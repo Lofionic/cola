@@ -1,0 +1,32 @@
+Add 'Bundle display name' to plist:
+    <key>CFBundleDisplayName</key>
+    <string>Cola Demo App</string>
+
+Add Audio Component to plist:
+    <key>AudioComponents</key>
+    <array>
+    <dict>
+    <key>manufacturer</key>
+    <string>lfnc</string>
+    <key>name</key>
+    <string>Cola Demo App</string>
+    <key>subtype</key>
+    <string>iasp</string>
+    <key>type</key>
+    <string>auri</string>
+    <key>version</key>
+    <string>1</string>
+    </dict>
+    </array>
+
+Add Inter-App Audio entitlement
+
+App Delegate conform to COLAudioEnvironmentInfoDelegate protocol
+
+Implement interAppInfoDictionary method in app delegate:
+    -(NSDictionary *)interAppInfoDictionary {
+        return @{
+                kDictionaryKeyComponentName : @"Cola Demo App",
+                kDictionaryKeyComponentMaufacturer : @"lfnc"
+        };
+    }

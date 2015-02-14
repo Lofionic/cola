@@ -1,0 +1,318 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6C1154751A8E306D005CF194 /* COLComponentIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1154741A8E306D005CF194 /* COLComponentIO.m */; };
+		6C1154771A8E31D0005CF194 /* COLComponentIO.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C1154731A8E306D005CF194 /* COLComponentIO.h */; };
+		6C11547A1A8E3468005CF194 /* LFOComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1154791A8E3468005CF194 /* LFOComponent.m */; };
+		6C2A5E751A8BF30500ECEAB2 /* ColaLib.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C2A5E741A8BF30500ECEAB2 /* ColaLib.h */; };
+		6C2A5E981A8BF5BE00ECEAB2 /* COLAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.m */; };
+		6C2A5E9C1A8BF7B100ECEAB2 /* COLAudioEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E9B1A8BF7B100ECEAB2 /* COLAudioEnvironment.m */; };
+		6C310D421A8D721900A97D82 /* SinWaveComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C310D411A8D721900A97D82 /* SinWaveComponent.m */; };
+		6C310D431A8D856A00A97D82 /* COLAudioEngine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27CC1A8D57EF00AFD384 /* COLAudioEngine.h */; };
+		6C310D441A8D857C00A97D82 /* COLComponentInput.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27C81A8D57AF00AFD384 /* COLComponentInput.h */; };
+		6C310D451A8D858300A97D82 /* COLComponent.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27C21A8D560100AFD384 /* COLComponent.h */; };
+		6C310D461A8D858700A97D82 /* COLComponentOutput.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27C51A8D578F00AFD384 /* COLComponentOutput.h */; };
+		6C7B27C41A8D560100AFD384 /* COLComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7B27C31A8D560100AFD384 /* COLComponent.m */; };
+		6C7B27C71A8D578F00AFD384 /* COLComponentOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7B27C61A8D578F00AFD384 /* COLComponentOutput.m */; };
+		6C7B27CA1A8D57AF00AFD384 /* COLComponentInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7B27C91A8D57AF00AFD384 /* COLComponentInput.m */; };
+		6C7B27CF1A8D61BB00AFD384 /* COLDefines.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27CD1A8D581100AFD384 /* COLDefines.h */; };
+		6C7B27D01A8D61F100AFD384 /* COLAudioEnvironment.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27CB1A8D57BD00AFD384 /* COLAudioEnvironment.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6C2A5E6F1A8BF30500ECEAB2 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				6C1154771A8E31D0005CF194 /* COLComponentIO.h in CopyFiles */,
+				6C310D431A8D856A00A97D82 /* COLAudioEngine.h in CopyFiles */,
+				6C7B27D01A8D61F100AFD384 /* COLAudioEnvironment.h in CopyFiles */,
+				6C2A5E751A8BF30500ECEAB2 /* ColaLib.h in CopyFiles */,
+				6C7B27CF1A8D61BB00AFD384 /* COLDefines.h in CopyFiles */,
+				6C310D441A8D857C00A97D82 /* COLComponentInput.h in CopyFiles */,
+				6C310D461A8D858700A97D82 /* COLComponentOutput.h in CopyFiles */,
+				6C310D451A8D858300A97D82 /* COLComponent.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		6C1154731A8E306D005CF194 /* COLComponentIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentIO.h; sourceTree = "<group>"; };
+		6C1154741A8E306D005CF194 /* COLComponentIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentIO.m; sourceTree = "<group>"; };
+		6C1154781A8E3468005CF194 /* LFOComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFOComponent.h; sourceTree = "<group>"; };
+		6C1154791A8E3468005CF194 /* LFOComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFOComponent.m; sourceTree = "<group>"; };
+		6C2A5E711A8BF30500ECEAB2 /* libColaLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libColaLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C2A5E741A8BF30500ECEAB2 /* ColaLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColaLib.h; sourceTree = "<group>"; };
+		6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLAudioEngine.m; sourceTree = "<group>"; };
+		6C2A5E9B1A8BF7B100ECEAB2 /* COLAudioEnvironment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLAudioEnvironment.m; sourceTree = "<group>"; };
+		6C310D401A8D721900A97D82 /* SinWaveComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinWaveComponent.h; sourceTree = "<group>"; };
+		6C310D411A8D721900A97D82 /* SinWaveComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinWaveComponent.m; sourceTree = "<group>"; };
+		6C7B27C21A8D560100AFD384 /* COLComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponent.h; sourceTree = "<group>"; };
+		6C7B27C31A8D560100AFD384 /* COLComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponent.m; sourceTree = "<group>"; };
+		6C7B27C51A8D578F00AFD384 /* COLComponentOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentOutput.h; sourceTree = "<group>"; };
+		6C7B27C61A8D578F00AFD384 /* COLComponentOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentOutput.m; sourceTree = "<group>"; };
+		6C7B27C81A8D57AF00AFD384 /* COLComponentInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentInput.h; sourceTree = "<group>"; };
+		6C7B27C91A8D57AF00AFD384 /* COLComponentInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentInput.m; sourceTree = "<group>"; };
+		6C7B27CB1A8D57BD00AFD384 /* COLAudioEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = COLAudioEnvironment.h; sourceTree = "<group>"; };
+		6C7B27CC1A8D57EF00AFD384 /* COLAudioEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = COLAudioEngine.h; sourceTree = "<group>"; };
+		6C7B27CD1A8D581100AFD384 /* COLDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = COLDefines.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6C2A5E6E1A8BF30500ECEAB2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6C11547B1A8E346E005CF194 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				6C310D401A8D721900A97D82 /* SinWaveComponent.h */,
+				6C310D411A8D721900A97D82 /* SinWaveComponent.m */,
+				6C1154781A8E3468005CF194 /* LFOComponent.h */,
+				6C1154791A8E3468005CF194 /* LFOComponent.m */,
+			);
+			name = Components;
+			sourceTree = "<group>";
+		};
+		6C2A5E681A8BF30500ECEAB2 = {
+			isa = PBXGroup;
+			children = (
+				6C2A5E731A8BF30500ECEAB2 /* ColaLib */,
+				6C2A5E721A8BF30500ECEAB2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6C2A5E721A8BF30500ECEAB2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6C2A5E711A8BF30500ECEAB2 /* libColaLib.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6C2A5E731A8BF30500ECEAB2 /* ColaLib */ = {
+			isa = PBXGroup;
+			children = (
+				6C2A5E741A8BF30500ECEAB2 /* ColaLib.h */,
+				6C7B27CD1A8D581100AFD384 /* COLDefines.h */,
+				6C7B27CB1A8D57BD00AFD384 /* COLAudioEnvironment.h */,
+				6C2A5E9B1A8BF7B100ECEAB2 /* COLAudioEnvironment.m */,
+				6C7B27CC1A8D57EF00AFD384 /* COLAudioEngine.h */,
+				6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.m */,
+				6C7B27C21A8D560100AFD384 /* COLComponent.h */,
+				6C7B27C31A8D560100AFD384 /* COLComponent.m */,
+				6C1154731A8E306D005CF194 /* COLComponentIO.h */,
+				6C1154741A8E306D005CF194 /* COLComponentIO.m */,
+				6C7B27C51A8D578F00AFD384 /* COLComponentOutput.h */,
+				6C7B27C61A8D578F00AFD384 /* COLComponentOutput.m */,
+				6C7B27C81A8D57AF00AFD384 /* COLComponentInput.h */,
+				6C7B27C91A8D57AF00AFD384 /* COLComponentInput.m */,
+				6C11547B1A8E346E005CF194 /* Components */,
+			);
+			path = ColaLib;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6C2A5E701A8BF30500ECEAB2 /* ColaLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C2A5E851A8BF30500ECEAB2 /* Build configuration list for PBXNativeTarget "ColaLib" */;
+			buildPhases = (
+				6C2A5E6D1A8BF30500ECEAB2 /* Sources */,
+				6C2A5E6E1A8BF30500ECEAB2 /* Frameworks */,
+				6C2A5E6F1A8BF30500ECEAB2 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ColaLib;
+			productName = ColaLib;
+			productReference = 6C2A5E711A8BF30500ECEAB2 /* libColaLib.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6C2A5E691A8BF30500ECEAB2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Chris Rivers";
+				TargetAttributes = {
+					6C2A5E701A8BF30500ECEAB2 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 6C2A5E6C1A8BF30500ECEAB2 /* Build configuration list for PBXProject "ColaLib" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 6C2A5E681A8BF30500ECEAB2;
+			productRefGroup = 6C2A5E721A8BF30500ECEAB2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6C2A5E701A8BF30500ECEAB2 /* ColaLib */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6C2A5E6D1A8BF30500ECEAB2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C2A5E981A8BF5BE00ECEAB2 /* COLAudioEngine.m in Sources */,
+				6C310D421A8D721900A97D82 /* SinWaveComponent.m in Sources */,
+				6C7B27CA1A8D57AF00AFD384 /* COLComponentInput.m in Sources */,
+				6C1154751A8E306D005CF194 /* COLComponentIO.m in Sources */,
+				6C7B27C71A8D578F00AFD384 /* COLComponentOutput.m in Sources */,
+				6C11547A1A8E3468005CF194 /* LFOComponent.m in Sources */,
+				6C7B27C41A8D560100AFD384 /* COLComponent.m in Sources */,
+				6C2A5E9C1A8BF7B100ECEAB2 /* COLAudioEnvironment.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		6C2A5E831A8BF30500ECEAB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		6C2A5E841A8BF30500ECEAB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6C2A5E861A8BF30500ECEAB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		6C2A5E871A8BF30500ECEAB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6C2A5E6C1A8BF30500ECEAB2 /* Build configuration list for PBXProject "ColaLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C2A5E831A8BF30500ECEAB2 /* Debug */,
+				6C2A5E841A8BF30500ECEAB2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6C2A5E851A8BF30500ECEAB2 /* Build configuration list for PBXNativeTarget "ColaLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C2A5E861A8BF30500ECEAB2 /* Debug */,
+				6C2A5E871A8BF30500ECEAB2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6C2A5E691A8BF30500ECEAB2 /* Project object */;
+}

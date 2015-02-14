@@ -13,16 +13,18 @@
 		6C2A5E2B1A8BF2CC00ECEAB2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5E291A8BF2CC00ECEAB2 /* Main.storyboard */; };
 		6C2A5E2D1A8BF2CC00ECEAB2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */; };
 		6C2A5E301A8BF2CC00ECEAB2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5E2E1A8BF2CC00ECEAB2 /* LaunchScreen.xib */; };
-		6C2A5E3C1A8BF2CC00ECEAB2 /* ColaAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E3B1A8BF2CC00ECEAB2 /* ColaAppTests.m */; };
+		6C2A5EA31A8C0B2A00ECEAB2 /* ToDo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5EA21A8C0B2A00ECEAB2 /* ToDo.txt */; };
+		6C2A5EA61A8C0B8D00ECEAB2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */; };
+		6C460D931A8D6B4C00161C0E /* libColaLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5E911A8BF30600ECEAB2 /* libColaLib.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		6C2A5E361A8BF2CC00ECEAB2 /* PBXContainerItemProxy */ = {
+		6C2A5E901A8BF30600ECEAB2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6C2A5E141A8BF2CC00ECEAB2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6C2A5E1B1A8BF2CC00ECEAB2;
-			remoteInfo = ColaApp;
+			containerPortal = 6C2A5E8B1A8BF30500ECEAB2 /* ColaLib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6C2A5E711A8BF30500ECEAB2;
+			remoteInfo = ColaLib;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -37,9 +39,10 @@
 		6C2A5E2A1A8BF2CC00ECEAB2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6C2A5E2F1A8BF2CC00ECEAB2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		6C2A5E351A8BF2CC00ECEAB2 /* ColaAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ColaAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6C2A5E3A1A8BF2CC00ECEAB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6C2A5E3B1A8BF2CC00ECEAB2 /* ColaAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColaAppTests.m; sourceTree = "<group>"; };
+		6C2A5E8B1A8BF30500ECEAB2 /* ColaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ColaLib.xcodeproj; path = ColaLib/ColaLib.xcodeproj; sourceTree = "<group>"; };
+		6C2A5EA21A8C0B2A00ECEAB2 /* ToDo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ToDo.txt; sourceTree = "<group>"; };
+		6C2A5EA41A8C0B8D00ECEAB2 /* ColaApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ColaApp.entitlements; sourceTree = "<group>"; };
+		6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,13 +50,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6C2A5E321A8BF2CC00ECEAB2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				6C460D931A8D6B4C00161C0E /* libColaLib.a in Frameworks */,
+				6C2A5EA61A8C0B8D00ECEAB2 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,8 +61,10 @@
 		6C2A5E131A8BF2CC00ECEAB2 = {
 			isa = PBXGroup;
 			children = (
+				6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */,
+				6C2A5EA21A8C0B2A00ECEAB2 /* ToDo.txt */,
+				6C2A5E8B1A8BF30500ECEAB2 /* ColaLib.xcodeproj */,
 				6C2A5E1E1A8BF2CC00ECEAB2 /* ColaApp */,
-				6C2A5E381A8BF2CC00ECEAB2 /* ColaAppTests */,
 				6C2A5E1D1A8BF2CC00ECEAB2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -73,7 +73,6 @@
 			isa = PBXGroup;
 			children = (
 				6C2A5E1C1A8BF2CC00ECEAB2 /* ColaApp.app */,
-				6C2A5E351A8BF2CC00ECEAB2 /* ColaAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -81,6 +80,7 @@
 		6C2A5E1E1A8BF2CC00ECEAB2 /* ColaApp */ = {
 			isa = PBXGroup;
 			children = (
+				6C2A5EA41A8C0B8D00ECEAB2 /* ColaApp.entitlements */,
 				6C2A5E231A8BF2CC00ECEAB2 /* AppDelegate.h */,
 				6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */,
 				6C2A5E261A8BF2CC00ECEAB2 /* ViewController.h */,
@@ -102,21 +102,12 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		6C2A5E381A8BF2CC00ECEAB2 /* ColaAppTests */ = {
+		6C2A5E8C1A8BF30500ECEAB2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6C2A5E3B1A8BF2CC00ECEAB2 /* ColaAppTests.m */,
-				6C2A5E391A8BF2CC00ECEAB2 /* Supporting Files */,
+				6C2A5E911A8BF30600ECEAB2 /* libColaLib.a */,
 			);
-			path = ColaAppTests;
-			sourceTree = "<group>";
-		};
-		6C2A5E391A8BF2CC00ECEAB2 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				6C2A5E3A1A8BF2CC00ECEAB2 /* Info.plist */,
-			);
-			name = "Supporting Files";
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,24 +130,6 @@
 			productReference = 6C2A5E1C1A8BF2CC00ECEAB2 /* ColaApp.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6C2A5E341A8BF2CC00ECEAB2 /* ColaAppTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6C2A5E421A8BF2CC00ECEAB2 /* Build configuration list for PBXNativeTarget "ColaAppTests" */;
-			buildPhases = (
-				6C2A5E311A8BF2CC00ECEAB2 /* Sources */,
-				6C2A5E321A8BF2CC00ECEAB2 /* Frameworks */,
-				6C2A5E331A8BF2CC00ECEAB2 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				6C2A5E371A8BF2CC00ECEAB2 /* PBXTargetDependency */,
-			);
-			name = ColaAppTests;
-			productName = ColaAppTests;
-			productReference = 6C2A5E351A8BF2CC00ECEAB2 /* ColaAppTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -168,10 +141,15 @@
 				TargetAttributes = {
 					6C2A5E1B1A8BF2CC00ECEAB2 = {
 						CreatedOnToolsVersion = 6.1.1;
-					};
-					6C2A5E341A8BF2CC00ECEAB2 = {
-						CreatedOnToolsVersion = 6.1.1;
-						TestTargetID = 6C2A5E1B1A8BF2CC00ECEAB2;
+						DevelopmentTeam = NK7M84AH48;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.InterAppAudio = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -186,13 +164,28 @@
 			mainGroup = 6C2A5E131A8BF2CC00ECEAB2;
 			productRefGroup = 6C2A5E1D1A8BF2CC00ECEAB2 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 6C2A5E8C1A8BF30500ECEAB2 /* Products */;
+					ProjectRef = 6C2A5E8B1A8BF30500ECEAB2 /* ColaLib.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				6C2A5E1B1A8BF2CC00ECEAB2 /* ColaApp */,
-				6C2A5E341A8BF2CC00ECEAB2 /* ColaAppTests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		6C2A5E911A8BF30600ECEAB2 /* libColaLib.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libColaLib.a;
+			remoteRef = 6C2A5E901A8BF30600ECEAB2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6C2A5E1A1A8BF2CC00ECEAB2 /* Resources */ = {
@@ -201,14 +194,8 @@
 			files = (
 				6C2A5E2B1A8BF2CC00ECEAB2 /* Main.storyboard in Resources */,
 				6C2A5E301A8BF2CC00ECEAB2 /* LaunchScreen.xib in Resources */,
+				6C2A5EA31A8C0B2A00ECEAB2 /* ToDo.txt in Resources */,
 				6C2A5E2D1A8BF2CC00ECEAB2 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6C2A5E331A8BF2CC00ECEAB2 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,23 +212,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6C2A5E311A8BF2CC00ECEAB2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6C2A5E3C1A8BF2CC00ECEAB2 /* ColaAppTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		6C2A5E371A8BF2CC00ECEAB2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6C2A5E1B1A8BF2CC00ECEAB2 /* ColaApp */;
-			targetProxy = 6C2A5E361A8BF2CC00ECEAB2 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6C2A5E291A8BF2CC00ECEAB2 /* Main.storyboard */ = {
@@ -344,54 +315,40 @@
 		6C2A5E401A8BF2CC00ECEAB2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ColaApp/ColaApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					$CONFIGURATION_BUILD_DIR/include,
+				);
 				INFOPLIST_FILE = ColaApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
 		6C2A5E411A8BF2CC00ECEAB2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ColaApp/ColaApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					$CONFIGURATION_BUILD_DIR/include,
+				);
 				INFOPLIST_FILE = ColaApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		6C2A5E431A8BF2CC00ECEAB2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = ColaAppTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ColaApp.app/ColaApp";
-			};
-			name = Debug;
-		};
-		6C2A5E441A8BF2CC00ECEAB2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = ColaAppTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ColaApp.app/ColaApp";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -414,14 +371,7 @@
 				6C2A5E411A8BF2CC00ECEAB2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-		};
-		6C2A5E421A8BF2CC00ECEAB2 /* Build configuration list for PBXNativeTarget "ColaAppTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6C2A5E431A8BF2CC00ECEAB2 /* Debug */,
-				6C2A5E441A8BF2CC00ECEAB2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
