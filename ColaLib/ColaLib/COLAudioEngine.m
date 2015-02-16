@@ -7,12 +7,11 @@
 //
 #import "COLAudioEngine.h"
 #import "COLDefines.h"
-
+#import "COLComponentInput.h"
 #import "Endian.h"
 
 @interface COLAudioEngine()
 
-@property (nonatomic) Float64 sampleRate;
 @property (nonatomic) BOOL isForeground;
 @property (nonatomic) BOOL isInterAppConnected;
 
@@ -30,15 +29,13 @@
         [self registerApplicationStateNotifications];
         
         // Init the master inputs
-        self.masterInputL = [[COLComponentInput alloc] init];
-        self.masterInputR = [[COLComponentInput alloc] init];
+        self.masterInputL = [[COLComponentInput alloc] initWithComponent:nil ofType:kComponentIOTypeAudio withName:@"Master L"];
+        self.masterInputR = [[COLComponentInput alloc] initWithComponent:nil ofType:kComponentIOTypeAudio withName:@"Master R"];
     }
     return self;
 }
 
 -(void)initializeAUGraph {
-    // Get the current audiosession sample rate
-    self.sampleRate = [[AVAudioSession sharedInstance] sampleRate];
     
     // Create the AUGraph
     NSLog(@"Creating AUGraph");

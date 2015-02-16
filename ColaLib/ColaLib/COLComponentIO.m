@@ -6,22 +6,47 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import "COLComponentIO.h"
+#import "COLComponent.h"
 
 @interface COLComponentIO()
 
 @property (nonatomic) kComponentIOType type;
 @property (nonatomic, weak) COLComponent *component;
+@property (nonatomic, strong) NSString *name;
 
 @end
 
 @implementation COLComponentIO
 
--(instancetype)initWithComponent:(COLComponent*)component ofType:(kComponentIOType)type {
+-(instancetype)initWithComponent:(COLComponent*)component ofType:(kComponentIOType)type withName:(NSString*)name {
     if (self = [super init]) {
         self.component = component;
         self.type = type;
+        self.name = name;
     }
     return self;
 }
 
+-(BOOL)isConnected {
+    return self.connectedTo != nil;
+}
+
+-(BOOL)disconnect {
+    if (self.connectedTo != nil) {
+        NSLog(@"%@ disconnected from %@", self.name, [[self connectedTo] name]);
+        COLComponentIO *connectedTo = self.connectedTo;
+        self.connectedTo = nil;
+        [connectedTo disconnect];
+    }
+    
+    return YES;
+}
+
+-(NSString*)name {
+    if (self.component) {
+        return [NSString stringWithFormat:@"%@:%@", [self.component name], _name];
+    } else {
+        return _name;
+    }
+}
 @end

@@ -20,23 +20,14 @@
 
 -(void)initializeIO {
     self.frequency = 1;
-    self.mainOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeControl];
-}
-
--(NSInteger)numberOfOutputs {
-    return 1;
-}
-
--(COLComponentOutput *)outputForIndex:(NSInteger)index {
-    if (index == 0) {
-        return self.mainOut;
-    }
+    self.mainOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"Out"];
     
-    return nil;
+    [self setOutputs:@[self.mainOut]];
 }
+
 
 -(void)renderOutput:(COLComponentOutput *)output toBuffer:(AudioSignalType *)outA samples:(UInt32)numFrames {
-        
+
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
     for (int i = 0; i < numFrames; i++) {

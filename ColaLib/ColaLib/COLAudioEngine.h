@@ -10,19 +10,10 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <CoreAudio/CoreAudioTypes.h>
-
-#import "COLComponentInput.h"
+#import "COLAudioEnvironment.h"
 
 @class COLAudioEngine;
-@protocol COLAudioEngineDelegate <NSObject>
-
--(NSDictionary*)interAppInfoDictionaryForAudioEngine:(COLAudioEngine*)audioEngine;
-
-@optional
--(void)audioEngineInterAppAudioConnected:(COLAudioEngine*)audioEngine;
--(void)audioEngineInterAppAudioDisconnected:(COLAudioEngine*)audioEngine;
--(void)audioEngineHostStateDidChange:(COLAudioEngine*)audioEngine;
-@end
+@class COLComponentInput;
 
 @interface COLAudioEngine : NSObject {
     AUGraph     mGraph;

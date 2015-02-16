@@ -16,6 +16,7 @@
 		6C2A5EA31A8C0B2A00ECEAB2 /* ToDo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5EA21A8C0B2A00ECEAB2 /* ToDo.txt */; };
 		6C2A5EA61A8C0B8D00ECEAB2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */; };
 		6C460D931A8D6B4C00161C0E /* libColaLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5E911A8BF30600ECEAB2 /* libColaLib.a */; };
+		6C65A4E81A9125DD000D9192 /* gtr.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C65A4E71A9125DD000D9192 /* gtr.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		6C2A5EA21A8C0B2A00ECEAB2 /* ToDo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ToDo.txt; sourceTree = "<group>"; };
 		6C2A5EA41A8C0B8D00ECEAB2 /* ColaApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ColaApp.entitlements; sourceTree = "<group>"; };
 		6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		6C65A4E71A9125DD000D9192 /* gtr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gtr.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				6C2A5EA41A8C0B8D00ECEAB2 /* ColaApp.entitlements */,
+				6C65A4E91A9125E1000D9192 /* Resources */,
 				6C2A5E231A8BF2CC00ECEAB2 /* AppDelegate.h */,
 				6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */,
 				6C2A5E261A8BF2CC00ECEAB2 /* ViewController.h */,
@@ -108,6 +111,14 @@
 				6C2A5E911A8BF30600ECEAB2 /* libColaLib.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		6C65A4E91A9125E1000D9192 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6C65A4E71A9125DD000D9192 /* gtr.wav */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,6 +206,7 @@
 				6C2A5E2B1A8BF2CC00ECEAB2 /* Main.storyboard in Resources */,
 				6C2A5E301A8BF2CC00ECEAB2 /* LaunchScreen.xib in Resources */,
 				6C2A5EA31A8C0B2A00ECEAB2 /* ToDo.txt in Resources */,
+				6C65A4E81A9125DD000D9192 /* gtr.wav in Resources */,
 				6C2A5E2D1A8BF2CC00ECEAB2 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -327,6 +339,7 @@
 				);
 				INFOPLIST_FILE = ColaApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -347,6 +360,7 @@
 				);
 				INFOPLIST_FILE = ColaApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};

@@ -11,5 +11,7 @@
 #define kDictionaryKeyComponentSubtype      @"kDictionaryKeyComponentSubtype"
 #define kDictionaryKeyComponentMaufacturer  @"kDictionaryKeyComponentManufacturer"
 
+#import <Foundation/Foundation.h>
+
 typedef Float32 AudioSignalType;
 

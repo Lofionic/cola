@@ -6,8 +6,9 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import "COLDefines.h"
-#import "COLComponentOutput.h"
 #import "COLComponentInput.h"
+#import "COLComponentOutput.h"
+
 
 @interface COLComponentInput () {
     UInt32              bufferSize;
@@ -35,5 +36,16 @@
     }
     return buffer;
 }
+
+-(BOOL)disconnect {
+    [[self connectedTo] disconnect];
+    self.connectedTo = nil;
+    return TRUE;
+}
+
+-(BOOL)isConnected {
+    return self.connectedTo != nil;
+}
+
 
 @end

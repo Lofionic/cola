@@ -10,11 +10,15 @@
 #import "COLAudioEngine.h"
 #import "COLComponent.h"
 #import "SinWaveComponent.h"
+#import "SquareWaveComponent.h"
 #import "LFOComponent.h"
+#import "WavePlayerComponent.h"
 
 @interface COLAudioEnvironment()
 
 @property (nonatomic, strong) COLAudioEngine* audioEngine;
+@property (nonatomic, strong) NSMutableArray *components;
+@property (nonatomic) Float64 sampleRate;
 
 @end
 
@@ -35,6 +39,9 @@
 {
     self = [super init];
     if (self) {
+        // Get the current audiosession sample rate
+        self.sampleRate = [[AVAudioSession sharedInstance] sampleRate];
+                
         id appDelegate = [[UIApplication sharedApplication] delegate];
         if ([appDelegate conformsToProtocol:@protocol(COLAudioEnvironmentInfoDelegate) ]) {
             self.infoDelegate = appDelegate;
@@ -54,27 +61,49 @@
     [self.audioEngine initializeAUGraph];
 }
 
-
--(void)connectComponent:(COLComponent*)component1 outputIndex:(NSInteger)outputIndex toComponet:(COLComponent*)component2 inputIndex:(NSInteger)inputIndex {
+-(BOOL)connectComponent:(COLComponent*)component1 outputIndex:(NSInteger)outputIndex toComponet:(COLComponent*)component2 inputIndex:(NSInteger)inputIndex {
+    
+    if (component1.environment != component2.environment) {
+        NSLog(@"Connection failed : Connecting components must exist in the same environment.");
+        return FALSE;
+    }
     
     COLComponentOutput *theOutput = [component1 outputForIndex:outputIndex];
+    if (!theOutput) {
+        NSLog(@"Connection failed : Invalid output");
+        return FALSE;
+    }
+    
     COLComponentInput *theInput = [component2 inputForIndex:inputIndex];
+    if (!theInput) {
+        NSLog(@"Connection failed : Invalid input");
+        return FALSE;
+    }
     
-    [self connectOutput:theOutput toInput:theInput];
+    return [theOutput connectTo:theInput];
 }
 
--(void)connectOutput:(COLComponentOutput*)output toInput:(COLComponentInput*)input {
+-(BOOL)connectComponent:(COLComponent*)component outputIndex:(NSInteger)outputIndex toMasterIndex:(NSInteger)masterIndex {
     
-    [output.connectedTo setConnectedTo:nil];
-    [input.connectedTo setConnectedTo:nil];
+    COLComponentOutput *theOutput = [component outputForIndex:outputIndex];
+    if (!theOutput) {
+        NSLog(@"Connection failed : Invalid output");
+        return FALSE;
+    }
     
-    [output setConnectedTo:input];
-    [input setConnectedTo:output];
+    COLComponentInput *theInput;
+    if (masterIndex == 0) {
+        theInput = [[self audioEngine] masterInputL];
+    } else if (masterIndex == 1) {
+        theInput = [[self audioEngine] masterInputR];
+    }
+    if (!theInput) {
+        NSLog(@"Connection failed : Invalid input");
+        return FALSE;
+    }
     
-    NSLog(@"Connected : %@ to %@", output.description, input.description);
+    return [theOutput connectTo:theInput];
 }
-
-
 
 #pragma mark AudioEngine delegates
 
@@ -91,56 +120,19 @@
 
 -(void)prepareTest {
     NSLog(@"Setting up test environment");
-    
     // Test environment
     {
-        SinWaveComponent *sinWaveComponent = [[SinWaveComponent alloc] initWithEnvironment:self];
-        [self.components addObject:sinWaveComponent];
+        WavePlayerComponent *wavePlayer = [[WavePlayerComponent alloc] initWithEnvironment:self];
+        [wavePlayer setName:@"Wave"];
+        [self.components addObject:wavePlayer];
         
-        COLComponentOutput *out = [sinWaveComponent outputForIndex:0];
-        COLComponentInput *in = [self.audioEngine masterInputL];
+        [wavePlayer loadWAVFile:[[NSBundle mainBundle] URLForResource:@"gtr" withExtension:@"wav"]];
         
-        [self connectOutput:out toInput:in];
+        [self connectComponent:wavePlayer outputIndex:0 toMasterIndex:0];
+        [self connectComponent:wavePlayer outputIndex:1 toMasterIndex:1];
         
-        LFOComponent *lfoComponent = [[LFOComponent alloc] initWithEnvironment:self];
-        [self.components addObject:lfoComponent];
-        
-        COLComponentOutput *lfoOut = [lfoComponent outputForIndex:0];
-        COLComponentInput *oscFreqIn = [sinWaveComponent inputForIndex:0];
-        //[self connectOutput:lfoOut toInput:oscFreqIn];
-
-        LFOComponent *anotherLFOComponent = [[LFOComponent alloc] initWithEnvironment:self];
-        [anotherLFOComponent setFrequency:2];
-        [self.components addObject:anotherLFOComponent];
-        
-        COLComponentOutput *anotherLFOout = [anotherLFOComponent outputForIndex:0];
-        COLComponentInput *oscAmpIn = [sinWaveComponent inputForIndex:1];
-        [self connectOutput:anotherLFOout toInput:oscAmpIn];
         
     }
-    
-    {
-        SinWaveComponent *sinWaveComponent = [[SinWaveComponent alloc] initWithEnvironment:self];
-        [self.components addObject:sinWaveComponent];
-        
-        [sinWaveComponent setFrequency:220];
-
-        COLComponentOutput *out = [sinWaveComponent outputForIndex:0];
-        COLComponentInput *in = [self.audioEngine masterInputR];
-        
-        [self connectOutput:out toInput:in];
-        
-        LFOComponent *lfoComponent = [[LFOComponent alloc] initWithEnvironment:self];
-        [lfoComponent setFrequency:1];
-        [self.components addObject:lfoComponent];
-        
-        [self connectComponent:lfoComponent outputIndex:0 toComponet:sinWaveComponent inputIndex:1];
-        
-    }
-}
-
--(Float64)sampleRate {
-    return self.audioEngine.sampleRate;
 }
 
 @end

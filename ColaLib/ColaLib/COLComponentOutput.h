@@ -12,6 +12,7 @@
 @class COLComponent;
 @class COLComponentInput;
 @class COLComponentOutput;
+
 @protocol COLOutputDelegate <NSObject>
 
 -(void)renderOutput:(COLComponentOutput *)output toBuffer:(AudioSignalType *)outA samples:(UInt32)numFrames;
@@ -23,5 +24,6 @@
 @property (nonatomic, weak) COLComponentInput *connectedTo;
 
 -(void)renderBuffer:(AudioSignalType*)outA samples:(UInt32)numFrames;
+-(BOOL)connectTo:(COLComponentInput*)input;
 
 @end

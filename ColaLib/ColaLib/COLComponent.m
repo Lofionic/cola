@@ -6,10 +6,14 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import "COLAudioEnvironment.m"
-#import "COLAudioEngine.m"
+#import "COLAudioEngine.H"
 #import "COLComponent.h"
 
 @interface COLComponent ()
+
+@property (nonatomic, weak) COLAudioEnvironment *environment;
+@property (nonatomic, strong) NSArray *inputs;
+@property (nonatomic, strong) NSArray *outputs;
 
 @end
 
@@ -29,24 +33,31 @@
 }
 
 -(NSInteger)numberOfOutputs {
-    return 0;
+    return [self.outputs count];
 }
 
 -(COLComponentOutput *)outputForIndex:(NSInteger)index {
-    return nil;
+    return [self.outputs objectAtIndex:index];
 }
 
 -(NSInteger)numberOfInputs {
-    return 0;
+    return [self.inputs count];
 }
 
 -(COLComponentInput *)inputForIndex:(NSInteger)index {
-    return nil;
+    return [self.inputs objectAtIndex:index];
 }
 
 -(void)renderOutput:(COLComponentOutput *)output toBuffer:(AudioSignalType *)outA samples:(UInt32)numFrames {
     
 }
 
+-(void)setInputs:(NSArray *)inputs {
+    _inputs = inputs;
+}
+
+-(void)setOutputs:(NSArray *)outputs {
+    _outputs = outputs;
+}
 
 @end

@@ -17,7 +17,11 @@ typedef NS_ENUM(NSUInteger, kComponentIOType) {
 
 @property (readonly) kComponentIOType type;
 @property (readonly, weak) COLComponent *component;
+@property (nonatomic, weak) id connectedTo;
 
--(instancetype)initWithComponent:(COLComponent*)component ofType:(kComponentIOType)type;
+-(instancetype)initWithComponent:(COLComponent*)component ofType:(kComponentIOType)type withName:(NSString*)name;
+-(BOOL)isConnected;
+-(BOOL)disconnect;
+-(NSString*)name;
 
 @end
