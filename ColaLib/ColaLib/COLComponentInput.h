@@ -15,6 +15,9 @@
 
 @property (nonatomic, weak) COLComponentOutput *connectedTo;
 
--(AudioSignalType*)renderSamples:(UInt32)numFrames;
+-(AudioSignalType*)getBuffer:(UInt32)numFrames;
+
+-(void)renderComponents:(UInt32)numFrames;
+-(void)engineDidRender;
 
 @end

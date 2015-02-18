@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import "COLAudioEngine.h"
+#import "COLAudioContext.h"
 #import "COLDefines.h"
 #import "COLComponentInput.h"
 #import "Endian.h"
@@ -15,8 +16,8 @@
 @property (nonatomic) BOOL isForeground;
 @property (nonatomic) BOOL isInterAppConnected;
 
-@property (nonatomic, strong) COLComponentInput *masterInputL;
-@property (nonatomic, strong) COLComponentInput *masterInputR;
+@property (nonatomic, weak) COLComponentInput *masterInputL;
+@property (nonatomic, weak) COLComponentInput *masterInputR;
 
 @end
 
@@ -29,8 +30,8 @@
         [self registerApplicationStateNotifications];
         
         // Init the master inputs
-        self.masterInputL = [[COLComponentInput alloc] initWithComponent:nil ofType:kComponentIOTypeAudio withName:@"Master L"];
-        self.masterInputR = [[COLComponentInput alloc] initWithComponent:nil ofType:kComponentIOTypeAudio withName:@"Master R"];
+        self.masterInputL = [[COLAudioContext globalContext] masterInputs][0];
+        self.masterInputR = [[COLAudioContext globalContext] masterInputs][1];
     }
     return self;
 }
@@ -151,8 +152,11 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 {
     COLAudioEngine *audioEngine = (__bridge COLAudioEngine*)inRefCon;
     
-    AudioSignalType *leftBuffer = [audioEngine.masterInputL renderSamples:inNumberFrames];
-    AudioSignalType *rightBuffer = [audioEngine.masterInputR renderSamples:inNumberFrames];
+//    [audioEngine.masterInputL renderComponents:inNumberFrames];
+//    [audioEngine.masterInputR renderComponents:inNumberFrames];
+//    
+    AudioSignalType *leftBuffer = [audioEngine.masterInputL getBuffer:inNumberFrames];
+    AudioSignalType *rightBuffer = [audioEngine.masterInputR getBuffer:inNumberFrames];
     
     AudioSignalType *outA = ioData->mBuffers[0].mData;
     AudioSignalType *outB = ioData->mBuffers[1].mData;
@@ -161,6 +165,9 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         outA[i] = leftBuffer[i];
         outB[i] = rightBuffer[i];
     }
+    
+    [audioEngine.masterInputL engineDidRender];
+    [audioEngine.masterInputR engineDidRender];
     
     return noErr;
 }

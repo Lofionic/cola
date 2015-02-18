@@ -14,6 +14,7 @@
 		6C2A5E981A8BF5BE00ECEAB2 /* COLAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.m */; };
 		6C2A5E9C1A8BF7B100ECEAB2 /* COLAudioEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E9B1A8BF7B100ECEAB2 /* COLAudioEnvironment.m */; };
 		6C310D421A8D721900A97D82 /* SinWaveComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C310D411A8D721900A97D82 /* SinWaveComponent.m */; };
+		6C3AA0881A94039500DAAC09 /* COLAudioContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AA0871A94039500DAAC09 /* COLAudioContext.m */; };
 		6C65A4E11A8F5E42000D9192 /* COLAudioEnvironment.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27CB1A8D57BD00AFD384 /* COLAudioEnvironment.h */; };
 		6C65A4E21A8F5E45000D9192 /* COLDefines.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27CD1A8D581100AFD384 /* COLDefines.h */; };
 		6C65A4E31A8F5E5D000D9192 /* COLAudioEngine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27CC1A8D57EF00AFD384 /* COLAudioEngine.h */; };
@@ -52,6 +53,8 @@
 		6C2A5E9B1A8BF7B100ECEAB2 /* COLAudioEnvironment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLAudioEnvironment.m; sourceTree = "<group>"; };
 		6C310D401A8D721900A97D82 /* SinWaveComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinWaveComponent.h; sourceTree = "<group>"; };
 		6C310D411A8D721900A97D82 /* SinWaveComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinWaveComponent.m; sourceTree = "<group>"; };
+		6C3AA0861A94039500DAAC09 /* COLAudioContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLAudioContext.h; sourceTree = "<group>"; };
+		6C3AA0871A94039500DAAC09 /* COLAudioContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLAudioContext.m; sourceTree = "<group>"; };
 		6C65A4E41A9117CF000D9192 /* WavePlayerComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WavePlayerComponent.h; sourceTree = "<group>"; };
 		6C65A4E51A9117CF000D9192 /* WavePlayerComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WavePlayerComponent.m; sourceTree = "<group>"; };
 		6C7B27C21A8D560100AFD384 /* COLComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponent.h; sourceTree = "<group>"; };
@@ -114,6 +117,8 @@
 				6C7B27CD1A8D581100AFD384 /* COLDefines.h */,
 				6C7B27CB1A8D57BD00AFD384 /* COLAudioEnvironment.h */,
 				6C2A5E9B1A8BF7B100ECEAB2 /* COLAudioEnvironment.m */,
+				6C3AA0861A94039500DAAC09 /* COLAudioContext.h */,
+				6C3AA0871A94039500DAAC09 /* COLAudioContext.m */,
 				6C7B27CC1A8D57EF00AFD384 /* COLAudioEngine.h */,
 				6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.m */,
 				6C7B27C21A8D560100AFD384 /* COLComponent.h */,
@@ -185,6 +190,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C3AA0881A94039500DAAC09 /* COLAudioContext.m in Sources */,
 				6C2A5E981A8BF5BE00ECEAB2 /* COLAudioEngine.m in Sources */,
 				6C0BE4EE1A8F51C100C0435D /* SquareWaveComponent.m in Sources */,
 				6C310D421A8D721900A97D82 /* SinWaveComponent.m in Sources */,

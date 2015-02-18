@@ -25,8 +25,12 @@
     [self setOutputs:@[self.mainOut]];
 }
 
-
--(void)renderOutput:(COLComponentOutput *)output toBuffer:(AudioSignalType *)outA samples:(UInt32)numFrames {
+-(void)renderOutputs:(UInt32)numFrames {
+    
+    [super renderOutputs:numFrames];
+    
+    // Output buffer
+    AudioSignalType *mainBuffer = [self.mainOut prepareBufferOfSize:numFrames];
 
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
@@ -35,8 +39,9 @@
         if (phase > 2.0 * M_PI) {
             phase -= (2.0 * M_PI);
         }
-        outA[i] = 0.5 + (sin(phase) / 2);
+        mainBuffer[i] = 0.5 + (sin(phase) / 2);
     }
 }
+
 
 @end

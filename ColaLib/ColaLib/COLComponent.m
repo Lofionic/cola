@@ -11,18 +11,19 @@
 
 @interface COLComponent ()
 
-@property (nonatomic, weak) COLAudioEnvironment *environment;
+@property (nonatomic, weak) COLAudioContext *context;
 @property (nonatomic, strong) NSArray *inputs;
 @property (nonatomic, strong) NSArray *outputs;
+@property (nonatomic) BOOL hasRendered;
 
 @end
 
 @implementation COLComponent
 
--(instancetype)initWithEnvironment:(COLAudioEnvironment*)environment {
+-(instancetype)initWithContext:(COLAudioContext *)context {
     self = [super init];
     if (self) {
-        self.environment = environment;
+        self.context = context;
         [self initializeIO];
     }
     return self;
@@ -48,16 +49,22 @@
     return [self.inputs objectAtIndex:index];
 }
 
--(void)renderOutput:(COLComponentOutput *)output toBuffer:(AudioSignalType *)outA samples:(UInt32)numFrames {
-    
+-(void)renderInputs:(UInt32)numFrames {
+    for (COLComponentInput *thisInput in self.inputs) {
+        [thisInput renderComponents:numFrames];
+    }
 }
 
--(void)setInputs:(NSArray *)inputs {
-    _inputs = inputs;
+-(void)renderOutputs:(UInt32)numFrames {
+    self.hasRendered = YES;
 }
 
--(void)setOutputs:(NSArray *)outputs {
-    _outputs = outputs;
+-(void)engineDidRender {
+    self.hasRendered = NO;
+    for (COLComponentInput *thisInput in self.inputs) {
+        [thisInput engineDidRender];
+    }
 }
+
 
 @end

@@ -12,18 +12,38 @@
 
 @interface WavePlayerComponent() {
     ExtAudioFileRef ref;
-    AudioSignalType samples[882000];
+    AudioSignalType samples[880000];
     UInt64 sampleCount;
-    UInt64 samplePositionL;
-    UInt64 samplePositionR;
+    Float32 samplePosition;
+    
+    AudioSignalType meterHoldSigma;
+    UInt64 meterHoldPosition;
+    AudioSignalType meterHold[4400];
+    
+    AudioSignalType meterPeak;
+    UInt64 meterAge;
+
 }
 
 @property (nonatomic, strong) COLComponentOutput *outputL;
 @property (nonatomic, strong) COLComponentOutput *outputR;
 
+@property (nonatomic, strong) COLComponentOutput *meterOut;
+
 @end
 
 @implementation WavePlayerComponent
+
+-(instancetype)initWithContext:(COLAudioContext *)context {
+    if (self = [super initWithContext:context]) {
+        samplePosition = 0;
+        sampleCount = 0;
+        
+        meterPeak = -1;
+        meterAge = 0;
+    }
+    return self;
+}
 
 -(void)loadWAVFile:(NSURL*)fileUrl {
     CFURLRef url = (__bridge CFURLRef)fileUrl;
@@ -88,8 +108,7 @@
     free(bufferList);
     ExtAudioFileDispose(fileRef);
     
-    samplePositionL = 0;
-    samplePositionR = 0;
+    samplePosition = 0;
 }
 
 -(void)initializeIO {
@@ -97,29 +116,58 @@
     self.outputL = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"OutL"];
     self.outputR = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"OutR"];
 
-    [self setOutputs:@[self.outputL, self.outputR]];
+    self.meterOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"Meter Out"];
+    
+    [self setOutputs:@[self.outputL, self.outputR, self.meterOut]];
     
 }
 
--(void)renderOutput:(COLComponentOutput *)output toBuffer:(AudioSignalType *)outA samples:(UInt32)numFrames {
+-(void)renderOutputs:(UInt32)numFrames {
     
-    if (output == self.outputL) {
-        for (int i = 0; i < numFrames; i++) {
-            outA[i] = samples[samplePositionL];
-            //printf("%.5f\n", outA[i]);
-            samplePositionL ++;
-            if (samplePositionL > sampleCount) {
-                samplePositionL -= sampleCount;
+    [super renderOutputs:numFrames];
+    
+    // Output buffers
+    AudioSignalType *leftOut = [self.outputL prepareBufferOfSize:numFrames];
+    AudioSignalType *rightOut = [self.outputR prepareBufferOfSize:numFrames];
+    AudioSignalType *meterOut = [self.meterOut prepareBufferOfSize:numFrames];
+    
+    int meterHoldSize = sizeof(meterHold) / sizeof(meterHold[0]);
+    
+    for (int i = 0; i < numFrames; i++) {
+        if (sampleCount > 0) {
+            UInt64 sampleIndex = (UInt64)round(samplePosition);
+            AudioSignalType sample = samples[sampleIndex];
+            leftOut[i] = sample;
+            rightOut[i] = sample;
+            
+//            AudioSignalType amp = fabsf(sample);
+//            if (amp > meterPeak || meterAge > 5500) {
+//                meterPeak = amp;
+//                meterAge = 0;
+//            } else {
+//                meterAge++;
+//            }
+//            
+//            meterOut[i] = meterPeak;
+            
+            meterHoldSigma -= meterHold[meterHoldPosition];
+            meterHold[meterHoldPosition] = fabsf(sample);
+            meterHoldSigma += fabsf(sample);
+
+            meterHoldPosition ++;
+            if (meterHoldPosition >= meterHoldSize) {
+                meterHoldPosition = 0;
             }
-        }
-    } else {
-        for (int i = 0; i < numFrames; i++) {
-            outA[i] = samples[samplePositionR];
-            //printf("%.5f\n", outA[i]);
-            samplePositionR ++;
-            if (samplePositionR > sampleCount) {
-                samplePositionR -= sampleCount;
+           
+            meterOut[i] = meterHoldSigma / meterHoldSize;
+            
+            samplePosition = samplePosition + 1;
+            if (samplePosition > sampleCount) {
+                samplePosition = 0;
             }
+        } else {
+                leftOut[i] = 0;
+                rightOut[i] = 0;
         }
     }
 }

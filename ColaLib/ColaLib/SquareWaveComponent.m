@@ -34,10 +34,17 @@
     
 }
 
--(void)renderOutput:(COLComponentOutput *)output toBuffer:(AudioSignalType *)outA samples:(UInt32)numFrames {
-    AudioSignalType *frequencyBuffer = [self.frequencyIn renderSamples:numFrames];
-    AudioSignalType *ampBuffer = [self.ampIn renderSamples:numFrames];
-        
+-(void)renderOutputs:(UInt32)numFrames {
+    
+    [super renderOutputs:numFrames];
+    
+    // Input buffers
+    AudioSignalType *frequencyBuffer = [self.frequencyIn getBuffer:numFrames];
+    AudioSignalType *ampBuffer = [self.ampIn getBuffer:numFrames];
+    
+    // Output buffers
+    AudioSignalType *outbuffer = [self.mainOut prepareBufferOfSize:numFrames];
+    
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
     for (int i = 0; i < numFrames; i++) {
@@ -60,7 +67,7 @@
             phase -= (2.0 * M_PI);
         }
         AudioSignalType wave = (phase < M_PI_2) ? 1.0 : -1.0;
-        outA[i] = wave * amp;
+        outbuffer[i] = wave * amp;
     }
 }
 

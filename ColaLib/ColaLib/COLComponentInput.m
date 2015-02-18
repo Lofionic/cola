@@ -9,32 +9,39 @@
 #import "COLComponentInput.h"
 #import "COLComponentOutput.h"
 
-
 @interface COLComponentInput () {
-    UInt32              bufferSize;
-    AudioSignalType     *buffer;
+    AudioSignalType *emptyBuffer;
+    UInt32 emptyBufferSize;
 }
 
 @end
 
 @implementation COLComponentInput
 
--(AudioSignalType*)renderSamples:(UInt32)numFrames {
-    // Prepare buffer
-    if (numFrames != bufferSize) {
-        free(buffer);
-        bufferSize = numFrames;
-        buffer = (AudioSignalType*)malloc(bufferSize * sizeof(AudioSignalType));
+-(void)renderComponents:(UInt32)numFrames {
+    if ([self isConnected]) {
+        [[self connectedTo] renderComponents:numFrames];
     }
+}
 
+-(AudioSignalType *)getBuffer:(UInt32)numFrames {
     if (self.connectedTo) {
-        [self.connectedTo renderBuffer:buffer samples:numFrames];
+        return [[self connectedTo] getBuffer:numFrames];
     } else {
-        for (int i = 0; i < numFrames; i++) {
-            buffer[i] = 0;
+        // No connection - no signal. Return an empty buffer
+        if (numFrames != emptyBufferSize) {
+            free(emptyBuffer);
+            emptyBufferSize = numFrames;
+            emptyBuffer = (AudioSignalType*)malloc(emptyBufferSize * sizeof(AudioSignalType));
+            memset(emptyBuffer, 0, emptyBufferSize * sizeof(AudioSignalType));
         }
+
+        return emptyBuffer;
     }
-    return buffer;
+}
+
+-(void)engineDidRender {
+    [[self connectedTo] engineDidRender];
 }
 
 -(BOOL)disconnect {

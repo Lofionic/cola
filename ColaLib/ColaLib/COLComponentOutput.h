@@ -15,7 +15,9 @@
 
 @protocol COLOutputDelegate <NSObject>
 
--(void)renderOutput:(COLComponentOutput *)output toBuffer:(AudioSignalType *)outA samples:(UInt32)numFrames;
+-(void)renderInputs:(UInt32)numFrames;
+-(void)renderOutputs:(UInt32)numFrames;
+-(void)engineDidRender;
 
 @end
 
@@ -23,7 +25,14 @@
 
 @property (nonatomic, weak) COLComponentInput *connectedTo;
 
--(void)renderBuffer:(AudioSignalType*)outA samples:(UInt32)numFrames;
+-(AudioSignalType*)getBuffer:(UInt32)numFrames;
+-(AudioSignalType*)prepareBufferOfSize:(UInt32)numFrames;
+
+-(void)renderComponents:(UInt32)numFrames;
+-(void)engineDidRender;
+
 -(BOOL)connectTo:(COLComponentInput*)input;
+
+
 
 @end

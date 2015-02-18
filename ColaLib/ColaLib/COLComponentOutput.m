@@ -9,7 +9,10 @@
 #import "COLComponent.h"
 #import "COLComponentInput.h"
 
-@interface COLComponentOutput ()
+@interface COLComponentOutput () {
+    AudioSignalType *buffer;
+    UInt32 bufferSize;
+}
 
 @property (nonatomic, weak) COLComponent<COLOutputDelegate> *outputDelegate;
 
@@ -30,8 +33,38 @@
     return self;
 }
 
--(void)renderBuffer:(AudioSignalType*)outA samples:(UInt32)numFrames {
-     [self.component renderOutput:self toBuffer:outA samples:numFrames];
+-(AudioSignalType*)getBuffer:(UInt32)numFrames {
+    
+    if (![self.component hasRendered]) {
+        // If the component hasn't rendered, now's the time to do it
+        // Render the component's inputs first
+        [self.component renderInputs:numFrames];
+        [self.component renderOutputs:numFrames];
+    }
+    
+    return buffer;
+}
+
+-(AudioSignalType*)prepareBufferOfSize:(UInt32)numFrames {
+    if (numFrames != bufferSize) {
+        free(buffer);
+        bufferSize = numFrames;
+        buffer = (AudioSignalType*)malloc(bufferSize * sizeof(AudioSignalType));
+        memset(buffer, 0, bufferSize * sizeof(AudioSignalType));
+    }
+    
+    return buffer;
+}
+
+-(void)renderComponents:(UInt32)numFrames {
+    if (![self.component hasRendered]) {
+        [self.component renderInputs:numFrames];
+        [self.component renderOutputs:numFrames];
+    }
+}
+
+-(void)engineDidRender {
+    [self.component engineDidRender];
 }
 
 -(BOOL)connectTo:(COLComponentInput *)input {

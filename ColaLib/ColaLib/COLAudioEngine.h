@@ -25,8 +25,8 @@
 @property (readonly) BOOL isForeground;
 @property (readonly) BOOL isInterAppConnected;
 
-@property (readonly) COLComponentInput *masterInputL;
-@property (readonly) COLComponentInput *masterInputR;
+@property (readonly, weak) COLComponentInput *masterInputL;
+@property (readonly, weak) COLComponentInput *masterInputR;
 
 -(void)initializeAUGraph;
 -(void)startStopEngine;

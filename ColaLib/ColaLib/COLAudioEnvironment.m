@@ -63,8 +63,8 @@
 
 -(BOOL)connectComponent:(COLComponent*)component1 outputIndex:(NSInteger)outputIndex toComponet:(COLComponent*)component2 inputIndex:(NSInteger)inputIndex {
     
-    if (component1.environment != component2.environment) {
-        NSLog(@"Connection failed : Connecting components must exist in the same environment.");
+    if (component1.context != component2.context) {
+        NSLog(@"Connection failed : Connecting components must exist in the same context.");
         return FALSE;
     }
     
@@ -122,16 +122,35 @@
     NSLog(@"Setting up test environment");
     // Test environment
     {
-        WavePlayerComponent *wavePlayer = [[WavePlayerComponent alloc] initWithEnvironment:self];
-        [wavePlayer setName:@"Wave"];
+        SinWaveComponent *component = [[SinWaveComponent alloc] initWithContext:[COLAudioContext globalContext]];
+        [component setName:@"Wave"];
+       [self.components addObject:component];
+        
+        LFOComponent *lfo = [[LFOComponent alloc] initWithContext:[COLAudioContext globalContext]];
+        [lfo setName:@"LFO"];
+        [self.components addObject:lfo];
+        
+        //[self connectComponent:lfo outputIndex:0 toComponet:component inputIndex:0];
+        //[self connectComponent:component outputIndex:0 toMasterIndex:0];
+        
+        SquareWaveComponent *square = [[SquareWaveComponent alloc] initWithContext:[COLAudioContext globalContext]];
+        [square setName:@"square"];
+        [self.components addObject:square];
+        
+        LFOComponent *lfo2 = [[LFOComponent alloc] initWithContext:[COLAudioContext globalContext]];
+        [lfo2 setName:@"LFO2"];
+        [self.components addObject:lfo2];
+        
+        [self connectComponent:lfo2 outputIndex:0 toComponet:square inputIndex:1];
+        [self connectComponent:square outputIndex:0 toMasterIndex:1];
+        
+        WavePlayerComponent *wavePlayer = [[WavePlayerComponent alloc] initWithContext:[COLAudioContext globalContext]];
+        [wavePlayer setName:@"WavePlayer"];
+        [wavePlayer loadWAVFile:[[NSBundle mainBundle] URLForResource:@"gtr" withExtension:@"wav"]];
         [self.components addObject:wavePlayer];
         
-        [wavePlayer loadWAVFile:[[NSBundle mainBundle] URLForResource:@"gtr" withExtension:@"wav"]];
-        
         [self connectComponent:wavePlayer outputIndex:0 toMasterIndex:0];
-        [self connectComponent:wavePlayer outputIndex:1 toMasterIndex:1];
-        
-        
+        [self connectComponent:wavePlayer outputIndex:2 toComponet:square inputIndex:1];
     }
 }
 
