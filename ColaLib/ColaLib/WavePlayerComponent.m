@@ -18,7 +18,7 @@
     
     AudioSignalType meterHoldSigma;
     UInt64 meterHoldPosition;
-    AudioSignalType meterHold[4400];
+    AudioSignalType meterHold[50];
     
     AudioSignalType meterPeak;
     UInt64 meterAge;
@@ -133,33 +133,29 @@
     
     int meterHoldSize = sizeof(meterHold) / sizeof(meterHold[0]);
     
+    AudioSignalType meterHoldHold ;
+    
     for (int i = 0; i < numFrames; i++) {
         if (sampleCount > 0) {
             UInt64 sampleIndex = (UInt64)round(samplePosition);
             AudioSignalType sample = samples[sampleIndex];
             leftOut[i] = sample;
             rightOut[i] = sample;
-            
-//            AudioSignalType amp = fabsf(sample);
-//            if (amp > meterPeak || meterAge > 5500) {
-//                meterPeak = amp;
-//                meterAge = 0;
-//            } else {
-//                meterAge++;
-//            }
-//            
-//            meterOut[i] = meterPeak;
-            
-            meterHoldSigma -= meterHold[meterHoldPosition];
-            meterHold[meterHoldPosition] = fabsf(sample);
-            meterHoldSigma += fabsf(sample);
+                       
+            if (i % 50 == 0) {
+                meterHoldSigma -= meterHold[meterHoldPosition];
+                meterHold[meterHoldPosition] = fabsf(sample);
+                meterHoldSigma += fabsf(sample);
 
-            meterHoldPosition ++;
-            if (meterHoldPosition >= meterHoldSize) {
-                meterHoldPosition = 0;
+                meterHoldPosition ++;
+                if (meterHoldPosition >= meterHoldSize) {
+                    meterHoldPosition = 0;
+                }
+                
+                meterHoldHold = meterHoldSigma / meterHoldSize;
             }
-           
-            meterOut[i] = meterHoldSigma / meterHoldSize;
+            
+            meterOut[i] = meterHoldHold;
             
             samplePosition = samplePosition + 1;
             if (samplePosition > sampleCount) {
