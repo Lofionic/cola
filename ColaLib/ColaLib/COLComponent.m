@@ -8,12 +8,15 @@
 #import "COLAudioEnvironment.m"
 #import "COLAudioEngine.H"
 #import "COLComponent.h"
+#import "COLComponentInput.h"
+#import "COLComponentOutput.h"
 
 @interface COLComponent ()
 
-@property (nonatomic, weak) COLAudioContext *context;
-@property (nonatomic, strong) NSArray *inputs;
-@property (nonatomic, strong) NSArray *outputs;
+@property (nonatomic, weak) COLAudioContext     *context;
+@property (nonatomic, strong) NSArray           *inputs;
+@property (nonatomic, strong) NSArray           *outputs;
+
 @property (nonatomic) BOOL hasRendered;
 
 @end
@@ -33,6 +36,7 @@
     
 }
 
+// Data source
 -(NSInteger)numberOfOutputs {
     return [self.outputs count];
 }
@@ -49,16 +53,12 @@
     return [self.inputs objectAtIndex:index];
 }
 
--(void)renderInputs:(UInt32)numFrames {
-    for (COLComponentInput *thisInput in self.inputs) {
-        [thisInput renderComponents:numFrames];
-    }
-}
-
+// Render numFrames number of frames into the output buffers
 -(void)renderOutputs:(UInt32)numFrames {
     self.hasRendered = YES;
 }
 
+// Called when engine render has completed
 -(void)engineDidRender {
     self.hasRendered = NO;
     for (COLComponentInput *thisInput in self.inputs) {
@@ -66,5 +66,18 @@
     }
 }
 
+-(void)disconnectAll {
+    for (COLComponentOutput* thisOutput in self.outputs) {
+        [thisOutput disconnect];
+    }
+    
+    for (COLComponentInput* thisInput in self.inputs) {
+        [thisInput disconnect];
+    }
+}
+
+-(void)dealloc {
+    NSLog(@"%@ dealloc", self.name);
+}
 
 @end

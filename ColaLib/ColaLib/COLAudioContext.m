@@ -31,4 +31,12 @@
     return globalContext;    
 }
 
+- (COLComponentInput*)masterInputAtIndex:(NSInteger)index {
+    if (index < [self.masterInputs count]) {
+        return [self.masterInputs objectAtIndex:index];
+    } else {
+        return nil;
+    }
+}
+
 @end

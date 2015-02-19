@@ -6,11 +6,10 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import <Foundation/Foundation.h>
-
+@class COLComponentInput;
 @interface COLAudioContext : NSObject
 
-@property (readonly, strong) NSArray *masterInputs;
-
 + (instancetype) globalContext;
+- (COLComponentInput*)masterInputAtIndex:(NSInteger)index;
 
 @end

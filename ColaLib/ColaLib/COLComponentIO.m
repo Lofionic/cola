@@ -1,5 +1,5 @@
 //
-//  COLIOPort.m
+//  COLComponentIO.m
 //  ColaLib
 //
 //  Created by Chris on 13/02/2015.
@@ -10,9 +10,9 @@
 
 @interface COLComponentIO()
 
-@property (nonatomic) kComponentIOType type;
-@property (nonatomic, weak) COLComponent *component;
-@property (nonatomic, strong) NSString *name;
+@property (nonatomic) kComponentIOType      type;
+@property (nonatomic, weak) COLComponent    *component;
+@property (nonatomic, strong) NSString      *name;
 
 @end
 
@@ -29,17 +29,6 @@
 
 -(BOOL)isConnected {
     return self.connectedTo != nil;
-}
-
--(BOOL)disconnect {
-    if (self.connectedTo != nil) {
-        NSLog(@"%@ disconnected from %@", self.name, [[self connectedTo] name]);
-        COLComponentIO *connectedTo = self.connectedTo;
-        self.connectedTo = nil;
-        [connectedTo disconnect];
-    }
-    
-    return YES;
 }
 
 -(NSString*)name {

@@ -5,27 +5,33 @@
 //  Created by Chris on 12/02/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-#import "SinWaveComponent.h"
+#import "COLComponentOscillator.h"
 #import "COLAudioEnvironment.h"
 #import "COLComponentInput.h"
 
-@interface SinWaveComponent () {
+@interface COLComponentOscillator () {
     Float64 phase;
+    
+    AudioSignalType meterHoldSigma;
+    UInt64 meterHoldPosition;
+    AudioSignalType meterHold[50];
 }
 
 @property (nonatomic, strong) COLComponentOutput *mainOut;
+@property (nonatomic, strong) COLComponentOutput *meterOut;
 @property (nonatomic, strong) COLComponentInput *frequencyIn;
 @property (nonatomic, strong) COLComponentInput *amplIn;
 
 @end
 
-@implementation SinWaveComponent
+@implementation COLComponentOscillator
 
 -(void)initializeIO {
     self.frequency = 440.0;
     self.mainOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"Out"];
+    self.meterOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"Meter Out"];
     
-    [self setOutputs:@[self.mainOut]];
+    [self setOutputs:@[self.mainOut, self.meterOut]];
     
     self.frequencyIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"FreqIn"];
     self.amplIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"AmpIn"];
@@ -43,6 +49,11 @@
 
     // Output Buffers
     AudioSignalType *mainOutBuffer = [self.mainOut prepareBufferOfSize:numFrames];
+    AudioSignalType *meterOut = [self.meterOut prepareBufferOfSize:numFrames];
+    
+    int meterHoldSize = sizeof(meterHold) / sizeof(meterHold[0]);
+    
+    AudioSignalType meterHoldHold = 0;
     
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
@@ -68,6 +79,23 @@
         }
         
         mainOutBuffer[i] = sin(phase) * amp;
+        
+        AudioSignalType sample = mainOutBuffer[i];
+        
+        if (i % 50 == 0) {
+            meterHoldSigma -= meterHold[meterHoldPosition];
+            meterHold[meterHoldPosition] = fabsf(sample);
+            meterHoldSigma += fabsf(sample);
+            
+            meterHoldPosition ++;
+            if (meterHoldPosition >= meterHoldSize) {
+                meterHoldPosition = 0;
+            }
+            
+            meterHoldHold = meterHoldSigma / meterHoldSize;
+        }
+        
+        meterOut[i] = meterHoldHold;
     }
 }
 

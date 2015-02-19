@@ -18,40 +18,47 @@
 
 @implementation COLComponentInput
 
--(void)renderComponents:(UInt32)numFrames {
-    if ([self isConnected]) {
-        [[self connectedTo] renderComponents:numFrames];
+-(AudioSignalType *)getBuffer:(UInt32)numFrames {
+    if (self.connectedTo) {
+        AudioSignalType* buffer = [[self connectedTo] getBuffer:numFrames];
+        if (buffer != NULL) {
+            return buffer;
+        } else {
+            // Can't provide buffer yet, probably because buffer is input is forming a ring
+            // Return an empty buffer
+            return [self emptyBuffer:numFrames];
+        }
+    } else {
+        // No connection - no signal. Return an empty buffer
+        return [self emptyBuffer:numFrames];
     }
 }
 
--(AudioSignalType *)getBuffer:(UInt32)numFrames {
-    if (self.connectedTo) {
-        return [[self connectedTo] getBuffer:numFrames];
-    } else {
-        // No connection - no signal. Return an empty buffer
-        if (numFrames != emptyBufferSize) {
-            free(emptyBuffer);
-            emptyBufferSize = numFrames;
-            emptyBuffer = (AudioSignalType*)malloc(emptyBufferSize * sizeof(AudioSignalType));
-            memset(emptyBuffer, 0, emptyBufferSize * sizeof(AudioSignalType));
-        }
-
-        return emptyBuffer;
+-(AudioSignalType*)emptyBuffer:(UInt32)numFrames {
+    if (numFrames != emptyBufferSize) {
+        free(emptyBuffer);
+        emptyBufferSize = numFrames;
+        emptyBuffer = (AudioSignalType*)malloc(emptyBufferSize * sizeof(AudioSignalType));
+        memset(emptyBuffer, 0, emptyBufferSize * sizeof(AudioSignalType));
     }
+    return emptyBuffer;
 }
 
 -(void)engineDidRender {
     [[self connectedTo] engineDidRender];
 }
 
--(BOOL)disconnect {
-    [[self connectedTo] disconnect];
-    self.connectedTo = nil;
-    return TRUE;
-}
-
 -(BOOL)isConnected {
     return self.connectedTo != nil;
+}
+
+-(BOOL)disconnect {
+    if ([self isConnected]) {
+        self.connectedTo = nil;
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 

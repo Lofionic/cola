@@ -20,8 +20,8 @@
     AudioUnit   mRemoteIO;
 }
 
-@property (nonatomic, weak) id<COLAudioEngineDelegate> delegate;
-@property (readonly) Float64 sampleRate;
+@property (nonatomic, weak) id<COLAudioEngineDelegate>  delegate;
+
 @property (readonly) BOOL isForeground;
 @property (readonly) BOOL isInterAppConnected;
 
@@ -30,6 +30,5 @@
 
 -(void)initializeAUGraph;
 -(void)startStopEngine;
-
 
 @end
