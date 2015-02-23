@@ -6,19 +6,20 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import <Foundation/Foundation.h>
-#import "COLAudioContext.h"
 #import "COLComponentInput.h"
 #import "COLComponentOutput.h"
 #import "COLComponentParameter.h"
 
 @class COLAudioEnvironment;
+@class COLAudioContext;
 
-@interface COLComponent : NSObject <COLOutputDelegate>
+@interface COLComponent : NSObject
 
-@property (readonly, weak) COLAudioContext *context;
-@property (readonly, strong) NSArray *outputs;
-@property (readonly, strong) NSArray *inputs;
-@property (nonatomic, strong) NSString *name;
+@property (readonly, weak) COLAudioContext  *context;
+@property (readonly, strong) NSArray        *outputs;
+@property (readonly, strong) NSArray        *inputs;
+@property (nonatomic, strong) NSString      *name;
+
 @property (readonly) BOOL hasRendered;
 
 -(NSInteger)numberOfOutputs;
@@ -34,5 +35,6 @@
 
 -(void)setOutputs:(NSArray*)outputs;
 -(void)setInputs:(NSArray*)inputs;
+-(void)disconnectAll;
 
 @end

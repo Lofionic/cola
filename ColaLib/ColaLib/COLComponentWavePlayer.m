@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import "COLDefines.h"
-#import "WavePlayerComponent.h"
+#import "COLComponentWavePlayer.h"
 #import "COLAudioEnvironment.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-@interface WavePlayerComponent() {
+@interface COLComponentWavePlayer() {
     ExtAudioFileRef ref;
     AudioSignalType samples[880000];
     UInt64 sampleCount;
@@ -30,17 +30,17 @@
 
 @property (nonatomic, strong) COLComponentOutput *meterOut;
 
+@property (nonatomic, strong) COLComponentInput *freqMod;
+
 @end
 
-@implementation WavePlayerComponent
+@implementation COLComponentWavePlayer
 
 -(instancetype)initWithContext:(COLAudioContext *)context {
     if (self = [super initWithContext:context]) {
         samplePosition = 0;
         sampleCount = 0;
-        
-        meterPeak = -1;
-        meterAge = 0;
+
     }
     return self;
 }
@@ -120,11 +120,16 @@
     
     [self setOutputs:@[self.outputL, self.outputR, self.meterOut]];
     
+    self.freqMod = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"FreqIn"];
+    [self setInputs:@[self.freqMod]];
 }
 
 -(void)renderOutputs:(UInt32)numFrames {
     
     [super renderOutputs:numFrames];
+    
+    // Input buffers
+    AudioSignalType *freqMod = [self.freqMod getBuffer:numFrames];
     
     // Output buffers
     AudioSignalType *leftOut = [self.outputL prepareBufferOfSize:numFrames];
@@ -133,12 +138,21 @@
     
     int meterHoldSize = sizeof(meterHold) / sizeof(meterHold[0]);
     
-    AudioSignalType meterHoldHold ;
+    AudioSignalType meterHoldHold = 0;
     
     for (int i = 0; i < numFrames; i++) {
         if (sampleCount > 0) {
-            UInt64 sampleIndex = (UInt64)round(samplePosition);
-            AudioSignalType sample = samples[sampleIndex];
+            UInt64 sampleIndex = (UInt64)floor(samplePosition);
+            AudioSignalType sample = 0;
+            if (sampleIndex != samplePosition && sampleIndex < sampleCount) {
+                // Interpolate between two samples
+                float dec = samplePosition - sampleIndex;
+                AudioSignalType sampleA = samples[sampleIndex];
+                AudioSignalType sampleB = samples[sampleIndex + 1];
+                sample = sampleA + ((sampleB - sampleA) * dec);
+            } else {
+                sample = samples[sampleIndex];
+            }
             leftOut[i] = sample;
             rightOut[i] = sample;
             
@@ -157,16 +171,12 @@
             
             meterOut[i] = meterHoldHold;
             
-            samplePosition = samplePosition + 1;
-            if (samplePosition > sampleCount) {
-                samplePosition = 0;
-            }
+
         } else {
                 leftOut[i] = 0;
                 rightOut[i] = 0;
         }
     }
 }
-
 
 @end

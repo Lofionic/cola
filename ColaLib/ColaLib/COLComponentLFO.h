@@ -7,7 +7,7 @@
 //
 #import "COLComponent.h"
 
-@interface LFOComponent : COLComponent
+@interface COLComponentLFO : COLComponent
 
 @property (readonly) COLComponentOutput *mainOut;
 @property float frequency;

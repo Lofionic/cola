@@ -9,6 +9,6 @@
 
 #import "COLComponent.h"
 
-@interface SinWaveComponent : COLComponent
+@interface COLComponentOscillator : COLComponent
 
 @end

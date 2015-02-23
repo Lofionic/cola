@@ -11,7 +11,17 @@
 #define kDictionaryKeyComponentSubtype      @"kDictionaryKeyComponentSubtype"
 #define kDictionaryKeyComponentMaufacturer  @"kDictionaryKeyComponentManufacturer"
 
-#import <Foundation/Foundation.h>
+#define kCOLComponentOscillator             @"kCOLComponentOscillator"
+#define kCOLComponentLFO                    @"kCOLComponentLFO"
+#define kCOLComponentWavePlayer             @"kCOLComponentWavePlayer"
 
+#define kCOLOutputOscillatorMain            0
+#define kCOLInputOscillatorFreq             0
+#define kCOLInputOscillatorAmp              1
+
+#define kCOLOutputLFOMain                   0
+#define kCOLInputLFOFreqIn                  0
+
+#import <Foundation/Foundation.h>
 typedef Float32 AudioSignalType;
 

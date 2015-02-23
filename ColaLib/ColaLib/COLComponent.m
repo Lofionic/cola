@@ -8,6 +8,8 @@
 #import "COLAudioEnvironment.m"
 #import "COLAudioEngine.H"
 #import "COLComponent.h"
+#import "COLComponentInput.h"
+#import "COLComponentOutput.h"
 
 @interface COLComponent ()
 
@@ -34,6 +36,7 @@
     
 }
 
+// Data source
 -(NSInteger)numberOfOutputs {
     return [self.outputs count];
 }
@@ -68,6 +71,7 @@
     self.hasRendered = YES;
 }
 
+// Called when engine render has completed
 -(void)engineDidRender {
     self.hasRendered = NO;
     for (COLComponentInput *thisInput in self.inputs) {
@@ -79,5 +83,18 @@
     }
 }
 
+-(void)disconnectAll {
+    for (COLComponentOutput* thisOutput in self.outputs) {
+        [thisOutput disconnect];
+    }
+    
+    for (COLComponentInput* thisInput in self.inputs) {
+        [thisInput disconnect];
+    }
+}
+
+-(void)dealloc {
+    NSLog(@"%@ dealloc", self.name);
+}
 
 @end

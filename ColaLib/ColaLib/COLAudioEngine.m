@@ -11,7 +11,9 @@
 #import "COLComponentInput.h"
 #import "Endian.h"
 
-@interface COLAudioEngine()
+@interface COLAudioEngine() {
+    Float64 sampleRate;
+}
 
 @property (nonatomic) BOOL isForeground;
 @property (nonatomic) BOOL isInterAppConnected;
@@ -30,8 +32,9 @@
         [self registerApplicationStateNotifications];
         
         // Init the master inputs
-        self.masterInputL = [[COLAudioContext globalContext] masterInputs][0];
-        self.masterInputR = [[COLAudioContext globalContext] masterInputs][1];
+        self.masterInputL = [[COLAudioContext globalContext] masterInputAtIndex:0];
+        self.masterInputR = [[COLAudioContext globalContext] masterInputAtIndex:1];
+
     }
     return self;
 }
@@ -70,7 +73,7 @@
     // Set the RemoteIO stream format
     AudioStreamBasicDescription streamFormat = {0};
     
-    streamFormat.mSampleRate =          self.sampleRate;
+    streamFormat.mSampleRate =          sampleRate;
     streamFormat.mFormatID =            kAudioFormatLinearPCM;
     streamFormat.mFormatFlags =         kAudioFormatFlagsNativeFloatPacked | kAudioFormatFlagIsNonInterleaved;
     streamFormat.mFramesPerPacket =     1;
@@ -93,6 +96,9 @@
     // Starts and stops graph according to app state
     if (self.isForeground || self.isInterAppConnected) {
         NSLog(@"App is foreground or Inter-App connected");
+        
+        sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
+        
         if (mGraph) {
             Boolean initialized = YES;
             checkError(AUGraphIsInitialized(mGraph, &initialized), "Error checking initializing of AUGraph");
@@ -151,10 +157,7 @@
 static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
 {
     COLAudioEngine *audioEngine = (__bridge COLAudioEngine*)inRefCon;
-    
-//    [audioEngine.masterInputL renderComponents:inNumberFrames];
-//    [audioEngine.masterInputR renderComponents:inNumberFrames];
-//    
+       
     AudioSignalType *leftBuffer = [audioEngine.masterInputL getBuffer:inNumberFrames];
     AudioSignalType *rightBuffer = [audioEngine.masterInputR getBuffer:inNumberFrames];
     
@@ -175,9 +178,9 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 
 #pragma mark Audio Session Management
 -(void) setAudioSessionActive {
-    NSLog(@"Audio Session Active with preferred sample rate : %.2f", self.sampleRate);
+    NSLog(@"Audio Session Active @ %.2fHz", sampleRate);
     AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setPreferredSampleRate: self.sampleRate error: nil];
+    [session setPreferredSampleRate: sampleRate error: nil];
     [session setCategory: AVAudioSessionCategoryPlayback withOptions: AVAudioSessionCategoryOptionMixWithOthers error: nil];
     [session setActive: YES error: nil];
 }

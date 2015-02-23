@@ -16,8 +16,8 @@
 @property (nonatomic, weak) COLComponentOutput *connectedTo;
 
 -(AudioSignalType*)getBuffer:(UInt32)numFrames;
-
--(void)renderComponents:(UInt32)numFrames;
 -(void)engineDidRender;
+
+-(BOOL)disconnect;
 
 @end
