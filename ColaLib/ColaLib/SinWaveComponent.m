@@ -17,12 +17,13 @@
 @property (nonatomic, strong) COLComponentInput *frequencyIn;
 @property (nonatomic, strong) COLComponentInput *amplIn;
 
+@property (nonatomic, strong) COLComponentParameter *frequency;
+
 @end
 
 @implementation SinWaveComponent
 
 -(void)initializeIO {
-    self.frequency = 440.0;
     self.mainOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"Out"];
     
     [self setOutputs:@[self.mainOut]];
@@ -53,10 +54,10 @@
         if ([self.frequencyIn isConnected]) {
             freq = (frequencyBuffer[i] + 1);
         } else {
-            freq = 1;
+            freq = [self.frequency valueAtDelta:(i / (float)numFrames)];
         }
         
-        phase += (2.0 * M_PI * 220 * freq) / sampleRate;
+        phase += (M_PI * freq) / sampleRate;
         if (phase > 2.0 * M_PI) {
             phase -= (2.0 * M_PI);
         }

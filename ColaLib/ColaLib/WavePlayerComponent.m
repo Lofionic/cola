@@ -141,7 +141,7 @@
             AudioSignalType sample = samples[sampleIndex];
             leftOut[i] = sample;
             rightOut[i] = sample;
-                       
+            
             if (i % 50 == 0) {
                 meterHoldSigma -= meterHold[meterHoldPosition];
                 meterHold[meterHoldPosition] = fabsf(sample);

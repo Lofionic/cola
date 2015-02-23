@@ -9,6 +9,7 @@
 #import "COLAudioContext.h"
 #import "COLComponentInput.h"
 #import "COLComponentOutput.h"
+#import "COLComponentParameter.h"
 
 @class COLAudioEnvironment;
 

@@ -14,6 +14,7 @@
 @property (nonatomic, weak) COLAudioContext *context;
 @property (nonatomic, strong) NSArray *inputs;
 @property (nonatomic, strong) NSArray *outputs;
+@property (nonatomic, strong) NSArray *parameters;
 @property (nonatomic) BOOL hasRendered;
 
 @end
@@ -49,6 +50,14 @@
     return [self.inputs objectAtIndex:index];
 }
 
+-(NSInteger)numberOfParameters {
+    return [self.parameters count];
+}
+
+-(COLComponentParameter *)parameterForIndex:(NSInteger)index {
+    return [self.parameters objectAtIndex:index];
+}
+
 -(void)renderInputs:(UInt32)numFrames {
     for (COLComponentInput *thisInput in self.inputs) {
         [thisInput renderComponents:numFrames];
@@ -63,6 +72,10 @@
     self.hasRendered = NO;
     for (COLComponentInput *thisInput in self.inputs) {
         [thisInput engineDidRender];
+    }
+    
+    for (COLComponentParameter *thisParameter in self.parameters) {
+        [thisParameter engineDidRender];
     }
 }
 
