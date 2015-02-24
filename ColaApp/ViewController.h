@@ -10,6 +10,8 @@
 
 @interface ViewController : UIViewController
 
+@property (nonatomic, weak) IBOutlet UISlider *slider;
+
 
 @end
 

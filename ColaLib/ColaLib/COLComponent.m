@@ -57,14 +57,14 @@
     return [self.parameters count];
 }
 
--(COLComponentParameter *)parameterForIndex:(NSInteger)index {
-    return [self.parameters objectAtIndex:index];
+-(void)setValue:(float)value forParameterAtIndex:(NSInteger)index {
+    COLComponentParameter *parameter = [self.parameters objectAtIndex:index];
+    [parameter setTo:value];
 }
 
--(void)renderInputs:(UInt32)numFrames {
-    for (COLComponentInput *thisInput in self.inputs) {
-        [thisInput renderComponents:numFrames];
-    }
+-(float)getValueForParameterAtIndex:(NSInteger)index {
+    COLComponentParameter *parameter = [self.parameters objectAtIndex:index];
+    return [parameter valueAtDelta:1];
 }
 
 -(void)renderOutputs:(UInt32)numFrames {

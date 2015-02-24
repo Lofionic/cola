@@ -29,8 +29,9 @@
 
 -(float)valueAtDelta:(float)delta {
     
-    return ((postValue - preValue) * delta) + preValue;
+    float f = ((postValue - preValue) * delta) + preValue;
     
+    return f;
 }
 
 @end

@@ -38,6 +38,9 @@
     self.amplIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"AmpIn"];
 
     [self setInputs:@[self.frequencyIn, self.amplIn]];
+    
+    self.frequency = [[COLComponentParameter alloc] init];
+    [self setParameters:@[self.frequency]];
 }
 
 -(void)renderOutputs:(UInt32)numFrames {
@@ -68,7 +71,7 @@
             freq = [self.frequency valueAtDelta:(i / (float)numFrames)];
         }
         
-        phase += (M_PI * freq) / sampleRate;
+        phase += (M_PI * freq * kOscillatorFrequencyRange) / sampleRate;
         if (phase > 2.0 * M_PI) {
             phase -= (2.0 * M_PI);
         }

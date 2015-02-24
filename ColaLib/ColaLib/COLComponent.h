@@ -28,6 +28,9 @@
 -(NSInteger)numberOfInputs;
 -(COLComponentInput *)inputForIndex:(NSInteger)index;
 
+-(void)setValue:(float)value forParameterAtIndex:(NSInteger)index;
+-(float)getValueForParameterAtIndex:(NSInteger)index;
+
 -(instancetype)initWithContext:(COLAudioContext*)context;
 -(void)initializeIO;
 -(void)renderOutputs:(UInt32)numFrames;
@@ -35,6 +38,7 @@
 
 -(void)setOutputs:(NSArray*)outputs;
 -(void)setInputs:(NSArray*)inputs;
+-(void)setParameters:(NSArray*)parameters;
 -(void)disconnectAll;
 
 @end

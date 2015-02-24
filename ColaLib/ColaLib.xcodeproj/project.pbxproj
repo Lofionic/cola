@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6C0DD3571A94DEDC00217751 /* COLComponents.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CFD38881A949D9600A6D80F /* COLComponents.h */; };
 		6C0DD3581A94DEE900217751 /* COLComponentOscillator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C310D401A8D721900A97D82 /* COLComponentOscillator.h */; };
 		6C0DD3591A94DEEB00217751 /* COLComponentLFO.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C1154781A8E3468005CF194 /* COLComponentLFO.h */; };
 		6C0DD35A1A94DEEC00217751 /* COLComponentWavePlayer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C65A4E41A9117CF000D9192 /* COLComponentWavePlayer.h */; };
@@ -32,6 +31,7 @@
 		6CB322F21A9BE2B20052AE50 /* COLComponentOutput.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27C51A8D578F00AFD384 /* COLComponentOutput.h */; };
 		6CB322F31A9BE2B30052AE50 /* COLComponentInput.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27C81A8D57AF00AFD384 /* COLComponentInput.h */; };
 		6CB322F41A9BE2B40052AE50 /* COLComponentParameter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB322EC1A9BC1110052AE50 /* COLComponentParameter.h */; };
+		6CB322F61A9BE5400052AE50 /* COLComponents.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB322F51A9BE5350052AE50 /* COLComponents.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,9 +43,10 @@
 			files = (
 				6C65A4E31A8F5E5D000D9192 /* COLAudioEngine.h in CopyFiles */,
 				6C0DD3591A94DEEB00217751 /* COLComponentLFO.h in CopyFiles */,
-				6C0DD3571A94DEDC00217751 /* COLComponents.h in CopyFiles */,
+				6CB322EF1A9BE1C90052AE50 /* COLComponent.h in CopyFiles */,
 				6C0DD35A1A94DEEC00217751 /* COLComponentWavePlayer.h in CopyFiles */,
 				6C0DD3581A94DEE900217751 /* COLComponentOscillator.h in CopyFiles */,
+				6CB322F61A9BE5400052AE50 /* COLComponents.h in CopyFiles */,
 				6C65A4E21A8F5E45000D9192 /* COLDefines.h in CopyFiles */,
 				6CB322F31A9BE2B30052AE50 /* COLComponentInput.h in CopyFiles */,
 				6CB322F41A9BE2B40052AE50 /* COLComponentParameter.h in CopyFiles */,
@@ -53,7 +54,6 @@
 				6CB322F21A9BE2B20052AE50 /* COLComponentOutput.h in CopyFiles */,
 				6C2A5E751A8BF30500ECEAB2 /* ColaLib.h in CopyFiles */,
 				6CB322F11A9BE2AE0052AE50 /* COLComponentIO.h in CopyFiles */,
-				6CB322EF1A9BE1C90052AE50 /* COLComponent.h in CopyFiles */,
 				6CB322F01A9BE2A30052AE50 /* COLAudioContext.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,6 +86,7 @@
 		6C7B27CD1A8D581100AFD384 /* COLDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = COLDefines.h; sourceTree = "<group>"; };
 		6CB322EC1A9BC1110052AE50 /* COLComponentParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentParameter.h; sourceTree = "<group>"; };
 		6CB322ED1A9BC1110052AE50 /* COLComponentParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentParameter.m; sourceTree = "<group>"; };
+		6CB322F51A9BE5350052AE50 /* COLComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponents.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +103,7 @@
 		6C11547B1A8E346E005CF194 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				6CFD38881A949D9600A6D80F /* COLComponents.h */,
+				6CB322F51A9BE5350052AE50 /* COLComponents.h */,
 				6C310D401A8D721900A97D82 /* COLComponentOscillator.h */,
 				6C310D411A8D721900A97D82 /* COLComponentOscillator.m */,
 				6C1154781A8E3468005CF194 /* COLComponentLFO.h */,

@@ -11,7 +11,7 @@
 
 @interface ViewController ()
 
-@property (weak) COLComponentWavePlayer *waveplayer;
+@property (weak) COLComponent *osc;
 @property (weak) COLComponentLFO *lfo1;
 @property (weak) COLComponent *lfo2;
 
@@ -24,22 +24,20 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     COLAudioEnvironment *env = [COLAudioEnvironment sharedEnvironment];
-    COLAudioContext *ctx = [COLAudioContext globalContext];
     
-    self.waveplayer = (COLComponentWavePlayer*)[env createComponentOfType:kCOLComponentWavePlayer];
-    [self.waveplayer loadWAVFile:[[NSBundle mainBundle] URLForResource:@"gtr" withExtension:@"wav"]];
-    [[self.waveplayer outputForIndex:0] connectTo:[ctx masterInputAtIndex:0]];
-    
-    self.lfo1 = (COLComponentLFO*)[env createComponentOfType:kCOLComponentLFO];
-    [self.lfo1 setFrequency:1];
-    [[self.lfo1 outputForIndex:0] connectTo:[self.waveplayer inputForIndex:0]];
+    self.osc = [env createComponentOfType:kCOLComponentOscillator];
+    [self.osc setName:@"osc"];
+    [self.osc setValue:0.1f forParameterAtIndex:0];
+
+    [[self.osc outputForIndex:0] connectTo:[[COLAudioContext globalContext] masterInputAtIndex:0]];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    
-   
 }
+
+-(IBAction)sliderDidChange:(id)sender {
+    [self.osc setValue:self.slider.value / 4 forParameterAtIndex:0];}
 
 @end
