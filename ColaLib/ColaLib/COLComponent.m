@@ -37,34 +37,40 @@
 }
 
 // Data source
--(NSInteger)numberOfOutputs {
+-(NSUInteger)numberOfOutputs {
     return [self.outputs count];
 }
 
--(COLComponentOutput *)outputForIndex:(NSInteger)index {
-    return [self.outputs objectAtIndex:index];
+-(COLComponentOutput *)outputForIndex:(NSUInteger)index {
+    if (index < [self.outputs count]) {
+        return [self.outputs objectAtIndex:index];
+    } else {
+        return nil;
+    }
 }
 
--(NSInteger)numberOfInputs {
+-(NSUInteger)numberOfInputs {
     return [self.inputs count];
 }
 
--(COLComponentInput *)inputForIndex:(NSInteger)index {
-    return [self.inputs objectAtIndex:index];
+-(COLComponentInput *)inputForIndex:(NSUInteger)index {
+    if (index < [self.inputs count]) {
+        return [self.inputs objectAtIndex:index];
+    } else {
+        return nil;
+    }
 }
 
--(NSInteger)numberOfParameters {
+-(NSUInteger)numberOfParameters {
     return [self.parameters count];
 }
 
--(void)setValue:(float)value forParameterAtIndex:(NSInteger)index {
-    COLComponentParameter *parameter = [self.parameters objectAtIndex:index];
-    [parameter setTo:value];
-}
-
--(float)getValueForParameterAtIndex:(NSInteger)index {
-    COLComponentParameter *parameter = [self.parameters objectAtIndex:index];
-    return [parameter valueAtDelta:1];
+-(COLComponentParameter*)parameterForIndex:(NSUInteger)index {
+    if (index < [self.parameters count]) {
+        return [self.parameters objectAtIndex:index];
+    } else {
+        return nil;
+    }
 }
 
 -(void)renderOutputs:(UInt32)numFrames {

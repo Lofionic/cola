@@ -68,7 +68,7 @@
         if ([self.frequencyIn isConnected]) {
             freq = (frequencyBuffer[i] + 1);
         } else {
-            freq = [self.frequency valueAtDelta:(i / (float)numFrames)];
+            freq = [self.frequency outputAtDelta:(i / (float)numFrames)];
         }
         
         phase += (M_PI * freq * kOscillatorFrequencyRange) / sampleRate;

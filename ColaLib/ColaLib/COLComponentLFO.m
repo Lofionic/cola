@@ -44,7 +44,7 @@
         if ([self.freqIn isConnected]) {
             freq = frequencyBuffer[i] + 1;
         } else {
-            freq = 1;
+            freq = 2;
         }
         
         phase += (2.0 * M_PI * (self.frequency * freq)) / sampleRate;

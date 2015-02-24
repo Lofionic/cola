@@ -22,14 +22,13 @@
 
 @property (readonly) BOOL hasRendered;
 
--(NSInteger)numberOfOutputs;
--(COLComponentOutput*)outputForIndex:(NSInteger)index;
+-(NSUInteger)numberOfOutputs;
+-(COLComponentOutput*)outputForIndex:(NSUInteger)index;
 
--(NSInteger)numberOfInputs;
--(COLComponentInput *)inputForIndex:(NSInteger)index;
+-(NSUInteger)numberOfInputs;
+-(COLComponentInput *)inputForIndex:(NSUInteger)index;
 
--(void)setValue:(float)value forParameterAtIndex:(NSInteger)index;
--(float)getValueForParameterAtIndex:(NSInteger)index;
+-(COLComponentParameter*)parameterForIndex:(NSUInteger)index;
 
 -(instancetype)initWithContext:(COLAudioContext*)context;
 -(void)initializeIO;

@@ -11,7 +11,7 @@
 
 @interface ViewController ()
 
-@property (weak) COLComponent *osc;
+@property (weak) COLComponentWavePlayer *component;
 @property (weak) COLComponentLFO *lfo1;
 @property (weak) COLComponent *lfo2;
 
@@ -24,12 +24,20 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     COLAudioEnvironment *env = [COLAudioEnvironment sharedEnvironment];
+    COLAudioContext *ctx = [COLAudioContext globalContext];
     
-    self.osc = [env createComponentOfType:kCOLComponentOscillator];
-    [self.osc setName:@"osc"];
-    [self.osc setValue:0.1f forParameterAtIndex:0];
-
-    [[self.osc outputForIndex:0] connectTo:[[COLAudioContext globalContext] masterInputAtIndex:0]];
+    self.component = (COLComponentWavePlayer*)[env createComponentOfType:kCOLComponentWavePlayer];
+    [self.component setName:@"WavePlayer"];
+    [self.component loadWAVFile:[[NSBundle mainBundle] URLForResource:@"loop" withExtension:@"wav"]];
+    
+    [[self.component outputForIndex:0] connectTo:[ctx masterInputAtIndex:0]];
+    [[self.component outputForIndex:1] connectTo:[ctx masterInputAtIndex:1]];
+    
+    [[self.component parameterForIndex:0] setNormalizedValue:0.5];
+    
+    self.lfo1 = (COLComponentLFO*)[env createComponentOfType:kCOLComponentLFO];
+    [[self.lfo1 parameterForIndex:0] setNormalizedValue:4];
+    //[[self.lfo1 outputForIndex:0] connectTo:[self.component inputForIndex:0]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,6 +46,11 @@
 }
 
 -(IBAction)sliderDidChange:(id)sender {
-    [self.osc setValue:self.slider.value / 4 forParameterAtIndex:0];}
+    COLComponentParameter *parameter = [self.component parameterForIndex:0];
+    
+    [parameter setNormalizedValue:self.slider.value];
+    NSLog(@"NormalizedValue : %.2f  Output : %.2f", [parameter getNormalizedValue], [parameter outputAtDelta:1]);
+}
+
 
 @end

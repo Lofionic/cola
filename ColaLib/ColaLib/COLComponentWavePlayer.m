@@ -12,25 +12,20 @@
 
 @interface COLComponentWavePlayer() {
     ExtAudioFileRef ref;
-    AudioSignalType samples[880000];
+    AudioSignalType samplesL[880000];
+    AudioSignalType samplesR[880000];
     UInt64 sampleCount;
     Float32 samplePosition;
     
-    AudioSignalType meterHoldSigma;
-    UInt64 meterHoldPosition;
-    AudioSignalType meterHold[50];
-    
-    AudioSignalType meterPeak;
-    UInt64 meterAge;
-
+    BOOL stereo;
 }
 
 @property (nonatomic, strong) COLComponentOutput *outputL;
 @property (nonatomic, strong) COLComponentOutput *outputR;
 
-@property (nonatomic, strong) COLComponentOutput *meterOut;
-
 @property (nonatomic, strong) COLComponentInput *freqMod;
+
+@property (nonatomic, strong) COLComponentParameter *speed;
 
 @end
 
@@ -45,19 +40,48 @@
     return self;
 }
 
--(void)loadWAVFile:(NSURL*)fileUrl {
+-(void)initializeIO {
+    
+    self.outputL = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"OutL"];
+    self.outputR = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"OutR"];
+    
+    [self setOutputs:@[self.outputL, self.outputR]];
+    
+    self.freqMod = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"FreqIn"];
+    [self setInputs:@[self.freqMod]];
+    
+    self.speed = [[COLComponentParameter alloc] initWithComponent:self withName:@"Speed"];
+    [self.speed setFunction:^float (float normalizedValue) {
+        normalizedValue = 1 + (powf(normalizedValue - 0.5, 3) * 8);
+        if (normalizedValue < 0.5) {
+            normalizedValue = 0.5;
+        }
+        return normalizedValue;
+    }];
+    
+    [self setParameters:@[self.speed]];
+}
+
+-(BOOL)loadWAVFile:(NSURL*)fileUrl {
     CFURLRef url = (__bridge CFURLRef)fileUrl;
     ExtAudioFileRef fileRef;
     
     OSStatus err = ExtAudioFileOpenURL(url, &fileRef);
+    if (err) {
+        return NO;
+    }
     
     // Get the file format description
     AudioStreamBasicDescription fileFormat;
     UInt32 dataSize = sizeof(fileFormat);
     err = ExtAudioFileGetProperty(fileRef, kExtAudioFileProperty_FileDataFormat, &dataSize, &fileFormat);
+    if (err) {
+        return NO;
+    }
     
     // Set the client format description
     AudioStreamBasicDescription clientFormat = fileFormat;
+    clientFormat.mSampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     clientFormat.mFormatID = kAudioFormatLinearPCM;
     clientFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagIsNonInterleaved;
     clientFormat.mBitsPerChannel = sizeof(AudioSignalType) * 8;
@@ -66,13 +90,19 @@
     clientFormat.mBytesPerFrame = 4;
 
     err = ExtAudioFileSetProperty(fileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(clientFormat), &clientFormat);
+    if (err) {
+        return NO;
+    }
     
     // Find the number of samples
     UInt64 numFrames = 0;
     dataSize = sizeof(numFrames);
     err = ExtAudioFileGetProperty(fileRef, kExtAudioFileProperty_FileLengthFrames, &dataSize, &numFrames);
+    if (err) {
+        return NO;
+    }
     
-    sampleCount = numFrames;
+    sampleCount = numFrames * (clientFormat.mSampleRate / fileFormat.mSampleRate);
     
     // Prepare an audio buffer list to hold the data when we read it from the file
     UInt32 maxReadFrames = 4096;  // number of samples to read at a time
@@ -92,13 +122,34 @@
     while (numFrames > 0) {
         UInt32 framesToRead = (maxReadFrames > numFrames) ? (UInt32)numFrames : maxReadFrames;
         err = ExtAudioFileRead(fileRef, &framesToRead, bufferList);
+        if (err) {
+            return NO;
+        }
+        
         // PCM data is in bufferList;
-        AudioBuffer buf = bufferList->mBuffers[0];
-        Float32 *data = buf.mData;
-        for (int i = 0; i < framesToRead; i++) {
-            //printf("%.4f\n", data[i]);
-            samples[nextSample] = (AudioSignalType)data[i];
-            nextSample ++;
+
+        if (bufferList->mNumberBuffers == 1) {
+            // read mono
+            stereo = NO;
+            AudioBuffer buffer = bufferList->mBuffers[0];
+            AudioSignalType *data = buffer.mData;
+            for (int i = 0; i < framesToRead; i++) {
+                samplesL[nextSample] = (AudioSignalType)data[i];
+                nextSample ++;
+            }
+        } else {
+            // read stereo
+            stereo = YES;
+            AudioBuffer bufferLeft = bufferList->mBuffers[0];
+            AudioBuffer bufferRight = bufferList->mBuffers[1];
+            AudioSignalType *dataLeft = bufferLeft.mData;
+            AudioSignalType *dataRight = bufferRight.mData;
+            for (int i = 0; i < framesToRead; i++) {
+                //printf("%.4f\n", data[i]);
+                samplesL[nextSample] = (AudioSignalType)dataLeft[i];
+                samplesR[nextSample] = (AudioSignalType)dataRight[i];
+                nextSample ++;
+            }
         }
         
         numFrames = framesToRead;
@@ -109,19 +160,8 @@
     ExtAudioFileDispose(fileRef);
     
     samplePosition = 0;
-}
-
--(void)initializeIO {
     
-    self.outputL = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"OutL"];
-    self.outputR = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"OutR"];
-
-    self.meterOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"Meter Out"];
-    
-    [self setOutputs:@[self.outputL, self.outputR, self.meterOut]];
-    
-    self.freqMod = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"FreqIn"];
-    [self setInputs:@[self.freqMod]];
+    return YES;
 }
 
 -(void)renderOutputs:(UInt32)numFrames {
@@ -134,44 +174,53 @@
     // Output buffers
     AudioSignalType *leftOut = [self.outputL prepareBufferOfSize:numFrames];
     AudioSignalType *rightOut = [self.outputR prepareBufferOfSize:numFrames];
-    AudioSignalType *meterOut = [self.meterOut prepareBufferOfSize:numFrames];
-    
-    int meterHoldSize = sizeof(meterHold) / sizeof(meterHold[0]);
-    
-    AudioSignalType meterHoldHold = 0;
     
     for (int i = 0; i < numFrames; i++) {
-        if (sampleCount > 0) {
+        if (sampleCount > 0 && samplePosition < sampleCount) {
             UInt64 sampleIndex = (UInt64)floor(samplePosition);
-            AudioSignalType sample = 0;
+            AudioSignalType sampleLeft = 0;
+            AudioSignalType sampleRight = 0;
+            
             if (sampleIndex != samplePosition && sampleIndex < sampleCount) {
+                
                 // Interpolate between two samples
                 float dec = samplePosition - sampleIndex;
-                AudioSignalType sampleA = samples[sampleIndex];
-                AudioSignalType sampleB = samples[sampleIndex + 1];
-                sample = sampleA + ((sampleB - sampleA) * dec);
-            } else {
-                sample = samples[sampleIndex];
-            }
-            leftOut[i] = sample;
-            rightOut[i] = sample;
-            
-            if (i % 50 == 0) {
-                meterHoldSigma -= meterHold[meterHoldPosition];
-                meterHold[meterHoldPosition] = fabsf(sample);
-                meterHoldSigma += fabsf(sample);
-
-                meterHoldPosition ++;
-                if (meterHoldPosition >= meterHoldSize) {
-                    meterHoldPosition = 0;
+                AudioSignalType sampleA = samplesL[sampleIndex];
+                AudioSignalType sampleB = samplesL[sampleIndex + 1];
+                sampleLeft = sampleA + ((sampleB - sampleA) * dec);
+                
+                if (stereo) {
+                    AudioSignalType sampleA = samplesR[sampleIndex];
+                    AudioSignalType sampleB = samplesR[sampleIndex + 1];
+                    sampleRight = sampleA + ((sampleB - sampleA) * dec);
+                } else {
+                    sampleRight = sampleLeft;
                 }
                 
-                meterHoldHold = meterHoldSigma / meterHoldSize;
+            } else {
+                sampleLeft = samplesL[sampleIndex];
+                if (stereo) {
+                    sampleRight = samplesR[sampleIndex];
+                } else {
+                    sampleRight = sampleLeft;
+                }
             }
             
-            meterOut[i] = meterHoldHold;
+            leftOut[i] = sampleLeft;
+            rightOut[i] = sampleRight;
             
+            // Iterate sample position
+            float delta = i / (float)numFrames;
+            float playbackSpeed = [self.speed outputAtDelta:delta];
 
+            if ([self.freqMod isConnected]) {
+                playbackSpeed *= (freqMod[i] * 1.5 + 0.5);
+            }
+            
+            samplePosition += playbackSpeed;
+            if (samplePosition >= sampleCount) {
+                samplePosition -= sampleCount;
+            }
         } else {
                 leftOut[i] = 0;
                 rightOut[i] = 0;

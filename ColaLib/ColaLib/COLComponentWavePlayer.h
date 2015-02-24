@@ -8,9 +8,9 @@
 
 #import "COLComponent.h"
 
+
 @interface COLComponentWavePlayer : COLComponent
 
--(void)loadWAVFile:(NSURL*)fileURL;
-
+-(BOOL)loadWAVFile:(NSURL*)fileURL;
 
 @end
