@@ -165,6 +165,10 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     AudioSignalType *outB = ioData->mBuffers[1].mData;
     
     for (int i = 0; i < inNumberFrames; i ++) {
+//        AudioSignalType p = leftBuffer[i];
+//        if (p != 0)
+//        printf("%.5f\n", p);
+        
         outA[i] = leftBuffer[i];
         outB[i] = rightBuffer[i];
     }

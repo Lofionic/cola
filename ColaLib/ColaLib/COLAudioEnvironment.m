@@ -93,6 +93,8 @@
         newComponent = [[COLComponentLFO alloc] initWithContext:context];
     } else if ([componentType isEqualToString:kCOLComponentWavePlayer]) {
         newComponent = [[COLComponentWavePlayer alloc] initWithContext:context];
+    } else if ([componentType isEqualToString:kCOLComponentEnvelope]) {
+        newComponent = [[COLCompenentEnvelope alloc] initWithContext:context];
     }
     
     if (newComponent) {

@@ -11,4 +11,8 @@
 
 @interface COLComponentOscillator : COLComponent
 
+-(void)retrigger;
+
+void renderNumberOfFrames(COLComponent *component, UInt32 numFrames);
+
 @end

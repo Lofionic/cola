@@ -24,6 +24,7 @@
 @property (nonatomic, strong) COLComponentOutput *outputR;
 
 @property (nonatomic, strong) COLComponentInput *freqMod;
+@property (nonatomic, strong) COLComponentInput *ampIn;
 
 @property (nonatomic, strong) COLComponentParameter *speed;
 
@@ -48,7 +49,8 @@
     [self setOutputs:@[self.outputL, self.outputR]];
     
     self.freqMod = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"FreqIn"];
-    [self setInputs:@[self.freqMod]];
+    self.ampIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"AmpIn"];
+    [self setInputs:@[self.freqMod, self.ampIn]];
     
     self.speed = [[COLComponentParameter alloc] initWithComponent:self withName:@"Speed"];
     [self.speed setFunction:^float (float normalizedValue) {
@@ -170,6 +172,7 @@
     
     // Input buffers
     AudioSignalType *freqMod = [self.freqMod getBuffer:numFrames];
+    AudioSignalType *ampIn = [self.ampIn getBuffer:numFrames];
     
     // Output buffers
     AudioSignalType *leftOut = [self.outputL prepareBufferOfSize:numFrames];
@@ -206,8 +209,15 @@
                 }
             }
             
-            leftOut[i] = sampleLeft;
-            rightOut[i] = sampleRight;
+            float amp;
+            if ([self.ampIn isConnected]) {
+                amp = ampIn[i];
+            } else {
+                amp = 1.0;
+            }
+            
+            leftOut[i] = sampleLeft * amp;
+            rightOut[i] = sampleRight * amp;
             
             // Iterate sample position
             float delta = i / (float)numFrames;

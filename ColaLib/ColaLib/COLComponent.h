@@ -40,4 +40,8 @@
 -(void)setParameters:(NSArray*)parameters;
 -(void)disconnectAll;
 
+-(void)parameterDidChange:(COLComponentParameter*)parameter;
+
+void renderNumberOfFrames(COLComponent *component, UInt32 numFrames);
+
 @end

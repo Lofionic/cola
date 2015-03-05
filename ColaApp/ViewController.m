@@ -11,9 +11,9 @@
 
 @interface ViewController ()
 
-@property (weak) COLComponentWavePlayer *component;
-@property (weak) COLComponentLFO *lfo1;
-@property (weak) COLComponent *lfo2;
+@property (nonatomic, weak) COLComponentWavePlayer  *wave;
+@property (nonatomic, weak) COLComponentOscillator  *osc;
+@property (nonatomic, weak) COLCompenentEnvelope    *eg;
 
 @end
 
@@ -25,19 +25,27 @@
     
     COLAudioEnvironment *env = [COLAudioEnvironment sharedEnvironment];
     COLAudioContext *ctx = [COLAudioContext globalContext];
+
+    self.osc = (COLComponentOscillator*)[env createComponentOfType:kCOLComponentOscillator];
+    [self.osc setName:@"Osc"];
+    [[self.osc parameterForIndex:0] setNormalizedValue:0.2];
     
-    self.component = (COLComponentWavePlayer*)[env createComponentOfType:kCOLComponentWavePlayer];
-    [self.component setName:@"WavePlayer"];
-    [self.component loadWAVFile:[[NSBundle mainBundle] URLForResource:@"loop" withExtension:@"wav"]];
+    self.wave = (COLComponentWavePlayer*)[env createComponentOfType:kCOLComponentWavePlayer];
+    [self.wave setName:@"Wave"];
+    [self.wave loadWAVFile:[[NSBundle mainBundle] URLForResource:@"loop" withExtension:@"wav"]];
     
-    [[self.component outputForIndex:0] connectTo:[ctx masterInputAtIndex:0]];
-    [[self.component outputForIndex:1] connectTo:[ctx masterInputAtIndex:1]];
+    [[self.wave outputForIndex:0] connectTo:[ctx masterInputAtIndex:0]];
     
-    [[self.component parameterForIndex:0] setNormalizedValue:0.5];
+    self.eg = (COLCompenentEnvelope*)[env createComponentOfType:kCOLComponentEnvelope];
+    [self.eg setName:@"EG"];
+    [[self.eg parameterForIndex:0] setNormalizedValue:0.01];
+    [[self.eg parameterForIndex:1] setNormalizedValue:0.5];
+    [[self.eg parameterForIndex:2] setNormalizedValue:0.5];
+    [[self.eg parameterForIndex:3] setNormalizedValue:0.5];
     
-    self.lfo1 = (COLComponentLFO*)[env createComponentOfType:kCOLComponentLFO];
-    [[self.lfo1 parameterForIndex:0] setNormalizedValue:4];
-    //[[self.lfo1 outputForIndex:0] connectTo:[self.component inputForIndex:0]];
+    [[self.eg outputForIndex:0] connectTo:[self.wave inputForIndex:1]];
+    
+    [self.eg setRetriggers:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,11 +54,15 @@
 }
 
 -(IBAction)sliderDidChange:(id)sender {
-    COLComponentParameter *parameter = [self.component parameterForIndex:0];
-    
-    [parameter setNormalizedValue:self.slider.value];
-    NSLog(@"NormalizedValue : %.2f  Output : %.2f", [parameter getNormalizedValue], [parameter outputAtDelta:1]);
+    [[self.wave parameterForIndex:0] setNormalizedValue:[self.slider value]];
 }
 
+-(IBAction)buttonDown:(id)sender {
+    [self.eg openGate];
+}
+
+-(IBAction)buttonUp:(id)sender {
+    [self.eg closeGate];
+}
 
 @end

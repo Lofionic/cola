@@ -38,6 +38,8 @@
     if (newValue >= 0 && newValue <= 1) {
         //postValue = self.outMinimum + ((self.outMaximum - self.outMinimum) * newValue);
         postValue = newValue;
+        
+        [self.component parameterDidChange:self];
     }
 }
 

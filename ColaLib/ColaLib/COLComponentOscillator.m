@@ -11,14 +11,9 @@
 
 @interface COLComponentOscillator () {
     Float64 phase;
-    
-    AudioSignalType meterHoldSigma;
-    UInt64 meterHoldPosition;
-    AudioSignalType meterHold[50];
 }
 
 @property (nonatomic, strong) COLComponentOutput *mainOut;
-@property (nonatomic, strong) COLComponentOutput *meterOut;
 @property (nonatomic, strong) COLComponentInput *frequencyIn;
 @property (nonatomic, strong) COLComponentInput *amplIn;
 
@@ -28,16 +23,21 @@
 
 @implementation COLComponentOscillator
 
+-(instancetype)initWithContext:(COLAudioContext *)context {
+    if (self = [super initWithContext:context]) {
+
+    }
+    return self;
+}
+
 -(void)initializeIO {
-    self.mainOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"Out"];
-    self.meterOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"Meter Out"];
-    
-    [self setOutputs:@[self.mainOut, self.meterOut]];
-    
     self.frequencyIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"FreqIn"];
     self.amplIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"AmpIn"];
-
+    
     [self setInputs:@[self.frequencyIn, self.amplIn]];
+    
+    self.mainOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"Out"];
+    [self setOutputs:@[self.mainOut]];
     
     self.frequency = [[COLComponentParameter alloc] init];
     [self setParameters:@[self.frequency]];
@@ -46,21 +46,16 @@
 -(void)renderOutputs:(UInt32)numFrames {
 
     [super renderOutputs:numFrames];
-    
+
     // Input Buffers
     AudioSignalType *frequencyBuffer = [self.frequencyIn getBuffer:numFrames];
     AudioSignalType *ampBuffer = [self.amplIn getBuffer:numFrames];
 
     // Output Buffers
     AudioSignalType *mainOutBuffer = [self.mainOut prepareBufferOfSize:numFrames];
-    AudioSignalType *meterOut = [self.meterOut prepareBufferOfSize:numFrames];
-    
-    int meterHoldSize = sizeof(meterHold) / sizeof(meterHold[0]);
-    
-    AudioSignalType meterHoldHold = 0;
-    
+
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
-    
+
     for (int i = 0; i < numFrames; i++) {
         AudioSignalType freq;
         AudioSignalType amp;
@@ -77,30 +72,20 @@
         }
         
         if ([self.amplIn isConnected]) {
-            amp = ampBuffer[i];
+            amp = ampBuffer[i] * 0.9f;
         } else {
-            amp = 0.5f;
+            amp = 1.0;
         }
+        AudioSignalType outputValue = sin(phase) * amp;
         
-        mainOutBuffer[i] = sin(phase) * amp;
-        
-        AudioSignalType sample = mainOutBuffer[i];
-        
-        if (i % 50 == 0) {
-            meterHoldSigma -= meterHold[meterHoldPosition];
-            meterHold[meterHoldPosition] = fabsf(sample);
-            meterHoldSigma += fabsf(sample);
-            
-            meterHoldPosition ++;
-            if (meterHoldPosition >= meterHoldSize) {
-                meterHoldPosition = 0;
-            }
-            
-            meterHoldHold = meterHoldSigma / meterHoldSize;
-        }
-        
-        meterOut[i] = meterHoldHold;
+        mainOutBuffer[i] = outputValue;
+    
     }
+
+}
+
+-(void)retrigger {
+    phase = 0;
 }
 
 @end

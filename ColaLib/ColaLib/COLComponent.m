@@ -69,6 +69,7 @@
     if (index < [self.parameters count]) {
         return [self.parameters objectAtIndex:index];
     } else {
+        NSLog(@"Warning: Invalid parameter index %lu for component %@", (unsigned long)index, self.name);
         return nil;
     }
 }
@@ -97,6 +98,10 @@
     for (COLComponentInput* thisInput in self.inputs) {
         [thisInput disconnect];
     }
+}
+
+-(void)parameterDidChange:(COLComponentParameter *)parameter {
+    
 }
 
 -(void)dealloc {

@@ -16,6 +16,8 @@
 		6C2A5E9C1A8BF7B100ECEAB2 /* COLAudioEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E9B1A8BF7B100ECEAB2 /* COLAudioEnvironment.m */; };
 		6C310D421A8D721900A97D82 /* COLComponentOscillator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C310D411A8D721900A97D82 /* COLComponentOscillator.m */; };
 		6C3AA0881A94039500DAAC09 /* COLAudioContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3AA0871A94039500DAAC09 /* COLAudioContext.m */; };
+		6C41E2301AA1C78800887B50 /* COLCompenentEnvelope.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C41E22F1AA1C78800887B50 /* COLCompenentEnvelope.m */; };
+		6C41E2311AA1D11E00887B50 /* COLCompenentEnvelope.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C41E22E1AA1C78800887B50 /* COLCompenentEnvelope.h */; };
 		6C65A4E11A8F5E42000D9192 /* COLAudioEnvironment.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27CB1A8D57BD00AFD384 /* COLAudioEnvironment.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6C65A4E21A8F5E45000D9192 /* COLDefines.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27CD1A8D581100AFD384 /* COLDefines.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6C65A4E31A8F5E5D000D9192 /* COLAudioEngine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27CC1A8D57EF00AFD384 /* COLAudioEngine.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -55,6 +57,7 @@
 				6C2A5E751A8BF30500ECEAB2 /* ColaLib.h in CopyFiles */,
 				6CB322F11A9BE2AE0052AE50 /* COLComponentIO.h in CopyFiles */,
 				6CB322F01A9BE2A30052AE50 /* COLAudioContext.h in CopyFiles */,
+				6C41E2311AA1D11E00887B50 /* COLCompenentEnvelope.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +76,8 @@
 		6C310D411A8D721900A97D82 /* COLComponentOscillator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentOscillator.m; sourceTree = "<group>"; };
 		6C3AA0861A94039500DAAC09 /* COLAudioContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLAudioContext.h; sourceTree = "<group>"; };
 		6C3AA0871A94039500DAAC09 /* COLAudioContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLAudioContext.m; sourceTree = "<group>"; };
+		6C41E22E1AA1C78800887B50 /* COLCompenentEnvelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLCompenentEnvelope.h; sourceTree = "<group>"; };
+		6C41E22F1AA1C78800887B50 /* COLCompenentEnvelope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLCompenentEnvelope.m; sourceTree = "<group>"; };
 		6C65A4E41A9117CF000D9192 /* COLComponentWavePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentWavePlayer.h; sourceTree = "<group>"; };
 		6C65A4E51A9117CF000D9192 /* COLComponentWavePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentWavePlayer.m; sourceTree = "<group>"; };
 		6C7B27C21A8D560100AFD384 /* COLComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponent.h; sourceTree = "<group>"; };
@@ -110,6 +115,8 @@
 				6C1154791A8E3468005CF194 /* COLComponentLFO.m */,
 				6C65A4E41A9117CF000D9192 /* COLComponentWavePlayer.h */,
 				6C65A4E51A9117CF000D9192 /* COLComponentWavePlayer.m */,
+				6C41E22E1AA1C78800887B50 /* COLCompenentEnvelope.h */,
+				6C41E22F1AA1C78800887B50 /* COLCompenentEnvelope.m */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -222,6 +229,7 @@
 				6C7B27C71A8D578F00AFD384 /* COLComponentOutput.m in Sources */,
 				6C11547A1A8E3468005CF194 /* COLComponentLFO.m in Sources */,
 				6C7B27C41A8D560100AFD384 /* COLComponent.m in Sources */,
+				6C41E2301AA1C78800887B50 /* COLCompenentEnvelope.m in Sources */,
 				6C2A5E9C1A8BF7B100ECEAB2 /* COLAudioEnvironment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

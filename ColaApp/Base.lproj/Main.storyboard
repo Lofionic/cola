@@ -23,11 +23,24 @@
                                     <action selector="sliderDidChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="HtA-nr-a6j"/>
                                 </connections>
                             </slider>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rhf-9O-1bK">
+                                <rect key="frame" x="263" y="113" width="75" height="30"/>
+                                <state key="normal" title="Open Gate">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonDown:" destination="BYZ-38-t0r" eventType="touchDown" id="yU7-5H-3qy"/>
+                                    <action selector="buttonUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="R5a-JC-dAl"/>
+                                    <action selector="buttonUp:" destination="BYZ-38-t0r" eventType="touchDragExit" id="wem-sJ-ROR"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="96H-iv-YG8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="0UP-EW-pQT"/>
+                            <constraint firstAttribute="centerX" secondItem="Rhf-9O-1bK" secondAttribute="centerX" id="9i4-3H-ZRk"/>
                             <constraint firstItem="96H-iv-YG8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="55" id="FoJ-38-HKy"/>
+                            <constraint firstItem="Rhf-9O-1bK" firstAttribute="top" secondItem="96H-iv-YG8" secondAttribute="bottom" constant="8" symbolic="YES" id="Imc-Cd-UkF"/>
                             <constraint firstItem="96H-iv-YG8" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="tq6-5F-gzI"/>
                         </constraints>
                     </view>

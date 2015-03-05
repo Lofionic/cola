@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "BuildViewController.h"
 
 @interface AppDelegate ()
 
@@ -18,6 +19,12 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [[COLAudioEnvironment sharedEnvironment] start];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self.window makeKeyAndVisible];
+    
+    BuildViewController *buildViewController = [[BuildViewController alloc] init];
+    [self.window setRootViewController:buildViewController];
     
     return YES;
 }

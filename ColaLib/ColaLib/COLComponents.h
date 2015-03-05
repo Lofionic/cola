@@ -12,5 +12,6 @@
 #import "COLComponentOscillator.h"
 #import "COLComponentLFO.h"
 #import "COLComponentWavePlayer.h"
+#import "COLCompenentEnvelope.h"
 
 #endif
