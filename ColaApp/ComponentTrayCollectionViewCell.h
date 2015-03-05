@@ -1,5 +1,5 @@
 //
-//  ComponentShelfCollectionViewCell.h
+//  ComponentTrayCollectionViewCell.h
 //  ColaApp
 //
 //  Created by Chris on 04/03/2015.
@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ComponentTrayView.h"
 
-@interface ComponentShelfCollectionViewCell : UICollectionViewCell
+@interface ComponentTrayCollectionViewCell : UICollectionViewCell
 
+@property (nonatomic, weak) ComponentTrayView *componentTrayView;
 @property (nonatomic, strong) UIImageView *thumbnailImageView;
 
 @end

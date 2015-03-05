@@ -8,9 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6C0F86D11AA7B2220092FB18 /* BuildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D01AA7B2220092FB18 /* BuildViewController.m */; };
-		6C0F86D51AA7B4ED0092FB18 /* BuildView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D41AA7B4ED0092FB18 /* BuildView.m */; };
-		6C0F86D81AA7BEB70092FB18 /* ComponentShelfController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D71AA7BEB70092FB18 /* ComponentShelfController.m */; };
-		6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */; };
+		6C0F86D81AA7BEB70092FB18 /* ComponentTrayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D71AA7BEB70092FB18 /* ComponentTrayView.m */; };
+		6C0F86DC1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86DB1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.m */; };
 		6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E211A8BF2CC00ECEAB2 /* main.m */; };
 		6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */; };
 		6C2A5E281A8BF2CC00ECEAB2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E271A8BF2CC00ECEAB2 /* ViewController.m */; };
@@ -22,6 +21,7 @@
 		6C460D931A8D6B4C00161C0E /* libColaLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5E911A8BF30600ECEAB2 /* libColaLib.a */; };
 		6C65A4E81A9125DD000D9192 /* gtr.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C65A4E71A9125DD000D9192 /* gtr.wav */; };
 		6C94939A1A9D1BFB00B7A37C /* loop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C9493991A9D1BFB00B7A37C /* loop.wav */; };
+		6CDA9F141AA9017E00D64EB0 /* BuildView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDA9F131AA9017E00D64EB0 /* BuildView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,12 +37,10 @@
 /* Begin PBXFileReference section */
 		6C0F86CF1AA7B2220092FB18 /* BuildViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewController.h; sourceTree = "<group>"; };
 		6C0F86D01AA7B2220092FB18 /* BuildViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildViewController.m; sourceTree = "<group>"; };
-		6C0F86D31AA7B4ED0092FB18 /* BuildView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildView.h; sourceTree = "<group>"; };
-		6C0F86D41AA7B4ED0092FB18 /* BuildView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildView.m; sourceTree = "<group>"; };
-		6C0F86D61AA7BEB70092FB18 /* ComponentShelfController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentShelfController.h; sourceTree = "<group>"; };
-		6C0F86D71AA7BEB70092FB18 /* ComponentShelfController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentShelfController.m; sourceTree = "<group>"; };
-		6C0F86DA1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentShelfCollectionViewCell.h; sourceTree = "<group>"; };
-		6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentShelfCollectionViewCell.m; sourceTree = "<group>"; };
+		6C0F86D61AA7BEB70092FB18 /* ComponentTrayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentTrayView.h; sourceTree = "<group>"; };
+		6C0F86D71AA7BEB70092FB18 /* ComponentTrayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentTrayView.m; sourceTree = "<group>"; };
+		6C0F86DA1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentTrayCollectionViewCell.h; sourceTree = "<group>"; };
+		6C0F86DB1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentTrayCollectionViewCell.m; sourceTree = "<group>"; };
 		6C2A5E1C1A8BF2CC00ECEAB2 /* ColaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2A5E201A8BF2CC00ECEAB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C2A5E211A8BF2CC00ECEAB2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -59,6 +57,8 @@
 		6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		6C65A4E71A9125DD000D9192 /* gtr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gtr.wav; sourceTree = "<group>"; };
 		6C9493991A9D1BFB00B7A37C /* loop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = loop.wav; sourceTree = "<group>"; };
+		6CDA9F121AA9017E00D64EB0 /* BuildView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildView.h; sourceTree = "<group>"; };
+		6CDA9F131AA9017E00D64EB0 /* BuildView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,10 +77,10 @@
 		6C0F86D91AA7BF070092FB18 /* ComponentShelf */ = {
 			isa = PBXGroup;
 			children = (
-				6C0F86D61AA7BEB70092FB18 /* ComponentShelfController.h */,
-				6C0F86D71AA7BEB70092FB18 /* ComponentShelfController.m */,
-				6C0F86DA1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.h */,
-				6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */,
+				6C0F86D61AA7BEB70092FB18 /* ComponentTrayView.h */,
+				6C0F86D71AA7BEB70092FB18 /* ComponentTrayView.m */,
+				6C0F86DA1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.h */,
+				6C0F86DB1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.m */,
 			);
 			name = ComponentShelf;
 			sourceTree = "<group>";
@@ -115,8 +115,8 @@
 				6C2A5E271A8BF2CC00ECEAB2 /* ViewController.m */,
 				6C0F86CF1AA7B2220092FB18 /* BuildViewController.h */,
 				6C0F86D01AA7B2220092FB18 /* BuildViewController.m */,
-				6C0F86D31AA7B4ED0092FB18 /* BuildView.h */,
-				6C0F86D41AA7B4ED0092FB18 /* BuildView.m */,
+				6CDA9F121AA9017E00D64EB0 /* BuildView.h */,
+				6CDA9F131AA9017E00D64EB0 /* BuildView.m */,
 				6C0F86D91AA7BF070092FB18 /* ComponentShelf */,
 				6C2A5E291A8BF2CC00ECEAB2 /* Main.storyboard */,
 				6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */,
@@ -251,12 +251,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C2A5E281A8BF2CC00ECEAB2 /* ViewController.m in Sources */,
-				6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */,
+				6CDA9F141AA9017E00D64EB0 /* BuildView.m in Sources */,
+				6C0F86DC1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.m in Sources */,
 				6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */,
-				6C0F86D81AA7BEB70092FB18 /* ComponentShelfController.m in Sources */,
+				6C0F86D81AA7BEB70092FB18 /* ComponentTrayView.m in Sources */,
 				6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */,
 				6C0F86D11AA7B2220092FB18 /* BuildViewController.m in Sources */,
-				6C0F86D51AA7B4ED0092FB18 /* BuildView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

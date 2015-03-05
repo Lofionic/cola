@@ -1,14 +1,14 @@
 //
-//  ComponentShelfCollectionViewCell.m
+//  ComponentTrayCollectionViewCell.m
 //  ColaApp
 //
 //  Created by Chris on 04/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 
-#import "ComponentShelfCollectionViewCell.h"
+#import "ComponentTrayCollectionViewCell.h"
 
-@implementation ComponentShelfCollectionViewCell
+@implementation ComponentTrayCollectionViewCell
 
 -(instancetype)initWithFrame:(CGRect)frame {
  
@@ -60,11 +60,28 @@
 }
 
 -(void)handlePanGesture:(UIGestureRecognizer*)uigr {
-    if (uigr.state == UIGestureRecognizerStateBegan) {
+    
+    UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)uigr;
+    
+    if (panGesture.state == UIGestureRecognizerStateBegan) {
         [self.thumbnailImageView setHidden:YES];
+        
+        if ([[self.componentTrayView delegate] respondsToSelector:@selector(componentTray:didBeginDraggingComponent:withGesture:)]) {
+            [[self.componentTrayView delegate] componentTray:self.componentTrayView didBeginDraggingComponent:self withGesture:panGesture];
+        }
+    } else if (panGesture.state == UIGestureRecognizerStateChanged) {
+        if ([[self.componentTrayView delegate] respondsToSelector:@selector(componentTray:didContinueDraggingComponent:withGesture:)]) {
+            [[self.componentTrayView delegate] componentTray:self.componentTrayView didContinueDraggingComponent:self withGesture:panGesture];
+        }
     } else if (uigr.state == UIGestureRecognizerStateEnded) {
         [self.thumbnailImageView setHidden:NO];
+        
+        if ([[self.componentTrayView delegate] respondsToSelector:@selector(componentTray:didEndDraggingComponent:withGesture:)]) {
+            [[self.componentTrayView delegate] componentTray:self.componentTrayView didEndDraggingComponent:self withGesture:panGesture];
+        }
     }
 }
+
+
 
 @end

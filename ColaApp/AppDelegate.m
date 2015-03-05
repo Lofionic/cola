@@ -20,7 +20,10 @@
     
     [[COLAudioEnvironment sharedEnvironment] start];
     
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self.window setBackgroundColor:[UIColor whiteColor]];
     [self.window makeKeyAndVisible];
     
     BuildViewController *buildViewController = [[BuildViewController alloc] init];
