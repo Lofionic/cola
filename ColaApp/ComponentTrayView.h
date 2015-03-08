@@ -20,8 +20,6 @@
 
 @interface ComponentTrayView : UIView <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
--(void)handleCellPanGesture:(UIGestureRecognizer*)uigr;
-
 @property (nonatomic, weak)     id<ComponentTrayDelegate> delegate;
 @property (nonatomic, strong)   UICollectionView *collectionView;
 @property (nonatomic, strong)   UICollectionViewFlowLayout *flowLayout;

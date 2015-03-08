@@ -27,7 +27,7 @@
         NSDictionary *viewsDictionary = @{
                                           @"collectionView" : self.collectionView
                                           };
-        
+
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[collectionView]|" options:0 metrics:nil views:viewsDictionary]];
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[collectionView]|" options:0 metrics:nil views:viewsDictionary]];
     }
