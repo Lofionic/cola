@@ -5,10 +5,10 @@
 //  Created by Chris on 04/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-#import "ComponentTrayCollectionViewCell.h"
-#import "ComponentTrayView.h"
+#import "ComponentShelfCollectionViewCell.h"
+#import "ComponentShelfView.h"
 
-@implementation ComponentTrayView
+@implementation ComponentShelfView
 
 -(instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -21,7 +21,7 @@
         [self.collectionView setDataSource:self];
         [self.collectionView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.7]];
         
-        [self.collectionView registerClass:[ComponentTrayCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+        [self.collectionView registerClass:[ComponentShelfCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
         [self addSubview:self.collectionView];
         
         NSDictionary *viewsDictionary = @{
@@ -37,7 +37,7 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    ComponentTrayCollectionViewCell *cell = (ComponentTrayCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    ComponentShelfCollectionViewCell *cell = (ComponentShelfCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     
     NSArray *colours = @[
                          [UIColor redColor],

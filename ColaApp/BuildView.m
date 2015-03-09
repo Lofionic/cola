@@ -125,4 +125,52 @@
     }
 }
 
+-(NSSet*)cellPathsForComponentOfWidth:(NSInteger)width height:(NSInteger)height center:(CGPoint)center {
+    
+    CGPoint minPoint = CGPointMake(
+                                   center.x - ((width - 1) * self.cellSize.width) / 2.0,
+                                   center.y - ((height - 1) * self.cellSize.height) / 2.0
+                                   );
+    
+    NSInteger minX = minPoint.x / self.cellSize.width;
+    NSInteger minY = minPoint.y / self.cellSize.height;
+    
+    if (minX < 0) {
+        minX = 0;
+    }
+    
+    if (minY < 0) {
+        minY = 0;
+    }
+    
+    NSInteger maxX = minX + width;
+    NSInteger maxY = minY + height;
+
+    while (maxX > self.columns) {
+        minX--;
+        maxX = minX + width;
+        if (minX < 0) {
+            return nil;
+        }
+    }
+
+    while (maxY > self.rows) {
+        minY--;
+        maxY = minY + height;
+        if (minY < 0) {
+            return nil;
+        }
+    }
+    
+    NSMutableSet *result = [[NSMutableSet alloc] initWithCapacity:self.rows * self.columns];
+    
+    for (NSInteger x = minX; x < maxX; x++) {
+        for (NSInteger y = minY; y < maxY; y++) {
+            [result addObject:[[BuildViewCellPath alloc] initWithColumn:x Row:y]];
+        }
+    }
+    
+    return [NSSet setWithSet:result];
+}
+
 @end

@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ComponentTrayView.h"
+#import "ComponentShelfView.h"
 
-@interface ComponentTrayCollectionViewCell : UICollectionViewCell
+@interface ComponentShelfCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, weak) ComponentTrayView *componentTrayView;
+@property (nonatomic, weak) ComponentShelfView *componentTrayView;
 @property (nonatomic, strong) UIImageView *thumbnailImageView;
 
 @end

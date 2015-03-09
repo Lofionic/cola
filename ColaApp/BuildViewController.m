@@ -18,7 +18,7 @@
     [self.buildView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:self.buildView];
     
-    self.componentTray = [[ComponentTrayView alloc] init];
+    self.componentTray = [[ComponentShelfView alloc] init];
     [self.componentTray setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.componentTray setDelegate:self];
     [self.view addSubview:self.componentTray];
@@ -50,7 +50,7 @@
                                                                         views:viewsDictionary]];
 }
 
--(void)componentTray:(ComponentTrayView *)componentTray didBeginDraggingComponent:(id)component withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentTray:(ComponentShelfView *)componentTray didBeginDraggingComponent:(id)component withGesture:(UIPanGestureRecognizer *)panGesture {
     
     CGPoint dragPoint = [panGesture locationInView:self.view];
     
@@ -62,21 +62,21 @@
     [self.view addSubview:self.dragView];
 }
 
--(void)componentTray:(ComponentTrayView *)componentTray didContinueDraggingComponent:(id)component withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentTray:(ComponentShelfView *)componentTray didContinueDraggingComponent:(id)component withGesture:(UIPanGestureRecognizer *)panGesture {
     
     CGPoint dragPoint = [panGesture locationInView:self.view];
     [self.dragView setCenter:dragPoint];
     
-    BuildViewCellPath *hoverCellPath = [self.buildView cellPathForPoint:[self.buildView convertPoint:dragPoint fromView:self.view]];
+    NSSet *hoverSet = [self.buildView cellPathsForComponentOfWidth:1 height:2 center:[panGesture locationInView:self.buildView]];
     
-    if (hoverCellPath && [self.view hitTest:dragPoint withEvent:nil] == self.buildView) {
-        [self.buildView setHighlightedCellSet:[NSSet setWithObject:hoverCellPath]];
+    if (hoverSet && [self.view hitTest:dragPoint withEvent:nil] == self.buildView) {
+        [self.buildView setHighlightedCellSet:hoverSet];
     } else {
         [self.buildView setHighlightedCellSet:nil];
     }
 }
 
--(void)componentTray:(ComponentTrayView *)componentTray didEndDraggingComponent:(id)component withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentTray:(ComponentShelfView *)componentTray didEndDraggingComponent:(id)component withGesture:(UIPanGestureRecognizer *)panGesture {
     [self.dragView removeFromSuperview];
     [self.buildView setHighlightedCellSet:nil];
 }

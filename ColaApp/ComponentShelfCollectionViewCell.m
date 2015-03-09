@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 
-#import "ComponentTrayCollectionViewCell.h"
+#import "ComponentShelfCollectionViewCell.h"
 
-@implementation ComponentTrayCollectionViewCell
+@implementation ComponentShelfCollectionViewCell
 
 -(instancetype)initWithFrame:(CGRect)frame {
  

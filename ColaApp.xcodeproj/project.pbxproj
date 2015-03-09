@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6C0F86D11AA7B2220092FB18 /* BuildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D01AA7B2220092FB18 /* BuildViewController.m */; };
-		6C0F86D81AA7BEB70092FB18 /* ComponentTrayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D71AA7BEB70092FB18 /* ComponentTrayView.m */; };
-		6C0F86DC1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86DB1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.m */; };
+		6C0F86D81AA7BEB70092FB18 /* ComponentShelfView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D71AA7BEB70092FB18 /* ComponentShelfView.m */; };
+		6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */; };
 		6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E211A8BF2CC00ECEAB2 /* main.m */; };
 		6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */; };
 		6C2A5E281A8BF2CC00ECEAB2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E271A8BF2CC00ECEAB2 /* ViewController.m */; };
@@ -37,10 +37,10 @@
 /* Begin PBXFileReference section */
 		6C0F86CF1AA7B2220092FB18 /* BuildViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewController.h; sourceTree = "<group>"; };
 		6C0F86D01AA7B2220092FB18 /* BuildViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildViewController.m; sourceTree = "<group>"; };
-		6C0F86D61AA7BEB70092FB18 /* ComponentTrayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentTrayView.h; sourceTree = "<group>"; };
-		6C0F86D71AA7BEB70092FB18 /* ComponentTrayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentTrayView.m; sourceTree = "<group>"; };
-		6C0F86DA1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentTrayCollectionViewCell.h; sourceTree = "<group>"; };
-		6C0F86DB1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentTrayCollectionViewCell.m; sourceTree = "<group>"; };
+		6C0F86D61AA7BEB70092FB18 /* ComponentShelfView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentShelfView.h; sourceTree = "<group>"; };
+		6C0F86D71AA7BEB70092FB18 /* ComponentShelfView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentShelfView.m; sourceTree = "<group>"; };
+		6C0F86DA1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentShelfCollectionViewCell.h; sourceTree = "<group>"; };
+		6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentShelfCollectionViewCell.m; sourceTree = "<group>"; };
 		6C2A5E1C1A8BF2CC00ECEAB2 /* ColaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2A5E201A8BF2CC00ECEAB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C2A5E211A8BF2CC00ECEAB2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -77,10 +77,10 @@
 		6C0F86D91AA7BF070092FB18 /* ComponentShelf */ = {
 			isa = PBXGroup;
 			children = (
-				6C0F86D61AA7BEB70092FB18 /* ComponentTrayView.h */,
-				6C0F86D71AA7BEB70092FB18 /* ComponentTrayView.m */,
-				6C0F86DA1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.h */,
-				6C0F86DB1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.m */,
+				6C0F86D61AA7BEB70092FB18 /* ComponentShelfView.h */,
+				6C0F86D71AA7BEB70092FB18 /* ComponentShelfView.m */,
+				6C0F86DA1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.h */,
+				6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */,
 			);
 			name = ComponentShelf;
 			sourceTree = "<group>";
@@ -252,9 +252,9 @@
 			files = (
 				6C2A5E281A8BF2CC00ECEAB2 /* ViewController.m in Sources */,
 				6CDA9F141AA9017E00D64EB0 /* BuildView.m in Sources */,
-				6C0F86DC1AA7C1330092FB18 /* ComponentTrayCollectionViewCell.m in Sources */,
+				6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */,
 				6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */,
-				6C0F86D81AA7BEB70092FB18 /* ComponentTrayView.m in Sources */,
+				6C0F86D81AA7BEB70092FB18 /* ComponentShelfView.m in Sources */,
 				6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */,
 				6C0F86D11AA7B2220092FB18 /* BuildViewController.m in Sources */,
 			);

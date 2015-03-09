@@ -24,5 +24,6 @@
 -(instancetype)initWithColumns:(NSInteger)columns;
 
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point;
+-(NSSet*)cellPathsForComponentOfWidth:(NSInteger)width height:(NSInteger)height center:(CGPoint)center;
 
 @end
