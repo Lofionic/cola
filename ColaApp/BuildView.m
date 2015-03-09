@@ -91,14 +91,12 @@
 
     // Draw highlighed cell
     if (self.highlightedCellSet) {
-        for (BuildViewCellPath* thisCellPath in self.highlightedCellSet) {
-            CGFloat xHighlight = thisCellPath.column * self.cellSize.width;
-            CGFloat yHighlight = thisCellPath.row * self.cellSize.height;
-            CGRect highlightRect = CGRectMake(xHighlight, yHighlight, self.cellSize.width, self.cellSize.height);
-            CGContextAddRect(ctx, highlightRect);
-        }
-        CGContextSetFillColorWithColor(ctx, [UIColor redColor].CGColor);
-        CGContextFillPath(ctx);
+        CGRect highlightRect = [self rectForCellSet:self.highlightedCellSet];
+        highlightRect = CGRectInset(highlightRect, 2, 2);
+        CGContextAddRect(ctx, highlightRect);
+        CGContextSetStrokeColorWithColor(ctx, [[UIColor redColor] CGColor]);
+        CGContextSetLineWidth(ctx, 4);
+        CGContextStrokePath(ctx);
     }
     
     // Draw grid
@@ -198,7 +196,7 @@
     }
 }
 
--(CGRect)getRectForCellSet:(NSSet*)cellSet {
+-(CGRect)rectForCellSet:(NSSet*)cellSet {
     
     __block NSInteger left = self.columns;
     __block NSInteger top = self.rows;
@@ -232,7 +230,7 @@
 -(UIView*)addViewForComponent:(ComponentDescription)componentDescription atPoint:(CGPoint)point {
     NSSet *cellSet = [self cellPathsForComponentOfWidth:componentDescription.width height:componentDescription.height center:point];
     if (cellSet) {
-        CGRect newFrame = [self getRectForCellSet:cellSet];
+        CGRect newFrame = [self rectForCellSet:cellSet];
         
         UIView *newView = [[UIView alloc] initWithFrame:newFrame];
         [newView setBackgroundColor:[UIColor whiteColor]];

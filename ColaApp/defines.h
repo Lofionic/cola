@@ -7,8 +7,8 @@
 //
 #import <UIKit/UIKit.h>
 
-extern CGFloat const kComponentShelfHeight;
-extern CGFloat const kToolbarHeight;
-extern CGFloat const kBuildViewWidth;
-extern NSInteger const kBuildViewColumns;
-extern NSInteger const kBuildViewRows;
+extern CGFloat kComponentShelfHeight;
+extern CGFloat kToolbarHeight;
+extern CGFloat kBuildViewWidth;
+extern NSInteger kBuildViewRows;
+extern NSInteger kBuildViewColumns;

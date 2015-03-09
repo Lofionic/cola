@@ -5,25 +5,38 @@
 //  Created by Chris on 11/02/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-
+#import "defines.h"
 #import "AppDelegate.h"
 #import "BuildViewController.h"
-
-CGFloat const kComponentShelfHeight = 175.0;
-CGFloat const kToolbarHeight = 64.0;
-CGFloat const kBuildViewWidth = 768.0;
-NSInteger const kBuildViewRows = 8;
-NSInteger const kBuildViewColumns = 4;
 
 @interface AppDelegate ()
 
 @end
+
+CGFloat kComponentShelfHeight;
+CGFloat kToolbarHeight;
+CGFloat kBuildViewWidth;
+NSInteger kBuildViewRows;
+NSInteger kBuildViewColumns;
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    // Setup metrics
+    kBuildViewColumns =     4;
+    kBuildViewRows =        8;
+    kToolbarHeight =        64.0;
+    kComponentShelfHeight = 150;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        kBuildViewWidth =   768.0;
+    } else {
+        kBuildViewWidth =   320;
+    }
+    
+    // Start audio engine
     [[COLAudioEnvironment sharedEnvironment] start];
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES];

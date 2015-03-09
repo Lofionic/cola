@@ -101,10 +101,10 @@
     if (panGesture.state != UIGestureRecognizerStateCancelled ){
         CGPoint pointInWindow = [panGesture locationInView:self.view];
         // Don't drop if drag is likely to have gone off-screen
-        if (pointInWindow.x > 3 &&
-            pointInWindow.x < self.view.frame.size.width - 3 &&
-            pointInWindow.y > 3 &&
-            pointInWindow.y < self.view.frame.size.height - 3) {
+        if (pointInWindow.x > 8 &&
+            pointInWindow.x < self.view.frame.size.width - 8 &&
+            pointInWindow.y > 8 &&
+            pointInWindow.y < self.view.frame.size.height - 8) {
             if ([self.view hitTest:pointInWindow withEvent:nil] == self.buildView) {
                 // Add a component
                 [self.buildView addViewForComponent:component atPoint:[panGesture locationInView:self.buildView]];
