@@ -5,7 +5,7 @@
 //  Created by Chris on 05/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-
+#import "ComponentDescription.h"
 #import <UIKit/UIKit.h>
 
 @interface BuildViewCellPath : NSObject
@@ -21,9 +21,8 @@
 
 @property (nonatomic, strong) NSSet *highlightedCellSet;
 
--(instancetype)initWithColumns:(NSInteger)columns;
-
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point;
 -(NSSet*)cellPathsForComponentOfWidth:(NSInteger)width height:(NSInteger)height center:(CGPoint)center;
+-(UIView*)addViewForComponent:(ComponentDescription)componentDescription atPoint:(CGPoint)point;
 
 @end

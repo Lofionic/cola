@@ -41,6 +41,8 @@
 		6C0F86D71AA7BEB70092FB18 /* ComponentShelfView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentShelfView.m; sourceTree = "<group>"; };
 		6C0F86DA1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentShelfCollectionViewCell.h; sourceTree = "<group>"; };
 		6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentShelfCollectionViewCell.m; sourceTree = "<group>"; };
+		6C1DB6AD1AADD3FE0041F5F9 /* ComponentDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentDescription.h; sourceTree = "<group>"; };
+		6C1DB6B11AADDEB60041F5F9 /* defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
 		6C2A5E1C1A8BF2CC00ECEAB2 /* ColaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2A5E201A8BF2CC00ECEAB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C2A5E211A8BF2CC00ECEAB2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				6C0F86D71AA7BEB70092FB18 /* ComponentShelfView.m */,
 				6C0F86DA1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.h */,
 				6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */,
+				6C1DB6AD1AADD3FE0041F5F9 /* ComponentDescription.h */,
 			);
 			name = ComponentShelf;
 			sourceTree = "<group>";
@@ -109,6 +112,7 @@
 			children = (
 				6C2A5EA41A8C0B8D00ECEAB2 /* ColaApp.entitlements */,
 				6C65A4E91A9125E1000D9192 /* Resources */,
+				6C1DB6B11AADDEB60041F5F9 /* defines.h */,
 				6C2A5E231A8BF2CC00ECEAB2 /* AppDelegate.h */,
 				6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */,
 				6C2A5E261A8BF2CC00ECEAB2 /* ViewController.h */,
@@ -378,6 +382,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -399,6 +404,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};

@@ -9,6 +9,12 @@
 #import "AppDelegate.h"
 #import "BuildViewController.h"
 
+CGFloat const kComponentShelfHeight = 175.0;
+CGFloat const kToolbarHeight = 64.0;
+CGFloat const kBuildViewWidth = 768.0;
+NSInteger const kBuildViewRows = 8;
+NSInteger const kBuildViewColumns = 4;
+
 @interface AppDelegate ()
 
 @end
@@ -23,7 +29,7 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [self.window setBackgroundColor:[UIColor whiteColor]];
+    [self.window setBackgroundColor:[UIColor blackColor]];
     [self.window makeKeyAndVisible];
     
     BuildViewController *buildViewController = [[BuildViewController alloc] init];

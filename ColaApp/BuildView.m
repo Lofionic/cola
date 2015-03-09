@@ -5,14 +5,18 @@
 //  Created by Chris on 05/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-
+#import "defines.h"
 #import "BuildView.h"
 
-@interface BuildView ()
+@interface BuildView () {
+    bool cellOccupied[256][256];
+}
 
 @property (nonatomic) CGSize cellSize;
 @property (nonatomic) NSInteger rows;
 @property (nonatomic) NSInteger columns;
+
+@property (nonatomic, strong) NSMutableSet *occupiedCells;
 
 @end
 
@@ -31,25 +35,33 @@
 
 @implementation BuildView
 
--(instancetype)initWithColumns:(NSInteger)columns {
-    
+-(instancetype)init {
     self = [super init];
     if (self) {
-        self.cellSize = CGSizeMake(256, 192);
+        self.columns = kBuildViewColumns;
+        self.rows = kBuildViewRows;
         
-        self.columns = columns;
-        self.rows = 8;
+        CGFloat columnWidth = kBuildViewWidth / self.columns;
+        CGFloat rowHeight = columnWidth * (0.75);
+        
+        self.cellSize = CGSizeMake(columnWidth, rowHeight);
         
         self.contentSize = CGSizeMake(
                                       self.columns * self.cellSize.width,
                                       self.rows * self.cellSize.height
                                       );
-        
+
         [self setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0.05 alpha:1]];
         [self setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
         
+        self.occupiedCells = [[NSMutableSet alloc] initWithCapacity:self.columns * self.rows];
+        
         [self setDelegate:self];
     }
+    return self;
+}
+
+-(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self;
 }
 
@@ -74,7 +86,7 @@
 -(void)drawRect:(CGRect)rect {
     
     [super drawRect:rect];
-
+    
     CGContextRef ctx = UIGraphicsGetCurrentContext();
 
     // Draw highlighed cell
@@ -108,7 +120,6 @@
     } while (xPosition < self.contentSize.width);
     
     CGContextStrokePath(ctx);
-    
 }
 
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point {
@@ -170,7 +181,74 @@
         }
     }
     
-    return [NSSet setWithSet:result];
+    // Check if any cells are occupied
+    __block BOOL occupied = NO;
+    [result enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        BuildViewCellPath *cellPath = (BuildViewCellPath*)obj;
+        if (cellOccupied[cellPath.row][cellPath.column]) {
+            occupied = YES;
+            *stop = YES;
+        }
+    }];
+    
+    if (!occupied) {
+        return [NSSet setWithSet:result];
+    } else {
+        return nil;
+    }
 }
+
+-(CGRect)getRectForCellSet:(NSSet*)cellSet {
+    
+    __block NSInteger left = self.columns;
+    __block NSInteger top = self.rows;
+    __block NSInteger right = 0;
+    __block NSInteger bottom = 0;
+    
+    [cellSet enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        BuildViewCellPath *cellPath = (BuildViewCellPath*)obj;
+        
+        if (cellPath.column < left) {
+            left = cellPath.column;
+        }
+        
+        if (cellPath.column > right) {
+            right = cellPath.column;
+        }
+        
+        if (cellPath.row < top) {
+            top = cellPath.row;
+        }
+        
+        if (cellPath.row > bottom) {
+            bottom = cellPath.row;
+        }
+    }];
+    
+    CGRect result = CGRectMake(left * self.cellSize.width, top * self.cellSize.height, (right - left + 1) * self.cellSize.width, (bottom - top + 1) * self.cellSize.height);
+    return result;
+}
+
+-(UIView*)addViewForComponent:(ComponentDescription)componentDescription atPoint:(CGPoint)point {
+    NSSet *cellSet = [self cellPathsForComponentOfWidth:componentDescription.width height:componentDescription.height center:point];
+    if (cellSet) {
+        CGRect newFrame = [self getRectForCellSet:cellSet];
+        
+        UIView *newView = [[UIView alloc] initWithFrame:newFrame];
+        [newView setBackgroundColor:[UIColor whiteColor]];
+        
+        [self addSubview:newView];
+        
+        // Add cells to occupied
+        [cellSet enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+            BuildViewCellPath *cellPath = (BuildViewCellPath*)obj;
+            cellOccupied[cellPath.row][cellPath.column] = TRUE;
+        }];
+        
+        return newView;
+    }
+    return nil;
+}
+
 
 @end
