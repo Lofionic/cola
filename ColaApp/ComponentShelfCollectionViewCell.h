@@ -12,6 +12,7 @@
 @interface ComponentShelfCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, weak) ComponentShelfView *componentTrayView;
+@property (nonatomic, weak) ComponentDescription *componentDescription;
 @property (nonatomic, strong) UIImageView *thumbnailImageView;
 
 @end

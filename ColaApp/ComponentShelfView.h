@@ -12,9 +12,9 @@
 @protocol ComponentTrayDelegate <NSObject>
 
 @optional
--(void)componentTray:(ComponentShelfView*)componentTray didBeginDraggingComponent:(ComponentDescription)component withGesture:(UIPanGestureRecognizer*)panGesture;
--(void)componentTray:(ComponentShelfView*)componentTray didContinueDraggingComponent:(ComponentDescription)component withGesture:(UIPanGestureRecognizer*)panGesture;
--(void)componentTray:(ComponentShelfView*)componentTray didEndDraggingComponent:(ComponentDescription)component withGesture:(UIPanGestureRecognizer*)panGesture;
+-(void)componentTray:(ComponentShelfView*)componentTray didBeginDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
+-(void)componentTray:(ComponentShelfView*)componentTray didContinueDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
+-(void)componentTray:(ComponentShelfView*)componentTray didEndDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
 
 @end
 

@@ -62,25 +62,22 @@
 -(void)handlePanGesture:(UIGestureRecognizer*)uigr {
     
     UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)uigr;
-    ComponentDescription component;
-    component.width = 1;
-    component.height = 2;
     
     if (panGesture.state == UIGestureRecognizerStateBegan) {
         [self.thumbnailImageView setHidden:YES];
         
         if ([[self.componentTrayView delegate] respondsToSelector:@selector(componentTray:didBeginDraggingComponent:withGesture:)]) {
-            [[self.componentTrayView delegate] componentTray:self.componentTrayView didBeginDraggingComponent:component withGesture:panGesture];
+            [[self.componentTrayView delegate] componentTray:self.componentTrayView didBeginDraggingComponent:self.componentDescription withGesture:panGesture];
         }
     } else if (panGesture.state == UIGestureRecognizerStateChanged) {
         if ([[self.componentTrayView delegate] respondsToSelector:@selector(componentTray:didContinueDraggingComponent:withGesture:)]) {
-            [[self.componentTrayView delegate] componentTray:self.componentTrayView didContinueDraggingComponent:component withGesture:panGesture];
+            [[self.componentTrayView delegate] componentTray:self.componentTrayView didContinueDraggingComponent:self.componentDescription withGesture:panGesture];
         }
     } else if (uigr.state == UIGestureRecognizerStateEnded) {
         [self.thumbnailImageView setHidden:NO];
         
         if ([[self.componentTrayView delegate] respondsToSelector:@selector(componentTray:didEndDraggingComponent:withGesture:)]) {
-            [[self.componentTrayView delegate] componentTray:self.componentTrayView didEndDraggingComponent:component withGesture:panGesture];
+            [[self.componentTrayView delegate] componentTray:self.componentTrayView didEndDraggingComponent:self.componentDescription withGesture:panGesture];
         }
     }
 }

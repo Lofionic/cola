@@ -1,0 +1,16 @@
+{
+  "components" : [
+    {
+      "kCOLComponentDescriptionNameKey" : "Oscillator",
+      "kCOLComponentDescriptionWidthKey" : 1,
+      "kCOLComponentDescriptionHeightKey" : 2,
+      "kCOLComponentDescriptionTypeKey" : "kCOLComponentTypeOscillator"
+    },
+    {
+    "kCOLComponentDescriptionNameKey" : "LFO",
+    "kCOLComponentDescriptionWidthKey" : 1,
+    "kCOLComponentDescriptionHeightKey" : 1,
+    "kCOLComponentDescriptionTypeKey" : "kCOLComponentTypeLFO"
+    }
+  ]
+}

@@ -10,10 +10,10 @@
 
 @interface BuildViewCellPath : NSObject
 
--(instancetype)initWithColumn:(NSInteger)column Row:(NSInteger)row;
+-(instancetype)initWithColumn:(NSUInteger)column Row:(NSUInteger)row;
 
-@property (nonatomic) NSInteger column;
-@property (nonatomic) NSInteger row;
+@property (nonatomic) NSUInteger column;
+@property (nonatomic) NSUInteger row;
 
 @end
 
@@ -22,7 +22,7 @@
 @property (nonatomic, strong) NSSet *highlightedCellSet;
 
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point;
--(NSSet*)cellPathsForComponentOfWidth:(NSInteger)width height:(NSInteger)height center:(CGPoint)center;
--(UIView*)addViewForComponent:(ComponentDescription)componentDescription atPoint:(CGPoint)point;
+-(NSSet*)cellPathsForComponentOfWidth:(NSUInteger)width height:(NSUInteger)height center:(CGPoint)center;
+-(UIView*)addViewForComponent:(ComponentDescription*)componentDescription atPoint:(CGPoint)point;
 
 @end

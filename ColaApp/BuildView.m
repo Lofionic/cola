@@ -13,8 +13,8 @@
 }
 
 @property (nonatomic) CGSize cellSize;
-@property (nonatomic) NSInteger rows;
-@property (nonatomic) NSInteger columns;
+@property (nonatomic) NSUInteger rows;
+@property (nonatomic) NSUInteger columns;
 
 @property (nonatomic, strong) NSMutableSet *occupiedCells;
 
@@ -22,7 +22,7 @@
 
 @implementation BuildViewCellPath
 
--(instancetype)initWithColumn:(NSInteger)column Row:(NSInteger)row {
+-(instancetype)initWithColumn:(NSUInteger)column Row:(NSUInteger)row {
     self = [super init];
     if (self) {
         self.row = row;
@@ -125,8 +125,8 @@
     if (point.x >= 0 && point.x <= self.contentSize.width &&
         point.y >= 0 && point.y <= self.contentSize.height) {
     
-        NSInteger column = point.x / self.cellSize.width;
-        NSInteger row = point.y / self.cellSize.height;
+        NSUInteger column = point.x / self.cellSize.width;
+        NSUInteger row = point.y / self.cellSize.height;
         
         return [[BuildViewCellPath alloc] initWithColumn:column Row:row];
     } else {
@@ -134,7 +134,7 @@
     }
 }
 
--(NSSet*)cellPathsForComponentOfWidth:(NSInteger)width height:(NSInteger)height center:(CGPoint)center {
+-(NSSet*)cellPathsForComponentOfWidth:(NSUInteger)width height:(NSUInteger)height center:(CGPoint)center {
     
     CGPoint minPoint = CGPointMake(
                                    center.x - ((width - 1) * self.cellSize.width) / 2.0,
@@ -227,7 +227,7 @@
     return result;
 }
 
--(UIView*)addViewForComponent:(ComponentDescription)componentDescription atPoint:(CGPoint)point {
+-(UIView*)addViewForComponent:(ComponentDescription*)componentDescription atPoint:(CGPoint)point {
     NSSet *cellSet = [self cellPathsForComponentOfWidth:componentDescription.width height:componentDescription.height center:point];
     if (cellSet) {
         CGRect newFrame = [self rectForCellSet:cellSet];

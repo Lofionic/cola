@@ -69,7 +69,7 @@
                                                                         views:viewsDictionary]];
 }
 
--(void)componentTray:(ComponentShelfView *)componentTray didBeginDraggingComponent:(ComponentDescription)component withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentTray:(ComponentShelfView *)componentTray didBeginDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer *)panGesture {
     CGPoint dragPoint = [panGesture locationInView:self.view];
     
     self.dragView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
@@ -80,7 +80,7 @@
     [self.view addSubview:self.dragView];
 }
 
--(void)componentTray:(ComponentShelfView *)componentTray didContinueDraggingComponent:(ComponentDescription)component withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentTray:(ComponentShelfView *)componentTray didContinueDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer *)panGesture {
     
     CGPoint dragPoint = [panGesture locationInView:self.view];
     [self.dragView setCenter:dragPoint];
@@ -94,7 +94,7 @@
     }
 }
 
--(void)componentTray:(ComponentShelfView *)componentTray didEndDraggingComponent:(ComponentDescription)component withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentTray:(ComponentShelfView *)componentTray didEndDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer *)panGesture {
     [self.dragView removeFromSuperview];
     [self.buildView setHighlightedCellSet:nil];
     

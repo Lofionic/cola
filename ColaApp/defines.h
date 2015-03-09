@@ -12,3 +12,5 @@ extern CGFloat kToolbarHeight;
 extern CGFloat kBuildViewWidth;
 extern NSInteger kBuildViewRows;
 extern NSInteger kBuildViewColumns;
+
+extern NSArray *componentCatalog;

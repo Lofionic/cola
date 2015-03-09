@@ -18,23 +18,15 @@ CGFloat kToolbarHeight;
 CGFloat kBuildViewWidth;
 NSInteger kBuildViewRows;
 NSInteger kBuildViewColumns;
+NSArray *componentCatalog;
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    // Setup metrics
-    kBuildViewColumns =     4;
-    kBuildViewRows =        8;
-    kToolbarHeight =        64.0;
-    kComponentShelfHeight = 150;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        kBuildViewWidth =   768.0;
-    } else {
-        kBuildViewWidth =   320;
-    }
+    [self initLayoutMetrics];
+    [self initComponentCatalog];
     
     // Start audio engine
     [[COLAudioEnvironment sharedEnvironment] start];
@@ -49,6 +41,44 @@ NSInteger kBuildViewColumns;
     [self.window setRootViewController:buildViewController];
     
     return YES;
+}
+
+- (void)initLayoutMetrics {
+    // Setup metrics
+    kBuildViewColumns =     4;
+    kBuildViewRows =        8;
+    kToolbarHeight =        64.0;
+    kComponentShelfHeight = 150;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        kBuildViewWidth =   768.0;
+    } else {
+        kBuildViewWidth =   320;
+    }
+}
+
+
+- (void)initComponentCatalog {
+    NSURL *componentCatalogURL = [[NSBundle mainBundle] URLForResource:@"componentCatalog" withExtension:@"txt"];
+    if (componentCatalogURL) {
+        NSError *dataError;
+        NSData *componentCatalogData = [NSData dataWithContentsOfURL:componentCatalogURL options:0 error:&dataError];
+        if (!dataError && componentCatalogData) {
+            NSError *dictError;
+            NSDictionary *componentCatalogJSON = [NSJSONSerialization JSONObjectWithData:componentCatalogData options:0 error:&dictError];
+            if (!dictError && componentCatalogJSON) {
+                NSArray *components = [componentCatalogJSON objectForKey:@"components"];
+                __block NSMutableArray *componentDescriptions = [[NSMutableArray alloc] initWithCapacity:[components count]];
+                
+                [components enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+                    NSDictionary *componentDictionary = (NSDictionary*)obj;
+                    [componentDescriptions addObject:[[ComponentDescription alloc] initWithDictionary:componentDictionary]];
+                }];
+                    
+                componentCatalog = [NSArray arrayWithArray:componentDescriptions];
+            }
+        }
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

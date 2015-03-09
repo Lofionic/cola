@@ -5,6 +5,7 @@
 //  Created by Chris on 04/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
+#import "defines.h"
 #import "ComponentShelfCollectionViewCell.h"
 #import "ComponentShelfView.h"
 
@@ -49,6 +50,8 @@
                          ];
     
     [cell.thumbnailImageView setBackgroundColor:[colours objectAtIndex:indexPath.row]];
+    
+    [cell setComponentDescription:[componentCatalog objectAtIndex:indexPath.row]];
     [cell setComponentTrayView:self];
     
     return cell;
@@ -60,7 +63,7 @@
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 5;
+    return [componentCatalog count];
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
