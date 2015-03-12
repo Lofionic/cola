@@ -1,16 +1,26 @@
 {
-  "components" : [
-    {
-      "kCOLComponentDescriptionNameKey" : "Oscillator",
-      "kCOLComponentDescriptionWidthKey" : 1,
-      "kCOLComponentDescriptionHeightKey" : 2,
-      "kCOLComponentDescriptionTypeKey" : "kCOLComponentTypeOscillator"
-    },
-    {
-    "kCOLComponentDescriptionNameKey" : "LFO",
-    "kCOLComponentDescriptionWidthKey" : 1,
-    "kCOLComponentDescriptionHeightKey" : 1,
-    "kCOLComponentDescriptionTypeKey" : "kCOLComponentTypeLFO"
-    }
+    "components" : [
+        {
+            "kCOLComponentDescriptionNameKey" : "Oscillator",
+            "kCOLComponentDescriptionWidthKey" : 1,
+            "kCOLComponentDescriptionHeightKey" : 2,
+            "kCOLComponentDescriptionTypeKey" : "kCOLComponentTypeOscillator",
+            "view" : {
+                "elements" : [
+                    {
+                        "elementType" : "output",
+                        "name" : "main out",
+                        "x" : 16,
+                        "y" : 16
+                    }
+                ]
+            },
+        },
+        {
+            "kCOLComponentDescriptionNameKey" : "LFO",
+            "kCOLComponentDescriptionWidthKey" : 1,
+            "kCOLComponentDescriptionHeightKey" : 1,
+            "kCOLComponentDescriptionTypeKey" : "kCOLComponentTypeLFO"
+        }
   ]
 }
