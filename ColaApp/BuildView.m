@@ -8,11 +8,14 @@
 #import "defines.h"
 #import "BuildView.h"
 
+#import <ColaLib/ColaLib.h>
+
 @interface BuildView () {
     bool cellOccupied[256][256];
 }
 
 @property (nonatomic) CGSize cellSize;
+@property (nonatomic) CGFloat headerHeight;
 @property (nonatomic) NSUInteger rows;
 @property (nonatomic) NSUInteger columns;
 
@@ -45,10 +48,11 @@
         CGFloat rowHeight = columnWidth * (0.75);
         
         self.cellSize = CGSizeMake(columnWidth, rowHeight);
+        self.headerHeight = 64;
         
         self.contentSize = CGSizeMake(
                                       self.columns * self.cellSize.width,
-                                      self.rows * self.cellSize.height
+                                      (self.rows * self.cellSize.height) + self.headerHeight
                                       );
 
         [self setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0.05 alpha:1]];
@@ -57,6 +61,12 @@
         self.occupiedCells = [[NSMutableSet alloc] initWithCapacity:self.columns * self.rows];
         
         [self setDelegate:self];
+        
+        // Add the Main Inputs
+        COLComponentIO *mainIn = [[COLAudioContext globalContext] masterInputAtIndex:0];
+        ConnectorView *mainInConnectorView = [[ConnectorView alloc] initWithComponentIO:mainIn];
+        [mainInConnectorView setCenter:CGPointMake(40, self.headerHeight / 2.0)];
+        [self addSubview:mainInConnectorView];
     }
     return self;
 }
@@ -103,7 +113,7 @@
     CGContextSetStrokeColorWithColor(ctx, [UIColor darkGrayColor].CGColor);
     CGContextSetLineWidth(ctx, 0.5);
     
-    CGFloat yPosition = self.cellSize.height;
+    CGFloat yPosition = self.headerHeight;
     do {
         CGContextMoveToPoint(ctx, 0, yPosition);
         CGContextAddLineToPoint(ctx, self.contentSize.width, yPosition);
@@ -112,7 +122,7 @@
     
     CGFloat xPosition = self.cellSize.width;
     do {
-        CGContextMoveToPoint(ctx, xPosition, 0);
+        CGContextMoveToPoint(ctx, xPosition, self.headerHeight);
         CGContextAddLineToPoint(ctx, xPosition, self.contentSize.height);
         xPosition += self.cellSize.width;
     } while (xPosition < self.contentSize.width);
@@ -123,10 +133,10 @@
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point {
     // Return the cell path for a point within the view's coordinate space
     if (point.x >= 0 && point.x <= self.contentSize.width &&
-        point.y >= 0 && point.y <= self.contentSize.height) {
+        point.y >= self.headerHeight && point.y <= self.contentSize.height) {
     
         NSUInteger column = point.x / self.cellSize.width;
-        NSUInteger row = point.y / self.cellSize.height;
+        NSUInteger row = (point.y - self.headerHeight) / self.cellSize.height;
         
         return [[BuildViewCellPath alloc] initWithColumn:column Row:row];
     } else {
@@ -138,7 +148,7 @@
     
     CGPoint minPoint = CGPointMake(
                                    center.x - ((width - 1) * self.cellSize.width) / 2.0,
-                                   center.y - ((height - 1) * self.cellSize.height) / 2.0
+                                   (center.y - self.headerHeight) - ((height - 1) * self.cellSize.height) / 2.0
                                    );
     
     NSInteger minX = minPoint.x / self.cellSize.width;
@@ -223,30 +233,87 @@
         }
     }];
     
-    CGRect result = CGRectMake(left * self.cellSize.width, top * self.cellSize.height, (right - left + 1) * self.cellSize.width, (bottom - top + 1) * self.cellSize.height);
+    CGRect result = CGRectMake(left * self.cellSize.width, (top * self.cellSize.height) + self.headerHeight, (right - left + 1) * self.cellSize.width, (bottom - top + 1) * self.cellSize.height);
     return result;
 }
 
 -(UIView*)addViewForComponent:(ComponentDescription*)componentDescription atPoint:(CGPoint)point {
     NSSet *cellSet = [self cellPathsForComponentOfWidth:componentDescription.width height:componentDescription.height center:point];
     if (cellSet) {
-        CGRect newFrame = [self rectForCellSet:cellSet];
+        COLComponent *component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:componentDescription.type];
         
-        UIView *newView = [[UIView alloc] initWithFrame:newFrame];
-        [newView setBackgroundColor:[UIColor whiteColor]];
-        
-        [self addSubview:newView];
-        
-        // Add cells to occupied
-        [cellSet enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-            BuildViewCellPath *cellPath = (BuildViewCellPath*)obj;
-            cellOccupied[cellPath.row][cellPath.column] = TRUE;
-        }];
-        
-        return newView;
+        if (component) {
+            CGRect newFrame = [self rectForCellSet:cellSet];
+            
+            UIView *newView = [[UIView alloc] initWithFrame:newFrame];
+            [newView setBackgroundColor:[UIColor whiteColor]];
+            
+            NSArray *connectors = [componentDescription connectors];
+            for (ConnectorDescription *thisConnector in connectors) {
+                
+                COLComponentIO *componentIO = nil;
+                if ([thisConnector.type isEqualToString:@"output"]) {
+                    componentIO = [component outputNamed:thisConnector.connectionName];
+                } else if ([thisConnector.type isEqualToString:@"input"]) {
+                    componentIO = [component inputNamed:thisConnector.connectionName];
+                }
+                
+                if (componentIO) {
+                    ConnectorView *connectorView = [[ConnectorView alloc] initWithComponentIO:componentIO];
+                    [connectorView setCenter:thisConnector.position];
+                    [connectorView setDelegate:self];
+                    [newView addSubview:connectorView];
+                }
+            }
+            
+            [self addSubview:newView];
+            
+            // Add cells to occupied
+            [cellSet enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+                BuildViewCellPath *cellPath = (BuildViewCellPath*)obj;
+                cellOccupied[cellPath.row][cellPath.column] = TRUE;
+            }];
+            
+            return newView;
+        }
     }
     return nil;
 }
 
+-(COLComponent*)componentForCompomentDescription:(ComponentDescription*)componentDescription {
+    COLComponent *result = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:componentDescription.type];
+    return result;
+}
+
+#pragma mark ConnectorView Delegate
+
+-(void)connectorView:(ConnectorView *)connectorView didBeginDrag:(UIPanGestureRecognizer *)uigr {
+    self.draggingConnector = connectorView;
+}
+
+-(void)connectorView:(ConnectorView *)connectorView didContinueDrag:(UIPanGestureRecognizer *)uigr {
+    
+}
+
+-(void)connectorView:(ConnectorView *)connectorView didEndDrag:(UIPanGestureRecognizer *)uigr {
+    UIView *hitView = [self hitTest:[uigr locationInView:self] withEvent:nil];
+    
+    if ([hitView isKindOfClass:[ConnectorView class]]) {
+        [self connectorView:connectorView connectWith:(ConnectorView*)hitView];
+    }
+}
+
+-(BOOL)connectorView:(ConnectorView*)connectorView1 connectWith:(ConnectorView*)connectorView2 {
+    COLComponentIO *componentIO1 = connectorView1.componentIO;
+    COLComponentIO *componentIO2 = connectorView2.componentIO;
+    
+    if ([componentIO1 isKindOfClass:[COLComponentOutput class]] && [componentIO2 isKindOfClass:[COLComponentInput class]]) {
+        COLComponentOutput *output = (COLComponentOutput*)componentIO1;
+        COLComponentInput *input = (COLComponentInput*)componentIO2;
+        return [output connectTo:input];
+    }
+    
+    return NO;
+}
 
 @end

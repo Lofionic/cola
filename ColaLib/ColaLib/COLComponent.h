@@ -24,9 +24,11 @@
 
 -(NSUInteger)numberOfOutputs;
 -(COLComponentOutput*)outputForIndex:(NSUInteger)index;
+-(COLComponentOutput *)outputNamed:(NSString*)name;
 
 -(NSUInteger)numberOfInputs;
 -(COLComponentInput *)inputForIndex:(NSUInteger)index;
+-(COLComponentOutput *)inputNamed:(NSString*)name;
 
 -(COLComponentParameter*)parameterForIndex:(NSUInteger)index;
 

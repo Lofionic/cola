@@ -13,23 +13,59 @@
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary {
     if (self = [super init]) {
         
-        if ([dictionary objectForKey:kCOLComponentDescriptionNameKey]) {
-            self.name = [dictionary objectForKey:kCOLComponentDescriptionNameKey];
+        if ([dictionary objectForKey:@"name"]) {
+            self.name = [dictionary objectForKey:@"name"];
         }
         
-        if ([dictionary objectForKey:kCOLComponentDescriptionTypeKey]) {
-            self.type = [dictionary objectForKey:kCOLComponentDescriptionTypeKey];
+        if ([dictionary objectForKey:@"type"]) {
+            self.type = [dictionary objectForKey:@"type"];
         }
         
-        if ([dictionary valueForKey:kCOLComponentDescriptionWidthKey]) {
-            self.width = [[dictionary valueForKey:kCOLComponentDescriptionWidthKey] integerValue];
+        if ([dictionary valueForKey:@"width"]) {
+            self.width = [[dictionary valueForKey:@"width"] integerValue];
         }
         
-        if ([dictionary valueForKey:kCOLComponentDescriptionHeightKey]) {
-            self.height = [[dictionary valueForKey:kCOLComponentDescriptionHeightKey] integerValue];
+        if ([dictionary valueForKey:@"height"]) {
+            self.height = [[dictionary valueForKey:@"height"] integerValue];
+        }
+        
+        if ([dictionary objectForKey:@"view"]) {
+            NSDictionary *viewInfo = [dictionary objectForKey:@"view"];
+            if ([viewInfo objectForKey:@"connectors"]) {
+                NSArray *connectors = [viewInfo objectForKey:@"connectors"];
+                NSMutableArray *connectorDescriptions = [[NSMutableArray alloc] initWithCapacity:[connectors count]];
+                for (NSDictionary *thisConnector in connectors) {
+                    ConnectorDescription *connectorDescription = [[ConnectorDescription alloc] initWithDictionary:thisConnector];
+                    [connectorDescriptions addObject:connectorDescription];
+                }
+                self.connectors = [NSArray arrayWithArray:connectorDescriptions];
+            }
         }
     }
     
+    return self;
+}
+
+@end
+
+@implementation ConnectorDescription
+
+-(instancetype)initWithDictionary:(NSDictionary*)dictionary {
+    if (self = [super init]) {
+        
+        if ([dictionary objectForKey:@"type"]) {
+            self.type = [dictionary objectForKey:@"type"];
+        }
+        
+        if ([dictionary objectForKey:@"connection"]) {
+            self.connectionName = [dictionary objectForKey:@"connection"];
+        }
+        
+        if ([dictionary valueForKey:@"x"] && [dictionary valueForKey:@"y"]) {
+            self.position = CGPointMake([[dictionary valueForKey:@"x"] integerValue], [[dictionary valueForKey:@"y"] integerValue]);
+        }
+        
+    }
     return self;
 }
 

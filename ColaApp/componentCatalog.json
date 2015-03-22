@@ -1,0 +1,49 @@
+{
+    "components" : [
+        {
+            "name" : "Oscillator",
+            "width" : 1,
+            "height" : 2,
+            "type" : "kCOLComponentOscillator",
+            "view" : {
+                "connectors" : [
+                    {
+                        "type" : "output",
+                        "connection" : "Out",
+                        "x" : 40,
+                        "y" : 40
+                    },
+                    {                   
+                        "type" : "input",
+                        "connection" : "AmpIn",
+                        "x" : 40,
+                        "y" : 85
+                    },
+                    {                   
+                        "type" : "input",
+                        "connection" : "FreqIn",
+                        "x" : 85,
+                        "y" : 85
+                    }
+                ]
+            },
+        },
+        {
+            "name" : "LFO",
+            "width" : 1,
+            "height" : 1,
+            "type" : "kCOLComponentLFO",
+            "view" : {
+                "connectors" : [
+                    {
+                        "type" : "output",
+                        "connection" : "Out",
+                        "x" : 40,
+                        "y" : 40
+                    }
+                ]
+            },        
+        }
+
+  ]
+}

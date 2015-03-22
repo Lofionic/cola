@@ -59,7 +59,7 @@ NSArray *componentCatalog;
 
 
 - (void)initComponentCatalog {
-    NSURL *componentCatalogURL = [[NSBundle mainBundle] URLForResource:@"componentCatalog" withExtension:@"txt"];
+    NSURL *componentCatalogURL = [[NSBundle mainBundle] URLForResource:@"componentCatalog" withExtension:@"json"];
     if (componentCatalogURL) {
         NSError *dataError;
         NSData *componentCatalogData = [NSData dataWithContentsOfURL:componentCatalogURL options:0 error:&dataError];

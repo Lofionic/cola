@@ -49,6 +49,21 @@
     }
 }
 
+-(COLComponentOutput *)outputNamed:(NSString*)name {
+    
+    __block COLComponentOutput *result = nil;
+    
+    [self.outputs enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+        COLComponentOutput *thisOutput = (COLComponentOutput*)obj;
+        if ([thisOutput.name isEqualToString:name]) {
+            result = thisOutput;
+            *stop = YES;
+        }
+    }];
+    
+    return result;
+}
+
 -(NSUInteger)numberOfInputs {
     return [self.inputs count];
 }
@@ -59,6 +74,21 @@
     } else {
         return nil;
     }
+}
+
+-(COLComponentInput *)inputNamed:(NSString*)name {
+    
+    __block COLComponentInput *result = nil;
+    
+    [self.inputs enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+        COLComponentInput *thisInput = (COLComponentInput*)obj;
+        if ([thisInput.name isEqualToString:name]) {
+            result = thisInput;
+            *stop = YES;
+        }
+    }];
+    
+    return result;
 }
 
 -(NSUInteger)numberOfParameters {

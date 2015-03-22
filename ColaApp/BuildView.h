@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import "ComponentDescription.h"
+#import "ConnectorView.h"
+
 #import <UIKit/UIKit.h>
 
 @interface BuildViewCellPath : NSObject
@@ -17,9 +19,10 @@
 
 @end
 
-@interface BuildView : UIScrollView <UIScrollViewDelegate>
+@interface BuildView : UIScrollView <UIScrollViewDelegate, ConnectorViewDelegate>
 
 @property (nonatomic, strong) NSSet *highlightedCellSet;
+@property (nonatomic, strong) ConnectorView *draggingConnector;
 
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point;
 -(NSSet*)cellPathsForComponentOfWidth:(NSUInteger)width height:(NSUInteger)height center:(CGPoint)center;

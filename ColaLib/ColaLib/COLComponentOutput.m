@@ -83,7 +83,7 @@
 
 -(BOOL)disconnect {
     if ([self isConnected]) {
-        NSLog(@"Disconnecting %@ from %@", self.name, [self.connectedTo name]);
+        NSLog(@"Disconnecting %@ from %@", self.name, [self.connectedTo nameWithComponent]);
         [self.connectedTo disconnect];
         self.connectedTo = nil;
         return TRUE;

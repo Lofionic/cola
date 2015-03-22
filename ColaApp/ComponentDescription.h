@@ -5,13 +5,18 @@
 //  Created by Chris on 09/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
+@import UIKit;
+@import Foundation;
 
-#define kCOLComponentDescriptionTypeKey     @"kCOLComponentDescriptionTypeKey"
-#define kCOLComponentDescriptionNameKey     @"kCOLComponentDescriptionNameKey"
-#define kCOLComponentDescriptionWidthKey    @"kCOLComponentDescriptionWidthKey"
-#define kCOLComponentDescriptionHeightKey   @"kCOLComponentDescriptionHeightKey"
+@interface ConnectorDescription : NSObject
 
-#import <Foundation/Foundation.h>
+@property (nonatomic, strong) NSString *type;
+@property (nonatomic, strong) NSString *connectionName;
+@property (nonatomic) CGPoint position;
+
+-(instancetype)initWithDictionary:(NSDictionary*)dictionary;
+
+@end
 
 @interface ComponentDescription : NSObject
 
@@ -21,5 +26,8 @@
 @property (nonatomic) NSUInteger width;
 @property (nonatomic) NSUInteger height;
 
+@property (nonatomic, strong) NSArray *connectors;
+
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary;
+
 @end
