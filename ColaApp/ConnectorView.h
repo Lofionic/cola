@@ -18,10 +18,13 @@
 
 @end
 
+@class BuildViewCable;
 @interface ConnectorView : UIView
 
 @property (nonatomic, weak) id<ConnectorViewDelegate>   delegate;
-@property (readonly, weak) COLComponentIO *             componentIO;
+@property (readonly, weak) COLComponentIO*              componentIO;
+
+@property (nonatomic, weak) BuildViewCable *cable;
 
 -(instancetype)initWithComponentIO:(COLComponentIO*)componentIO;
 

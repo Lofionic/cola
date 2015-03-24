@@ -14,7 +14,6 @@ static BuildView *buildView = nil;
 
 @implementation BuildViewController
 
-
 -(void)viewDidLoad {
     
     [super viewDidLoad];

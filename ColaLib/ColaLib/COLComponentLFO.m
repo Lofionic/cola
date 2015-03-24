@@ -49,7 +49,7 @@
         if ([self.freqIn isConnected]) {
             freq = frequencyBuffer[i] + 1;
         } else {
-            freq = [self.frequency outputAtDelta:i / (float)numFrames];
+            freq = [self.frequency outputAtDelta:i / (float)numFrames] * 10.0;
         }
         
         phase += (2.0 * M_PI * (freq)) / sampleRate;

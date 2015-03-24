@@ -18,6 +18,4 @@
 -(AudioSignalType*)getBuffer:(UInt32)numFrames;
 -(void)engineDidRender;
 
--(BOOL)disconnect;
-
 @end

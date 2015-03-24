@@ -8,12 +8,18 @@
 #import "BuildView.h"
 #import "defines.h"
 #import "ComponentView.h"
+#import "BuildViewGridLayer.h"
+#import "BuildViewHighlightLayer.h"
+#import "BuildViewCableLayer.h"
 
 #import <ColaLib/ColaLib.h>
 
 @interface BuildView () {
     bool cellOccupied[256][256];
+
 }
+
+@property (nonatomic, strong) ConnectorView *draggingConnector;
 
 @property (nonatomic) CGSize cellSize;
 @property (nonatomic) CGFloat headerHeight;
@@ -22,22 +28,19 @@
 
 @property (nonatomic, strong) NSMutableSet *occupiedCells;
 
-@end
+@property (nonatomic, strong) BuildViewGridLayer *gridLayer;
+@property (nonatomic, strong) BuildViewHighlightLayer *highlightLayer;
+@property (nonatomic, strong) BuildViewCableLayer *cableLayer;
 
-@implementation BuildViewCellPath
-
--(instancetype)initWithColumn:(NSUInteger)column Row:(NSUInteger)row {
-    self = [super init];
-    if (self) {
-        self.row = row;
-        self.column = column;
-    }
-    return self;
-}
+@property (nonatomic, strong) NSMutableArray *cables;
+@property (nonatomic, strong) BuildViewCable *dragCable;
 
 @end
+
 
 @implementation BuildView
+
+static NSArray *cableColours;
 
 -(instancetype)init {
     self = [super init];
@@ -60,22 +63,43 @@
         [self setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
         
         self.occupiedCells = [[NSMutableSet alloc] initWithCapacity:self.columns * self.rows];
-        
         [self setDelegate:self];
-        
-        // Add the Main Inputs
-        COLComponentIO *mainIn = [[COLAudioContext globalContext] masterInputAtIndex:0];
-        ConnectorView *mainInConnectorView = [[ConnectorView alloc] initWithComponentIO:mainIn];
-        [mainInConnectorView setCenter:CGPointMake(40, self.headerHeight / 2.0)];
-        [self addSubview:mainInConnectorView];
-        
         self.delaysContentTouches = NO;
+        
+        [self addGlobalIO];
+        [self addLayers];
+        
+        self.cables = [[NSMutableArray alloc] initWithCapacity:200];
     }
     return self;
 }
 
--(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return self;
+-(void)addLayers {
+    self.gridLayer = [BuildViewGridLayer layer];
+    [self.gridLayer setBuildView:self];
+    [self.gridLayer setFrame:CGRectMake(0, 0, self.contentSize.width, self.contentSize.height)];
+    [self.gridLayer setNeedsDisplay];
+    [self.layer addSublayer:self.gridLayer];
+    
+    self.highlightLayer = [BuildViewHighlightLayer layer];
+    [self.highlightLayer setBuildView:self];
+    [self.highlightLayer setFrame:CGRectMake(0, 0, self.contentSize.width, self.contentSize.height)];
+    [self.highlightLayer setNeedsDisplay];
+    [self.layer addSublayer:self.highlightLayer];
+    
+    self.cableLayer = [BuildViewCableLayer layer];
+    [self.cableLayer setBuildView:self];
+    [self.cableLayer setFrame:CGRectMake(0, 0, self.contentSize.width, self.contentSize.height)];
+    [self.cableLayer setNeedsDisplay];
+    [self.layer insertSublayer:self.cableLayer above:self.layer];
+    [self.cableLayer setZPosition:100.0];
+}
+
+-(void)addGlobalIO {
+    COLComponentIO *mainIn = [[COLAudioContext globalContext] masterInputAtIndex:0];
+    ConnectorView *mainInConnectorView = [[ConnectorView alloc] initWithComponentIO:mainIn];
+    [mainInConnectorView setCenter:CGPointMake(40, self.headerHeight / 2.0)];
+    [self addSubview:mainInConnectorView];
 }
 
 @synthesize highlightedCellSet = _highlightedCellSet;
@@ -88,49 +112,8 @@
     if (![_highlightedCellSet isEqualToSet:highlightedCellSet]) {
         // Highlighted cell set has changed
         _highlightedCellSet = highlightedCellSet;
-        [self setNeedsDisplay];
+        [self.highlightLayer setNeedsDisplay];
     }
-}
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [self setNeedsDisplay];
-}
-
--(void)drawRect:(CGRect)rect {
-    
-    [super drawRect:rect];
-    
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-
-    // Draw highlighed cell
-    if (self.highlightedCellSet) {
-        CGRect highlightRect = [self rectForCellSet:self.highlightedCellSet];
-        highlightRect = CGRectInset(highlightRect, 2, 2);
-        CGContextAddRect(ctx, highlightRect);
-        CGContextSetStrokeColorWithColor(ctx, [[UIColor redColor] CGColor]);
-        CGContextSetLineWidth(ctx, 4);
-        CGContextStrokePath(ctx);
-    }
-    
-    // Draw grid
-    CGContextSetStrokeColorWithColor(ctx, [UIColor darkGrayColor].CGColor);
-    CGContextSetLineWidth(ctx, 0.5);
-    
-    CGFloat yPosition = self.headerHeight;
-    do {
-        CGContextMoveToPoint(ctx, 0, yPosition);
-        CGContextAddLineToPoint(ctx, self.contentSize.width, yPosition);
-        yPosition += self.cellSize.height;
-    } while (yPosition < self.contentSize.height);
-    
-    CGFloat xPosition = self.cellSize.width;
-    do {
-        CGContextMoveToPoint(ctx, xPosition, self.headerHeight);
-        CGContextAddLineToPoint(ctx, xPosition, self.contentSize.height);
-        xPosition += self.cellSize.width;
-    } while (xPosition < self.contentSize.width);
-    
-    CGContextStrokePath(ctx);
 }
 
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point {
@@ -148,7 +131,6 @@
 }
 
 -(NSSet*)cellPathsForComponentOfWidth:(NSUInteger)width height:(NSUInteger)height center:(CGPoint)center {
-    
     CGPoint minPoint = CGPointMake(
                                    center.x - ((width - 1) * self.cellSize.width) / 2.0,
                                    (center.y - self.headerHeight) - ((height - 1) * self.cellSize.height) / 2.0
@@ -273,18 +255,54 @@
 
 -(void)connectorView:(ConnectorView *)connectorView didBeginDrag:(UIPanGestureRecognizer *)uigr {
     self.draggingConnector = connectorView;
+    
+    CGPoint point1 = [self convertPoint:connectorView.center fromView:connectorView.superview];
+    CGPoint point2 = [uigr locationInView:self];
+    self.dragCable = [[BuildViewCable alloc] initWithPoint:point1 andPoint:point2];
+    
+    // Remove any cables connected to this connector
+    if (connectorView.cable) {
+        [self.dragCable setColour:connectorView.cable.colour];
+        [self.cables removeObject:connectorView.cable];
+        [self.cableLayer setNeedsDisplay];
+        [self disconnectConnectorView:connectorView];
+    } else {
+        NSInteger randomColour = arc4random_uniform((UInt32)[[BuildView cableColours] count]);
+        [self.dragCable setColour:[[BuildView cableColours] objectAtIndex:randomColour]];
+    }
+    
+    [self.cables addObject:self.dragCable];
 }
 
 -(void)connectorView:(ConnectorView *)connectorView didContinueDrag:(UIPanGestureRecognizer *)uigr {
-    
+    [self.dragCable setPoint2:[uigr locationInView:self]];
+    [self.cableLayer setNeedsDisplay];
 }
 
 -(void)connectorView:(ConnectorView *)connectorView didEndDrag:(UIPanGestureRecognizer *)uigr {
-    UIView *hitView = [self hitTest:[uigr locationInView:self] withEvent:nil];
+    [self.cables removeObject:self.dragCable];
     
+    UIView *hitView = [self hitTest:[uigr locationInView:self] withEvent:nil];
     if ([hitView isKindOfClass:[ConnectorView class]]) {
-        [self connectorView:connectorView connectWith:(ConnectorView*)hitView];
+        ConnectorView *hitConnector = (ConnectorView*)hitView;
+        if ([self connectorView:connectorView connectWith:hitConnector]) {
+            if (hitConnector.cable) {
+                [self.cables removeObject:hitConnector.cable];
+            }
+            // Successful connection
+            CGPoint point1 = [self convertPoint:connectorView.center fromView:connectorView.superview];
+            CGPoint point2 = [self convertPoint:hitConnector.center fromView:hitConnector.superview];
+            
+            BuildViewCable *newCable = [[BuildViewCable alloc] initWithPoint:point1 andPoint:point2];
+            [newCable setColour:[self.dragCable colour]];
+            [connectorView setCable:newCable];
+            [hitConnector setCable:newCable];
+            
+            [self.cables addObject:newCable];
+        }
     }
+    self.dragCable = nil;
+    [self.cableLayer setNeedsDisplay];
 }
 
 -(BOOL)connectorView:(ConnectorView*)connectorView1 connectWith:(ConnectorView*)connectorView2 {
@@ -300,4 +318,48 @@
     return NO;
 }
 
+-(void)disconnectConnectorView:(ConnectorView*)connectorView {
+    COLComponentIO *componentIO = connectorView.componentIO;
+    if (componentIO) {
+        [componentIO disconnect];
+    }
+}
+
++(NSArray*)cableColours {
+    if (!cableColours) {
+        cableColours = @[[UIColor redColor], [UIColor blueColor], [UIColor yellowColor], [UIColor greenColor], [UIColor orangeColor], [UIColor blackColor], [UIColor lightGrayColor]];
+    }
+    
+    return cableColours;
+}
+
+@end
+
+@interface BuildViewCellPath ()
+@property (nonatomic) NSUInteger column;
+@property (nonatomic) NSUInteger row;
+@end
+
+@implementation BuildViewCellPath
+-(instancetype)initWithColumn:(NSUInteger)column Row:(NSUInteger)row {
+    self = [super init];
+    if (self) {
+        self.row = row;
+        self.column = column;
+    }
+    return self;
+}
+@end
+
+@implementation BuildViewCable
+-(instancetype)initWithPoint:(CGPoint)point1 andPoint:(CGPoint)point2 {
+    self = [super init];
+    if (self) {
+        self.point1 = point1;
+        self.point2 = point2;
+        
+        self.colour = [UIColor redColor];
+    }
+    return self;
+}
 @end

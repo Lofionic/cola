@@ -12,6 +12,9 @@
 		6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */; };
 		6C1201091AAE44D200C6ACB6 /* ComponentDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1201081AAE44D200C6ACB6 /* ComponentDescription.m */; };
 		6C12010B1AAE49A100C6ACB6 /* componentCatalog.json in Resources */ = {isa = PBXBuildFile; fileRef = 6C12010A1AAE49A100C6ACB6 /* componentCatalog.json */; };
+		6C1CF0DD1AC202F50004A2FA /* BuildViewGridLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1CF0DC1AC202F50004A2FA /* BuildViewGridLayer.m */; };
+		6C1CF0E01AC206BD0004A2FA /* BuildViewHighlightLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1CF0DF1AC206BD0004A2FA /* BuildViewHighlightLayer.m */; };
+		6C1CF0E31AC20A020004A2FA /* BuildViewCableLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1CF0E21AC20A020004A2FA /* BuildViewCableLayer.m */; };
 		6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E211A8BF2CC00ECEAB2 /* main.m */; };
 		6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */; };
 		6C2A5E2B1A8BF2CC00ECEAB2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5E291A8BF2CC00ECEAB2 /* Main.storyboard */; };
@@ -48,6 +51,12 @@
 		6C1201071AAE44D200C6ACB6 /* ComponentDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentDescription.h; sourceTree = "<group>"; };
 		6C1201081AAE44D200C6ACB6 /* ComponentDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentDescription.m; sourceTree = "<group>"; };
 		6C12010A1AAE49A100C6ACB6 /* componentCatalog.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = componentCatalog.json; sourceTree = "<group>"; };
+		6C1CF0DB1AC202F50004A2FA /* BuildViewGridLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewGridLayer.h; sourceTree = "<group>"; };
+		6C1CF0DC1AC202F50004A2FA /* BuildViewGridLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildViewGridLayer.m; sourceTree = "<group>"; };
+		6C1CF0DE1AC206BD0004A2FA /* BuildViewHighlightLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewHighlightLayer.h; sourceTree = "<group>"; };
+		6C1CF0DF1AC206BD0004A2FA /* BuildViewHighlightLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildViewHighlightLayer.m; sourceTree = "<group>"; };
+		6C1CF0E11AC20A020004A2FA /* BuildViewCableLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewCableLayer.h; sourceTree = "<group>"; };
+		6C1CF0E21AC20A020004A2FA /* BuildViewCableLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildViewCableLayer.m; sourceTree = "<group>"; };
 		6C1DB6B11AADDEB60041F5F9 /* defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
 		6C2A5E1C1A8BF2CC00ECEAB2 /* ColaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2A5E201A8BF2CC00ECEAB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -169,6 +178,12 @@
 				6C0F86D01AA7B2220092FB18 /* BuildViewController.m */,
 				6CDA9F121AA9017E00D64EB0 /* BuildView.h */,
 				6CDA9F131AA9017E00D64EB0 /* BuildView.m */,
+				6C1CF0DB1AC202F50004A2FA /* BuildViewGridLayer.h */,
+				6C1CF0DC1AC202F50004A2FA /* BuildViewGridLayer.m */,
+				6C1CF0DE1AC206BD0004A2FA /* BuildViewHighlightLayer.h */,
+				6C1CF0DF1AC206BD0004A2FA /* BuildViewHighlightLayer.m */,
+				6C1CF0E11AC20A020004A2FA /* BuildViewCableLayer.h */,
+				6C1CF0E21AC20A020004A2FA /* BuildViewCableLayer.m */,
 				6C8DD2931AC0C9CC00320628 /* ComponentView.h */,
 				6C8DD2941AC0C9CC00320628 /* ComponentView.m */,
 				6C59C5641ABF4273001EE663 /* ConnectorView.h */,
@@ -283,11 +298,14 @@
 				6C1201091AAE44D200C6ACB6 /* ComponentDescription.m in Sources */,
 				6CDA9F141AA9017E00D64EB0 /* BuildView.m in Sources */,
 				6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */,
+				6C1CF0E01AC206BD0004A2FA /* BuildViewHighlightLayer.m in Sources */,
 				6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */,
 				6C0F86D81AA7BEB70092FB18 /* ComponentShelfView.m in Sources */,
 				6C8DD2951AC0C9CC00320628 /* ComponentView.m in Sources */,
 				6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */,
 				6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */,
+				6C1CF0E31AC20A020004A2FA /* BuildViewCableLayer.m in Sources */,
+				6C1CF0DD1AC202F50004A2FA /* BuildViewGridLayer.m in Sources */,
 				6C0F86D11AA7B2220092FB18 /* BuildViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

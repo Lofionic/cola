@@ -31,6 +31,10 @@
     return self.connectedTo != nil;
 }
 
+-(BOOL)disconnect {
+    return NO;
+}
+
 -(NSString*)nameWithComponent {
     if (self.component) {
         return [NSString stringWithFormat:@"%@:%@", [self.component name], _name];

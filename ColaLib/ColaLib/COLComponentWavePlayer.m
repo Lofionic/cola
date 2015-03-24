@@ -125,6 +125,7 @@
         UInt32 framesToRead = (maxReadFrames > numFrames) ? (UInt32)numFrames : maxReadFrames;
         err = ExtAudioFileRead(fileRef, &framesToRead, bufferList);
         if (err) {
+            free(bufferList);
             return NO;
         }
         

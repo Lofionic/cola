@@ -24,4 +24,6 @@ typedef NS_ENUM(NSUInteger, kComponentIOType) {
 -(BOOL)isConnected;
 -(NSString*)nameWithComponent;
 
+-(BOOL)disconnect;
+
 @end

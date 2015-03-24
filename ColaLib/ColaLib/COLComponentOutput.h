@@ -21,6 +21,5 @@
 -(void)engineDidRender;
 
 -(BOOL)connectTo:(COLComponentInput*)input;
--(BOOL)disconnect;
 
 @end
