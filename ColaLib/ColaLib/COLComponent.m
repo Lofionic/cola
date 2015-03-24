@@ -104,6 +104,21 @@
     }
 }
 
+-(COLComponentParameter *)parameterNamed:(NSString*)name {
+    
+    __block COLComponentParameter *result = nil;
+    
+    [self.parameters enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+        COLComponentParameter *thisParameter = (COLComponentParameter*)obj;
+        if ([thisParameter.name isEqualToString:name]) {
+            result = thisParameter;
+            *stop = YES;
+        }
+    }];
+    
+    return result;
+}
+
 -(void)renderOutputs:(UInt32)numFrames {
     self.hasRendered = YES;
 }

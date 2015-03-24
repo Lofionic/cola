@@ -31,6 +31,7 @@
 -(COLComponentOutput *)inputNamed:(NSString*)name;
 
 -(COLComponentParameter*)parameterForIndex:(NSUInteger)index;
+-(COLComponentParameter *)parameterNamed:(NSString*)name;
 
 -(instancetype)initWithContext:(COLAudioContext*)context;
 -(void)initializeIO;

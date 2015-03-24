@@ -15,17 +15,22 @@
 @property (nonatomic, strong) COLComponentOutput *mainOut;
 @property (nonatomic, strong) COLComponentInput *freqIn;
 
+@property (nonatomic, strong) COLComponentParameter *frequency;
+
 @end
 
 @implementation COLComponentLFO
 
 -(void)initializeIO {
-    self.frequency = 1;
+
     self.mainOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"Out"];
     [self setOutputs:@[self.mainOut]];
     
     self.freqIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"FreqIn"];
     [self setInputs:@[self.freqIn]];
+    
+    self.frequency = [[COLComponentParameter alloc] initWithComponent:self withName:@"Freq"];
+    [self setParameters:@[self.frequency]];
 }
 
 -(void)renderOutputs:(UInt32)numFrames {
@@ -44,10 +49,10 @@
         if ([self.freqIn isConnected]) {
             freq = frequencyBuffer[i] + 1;
         } else {
-            freq = 2;
+            freq = [self.frequency outputAtDelta:i / (float)numFrames];
         }
         
-        phase += (2.0 * M_PI * (self.frequency * freq)) / sampleRate;
+        phase += (2.0 * M_PI * (freq)) / sampleRate;
         if (phase > 2.0 * M_PI) {
             phase -= (2.0 * M_PI);
         }

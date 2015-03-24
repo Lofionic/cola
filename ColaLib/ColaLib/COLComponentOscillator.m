@@ -39,7 +39,8 @@
     self.mainOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"Out"];
     [self setOutputs:@[self.mainOut]];
     
-    self.frequency = [[COLComponentParameter alloc] init];
+    self.frequency = [[COLComponentParameter alloc] initWithComponent:self withName:@"Freq"];
+    [self.frequency setNormalizedValue:0];
     [self setParameters:@[self.frequency]];
 }
 
@@ -63,7 +64,7 @@
         if ([self.frequencyIn isConnected]) {
             freq = (frequencyBuffer[i] + 1);
         } else {
-            freq = [self.frequency outputAtDelta:(i / (float)numFrames)];
+            freq = [self.frequency outputAtDelta:i / (float)numFrames];
         }
         
         phase += (M_PI * freq * kOscillatorFrequencyRange) / sampleRate;
@@ -79,9 +80,7 @@
         AudioSignalType outputValue = sin(phase) * amp;
         
         mainOutBuffer[i] = outputValue;
-    
     }
-
 }
 
 -(void)retrigger {

@@ -89,7 +89,6 @@
     
     if ([componentType isEqualToString:kCOLComponentOscillator]) {
         newComponent = [[COLComponentOscillator alloc] initWithContext:context];
-        [[newComponent parameterForIndex:0] setNormalizedValue:0.1];
     } else if ([componentType isEqualToString:kCOLComponentLFO]) {
         newComponent = [[COLComponentLFO alloc] initWithContext:context];
     } else if ([componentType isEqualToString:kCOLComponentWavePlayer]) {

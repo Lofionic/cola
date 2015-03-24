@@ -8,25 +8,36 @@
 @import UIKit;
 @import Foundation;
 
-@interface ConnectorDescription : NSObject
+@interface ComponentDescription : NSObject
 
-@property (nonatomic, strong) NSString *type;
-@property (nonatomic, strong) NSString *connectionName;
-@property (nonatomic) CGPoint position;
+@property (readonly, strong) NSString   *type;
+@property (readonly, strong) NSString   *name;
+
+@property (readonly) NSUInteger         width;
+@property (readonly) NSUInteger         height;
+
+@property (readonly, strong) NSArray    *connectors;
+@property (readonly, strong) NSArray    *encoders;
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
 @end
 
-@interface ComponentDescription : NSObject
+@interface ConnectorDescription : NSObject
 
-@property (nonatomic, strong) NSString *type;
-@property (nonatomic, strong) NSString *name;
+@property (readonly, strong) NSString   *type;
+@property (readonly, strong) NSString   *connectionName;
+@property (readonly) CGPoint            location;
 
-@property (nonatomic) NSUInteger width;
-@property (nonatomic) NSUInteger height;
+-(instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
-@property (nonatomic, strong) NSArray *connectors;
+@end
+
+@interface EncoderDescription : NSObject
+
+@property (readonly, strong) NSString   *type;
+@property (readonly, strong) NSString   *parameterName;
+@property (readonly) CGPoint            location;
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary;
 

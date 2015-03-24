@@ -5,8 +5,9 @@
 //  Created by Chris on 05/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-#import "defines.h"
 #import "BuildView.h"
+#import "defines.h"
+#import "ComponentView.h"
 
 #import <ColaLib/ColaLib.h>
 
@@ -67,6 +68,8 @@
         ConnectorView *mainInConnectorView = [[ConnectorView alloc] initWithComponentIO:mainIn];
         [mainInConnectorView setCenter:CGPointMake(40, self.headerHeight / 2.0)];
         [self addSubview:mainInConnectorView];
+        
+        self.delaysContentTouches = NO;
     }
     return self;
 }
@@ -239,34 +242,15 @@
 
 -(UIView*)addViewForComponent:(ComponentDescription*)componentDescription atPoint:(CGPoint)point {
     NSSet *cellSet = [self cellPathsForComponentOfWidth:componentDescription.width height:componentDescription.height center:point];
+    
     if (cellSet) {
-        COLComponent *component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:componentDescription.type];
         
-        if (component) {
-            CGRect newFrame = [self rectForCellSet:cellSet];
-            
-            UIView *newView = [[UIView alloc] initWithFrame:newFrame];
-            [newView setBackgroundColor:[UIColor whiteColor]];
-            
-            NSArray *connectors = [componentDescription connectors];
-            for (ConnectorDescription *thisConnector in connectors) {
-                
-                COLComponentIO *componentIO = nil;
-                if ([thisConnector.type isEqualToString:@"output"]) {
-                    componentIO = [component outputNamed:thisConnector.connectionName];
-                } else if ([thisConnector.type isEqualToString:@"input"]) {
-                    componentIO = [component inputNamed:thisConnector.connectionName];
-                }
-                
-                if (componentIO) {
-                    ConnectorView *connectorView = [[ConnectorView alloc] initWithComponentIO:componentIO];
-                    [connectorView setCenter:thisConnector.position];
-                    [connectorView setDelegate:self];
-                    [newView addSubview:connectorView];
-                }
-            }
-            
-            [self addSubview:newView];
+        CGRect newFrame = [self rectForCellSet:cellSet];
+        ComponentView *componentView = [[ComponentView alloc] initWithComponentDescription:componentDescription inFrame:newFrame];
+
+        if (componentView) {
+
+            [self addSubview:componentView];
             
             // Add cells to occupied
             [cellSet enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
@@ -274,7 +258,7 @@
                 cellOccupied[cellPath.row][cellPath.column] = TRUE;
             }];
             
-            return newView;
+            return componentView;
         }
     }
     return nil;

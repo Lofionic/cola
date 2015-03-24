@@ -14,6 +14,7 @@
     
     float preValue;
     float postValue;
+    float pendingValue;
     
     float cacheIn;
     float cacheOut;
@@ -30,21 +31,21 @@
         
         preValue = 0;
         postValue = 0;
+        pendingValue = 0;
     }
     return self;
 }
 
 -(void)setNormalizedValue:(float)newValue {
     if (newValue >= 0 && newValue <= 1) {
-        //postValue = self.outMinimum + ((self.outMaximum - self.outMinimum) * newValue);
-        postValue = newValue;
-        
+        pendingValue = newValue;
         [self.component parameterDidChange:self];
     }
 }
 
 -(void)engineDidRender {
     preValue = postValue;
+    postValue = pendingValue;
 }
 
 -(float)outputAtDelta:(float)delta {
@@ -63,7 +64,7 @@
 }
 
 -(float)getNormalizedValue {
-    return postValue;
+    return pendingValue;
 }
 
 @end

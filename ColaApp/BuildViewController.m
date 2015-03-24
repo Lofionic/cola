@@ -9,7 +9,11 @@
 #import "ComponentDescription.h"
 #import "BuildViewController.h"
 
+
+static BuildView *buildView = nil;
+
 @implementation BuildViewController
+
 
 -(void)viewDidLoad {
     
@@ -20,6 +24,8 @@
     [self.buildView setContentInset:UIEdgeInsetsMake(kToolbarHeight, 0, kComponentShelfHeight, 0)];
     [self.buildView setScrollIndicatorInsets:UIEdgeInsetsMake(kToolbarHeight, 0, kComponentShelfHeight, 0)];
     [self.view addSubview:self.buildView];
+    
+    buildView = self.buildView;
     
     self.componentTray = [[ComponentShelfView alloc] init];
     [self.componentTray setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -111,6 +117,10 @@
             }
         }
     }
+}
+
++(BuildView*)buildView {
+    return buildView;
 }
 
 @end
