@@ -12,10 +12,11 @@
 #define OUTLINE_COLOUR  [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5]
 #define NEEDLE_COLOUR   [UIColor colorWithRed:255/255.0 green:0/255.0 blue:0/255.0 alpha:1]
 
-
 @interface RotaryEncoder ()
 
 @property (nonatomic, weak) COLComponentParameter *parameter;
+@property (nonatomic, strong) CALayer *needleLayer;
+@property NSInteger needleRotation;
 
 @end
 
@@ -30,40 +31,30 @@
         self.parameter = parameter;
         self.value = 0;
         
-        [self setBackgroundColor:[UIColor clearColor]];
+        UIImage *encoderImage = [UIImage imageNamed:@"ImageAssets/encoder_white"];
+        if (encoderImage) {
+            [self.layer setContents:(id)encoderImage.CGImage];
+        }
+        
+        UIImage *needleImage = [UIImage imageNamed:@"ImageAssets/encoder_needle_grey"];
+        if (needleImage) {
+            self.needleLayer = [CALayer layer];
+            [self.needleLayer setFrame:CGRectMake(0, 0, 40, 40)];
+            [self.needleLayer setContents:(id)needleImage.CGImage];
+            [self.layer addSublayer:self.needleLayer];
+        }
     }
     return  self;
 }
 
--(void)drawRect:(CGRect)rect {
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
-    CGRect ellipseRect = CGRectInset(rect, 4, 4);
-    
-    // Draw dial
-    CGContextSetFillColorWithColor(ctx, [DIAL_COLOUR CGColor]);
-    CGContextFillEllipseInRect(ctx, ellipseRect);
-    
-    // Draw Needle
-    CGFloat radius = ellipseRect.size.width / 2.0;
-    CGPoint centre = CGPointMake(rect.size.width / 2.0,
-                                 rect.size.height / 2.0 );
-    
+
+-(void)updateNeedleAnimated:(BOOL)animated {
     double theta = ((M_PI * 2.0) * self.value * 0.75) + (M_PI * (3.0 / 4.0));
     
-    CGPoint endPoint = CGPointMake(centre.x + (cos(theta) * radius),
-                                   centre.y + (sin(theta) * radius));
-    
-    CGContextSetLineWidth(ctx, 2);
-    CGContextSetStrokeColorWithColor(ctx, [NEEDLE_COLOUR CGColor]);
-    CGContextMoveToPoint(ctx, centre.x, centre.y);
-    CGContextAddLineToPoint(ctx, endPoint.x, endPoint.y);
-    CGContextStrokePath(ctx);
-    
-    CGContextSetStrokeColorWithColor(ctx, [OUTLINE_COLOUR CGColor]);
-    CGContextStrokeEllipseInRect(ctx, ellipseRect);
-    
-    [super drawRect:rect];
+    BOOL disableActions = [CATransaction disableActions];
+    [CATransaction setDisableActions:!animated];
+    [self.needleLayer setAffineTransform:CGAffineTransformRotate(CGAffineTransformIdentity, theta)];
+    [CATransaction setDisableActions:disableActions];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -78,7 +69,7 @@
     if (tracking) {
         UITouch *touch = [touches anyObject];
         CGFloat translation = trackingY - [touch locationInView:self].y;
-        CGFloat delta = translation / 500.0;
+        CGFloat delta = translation / 200.0;
         self.value = trackingValue + delta;
         
         self.value = MIN(1.0, self.value);
@@ -87,6 +78,7 @@
         [self setNeedsDisplay];
         
         [self.parameter setNormalizedValue:self.value];
+        
     }
 }
 
@@ -98,7 +90,7 @@
 
 -(void)setValue:(double)value {
     _value = value;
-    [self setNeedsDisplay];
+    [self updateNeedleAnimated:NO];
 }
 
 @end

@@ -28,6 +28,8 @@
 		6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */; };
 		6C8DD2951AC0C9CC00320628 /* ComponentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2941AC0C9CC00320628 /* ComponentView.m */; };
 		6C94939A1A9D1BFB00B7A37C /* loop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C9493991A9D1BFB00B7A37C /* loop.wav */; };
+		6CB828381AC2F58000610DD4 /* ImageAssets in Resources */ = {isa = PBXBuildFile; fileRef = 6CB828371AC2F58000610DD4 /* ImageAssets */; };
+		6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */; };
 		6CDA9F141AA9017E00D64EB0 /* BuildView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDA9F131AA9017E00D64EB0 /* BuildView.m */; };
 /* End PBXBuildFile section */
 
@@ -78,6 +80,9 @@
 		6C8DD2931AC0C9CC00320628 /* ComponentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentView.h; sourceTree = "<group>"; };
 		6C8DD2941AC0C9CC00320628 /* ComponentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentView.m; sourceTree = "<group>"; };
 		6C9493991A9D1BFB00B7A37C /* loop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = loop.wav; sourceTree = "<group>"; };
+		6CB828371AC2F58000610DD4 /* ImageAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ImageAssets; sourceTree = "<group>"; };
+		6CB8283C1AC3077800610DD4 /* UIColor+Shades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Shades.h"; sourceTree = "<group>"; };
+		6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Shades.m"; sourceTree = "<group>"; };
 		6CDA9F121AA9017E00D64EB0 /* BuildView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildView.h; sourceTree = "<group>"; };
 		6CDA9F131AA9017E00D64EB0 /* BuildView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,6 +122,8 @@
 				6C1CF0DF1AC206BD0004A2FA /* BuildViewHighlightLayer.m */,
 				6C1CF0E11AC20A020004A2FA /* BuildViewCableLayer.h */,
 				6C1CF0E21AC20A020004A2FA /* BuildViewCableLayer.m */,
+				6CB8283C1AC3077800610DD4 /* UIColor+Shades.h */,
+				6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */,
 			);
 			name = Layers;
 			sourceTree = "<group>";
@@ -177,6 +184,7 @@
 		6C65A4E91A9125E1000D9192 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6CB828371AC2F58000610DD4 /* ImageAssets */,
 				6C65A4E71A9125DD000D9192 /* gtr.wav */,
 				6C9493991A9D1BFB00B7A37C /* loop.wav */,
 				6C12010A1AAE49A100C6ACB6 /* componentCatalog.json */,
@@ -290,6 +298,7 @@
 				6C12010B1AAE49A100C6ACB6 /* componentCatalog.json in Resources */,
 				6C2A5E301A8BF2CC00ECEAB2 /* LaunchScreen.xib in Resources */,
 				6C2A5EA31A8C0B2A00ECEAB2 /* ToDo.txt in Resources */,
+				6CB828381AC2F58000610DD4 /* ImageAssets in Resources */,
 				6C65A4E81A9125DD000D9192 /* gtr.wav in Resources */,
 				6C2A5E2D1A8BF2CC00ECEAB2 /* Images.xcassets in Resources */,
 			);
@@ -309,6 +318,7 @@
 				6C1CF0E01AC206BD0004A2FA /* BuildViewHighlightLayer.m in Sources */,
 				6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */,
 				6C0F86D81AA7BEB70092FB18 /* ComponentShelfView.m in Sources */,
+				6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */,
 				6C8DD2951AC0C9CC00320628 /* ComponentView.m in Sources */,
 				6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */,
 				6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */,

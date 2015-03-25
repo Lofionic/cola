@@ -22,10 +22,22 @@
         self.componentIO = componentIO;
         self.frame = CGRectMake(0, 0, 40, 40);
         
-        if ([componentIO isKindOfClass:[COLComponentInput class]]) {
-            self.backgroundColor = [UIColor greenColor];
-        } else {
-            self.backgroundColor = [UIColor blueColor];
+        NSString *connectorImageName;
+        if (componentIO.type == kComponentIOTypeAudio) {
+            if ([componentIO isKindOfClass:[COLComponentOutput class]]) {
+                connectorImageName = @"blue";
+            } else if ([componentIO isKindOfClass:[COLComponentInput class]]) {
+                connectorImageName = @"green";
+            }
+        } else if (componentIO.type == kComponentIOTypeControl) {
+            connectorImageName = @"yellow";
+        }
+        
+        connectorImageName = [NSString stringWithFormat:@"ImageAssets/connector_%@", connectorImageName];
+        UIImage *connectorImage = [UIImage imageNamed:connectorImageName];
+        
+        if (connectorImage) {
+            [self.layer setContents:(id)connectorImage.CGImage];
         }
         
         UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureHandler:)];

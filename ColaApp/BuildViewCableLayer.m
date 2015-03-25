@@ -9,6 +9,7 @@
 #import <CoreMotion/CoreMotion.h>
 #import "BuildViewCableLayer.h"
 #import "BuildView.h"
+#import "UIColor+Shades.h"
 
 @interface BuildViewCableLayer ()
 @property (nonatomic, strong) CADisplayLink *displayLink;
@@ -25,11 +26,11 @@
     if (self)
     {
         self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(setNeedsDisplay)];
-        [self.displayLink setFrameInterval:8];
+        [self.displayLink setFrameInterval:4];
         [self setNeedsDisplayOnBoundsChange:YES];
         
         self.motionManager = [[CMMotionManager alloc] init];
-        [self.motionManager setDeviceMotionUpdateInterval:1/25.0];
+        [self.motionManager setDeviceMotionUpdateInterval:1/15.0];
         if ([self.motionManager isDeviceMotionAvailable]) {
             // to avoid using more CPU than necessary we use `CMAttitudeReferenceFrameXArbitraryZVertical`
             [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryZVertical];
@@ -48,20 +49,16 @@
     for (BuildViewCable *cable in self.buildView.cables) {
         CGContextSaveGState(ctx);
         
-        CGContextSetFillColorWithColor(ctx, [[UIColor darkGrayColor] CGColor]);
-        CGRect rect1 = CGRectMake(cable.point1.x - 8, cable.point1.y - 8, 16, 16);
-        CGContextFillEllipseInRect(ctx, rect1);
-        
-        CGRect rect2 = CGRectMake(cable.point2.x - 8, cable.point2.y - 8, 16, 16);
-        CGContextFillEllipseInRect(ctx, rect2);
-        
-        CGContextSetFillColorWithColor(ctx, [[UIColor lightGrayColor] CGColor]);
-        CGContextFillEllipseInRect(ctx, CGRectOffset(rect1, 0, -2));
-        CGContextFillEllipseInRect(ctx, CGRectOffset(rect2, 0, -2));
-        
-        CGContextSetStrokeColorWithColor(ctx, [cable.colour CGColor]);
-        CGContextSetLineWidth(ctx, 10);
-        CGContextSetLineCap(ctx, kCGLineCapRound);
+//        CGContextSetFillColorWithColor(ctx, [[UIColor darkGrayColor] CGColor]);
+//        CGRect rect1 = CGRectMake(cable.point1.x - 8, cable.point1.y - 8, 16, 16);
+//        CGContextFillEllipseInRect(ctx, rect1);
+//        
+//        CGRect rect2 = CGRectMake(cable.point2.x - 8, cable.point2.y - 8, 16, 16);
+//        CGContextFillEllipseInRect(ctx, rect2);
+//        
+//        CGContextSetFillColorWithColor(ctx, [[UIColor lightGrayColor] CGColor]);
+//        CGContextFillEllipseInRect(ctx, CGRectOffset(rect1, 0, -2));
+//        CGContextFillEllipseInRect(ctx, CGRectOffset(rect2, 0, -2));
         
         CGFloat hang = MIN(abs(cable.point2.x - cable.point1.x), 40);
         CGFloat bottom = MAX(cable.point1.y, cable.point2.y) + hang;
@@ -89,20 +86,24 @@
         [bezierPath moveToPoint:left];
         [bezierPath addCurveToPoint:right controlPoint1:controlPoint1 controlPoint2:controlPoint2];
         
+        // Stroke Shadow
         CGContextAddPath(ctx, bezierPath.CGPath);
+        CGContextSetStrokeColorWithColor(ctx, [[cable.colour darkerShade] CGColor]);
+        CGContextSetLineWidth(ctx, 8);
+        CGContextSetLineCap(ctx, kCGLineCapRound);
         CGContextStrokePath(ctx);
         
-        CGContextSetStrokeColorWithColor(ctx, [[UIColor colorWithWhite:0 alpha:0.2] CGColor]);
-        CGContextAddPath(ctx, bezierPath.CGPath);
-        CGContextStrokePath(ctx);
-        
-        CGContextSetStrokeColorWithColor(ctx, [cable.colour CGColor]);
+        // Stroke Mid
+        CGContextSetStrokeColorWithColor(ctx, [[cable.colour midShade] CGColor]);
         CGContextTranslateCTM(ctx, 0, -2);
+        CGContextSetLineWidth(ctx, 6);
         CGContextAddPath(ctx, bezierPath.CGPath);
         CGContextStrokePath(ctx);
         
-        CGContextSetStrokeColorWithColor(ctx, [[UIColor colorWithWhite:1 alpha:0.2] CGColor]);
-        CGContextSetLineWidth(ctx, 4);
+        // Stroke Highlight
+        CGContextSetStrokeColorWithColor(ctx, [[cable.colour lighterShade] CGColor]);
+        CGContextTranslateCTM(ctx, 0, -2);
+        CGContextSetLineWidth(ctx, 2);
         CGContextAddPath(ctx, bezierPath.CGPath);
         CGContextStrokePath(ctx);
         
