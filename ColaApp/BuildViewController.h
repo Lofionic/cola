@@ -12,9 +12,6 @@
 
 @interface BuildViewController : UIViewController <ComponentTrayDelegate>
 
-@property (nonatomic, strong) BuildView             *buildView;
-@property (nonatomic, strong) ComponentShelfView     *componentTray;
-@property (nonatomic, strong) UIView                *dragView;
 
 +(BuildView*)buildView;
 

@@ -10,7 +10,8 @@
 @class COLComponent;
 typedef NS_ENUM(NSUInteger, kComponentIOType) {
     kComponentIOTypeAudio,
-    kComponentIOTypeControl
+    kComponentIOTypeControl,
+    kComponentIOType1VOct
 };
 
 @interface COLComponentIO : NSObject

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C0D487D1AC358C2008AD869 /* COLKeyboardComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0D487C1AC358C2008AD869 /* COLKeyboardComponent.m */; };
+		6C0D487E1AC365BC008AD869 /* COLKeyboardComponent.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C0D487B1AC358C2008AD869 /* COLKeyboardComponent.h */; };
 		6C0DD3581A94DEE900217751 /* COLComponentOscillator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C310D401A8D721900A97D82 /* COLComponentOscillator.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6C0DD35A1A94DEEC00217751 /* COLComponentWavePlayer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C65A4E41A9117CF000D9192 /* COLComponentWavePlayer.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6C1154751A8E306D005CF194 /* COLComponentIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1154741A8E306D005CF194 /* COLComponentIO.m */; };
@@ -58,12 +60,15 @@
 				6CB322F11A9BE2AE0052AE50 /* COLComponentIO.h in CopyFiles */,
 				6CB322F01A9BE2A30052AE50 /* COLAudioContext.h in CopyFiles */,
 				6C41E2311AA1D11E00887B50 /* COLCompenentEnvelope.h in CopyFiles */,
+				6C0D487E1AC365BC008AD869 /* COLKeyboardComponent.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6C0D487B1AC358C2008AD869 /* COLKeyboardComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLKeyboardComponent.h; sourceTree = "<group>"; };
+		6C0D487C1AC358C2008AD869 /* COLKeyboardComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLKeyboardComponent.m; sourceTree = "<group>"; };
 		6C1154731A8E306D005CF194 /* COLComponentIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentIO.h; sourceTree = "<group>"; };
 		6C1154741A8E306D005CF194 /* COLComponentIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentIO.m; sourceTree = "<group>"; };
 		6C1154781A8E3468005CF194 /* COLComponentLFO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentLFO.h; sourceTree = "<group>"; };
@@ -117,6 +122,8 @@
 				6C65A4E51A9117CF000D9192 /* COLComponentWavePlayer.m */,
 				6C41E22E1AA1C78800887B50 /* COLCompenentEnvelope.h */,
 				6C41E22F1AA1C78800887B50 /* COLCompenentEnvelope.m */,
+				6C0D487B1AC358C2008AD869 /* COLKeyboardComponent.h */,
+				6C0D487C1AC358C2008AD869 /* COLKeyboardComponent.m */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -224,6 +231,7 @@
 				6C2A5E981A8BF5BE00ECEAB2 /* COLAudioEngine.m in Sources */,
 				6C310D421A8D721900A97D82 /* COLComponentOscillator.m in Sources */,
 				6C7B27CA1A8D57AF00AFD384 /* COLComponentInput.m in Sources */,
+				6C0D487D1AC358C2008AD869 /* COLKeyboardComponent.m in Sources */,
 				6C1154751A8E306D005CF194 /* COLComponentIO.m in Sources */,
 				6C65A4E61A9117CF000D9192 /* COLComponentWavePlayer.m in Sources */,
 				6C7B27C71A8D578F00AFD384 /* COLComponentOutput.m in Sources */,

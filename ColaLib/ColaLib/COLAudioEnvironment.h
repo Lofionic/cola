@@ -21,11 +21,14 @@
 -(void)audioEngineHostStateDidChange:(COLAudioEngine*)audioEngine;
 @end
 
+@class COLKeyboardComponent;
 @interface COLAudioEnvironment : NSObject <COLAudioEngineDelegate>
 
 @property (nonatomic, weak) id      infoDelegate;
 @property (readonly) COLAudioEngine *audioEngine;
 @property (readonly) Float64        sampleRate;
+
+@property (nonatomic, strong) COLKeyboardComponent  *keyboardComponent;
 
 +(instancetype)sharedEnvironment;
 -(void)start;

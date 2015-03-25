@@ -13,5 +13,6 @@
 #import "COLComponentLFO.h"
 #import "COLComponentWavePlayer.h"
 #import "COLCompenentEnvelope.h"
+#import "COLKeyboardComponent.h"
 
 #endif

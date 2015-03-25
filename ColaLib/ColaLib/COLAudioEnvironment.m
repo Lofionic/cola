@@ -51,6 +51,8 @@
         [self.audioEngine setDelegate:self];
         
         self.components = [[NSMutableArray alloc] initWithCapacity:10];
+        
+        self.keyboardComponent = [[COLKeyboardComponent alloc] initWithContext:[COLAudioContext globalContext]];
     }
     return self;
 }

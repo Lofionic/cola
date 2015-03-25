@@ -8,9 +8,20 @@
 #import "defines.h"
 #import "ComponentDescription.h"
 #import "BuildViewController.h"
-
+#import "KeyboardView.h"
 
 static BuildView *buildView = nil;
+
+@interface BuildViewController()
+
+@property (nonatomic, strong) BuildView             *buildView;
+
+@property (nonatomic, strong) ComponentShelfView    *componentTray;
+@property (nonatomic, strong) KeyboardView          *keyboardView;
+
+@property (nonatomic, strong) UIView                *dragView;
+
+@end
 
 @implementation BuildViewController
 
@@ -31,12 +42,23 @@ static BuildView *buildView = nil;
     [self.componentTray setDelegate:self];
     [self.view addSubview:self.componentTray];
     
+    self.keyboardView = [[KeyboardView alloc] init];
+    [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.keyboardView setKbComponent:[[COLAudioEnvironment sharedEnvironment] keyboardComponent]];
+    [self.view addSubview:self.keyboardView];
+    
     NSDictionary *viewsDictionary = @{
                                       @"buildView"      :   self.buildView,
-                                      @"componentShelf" :   self.componentTray
+                                      @"componentShelf" :   self.componentTray,
+                                      @"keyboardView"   :   self.keyboardView
                                       };
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[componentShelf]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:viewsDictionary]];
+
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[keyboardView]|"
                                                                       options:0
                                                                       metrics:nil
                                                                         views:viewsDictionary]];
@@ -47,7 +69,7 @@ static BuildView *buildView = nil;
                                         @"toolbarHeight"        : [NSNumber numberWithFloat:kToolbarHeight]
                                         };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[componentShelf(componentShelfHeight)]|"
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[keyboardView(100)][componentShelf(componentShelfHeight)]|"
                                                                       options:0
                                                                       metrics:metricsDictionary
                                                                         views:viewsDictionary]];

@@ -9,6 +9,4 @@
 
 @interface COLComponentLFO : COLComponent
 
-@property (readonly) COLComponentOutput *mainOut;
-
 @end
