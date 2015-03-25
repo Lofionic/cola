@@ -108,6 +108,19 @@
 			name = ComponentShelf;
 			sourceTree = "<group>";
 		};
+		6C1962411AC2408900E6A416 /* Layers */ = {
+			isa = PBXGroup;
+			children = (
+				6C1CF0DB1AC202F50004A2FA /* BuildViewGridLayer.h */,
+				6C1CF0DC1AC202F50004A2FA /* BuildViewGridLayer.m */,
+				6C1CF0DE1AC206BD0004A2FA /* BuildViewHighlightLayer.h */,
+				6C1CF0DF1AC206BD0004A2FA /* BuildViewHighlightLayer.m */,
+				6C1CF0E11AC20A020004A2FA /* BuildViewCableLayer.h */,
+				6C1CF0E21AC20A020004A2FA /* BuildViewCableLayer.m */,
+			);
+			name = Layers;
+			sourceTree = "<group>";
+		};
 		6C2A5E131A8BF2CC00ECEAB2 = {
 			isa = PBXGroup;
 			children = (
@@ -178,12 +191,7 @@
 				6C0F86D01AA7B2220092FB18 /* BuildViewController.m */,
 				6CDA9F121AA9017E00D64EB0 /* BuildView.h */,
 				6CDA9F131AA9017E00D64EB0 /* BuildView.m */,
-				6C1CF0DB1AC202F50004A2FA /* BuildViewGridLayer.h */,
-				6C1CF0DC1AC202F50004A2FA /* BuildViewGridLayer.m */,
-				6C1CF0DE1AC206BD0004A2FA /* BuildViewHighlightLayer.h */,
-				6C1CF0DF1AC206BD0004A2FA /* BuildViewHighlightLayer.m */,
-				6C1CF0E11AC20A020004A2FA /* BuildViewCableLayer.h */,
-				6C1CF0E21AC20A020004A2FA /* BuildViewCableLayer.m */,
+				6C1962411AC2408900E6A416 /* Layers */,
 				6C8DD2931AC0C9CC00320628 /* ComponentView.h */,
 				6C8DD2941AC0C9CC00320628 /* ComponentView.m */,
 				6C59C5641ABF4273001EE663 /* ConnectorView.h */,

@@ -33,6 +33,8 @@
 @property (readonly) NSUInteger rows;
 @property (readonly) NSUInteger columns;
 
+@property CGFloat test;
+
 @property (readonly, strong) NSMutableArray *cables;
 
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point;

@@ -74,6 +74,7 @@ static NSArray *cableColours;
     return self;
 }
 
+
 -(void)addLayers {
     self.gridLayer = [BuildViewGridLayer layer];
     [self.gridLayer setBuildView:self];
@@ -92,7 +93,8 @@ static NSArray *cableColours;
     [self.cableLayer setFrame:CGRectMake(0, 0, self.contentSize.width, self.contentSize.height)];
     [self.cableLayer setNeedsDisplay];
     [self.layer insertSublayer:self.cableLayer above:self.layer];
-    [self.cableLayer setZPosition:100.0];
+    [self.cableLayer setZPosition:1.0];
+
 }
 
 -(void)addGlobalIO {

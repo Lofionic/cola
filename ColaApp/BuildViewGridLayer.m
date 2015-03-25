@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import "BuildViewGridLayer.h"
 
 @implementation BuildViewGridLayer
