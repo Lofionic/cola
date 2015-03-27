@@ -69,7 +69,7 @@ static BuildView *buildView = nil;
                                         @"toolbarHeight"        : [NSNumber numberWithFloat:kToolbarHeight]
                                         };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[keyboardView(100)][componentShelf(componentShelfHeight)]|"
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[keyboardView(componentShelfHeight)][componentShelf(componentShelfHeight)]|"
                                                                       options:0
                                                                       metrics:metricsDictionary
                                                                         views:viewsDictionary]];
@@ -112,7 +112,7 @@ static BuildView *buildView = nil;
     CGPoint dragPoint = [panGesture locationInView:self.view];
     [self.dragView setCenter:dragPoint];
     
-    NSSet *hoverSet = [self.buildView cellPathsForComponentOfWidth:component.width height:component.height center:[panGesture locationInView:self.buildView]];
+    NSSet *hoverSet = [self.buildView cellPathsForComponentOfWidth:component.width center:[panGesture locationInView:self.buildView]];
     
     if (hoverSet && [self.view hitTest:dragPoint withEvent:nil] == self.buildView) {
         [self.buildView setHighlightedCellSet:hoverSet];

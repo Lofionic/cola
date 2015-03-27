@@ -8,15 +8,17 @@
 
 #import "RotaryEncoder.h"
 
+
+
 #define DIAL_COLOUR     [UIColor colorWithRed:50/255.0 green:50/255.0 blue:50/255.0 alpha:1]
 #define OUTLINE_COLOUR  [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5]
 #define NEEDLE_COLOUR   [UIColor colorWithRed:255/255.0 green:0/255.0 blue:0/255.0 alpha:1]
 
 @interface RotaryEncoder ()
 
-@property (nonatomic, weak) COLComponentParameter *parameter;
-@property (nonatomic, strong) CALayer *needleLayer;
-@property NSInteger needleRotation;
+@property (nonatomic, weak) COLComponentParameter   *parameter;
+@property (nonatomic, strong) NSString              *asset;
+@property (nonatomic, strong) CALayer               *needleLayer;
 
 @end
 
@@ -26,27 +28,35 @@
     double      trackingValue;
 }
 
--(instancetype)initWithParameter:(COLComponentParameter *)parameter {
-    if (self = [super initWithFrame:CGRectMake(0, 0, 40, 40)]) {
+-(instancetype)initWithDescription:(EncoderDescription*)encoderDescription forComponent:(COLComponent*)component {
+    
+    COLComponentParameter *parameter = [component parameterNamed:encoderDescription.parameterName];
+    if (parameter && (self = [super init])) {
         self.parameter = parameter;
         self.value = 0;
         
-        UIImage *encoderImage = [UIImage imageNamed:@"ImageAssets/encoder_white"];
+        self.asset = encoderDescription.asset;
+        NSString *encoderAsset = [NSString stringWithFormat:@"ImageAssets/encoder_%@", self.asset];
+        UIImage *encoderImage = [UIImage imageNamed:encoderAsset];
         if (encoderImage) {
             [self.layer setContents:(id)encoderImage.CGImage];
         }
         
-        UIImage *needleImage = [UIImage imageNamed:@"ImageAssets/encoder_needle_grey"];
+        NSString *needleAsset = [NSString stringWithFormat:@"ImageAssets/encoder_needle_%@", self.asset];
+        UIImage *needleImage = [UIImage imageNamed:needleAsset];
         if (needleImage) {
             self.needleLayer = [CALayer layer];
-            [self.needleLayer setFrame:CGRectMake(0, 0, 40, 40)];
             [self.needleLayer setContents:(id)needleImage.CGImage];
             [self.layer addSublayer:self.needleLayer];
         }
+        
+        [self setValue:[self.parameter getNormalizedValue]];
+        
+        [self setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
+        [self.needleLayer setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
     }
     return  self;
 }
-
 
 -(void)updateNeedleAnimated:(BOOL)animated {
     double theta = ((M_PI * 2.0) * self.value * 0.75) + (M_PI * (3.0 / 4.0));

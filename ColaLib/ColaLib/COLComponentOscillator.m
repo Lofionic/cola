@@ -16,15 +16,15 @@
     Float64 phase;
 }
 
-@property (nonatomic, strong) COLComponentOutput *mainOut;
-
 @property (nonatomic, strong) COLComponentInput *keyboardIn;
-@property (nonatomic, strong) COLComponentInput *frequencyIn;
-@property (nonatomic, strong) COLComponentInput *amplIn;
+@property (nonatomic, strong) COLComponentInput *fmodIn;
 
-@property (nonatomic, strong) COLComponentParameter *frequency;
+@property (nonatomic, strong) COLComponentOutput *out;
 
-@property (nonatomic, weak) COLComponentOutput *keyboardOutput;
+@property (nonatomic, strong) COLComponentParameter *octave;
+@property (nonatomic, strong) COLComponentParameter *waveform;
+@property (nonatomic, strong) COLComponentParameter *tune;
+@property (nonatomic, strong) COLComponentParameter *fmAmt;
 
 @end
 
@@ -38,18 +38,26 @@
 }
 
 -(void)initializeIO {
-    self.frequencyIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"FreqIn"];
-    self.amplIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"AmpIn"];
-    [self setInputs:@[self.frequencyIn, self.amplIn]];
+    // Inputs
+    self.keyboardIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOType1VOct withName:@"Keyboard In"];
+    self.fmodIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"FM In"];
+    [self setInputs:@[self.keyboardIn, self.fmodIn]];
     
-    self.mainOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"Out"];
-    [self setOutputs:@[self.mainOut]];
+    // Outputs
+    self.out = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"Out"];
+    [self setOutputs:@[self.out]];
     
-    self.frequency = [[COLComponentParameter alloc] initWithComponent:self withName:@"Freq"];
-    [self.frequency setNormalizedValue:0];
-    [self setParameters:@[self.frequency]];
-    
-    self.keyboardOutput = [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] outputForIndex:0];
+    // Parameters
+    self.octave = [[COLComponentParameter alloc] initWithComponent:self withName:@"Octave"];
+    [self.octave setNormalizedValue:0.5];
+    self.waveform = [[COLComponentParameter alloc] initWithComponent:self withName:@"Waveform"];
+    [self.waveform setNormalizedValue:0.5];
+    self.tune = [[COLComponentParameter alloc] initWithComponent:self withName:@"Tune"];
+    [self.tune setNormalizedValue:0.5];
+    self.fmAmt = [[COLComponentParameter alloc] initWithComponent:self withName:@"FM Amt"];
+    [self.fmAmt setNormalizedValue:0.5];
+    [self setParameters:@[self.octave, self.waveform, self.tune, self.fmAmt]];
+
 }
 
 -(void)renderOutputs:(UInt32)numFrames {
@@ -57,41 +65,35 @@
     [super renderOutputs:numFrames];
 
     // Input Buffers
-    AudioSignalType *frequencyBuffer = [self.frequencyIn getBuffer:numFrames];
-    AudioSignalType *ampBuffer = [self.amplIn getBuffer:numFrames];
+    AudioSignalType *fmBuffer = [self.fmodIn getBuffer:numFrames];
     
     // Keyboard Buffer
-    AudioSignalType *keyboardBuffer = [self.keyboardOutput getBuffer:numFrames];
+    AudioSignalType *kbBuffer = [self.keyboardIn getBuffer:numFrames];
 
     // Output Buffers
-    AudioSignalType *mainOutBuffer = [self.mainOut prepareBufferOfSize:numFrames];
+    AudioSignalType *outBuffer = [self.out prepareBufferOfSize:numFrames];
 
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
-
+    
     for (int i = 0; i < numFrames; i++) {
         AudioSignalType freq;
-        AudioSignalType amp;
         
-        if ([self.frequencyIn isConnected]) {
-            freq = (frequencyBuffer[i] + 1);
+        if ([self.fmodIn isConnected]) {
+            freq = (fmBuffer[i]);
+        } else if ([self.keyboardIn isConnected]) {
+            freq = kbBuffer[i];
         } else {
-            //freq = [self.frequency outputAtDelta:i / (float)numFrames];
-            freq = keyboardBuffer[i];
+            freq = 0;
         }
-        
+
         phase += (M_PI * freq * CV_FREQUENCY_RANGE) / sampleRate;
-        if (phase > 2.0 * M_PI) {
-            phase -= (2.0 * M_PI);
-        }
         
-        if ([self.amplIn isConnected]) {
-            amp = ampBuffer[i] * 0.9f;
-        } else {
-            amp = 1.0;
-        }
-        AudioSignalType outputValue = sin(phase) * amp;
-        
-        mainOutBuffer[i] = outputValue;
+        outBuffer[i] = sin(phase);;
+    }
+    
+    
+    if (phase > 2.0 * M_PI) {
+        phase -= (2.0 * M_PI);
     }
 }
 

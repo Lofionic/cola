@@ -12,9 +12,9 @@
 
 @property (readonly, strong) NSString   *type;
 @property (readonly, strong) NSString   *name;
+@property (readonly, strong) NSString   *asset;
 
 @property (readonly) NSUInteger         width;
-@property (readonly) NSUInteger         height;
 
 @property (readonly, strong) NSArray    *connectors;
 @property (readonly, strong) NSArray    *encoders;
@@ -37,6 +37,7 @@
 
 @property (readonly, strong) NSString   *type;
 @property (readonly, strong) NSString   *parameterName;
+@property (readonly, strong) NSString   *asset;
 @property (readonly) CGPoint            location;
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary;

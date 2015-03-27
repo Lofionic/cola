@@ -20,7 +20,7 @@
     
     if (self = [super init]) {
         self.componentIO = componentIO;
-        self.frame = CGRectMake(0, 0, 40, 40);
+        self.frame = CGRectMake(0, 0, 44, 44);
         
         NSString *connectorImageName;
         if (componentIO.type == kComponentIOTypeAudio) {
@@ -29,7 +29,7 @@
             } else if ([componentIO isKindOfClass:[COLComponentInput class]]) {
                 connectorImageName = @"green";
             }
-        } else if (componentIO.type == kComponentIOTypeControl) {
+        } else if (componentIO.type == kComponentIOTypeControl || componentIO.type == kComponentIOType1VOct) {
             connectorImageName = @"yellow";
         }
         

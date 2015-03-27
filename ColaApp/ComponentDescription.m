@@ -12,9 +12,9 @@
 
 @property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *asset;
 
 @property (nonatomic) NSUInteger width;
-@property (nonatomic) NSUInteger height;
 
 @property (nonatomic, strong) NSArray *connectors;
 @property (nonatomic, strong) NSArray *encoders;
@@ -37,13 +37,13 @@
         if ([dictionary valueForKey:@"width"]) {
             self.width = [[dictionary valueForKey:@"width"] integerValue];
         }
-        
-        if ([dictionary valueForKey:@"height"]) {
-            self.height = [[dictionary valueForKey:@"height"] integerValue];
-        }
-        
+
         if ([dictionary objectForKey:@"view"]) {
             NSDictionary *viewInfo = [dictionary objectForKey:@"view"];
+            if ([viewInfo objectForKey:@"asset"]) {
+                self.asset = [viewInfo objectForKey:@"asset"];
+            }
+            
             if ([viewInfo objectForKey:@"connectors"]) {
                 NSArray *connectors = [viewInfo objectForKey:@"connectors"];
                 NSMutableArray *connectorDescriptions = [[NSMutableArray alloc] initWithCapacity:[connectors count]];
@@ -106,6 +106,7 @@
 
 @property (nonatomic, strong) NSString   *type;
 @property (nonatomic, strong) NSString   *parameterName;
+@property (nonatomic, strong) NSString   *asset;
 @property (nonatomic) CGPoint            location;
 
 @end
@@ -121,6 +122,10 @@
         
         if ([dictionary objectForKey:@"parameter"]) {
             self.parameterName = [dictionary objectForKey:@"parameter"];
+        }
+        
+        if ([dictionary objectForKey:@"asset"]) {
+            self.asset = [dictionary objectForKey:@"asset"];
         }
         
         if ([dictionary valueForKey:@"x"] && [dictionary valueForKey:@"y"]) {

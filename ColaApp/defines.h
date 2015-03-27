@@ -10,7 +10,7 @@
 extern CGFloat kComponentShelfHeight;
 extern CGFloat kToolbarHeight;
 extern CGFloat kBuildViewWidth;
-extern NSInteger kBuildViewRows;
-extern NSInteger kBuildViewColumns;
+extern CGFloat kBuildViewRowHeight;
+extern CGFloat kBuildViewColumnWidth;
 
 extern NSArray *componentCatalog;

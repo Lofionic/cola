@@ -7,12 +7,13 @@
 //
 #import <ColaLib/ColaLib.h>
 #import <UIKit/UIKit.h>
+#import "ComponentDescription.h"
 
 @interface RotaryEncoder : UIControl
 
 @property (readonly, weak) COLComponentParameter *parameter;
 @property (nonatomic) double value;
 
--(instancetype)initWithParameter:(COLComponentParameter*)parameter;
+-(instancetype)initWithDescription:(EncoderDescription*)encoderDescription forComponent:(COLComponent*)component;
 
 @end

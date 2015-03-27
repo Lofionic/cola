@@ -1,37 +1,60 @@
 {
     "components" : [
         {
-            "name" : "Oscillator",
-            "width" : 1,
-            "height" : 2,
+            "name" : "VCO A",
+            "width" : 2,
             "type" : "kCOLComponentOscillator",
-            "view" : {
+            "view" : 
+            {
+                "asset" : "vco_a",
                 "connectors" : [
-                    {
-                        "type" : "output",
-                        "connection" : "Out",
-                        "x" : 40,
-                        "y" : 40
-                    },
-                    {                   
-                        "type" : "input",
-                        "connection" : "AmpIn",
-                        "x" : 40,
-                        "y" : 85
-                    },
-                    {                   
-                        "type" : "input",
-                        "connection" : "FreqIn",
-                        "x" : 85,
-                        "y" : 85
-                    }
+                {
+                    "type" : "input",
+                    "connection" : "Keyboard In",
+                    "x" : 48,
+                    "y" : 200
+                },
+                {                   
+                    "type" : "input",
+                    "connection" : "FM In",
+                    "x" : 96,
+                    "y" : 200
+                },
+                {                   
+                    "type" : "output",
+                    "connection" : "Out",
+                    "x" : 144,
+                    "y" : 200
+                }
                 ],
                 "encoders" : [
                     {
+                        "asset" : "large_white",
                         "type" : "continuous",
-                        "parameter" : "Freq",
-                        "x" : 40,
-                        "y" : 130
+                        "parameter" : "Octave",
+                        "x" : 56,
+                        "y" : 56
+                    },
+                    {
+                        "asset" : "large_white",
+                        "type" : "continuous",
+                        "parameter" : "Waveform",
+                        "x" : 136,
+                        "y" : 56
+                    },
+                    {
+                        "asset" : "small_white",
+                        "type" : "continuous",
+                        "parameter" : "Tune",
+                        "x" : 56,
+                        "y" : 136
+                    },
+                    {
+                        "asset" : "small_white",
+                        "type" : "continuous",
+                        "parameter" : "FM Amt",
+                        "x" : 136,
+                        "y" : 136
                     }
                 ]
             }
@@ -39,26 +62,25 @@
         {
             "name" : "LFO",
             "width" : 1,
-            "height" : 1,
             "type" : "kCOLComponentLFO",
             "view" : {
                 "connectors" : [
                     {
                         "type" : "output",
                         "connection" : "Out",
-                        "x" : 40,
+                        "x" : 48,
                         "y" : 40
                     }
-                ],
-                "encoders" : [
+                    ],
+                    "encoders" : [
                     {
                         "type" : "continuous",
                         "parameter" : "Freq",
-                        "x" : 40,
+                        "x" : 48,
                         "y" : 85
                     }
                 ]
             }     
         }
-  ]
+    ]
 }

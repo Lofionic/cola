@@ -16,7 +16,8 @@
 
 @interface ComponentView ()
 
-@property (nonatomic, weak) COLComponent *component;
+@property (nonatomic, weak) COLComponent    *component;
+@property (nonatomic, strong) NSString      *asset;
 
 @end
 
@@ -37,7 +38,17 @@
             [self addEncoders:componentDescription.encoders];
         }
         
-        [self setBackgroundColor:BACKGROUND_COLOUR];
+        UIImage *assetImage = nil;
+        if (componentDescription.asset) {
+            self.asset = [NSString stringWithFormat:@"ImageAssets/Components/%@", componentDescription.asset];
+            assetImage = [UIImage imageNamed:self.asset];
+        }
+        
+        if (assetImage) {
+            [self.layer setContents:(id)assetImage.CGImage];
+        } else {
+            [self setBackgroundColor:BACKGROUND_COLOUR];
+        }
         
     }
     return self;
@@ -66,13 +77,9 @@
   
     for (EncoderDescription *thisEncoder in encoders) {
         
-        COLComponentParameter *componentParameter = nil;
-        componentParameter = [self.component parameterNamed:thisEncoder.parameterName];
-
-        if (componentParameter) {
-            RotaryEncoder *rotaryEncoder = [[RotaryEncoder alloc] initWithParameter:componentParameter];
+        RotaryEncoder *rotaryEncoder = [[RotaryEncoder alloc] initWithDescription:thisEncoder forComponent:self.component];
+        if (rotaryEncoder) {
             [rotaryEncoder setCenter:thisEncoder.location];
-            [rotaryEncoder setValue:componentParameter.getNormalizedValue];
             [self addSubview:rotaryEncoder];
         }
     }

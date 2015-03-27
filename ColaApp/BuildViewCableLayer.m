@@ -25,40 +25,40 @@
     self = [super init];
     if (self)
     {
-        self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(setNeedsDisplay)];
-        [self.displayLink setFrameInterval:4];
-        [self setNeedsDisplayOnBoundsChange:YES];
+//        self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(setNeedsDisplay)];
+//        [self.displayLink setFrameInterval:4];
+//        [self setNeedsDisplayOnBoundsChange:YES];
         
-        self.motionManager = [[CMMotionManager alloc] init];
-        [self.motionManager setDeviceMotionUpdateInterval:1/15.0];
-        if ([self.motionManager isDeviceMotionAvailable]) {
-            // to avoid using more CPU than necessary we use `CMAttitudeReferenceFrameXArbitraryZVertical`
-            [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryZVertical];
-        }
+//        self.motionManager = [[CMMotionManager alloc] init];
+//        [self.motionManager setDeviceMotionUpdateInterval:1/15.0];
+//        if ([self.motionManager isDeviceMotionAvailable]) {
+//            // to avoid using more CPU than necessary we use `CMAttitudeReferenceFrameXArbitraryZVertical`
+//            [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryZVertical];
+//        }
     }
     return self;
 }
 
 -(void)drawInContext:(CGContextRef)ctx {
 
-    if (!self.displayLinkRunning) {
-        [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-        self.displayLinkRunning = YES;
-    }
+//    if (!self.displayLinkRunning) {
+//        [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+//        self.displayLinkRunning = YES;
+//    }
     
     for (BuildViewCable *cable in self.buildView.cables) {
         CGContextSaveGState(ctx);
         
-//        CGContextSetFillColorWithColor(ctx, [[UIColor darkGrayColor] CGColor]);
-//        CGRect rect1 = CGRectMake(cable.point1.x - 8, cable.point1.y - 8, 16, 16);
-//        CGContextFillEllipseInRect(ctx, rect1);
-//        
-//        CGRect rect2 = CGRectMake(cable.point2.x - 8, cable.point2.y - 8, 16, 16);
-//        CGContextFillEllipseInRect(ctx, rect2);
-//        
-//        CGContextSetFillColorWithColor(ctx, [[UIColor lightGrayColor] CGColor]);
-//        CGContextFillEllipseInRect(ctx, CGRectOffset(rect1, 0, -2));
-//        CGContextFillEllipseInRect(ctx, CGRectOffset(rect2, 0, -2));
+        CGContextSetFillColorWithColor(ctx, [[UIColor darkGrayColor] CGColor]);
+        CGRect rect1 = CGRectMake(cable.point1.x - 8, cable.point1.y - 8, 16, 16);
+        CGContextFillEllipseInRect(ctx, rect1);
+        
+        CGRect rect2 = CGRectMake(cable.point2.x - 8, cable.point2.y - 8, 16, 16);
+        CGContextFillEllipseInRect(ctx, rect2);
+        
+        CGContextSetFillColorWithColor(ctx, [[UIColor lightGrayColor] CGColor]);
+        CGContextFillEllipseInRect(ctx, CGRectOffset(rect1, 0, -2));
+        CGContextFillEllipseInRect(ctx, CGRectOffset(rect2, 0, -2));
         
         CGFloat hang = MIN(abs(cable.point2.x - cable.point1.x), 40);
         CGFloat bottom = MAX(cable.point1.y, cable.point2.y) + hang;

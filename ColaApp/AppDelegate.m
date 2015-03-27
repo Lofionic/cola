@@ -16,8 +16,8 @@
 CGFloat kComponentShelfHeight;
 CGFloat kToolbarHeight;
 CGFloat kBuildViewWidth;
-NSInteger kBuildViewRows;
-NSInteger kBuildViewColumns;
+CGFloat kBuildViewColumnWidth;
+CGFloat kBuildViewRowHeight;
 NSArray *componentCatalog;
 
 @implementation AppDelegate
@@ -45,18 +45,17 @@ NSArray *componentCatalog;
 
 - (void)initLayoutMetrics {
     // Setup metrics
-    kBuildViewColumns =     4;
-    kBuildViewRows =        8;
-    kToolbarHeight =        64.0;
-    kComponentShelfHeight = 150;
+    kBuildViewWidth =       768;
+    kBuildViewColumnWidth = 96;
+    kBuildViewRowHeight =   256;
+    kToolbarHeight =        64;
+    kComponentShelfHeight = 120;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        kBuildViewWidth =   768.0;
-    } else {
-        kBuildViewWidth =   320;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        kBuildViewWidth =           320;
+        kBuildViewColumnWidth =     64;
     }
 }
-
 
 - (void)initComponentCatalog {
     NSURL *componentCatalogURL = [[NSBundle mainBundle] URLForResource:@"componentCatalog" withExtension:@"json"];

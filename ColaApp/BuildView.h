@@ -38,7 +38,7 @@
 @property (readonly, strong) NSMutableArray *cables;
 
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point;
--(NSSet*)cellPathsForComponentOfWidth:(NSUInteger)width height:(NSUInteger)height center:(CGPoint)center;
+-(NSSet*)cellPathsForComponentOfWidth:(NSUInteger)width center:(CGPoint)center;
 -(UIView*)addViewForComponent:(ComponentDescription*)componentDescription atPoint:(CGPoint)point;
 -(CGRect)rectForCellSet:(NSSet*)cellSet;
 

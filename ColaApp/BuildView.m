@@ -45,11 +45,11 @@ static NSArray *cableColours;
 -(instancetype)init {
     self = [super init];
     if (self) {
-        self.columns = kBuildViewColumns;
-        self.rows = kBuildViewRows;
+        self.columns = kBuildViewWidth / kBuildViewColumnWidth;
+        self.rows = 4;
         
-        CGFloat columnWidth = kBuildViewWidth / self.columns;
-        CGFloat rowHeight = columnWidth * (0.75);
+        CGFloat columnWidth = kBuildViewColumnWidth;
+        CGFloat rowHeight = kBuildViewRowHeight;
         
         self.cellSize = CGSizeMake(columnWidth, rowHeight);
         self.headerHeight = 64;
@@ -59,7 +59,7 @@ static NSArray *cableColours;
                                       (self.rows * self.cellSize.height) + self.headerHeight
                                       );
 
-        [self setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0.05 alpha:1]];
+        [self setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0.0 alpha:1]];
         [self setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
         
         self.occupiedCells = [[NSMutableSet alloc] initWithCapacity:self.columns * self.rows];
@@ -100,8 +100,15 @@ static NSArray *cableColours;
 -(void)addGlobalIO {
     COLComponentIO *mainIn = [[COLAudioContext globalContext] masterInputAtIndex:0];
     ConnectorView *mainInConnectorView = [[ConnectorView alloc] initWithComponentIO:mainIn];
-    [mainInConnectorView setCenter:CGPointMake(40, self.headerHeight / 2.0)];
+    [mainInConnectorView setCenter:CGPointMake(24, self.headerHeight / 2.0)];
+    [mainInConnectorView setDelegate:self];
     [self addSubview:mainInConnectorView];
+    
+    COLComponentIO *keyboardOut = [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] outputForIndex:0];
+    ConnectorView *keyboardOutView = [[ConnectorView alloc] initWithComponentIO:keyboardOut];
+    [keyboardOutView setCenter:CGPointMake(120, self.headerHeight / 2.0)];
+    [keyboardOutView setDelegate:self];
+    [self addSubview:keyboardOutView];
 }
 
 @synthesize highlightedCellSet = _highlightedCellSet;
@@ -132,7 +139,8 @@ static NSArray *cableColours;
     }
 }
 
--(NSSet*)cellPathsForComponentOfWidth:(NSUInteger)width height:(NSUInteger)height center:(CGPoint)center {
+-(NSSet*)cellPathsForComponentOfWidth:(NSUInteger)width center:(CGPoint)center {
+    NSInteger height = 1;
     CGPoint minPoint = CGPointMake(
                                    center.x - ((width - 1) * self.cellSize.width) / 2.0,
                                    (center.y - self.headerHeight) - ((height - 1) * self.cellSize.height) / 2.0
@@ -151,7 +159,7 @@ static NSArray *cableColours;
     
     NSInteger maxX = minX + width;
     NSInteger maxY = minY + height;
-
+    
     while (maxX > self.columns) {
         minX--;
         maxX = minX + width;
@@ -159,7 +167,7 @@ static NSArray *cableColours;
             return nil;
         }
     }
-
+    
     while (maxY > self.rows) {
         minY--;
         maxY = minY + height;
@@ -225,7 +233,7 @@ static NSArray *cableColours;
 }
 
 -(UIView*)addViewForComponent:(ComponentDescription*)componentDescription atPoint:(CGPoint)point {
-    NSSet *cellSet = [self cellPathsForComponentOfWidth:componentDescription.width height:componentDescription.height center:point];
+    NSSet *cellSet = [self cellPathsForComponentOfWidth:componentDescription.width center:point];
     
     if (cellSet) {
         
