@@ -8,19 +8,19 @@
 #import <UIKit/UIKit.h>
 
 @class ComponentShelfView;
-@class ComponentDescription;
-@protocol ComponentTrayDelegate <NSObject>
+@class ModuleDescription;
+@protocol ComponentShelfDelegate <NSObject>
 
 @optional
--(void)componentTray:(ComponentShelfView*)componentTray didBeginDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
--(void)componentTray:(ComponentShelfView*)componentTray didContinueDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
--(void)componentTray:(ComponentShelfView*)componentTray didEndDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
+-(void)componentShelf:(ComponentShelfView*)componentTray didBeginDraggingModule:(ModuleDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
+-(void)componentShelf:(ComponentShelfView*)componentTray didContinueDraggingModule:(ModuleDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
+-(void)componentShelf:(ComponentShelfView*)componentTray didEndDraggingModule:(ModuleDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
 
 @end
 
 @interface ComponentShelfView : UIView <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, weak)     id<ComponentTrayDelegate> delegate;
+@property (nonatomic, weak)     id<ComponentShelfDelegate> delegate;
 @property (nonatomic, strong)   UICollectionView *collectionView;
 @property (nonatomic, strong)   UICollectionViewFlowLayout *flowLayout;
 

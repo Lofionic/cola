@@ -13,7 +13,7 @@ extern CGFloat kBuildViewWidth;
 extern CGFloat kBuildViewRowHeight;
 extern CGFloat kBuildViewColumnWidth;
 
-extern NSArray *componentCatalog;
+extern NSArray *moduleCatalog;
 
 #define ASSETS_PATH             @"ImageAssets/"
 #define ASSETS_PATH_COMPONENTS  [ASSETS_PATH stringByAppendingString:@"components/"]

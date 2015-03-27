@@ -7,7 +7,7 @@
 //
 #import "BuildView.h"
 #import "defines.h"
-#import "ComponentView.h"
+#import "ModuleView.h"
 #import "BuildViewGridLayer.h"
 #import "BuildViewHighlightLayer.h"
 #import "BuildViewCableLayer.h"
@@ -139,7 +139,7 @@ static NSArray *cableColours;
     }
 }
 
--(NSSet*)cellPathsForComponentOfWidth:(NSUInteger)width center:(CGPoint)center {
+-(NSSet*)cellPathsForModuleOfWidth:(NSUInteger)width center:(CGPoint)center {
     NSInteger height = 1;
     CGPoint minPoint = CGPointMake(
                                    center.x - ((width - 1) * self.cellSize.width) / 2.0,
@@ -232,17 +232,17 @@ static NSArray *cableColours;
     return result;
 }
 
--(UIView*)addViewForComponent:(ComponentDescription*)componentDescription atPoint:(CGPoint)point {
-    NSSet *cellSet = [self cellPathsForComponentOfWidth:componentDescription.width center:point];
+-(UIView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point {
+    NSSet *cellSet = [self cellPathsForModuleOfWidth:moduleDescription.width center:point];
     
     if (cellSet) {
         
         CGRect newFrame = [self rectForCellSet:cellSet];
-        ComponentView *componentView = [[ComponentView alloc] initWithComponentDescription:componentDescription inFrame:newFrame];
+        ModuleView *moduleView = [[ModuleView alloc] initWithModuleDescription:moduleDescription inFrame:newFrame];
 
-        if (componentView) {
+        if (moduleView) {
 
-            [self addSubview:componentView];
+            [self addSubview:moduleView];
             
             // Add cells to occupied
             [cellSet enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
@@ -250,14 +250,14 @@ static NSArray *cableColours;
                 cellOccupied[cellPath.row][cellPath.column] = TRUE;
             }];
             
-            return componentView;
+            return moduleView;
         }
     }
     return nil;
 }
 
--(COLComponent*)componentForCompomentDescription:(ComponentDescription*)componentDescription {
-    COLComponent *result = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:componentDescription.type];
+-(COLComponent*)componentForModuleDescription:(ModuleDescription*)moduleDescription {
+    COLComponent *result = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:moduleDescription.type];
     return result;
 }
 

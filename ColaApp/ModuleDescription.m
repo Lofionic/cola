@@ -1,14 +1,14 @@
 //
-//  ComponentDescription.m
+//  ModuleDescription.m
 //  ColaApp
 //
 //  Created by Chris on 09/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 
-#import "ComponentDescription.h"
+#import "ModuleDescription.h"
 
-@interface ComponentDescription ()
+@interface ModuleDescription ()
 
 @property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) NSString *name;
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation ComponentDescription
+@implementation ModuleDescription
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary {
     if (self = [super init]) {

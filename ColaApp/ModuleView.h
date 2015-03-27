@@ -8,12 +8,12 @@
 #import <ColaLib/ColaLib.h>
 #import <UIKit/UIKit.h>
 
-@class ComponentDescription;
+@class ModuleDescription;
 
-@interface ComponentView : UIView
+@interface ModuleView : UIView
 
 @property (readonly, weak) COLComponent *component;
 
--(instancetype)initWithComponentDescription:(ComponentDescription *)componentDescription inFrame:(CGRect)frame;
+-(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame;
 
 @end

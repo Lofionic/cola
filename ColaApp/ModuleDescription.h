@@ -1,5 +1,5 @@
 //
-//  ComponentDescription.h
+//  ModuleDescription.h
 //  ColaApp
 //
 //  Created by Chris on 09/03/2015.
@@ -8,7 +8,7 @@
 @import UIKit;
 @import Foundation;
 
-@interface ComponentDescription : NSObject
+@interface ModuleDescription : NSObject
 
 @property (readonly, strong) NSString   *type;
 @property (readonly, strong) NSString   *name;

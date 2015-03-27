@@ -23,19 +23,19 @@
         self.componentIO = componentIO;
         self.frame = CGRectMake(0, 0, 44, 44);
         
-        NSString *connectorImageName;
+        NSString *connectorAssetName;
         if (componentIO.type == kComponentIOTypeAudio) {
             if ([componentIO isKindOfClass:[COLComponentOutput class]]) {
-                connectorImageName = @"blue";
+                connectorAssetName = @"connector_blue";
             } else if ([componentIO isKindOfClass:[COLComponentInput class]]) {
-                connectorImageName = @"green";
+                connectorAssetName = @"connector_green";
             }
         } else if (componentIO.type == kComponentIOTypeControl || componentIO.type == kComponentIOType1VOct) {
-            connectorImageName = @"yellow";
+            connectorAssetName = @"connector_yellow";
         }
         
-        connectorImageName = [ASSETS_PATH_CONNECTORS stringByAppendingString:connectorImageName];
-        UIImage *connectorImage = [UIImage imageNamed:connectorImageName];
+        connectorAssetName = [ASSETS_PATH_CONNECTORS stringByAppendingString:connectorAssetName];
+        UIImage *connectorImage = [UIImage imageNamed:connectorAssetName];
         
         if (connectorImage) {
             [self.layer setContents:(id)connectorImage.CGImage];

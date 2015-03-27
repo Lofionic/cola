@@ -8,40 +8,40 @@
 #import "BuildViewController.h"
 
 #import "defines.h"
-#import "ComponentView.h"
-#import "ComponentDescription.h"
+#import "ModuleView.h"
+#import "ModuleDescription.h"
 #import "ConnectorView.h"
 #import "RotaryEncoder.h"
 
 #define BACKGROUND_COLOUR [UIColor colorWithRed:64/255.0 green:64/255.0 blue:64/255.0 alpha:1]
 
-@interface ComponentView ()
+@interface ModuleView ()
 
 @property (nonatomic, weak) COLComponent    *component;
 @property (nonatomic, strong) NSString      *asset;
 
 @end
 
-@implementation ComponentView
+@implementation ModuleView
 
--(instancetype)initWithComponentDescription:(ComponentDescription *)componentDescription inFrame:(CGRect)frame {
+-(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame {
     
-    COLComponent *component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:componentDescription.type];
+    COLComponent *component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:moduleDescription.type];
     
     if (component && (self = [super initWithFrame:frame])) {
         self.component = component;
         
-        if (componentDescription.connectors) {
-            [self addConnectors:componentDescription.connectors];
+        if (moduleDescription.connectors) {
+            [self addConnectors:moduleDescription.connectors];
         }
         
-        if (componentDescription.encoders) {
-            [self addEncoders:componentDescription.encoders];
+        if (moduleDescription.encoders) {
+            [self addEncoders:moduleDescription.encoders];
         }
         
         UIImage *assetImage = nil;
-        if (componentDescription.asset) {
-            self.asset = [ASSETS_PATH_COMPONENTS stringByAppendingString:componentDescription.asset];
+        if (moduleDescription.asset) {
+            self.asset = [ASSETS_PATH_COMPONENTS stringByAppendingString:moduleDescription.asset];
             assetImage = [UIImage imageNamed:self.asset];
         }
         
@@ -50,7 +50,6 @@
         } else {
             [self setBackgroundColor:BACKGROUND_COLOUR];
         }
-        
     }
     return self;
 }
@@ -77,7 +76,6 @@
 -(void)addEncoders:(NSArray*)encoders {
   
     for (EncoderDescription *thisEncoder in encoders) {
-        
         RotaryEncoder *rotaryEncoder = [[RotaryEncoder alloc] initWithDescription:thisEncoder forComponent:self.component];
         if (rotaryEncoder) {
             [rotaryEncoder setCenter:thisEncoder.location];

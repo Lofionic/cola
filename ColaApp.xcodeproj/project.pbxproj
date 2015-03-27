@@ -11,8 +11,8 @@
 		6C0F86D11AA7B2220092FB18 /* BuildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D01AA7B2220092FB18 /* BuildViewController.m */; };
 		6C0F86D81AA7BEB70092FB18 /* ComponentShelfView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D71AA7BEB70092FB18 /* ComponentShelfView.m */; };
 		6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */; };
-		6C1201091AAE44D200C6ACB6 /* ComponentDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1201081AAE44D200C6ACB6 /* ComponentDescription.m */; };
-		6C12010B1AAE49A100C6ACB6 /* componentCatalog.json in Resources */ = {isa = PBXBuildFile; fileRef = 6C12010A1AAE49A100C6ACB6 /* componentCatalog.json */; };
+		6C1201091AAE44D200C6ACB6 /* ModuleDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1201081AAE44D200C6ACB6 /* ModuleDescription.m */; };
+		6C12010B1AAE49A100C6ACB6 /* moduleCatalog.json in Resources */ = {isa = PBXBuildFile; fileRef = 6C12010A1AAE49A100C6ACB6 /* moduleCatalog.json */; };
 		6C1CF0DD1AC202F50004A2FA /* BuildViewGridLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1CF0DC1AC202F50004A2FA /* BuildViewGridLayer.m */; };
 		6C1CF0E01AC206BD0004A2FA /* BuildViewHighlightLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1CF0DF1AC206BD0004A2FA /* BuildViewHighlightLayer.m */; };
 		6C1CF0E31AC20A020004A2FA /* BuildViewCableLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1CF0E21AC20A020004A2FA /* BuildViewCableLayer.m */; };
@@ -27,7 +27,7 @@
 		6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C59C5651ABF4273001EE663 /* ConnectorView.m */; };
 		6C65A4E81A9125DD000D9192 /* gtr.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C65A4E71A9125DD000D9192 /* gtr.wav */; };
 		6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */; };
-		6C8DD2951AC0C9CC00320628 /* ComponentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2941AC0C9CC00320628 /* ComponentView.m */; };
+		6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2941AC0C9CC00320628 /* ModuleView.m */; };
 		6C94939A1A9D1BFB00B7A37C /* loop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C9493991A9D1BFB00B7A37C /* loop.wav */; };
 		6CB828381AC2F58000610DD4 /* ImageAssets in Resources */ = {isa = PBXBuildFile; fileRef = 6CB828371AC2F58000610DD4 /* ImageAssets */; };
 		6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */; };
@@ -53,9 +53,9 @@
 		6C0F86D71AA7BEB70092FB18 /* ComponentShelfView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentShelfView.m; sourceTree = "<group>"; };
 		6C0F86DA1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentShelfCollectionViewCell.h; sourceTree = "<group>"; };
 		6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentShelfCollectionViewCell.m; sourceTree = "<group>"; };
-		6C1201071AAE44D200C6ACB6 /* ComponentDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentDescription.h; sourceTree = "<group>"; };
-		6C1201081AAE44D200C6ACB6 /* ComponentDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentDescription.m; sourceTree = "<group>"; };
-		6C12010A1AAE49A100C6ACB6 /* componentCatalog.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = componentCatalog.json; sourceTree = "<group>"; };
+		6C1201071AAE44D200C6ACB6 /* ModuleDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleDescription.h; sourceTree = "<group>"; };
+		6C1201081AAE44D200C6ACB6 /* ModuleDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleDescription.m; sourceTree = "<group>"; };
+		6C12010A1AAE49A100C6ACB6 /* moduleCatalog.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = moduleCatalog.json; sourceTree = "<group>"; };
 		6C1CF0DB1AC202F50004A2FA /* BuildViewGridLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewGridLayer.h; sourceTree = "<group>"; };
 		6C1CF0DC1AC202F50004A2FA /* BuildViewGridLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildViewGridLayer.m; sourceTree = "<group>"; };
 		6C1CF0DE1AC206BD0004A2FA /* BuildViewHighlightLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewHighlightLayer.h; sourceTree = "<group>"; };
@@ -80,8 +80,8 @@
 		6C65A4E71A9125DD000D9192 /* gtr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gtr.wav; sourceTree = "<group>"; };
 		6C8DD28F1AC0AB1200320628 /* RotaryEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotaryEncoder.h; sourceTree = "<group>"; };
 		6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotaryEncoder.m; sourceTree = "<group>"; };
-		6C8DD2931AC0C9CC00320628 /* ComponentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentView.h; sourceTree = "<group>"; };
-		6C8DD2941AC0C9CC00320628 /* ComponentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentView.m; sourceTree = "<group>"; };
+		6C8DD2931AC0C9CC00320628 /* ModuleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleView.h; sourceTree = "<group>"; };
+		6C8DD2941AC0C9CC00320628 /* ModuleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleView.m; sourceTree = "<group>"; };
 		6C9493991A9D1BFB00B7A37C /* loop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = loop.wav; sourceTree = "<group>"; };
 		6CB828371AC2F58000610DD4 /* ImageAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ImageAssets; sourceTree = "<group>"; };
 		6CB8283C1AC3077800610DD4 /* UIColor+Shades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Shades.h"; sourceTree = "<group>"; };
@@ -103,13 +103,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6C0D487F1AC3662E008AD869 /* Keyboard */ = {
+		6C0D487F1AC3662E008AD869 /* KeyboardView */ = {
 			isa = PBXGroup;
 			children = (
 				6C0D48811AC3663D008AD869 /* KeyboardView.h */,
 				6C0D48821AC3663D008AD869 /* KeyboardView.m */,
 			);
-			name = Keyboard;
+			name = KeyboardView;
 			sourceTree = "<group>";
 		};
 		6C0F86D91AA7BF070092FB18 /* ComponentShelf */ = {
@@ -119,8 +119,8 @@
 				6C0F86D71AA7BEB70092FB18 /* ComponentShelfView.m */,
 				6C0F86DA1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.h */,
 				6C0F86DB1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m */,
-				6C1201071AAE44D200C6ACB6 /* ComponentDescription.h */,
-				6C1201081AAE44D200C6ACB6 /* ComponentDescription.m */,
+				6C1201071AAE44D200C6ACB6 /* ModuleDescription.h */,
+				6C1201081AAE44D200C6ACB6 /* ModuleDescription.m */,
 			);
 			name = ComponentShelf;
 			sourceTree = "<group>";
@@ -167,7 +167,7 @@
 				6C2A5E231A8BF2CC00ECEAB2 /* AppDelegate.h */,
 				6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */,
 				6C8DD2961AC0DA2400320628 /* BuildView */,
-				6C0D487F1AC3662E008AD869 /* Keyboard */,
+				6C0D487F1AC3662E008AD869 /* KeyboardView */,
 				6C2A5E291A8BF2CC00ECEAB2 /* Main.storyboard */,
 				6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */,
 				6C2A5E2E1A8BF2CC00ECEAB2 /* LaunchScreen.xib */,
@@ -200,7 +200,7 @@
 				6CB828371AC2F58000610DD4 /* ImageAssets */,
 				6C65A4E71A9125DD000D9192 /* gtr.wav */,
 				6C9493991A9D1BFB00B7A37C /* loop.wav */,
-				6C12010A1AAE49A100C6ACB6 /* componentCatalog.json */,
+				6C12010A1AAE49A100C6ACB6 /* moduleCatalog.json */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -213,15 +213,23 @@
 				6CDA9F121AA9017E00D64EB0 /* BuildView.h */,
 				6CDA9F131AA9017E00D64EB0 /* BuildView.m */,
 				6C1962411AC2408900E6A416 /* Layers */,
-				6C8DD2931AC0C9CC00320628 /* ComponentView.h */,
-				6C8DD2941AC0C9CC00320628 /* ComponentView.m */,
+				6CB5DA9A1AC582DF005D80FD /* ModuleView */,
+				6C0F86D91AA7BF070092FB18 /* ComponentShelf */,
+			);
+			name = BuildView;
+			sourceTree = "<group>";
+		};
+		6CB5DA9A1AC582DF005D80FD /* ModuleView */ = {
+			isa = PBXGroup;
+			children = (
+				6C8DD2931AC0C9CC00320628 /* ModuleView.h */,
+				6C8DD2941AC0C9CC00320628 /* ModuleView.m */,
 				6C59C5641ABF4273001EE663 /* ConnectorView.h */,
 				6C59C5651ABF4273001EE663 /* ConnectorView.m */,
 				6C8DD28F1AC0AB1200320628 /* RotaryEncoder.h */,
 				6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */,
-				6C0F86D91AA7BF070092FB18 /* ComponentShelf */,
 			);
-			name = BuildView;
+			name = ModuleView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -308,7 +316,7 @@
 			files = (
 				6C94939A1A9D1BFB00B7A37C /* loop.wav in Resources */,
 				6C2A5E2B1A8BF2CC00ECEAB2 /* Main.storyboard in Resources */,
-				6C12010B1AAE49A100C6ACB6 /* componentCatalog.json in Resources */,
+				6C12010B1AAE49A100C6ACB6 /* moduleCatalog.json in Resources */,
 				6C2A5E301A8BF2CC00ECEAB2 /* LaunchScreen.xib in Resources */,
 				6C2A5EA31A8C0B2A00ECEAB2 /* ToDo.txt in Resources */,
 				6CB828381AC2F58000610DD4 /* ImageAssets in Resources */,
@@ -325,14 +333,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */,
-				6C1201091AAE44D200C6ACB6 /* ComponentDescription.m in Sources */,
+				6C1201091AAE44D200C6ACB6 /* ModuleDescription.m in Sources */,
 				6CDA9F141AA9017E00D64EB0 /* BuildView.m in Sources */,
 				6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */,
 				6C1CF0E01AC206BD0004A2FA /* BuildViewHighlightLayer.m in Sources */,
 				6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */,
 				6C0F86D81AA7BEB70092FB18 /* ComponentShelfView.m in Sources */,
 				6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */,
-				6C8DD2951AC0C9CC00320628 /* ComponentView.m in Sources */,
+				6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */,
 				6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */,
 				6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */,
 				6C1CF0E31AC20A020004A2FA /* BuildViewCableLayer.m in Sources */,

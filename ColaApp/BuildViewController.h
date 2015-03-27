@@ -10,7 +10,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BuildViewController : UIViewController <ComponentTrayDelegate>
+@interface BuildViewController : UIViewController <ComponentShelfDelegate>
 
 
 +(BuildView*)buildView;

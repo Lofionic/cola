@@ -67,18 +67,18 @@
     if (panGesture.state == UIGestureRecognizerStateBegan) {
         [self.thumbnailImageView setHidden:YES];
         
-        if ([[self.componentTrayView delegate] respondsToSelector:@selector(componentTray:didBeginDraggingComponent:withGesture:)]) {
-            [[self.componentTrayView delegate] componentTray:self.componentTrayView didBeginDraggingComponent:self.componentDescription withGesture:panGesture];
+        if ([[self.componentShelf delegate] respondsToSelector:@selector(componentShelf:didBeginDraggingModule:withGesture:)]) {
+            [[self.componentShelf delegate] componentShelf:self.componentShelf didBeginDraggingModule:self.moduleDescription withGesture:panGesture];
         }
     } else if (panGesture.state == UIGestureRecognizerStateChanged) {
-        if ([[self.componentTrayView delegate] respondsToSelector:@selector(componentTray:didContinueDraggingComponent:withGesture:)]) {
-            [[self.componentTrayView delegate] componentTray:self.componentTrayView didContinueDraggingComponent:self.componentDescription withGesture:panGesture];
+        if ([[self.componentShelf delegate] respondsToSelector:@selector(componentShelf:didContinueDraggingModule:withGesture:)]) {
+            [[self.componentShelf delegate] componentShelf:self.componentShelf didContinueDraggingModule:self.moduleDescription withGesture:panGesture];
         }
     } else if (uigr.state == UIGestureRecognizerStateEnded) {
         [self.thumbnailImageView setHidden:NO];
         
-        if ([[self.componentTrayView delegate] respondsToSelector:@selector(componentTray:didEndDraggingComponent:withGesture:)]) {
-            [[self.componentTrayView delegate] componentTray:self.componentTrayView didEndDraggingComponent:self.componentDescription withGesture:panGesture];
+        if ([[self.componentShelf delegate] respondsToSelector:@selector(componentShelf:didEndDraggingModule:withGesture:)]) {
+            [[self.componentShelf delegate] componentShelf:self.componentShelf didEndDraggingModule:self.moduleDescription withGesture:panGesture];
         }
     }
 }

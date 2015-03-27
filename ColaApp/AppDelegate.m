@@ -18,7 +18,8 @@ CGFloat kToolbarHeight;
 CGFloat kBuildViewWidth;
 CGFloat kBuildViewColumnWidth;
 CGFloat kBuildViewRowHeight;
-NSArray *componentCatalog;
+
+NSArray *moduleCatalog;
 
 @implementation AppDelegate
 
@@ -26,7 +27,7 @@ NSArray *componentCatalog;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [self initLayoutMetrics];
-    [self initComponentCatalog];
+    [self initModuleCatalog];
     
     // Start audio engine
     [[COLAudioEnvironment sharedEnvironment] start];
@@ -57,24 +58,23 @@ NSArray *componentCatalog;
     }
 }
 
-- (void)initComponentCatalog {
-    NSURL *componentCatalogURL = [[NSBundle mainBundle] URLForResource:@"componentCatalog" withExtension:@"json"];
-    if (componentCatalogURL) {
+- (void)initModuleCatalog {
+    NSURL *moduleCatalogURL = [[NSBundle mainBundle] URLForResource:@"moduleCatalog" withExtension:@"json"];
+    if (moduleCatalogURL) {
         NSError *dataError;
-        NSData *componentCatalogData = [NSData dataWithContentsOfURL:componentCatalogURL options:0 error:&dataError];
-        if (!dataError && componentCatalogData) {
+        NSData *moduleCatalogData = [NSData dataWithContentsOfURL:moduleCatalogURL options:0 error:&dataError];
+        if (!dataError && moduleCatalogData) {
             NSError *dictError;
-            NSDictionary *componentCatalogJSON = [NSJSONSerialization JSONObjectWithData:componentCatalogData options:0 error:&dictError];
-            if (!dictError && componentCatalogJSON) {
-                NSArray *components = [componentCatalogJSON objectForKey:@"components"];
-                __block NSMutableArray *componentDescriptions = [[NSMutableArray alloc] initWithCapacity:[components count]];
+            NSDictionary *moduleCatalogJSON = [NSJSONSerialization JSONObjectWithData:moduleCatalogData options:0 error:&dictError];
+            if (!dictError && moduleCatalogJSON) {
+                NSArray *modules = [moduleCatalogJSON objectForKey:@"modules"];
+                __block NSMutableArray *moduleDescriptions = [[NSMutableArray alloc] initWithCapacity:[modules count]];
                 
-                [components enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
-                    NSDictionary *componentDictionary = (NSDictionary*)obj;
-                    [componentDescriptions addObject:[[ComponentDescription alloc] initWithDictionary:componentDictionary]];
+                [modules enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+                    NSDictionary *moduleDictionary = (NSDictionary*)obj;
+                    [moduleDescriptions addObject:[[ModuleDescription alloc] initWithDictionary:moduleDictionary]];
                 }];
-                    
-                componentCatalog = [NSArray arrayWithArray:componentDescriptions];
+                moduleCatalog = [NSArray arrayWithArray:moduleDescriptions];
             }
         }
     }

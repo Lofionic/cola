@@ -1,5 +1,5 @@
 {
-    "components" : [
+    "modules" : [
         {
             "name" : "VCO A",
             "width" : 2,
@@ -12,19 +12,19 @@
                     "type" : "input",
                     "connection" : "Keyboard In",
                     "x" : 48,
-                    "y" : 200
+                    "y" : 240
                 },
                 {                   
                     "type" : "input",
                     "connection" : "FM In",
                     "x" : 96,
-                    "y" : 200
+                    "y" : 240
                 },
                 {                   
                     "type" : "output",
                     "connection" : "Out",
                     "x" : 144,
-                    "y" : 200
+                    "y" : 240
                 }
                 ],
                 "encoders" : [
@@ -33,28 +33,28 @@
                         "type" : "continuous",
                         "parameter" : "Octave",
                         "x" : 56,
-                        "y" : 56
+                        "y" : 72
                     },
                     {
                         "asset" : "large_white",
                         "type" : "continuous",
                         "parameter" : "Waveform",
                         "x" : 136,
-                        "y" : 56
+                        "y" : 72
                     },
                     {
                         "asset" : "small_white",
                         "type" : "continuous",
                         "parameter" : "Tune",
                         "x" : 56,
-                        "y" : 136
+                        "y" : 152
                     },
                     {
                         "asset" : "small_white",
                         "type" : "continuous",
                         "parameter" : "FM Amt",
                         "x" : 136,
-                        "y" : 136
+                        "y" : 152
                     }
                 ]
             }
@@ -76,6 +76,7 @@
                     {
                         "type" : "continuous",
                         "parameter" : "Freq",
+                        "asset" : "small_white",
                         "x" : 48,
                         "y" : 85
                     }

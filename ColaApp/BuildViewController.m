@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import "defines.h"
-#import "ComponentDescription.h"
+#import "ModuleDescription.h"
 #import "BuildViewController.h"
 #import "KeyboardView.h"
 
@@ -16,7 +16,7 @@ static BuildView *buildView = nil;
 
 @property (nonatomic, strong) BuildView             *buildView;
 
-@property (nonatomic, strong) ComponentShelfView    *componentTray;
+@property (nonatomic, strong) ComponentShelfView    *componentShelf;
 @property (nonatomic, strong) KeyboardView          *keyboardView;
 
 @property (nonatomic, strong) UIView                *dragView;
@@ -37,10 +37,10 @@ static BuildView *buildView = nil;
     
     buildView = self.buildView;
     
-    self.componentTray = [[ComponentShelfView alloc] init];
-    [self.componentTray setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.componentTray setDelegate:self];
-    [self.view addSubview:self.componentTray];
+    self.componentShelf = [[ComponentShelfView alloc] init];
+    [self.componentShelf setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.componentShelf setDelegate:self];
+    [self.view addSubview:self.componentShelf];
     
     self.keyboardView = [[KeyboardView alloc] init];
     [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -49,7 +49,7 @@ static BuildView *buildView = nil;
     
     NSDictionary *viewsDictionary = @{
                                       @"buildView"      :   self.buildView,
-                                      @"componentShelf" :   self.componentTray,
+                                      @"componentShelf" :   self.componentShelf,
                                       @"keyboardView"   :   self.keyboardView
                                       };
     
@@ -96,7 +96,7 @@ static BuildView *buildView = nil;
                                                                         views:viewsDictionary]];
 }
 
--(void)componentTray:(ComponentShelfView *)componentTray didBeginDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentShelf:(ComponentShelfView *)componentTray didBeginDraggingModule:(ModuleDescription*)module withGesture:(UIPanGestureRecognizer *)panGesture {
     CGPoint dragPoint = [panGesture locationInView:self.view];
     
     self.dragView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
@@ -107,12 +107,12 @@ static BuildView *buildView = nil;
     [self.view addSubview:self.dragView];
 }
 
--(void)componentTray:(ComponentShelfView *)componentTray didContinueDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentShelf:(ComponentShelfView *)componentTray didContinueDraggingModule:(ModuleDescription*)module withGesture:(UIPanGestureRecognizer *)panGesture {
     
     CGPoint dragPoint = [panGesture locationInView:self.view];
     [self.dragView setCenter:dragPoint];
     
-    NSSet *hoverSet = [self.buildView cellPathsForComponentOfWidth:component.width center:[panGesture locationInView:self.buildView]];
+    NSSet *hoverSet = [self.buildView cellPathsForModuleOfWidth:module.width center:[panGesture locationInView:self.buildView]];
     
     if (hoverSet && [self.view hitTest:dragPoint withEvent:nil] == self.buildView) {
         [self.buildView setHighlightedCellSet:hoverSet];
@@ -121,7 +121,7 @@ static BuildView *buildView = nil;
     }
 }
 
--(void)componentTray:(ComponentShelfView *)componentTray didEndDraggingComponent:(ComponentDescription*)component withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentShelf:(ComponentShelfView *)componentTray didEndDraggingModule:(ModuleDescription*)module withGesture:(UIPanGestureRecognizer *)panGesture {
     [self.dragView removeFromSuperview];
     [self.buildView setHighlightedCellSet:nil];
     
@@ -134,7 +134,7 @@ static BuildView *buildView = nil;
             pointInWindow.y < self.view.frame.size.height - 8) {
             if ([self.view hitTest:pointInWindow withEvent:nil] == self.buildView) {
                 // Add a component
-                [self.buildView addViewForComponent:component atPoint:[panGesture locationInView:self.buildView]];
+                [self.buildView addViewForModule:module atPoint:[panGesture locationInView:self.buildView]];
             }
         }
     }

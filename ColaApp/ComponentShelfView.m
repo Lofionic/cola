@@ -8,7 +8,7 @@
 #import "defines.h"
 #import "ComponentShelfCollectionViewCell.h"
 #import "ComponentShelfView.h"
-#import "ComponentDescription.h"
+#import "ModuleDescription.h"
 
 @implementation ComponentShelfView
 
@@ -52,8 +52,8 @@
     
     [cell.thumbnailImageView setBackgroundColor:[colours objectAtIndex:indexPath.row]];
     
-    [cell setComponentDescription:[componentCatalog objectAtIndex:indexPath.row]];
-    [cell setComponentTrayView:self];
+    [cell setModuleDescription:[moduleCatalog objectAtIndex:indexPath.row]];
+    [cell setComponentShelf:self];
     
     return cell;
     
@@ -64,7 +64,7 @@
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [componentCatalog count];
+    return [moduleCatalog count];
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {

@@ -5,7 +5,7 @@
 //  Created by Chris on 05/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-#import "ComponentDescription.h"
+#import "ModuleDescription.h"
 #import "ConnectorView.h"
 
 #import <UIKit/UIKit.h>
@@ -38,8 +38,8 @@
 @property (readonly, strong) NSMutableArray *cables;
 
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point;
--(NSSet*)cellPathsForComponentOfWidth:(NSUInteger)width center:(CGPoint)center;
--(UIView*)addViewForComponent:(ComponentDescription*)componentDescription atPoint:(CGPoint)point;
+-(NSSet*)cellPathsForModuleOfWidth:(NSUInteger)width center:(CGPoint)center;
+-(UIView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point;
 -(CGRect)rectForCellSet:(NSSet*)cellSet;
 
 @end

@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class ComponentDescription;
+@class ModuleDescription;
 @class ComponentShelfView;
 @interface ComponentShelfCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, weak) ComponentShelfView *componentTrayView;
-@property (nonatomic, weak) ComponentDescription *componentDescription;
+@property (nonatomic, weak) ComponentShelfView *componentShelf;
+@property (nonatomic, weak) ModuleDescription *moduleDescription;
 @property (nonatomic, strong) UIImageView *thumbnailImageView;
 
 @end

@@ -9,7 +9,7 @@
 #import "RotaryEncoder.h"
 
 #import "defines.h"
-#import "ComponentDescription.h"
+#import "ModuleDescription.h"
 
 
 #define DIAL_COLOUR     [UIColor colorWithRed:50/255.0 green:50/255.0 blue:50/255.0 alpha:1]
@@ -19,7 +19,6 @@
 @interface RotaryEncoder ()
 
 @property (nonatomic, weak) COLComponentParameter   *parameter;
-@property (nonatomic, strong) NSString              *asset;
 @property (nonatomic, strong) CALayer               *needleLayer;
 
 @end
@@ -37,25 +36,26 @@
         self.parameter = parameter;
         self.value = 0;
         
-        self.asset = encoderDescription.asset;
-        NSString *encoderAsset = [NSString stringWithFormat:@"ImageAssets/eencoders/ncoder_%@", self.asset];
-        UIImage *encoderImage = [UIImage imageNamed:encoderAsset];
-        if (encoderImage) {
-            [self.layer setContents:(id)encoderImage.CGImage];
-        }
-        
-        NSString *needleAsset = [NSString stringWithFormat:@"ImageAssets/encoders/encoder_needle_%@", self.asset];
-        UIImage *needleImage = [UIImage imageNamed:needleAsset];
-        if (needleImage) {
-            self.needleLayer = [CALayer layer];
-            [self.needleLayer setContents:(id)needleImage.CGImage];
-            [self.layer addSublayer:self.needleLayer];
+        if (encoderDescription.asset) {
+            NSString *encoderAsset = [ASSETS_PATH_ENCODERS stringByAppendingString:[@"encoder_" stringByAppendingString:encoderDescription.asset]];
+            UIImage *encoderImage = [UIImage imageNamed:encoderAsset];
+            if (encoderImage) {
+                [self.layer setContents:(id)encoderImage.CGImage];
+            }
+
+            NSString *needleAsset = [ASSETS_PATH_ENCODERS stringByAppendingString:[@"encoder_needle_" stringByAppendingString:encoderDescription.asset]];
+            UIImage *needleImage = [UIImage imageNamed:needleAsset];
+            if (needleImage) {
+                self.needleLayer = [CALayer layer];
+                [self.needleLayer setContents:(id)needleImage.CGImage];
+                [self.layer addSublayer:self.needleLayer];
+            }
+            
+            [self setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
+            [self.needleLayer setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
         }
         
         [self setValue:[self.parameter getNormalizedValue]];
-        
-        [self setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
-        [self.needleLayer setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
     }
     return  self;
 }

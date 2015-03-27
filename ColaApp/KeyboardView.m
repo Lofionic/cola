@@ -29,7 +29,6 @@
     return self;
 }
 
-
 -(void)awakeFromNib {
     self.userInteractionEnabled = YES;
     self.multipleTouchEnabled = YES;
@@ -41,7 +40,6 @@
 -(void)initKeys {
     
     keyTouches = [[NSMutableDictionary alloc] initWithCapacity:10];
-    
     
     if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)) {
         octaves = 2;
@@ -193,8 +191,6 @@
     prevKeysDown = [NSSet setWithSet:keysDown];
 }
 
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
@@ -249,7 +245,6 @@
             CGContextRestoreGState(ctx);
         }
     }
-    
 }
 
 @end
