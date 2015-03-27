@@ -8,6 +8,7 @@
 #import "defines.h"
 #import "ComponentShelfCollectionViewCell.h"
 #import "ComponentShelfView.h"
+#import "ComponentDescription.h"
 
 @implementation ComponentShelfView
 

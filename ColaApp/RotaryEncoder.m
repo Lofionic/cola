@@ -8,6 +8,8 @@
 
 #import "RotaryEncoder.h"
 
+#import "defines.h"
+#import "ComponentDescription.h"
 
 
 #define DIAL_COLOUR     [UIColor colorWithRed:50/255.0 green:50/255.0 blue:50/255.0 alpha:1]
@@ -36,13 +38,13 @@
         self.value = 0;
         
         self.asset = encoderDescription.asset;
-        NSString *encoderAsset = [NSString stringWithFormat:@"ImageAssets/encoder_%@", self.asset];
+        NSString *encoderAsset = [NSString stringWithFormat:@"ImageAssets/eencoders/ncoder_%@", self.asset];
         UIImage *encoderImage = [UIImage imageNamed:encoderAsset];
         if (encoderImage) {
             [self.layer setContents:(id)encoderImage.CGImage];
         }
         
-        NSString *needleAsset = [NSString stringWithFormat:@"ImageAssets/encoder_needle_%@", self.asset];
+        NSString *needleAsset = [NSString stringWithFormat:@"ImageAssets/encoders/encoder_needle_%@", self.asset];
         UIImage *needleImage = [UIImage imageNamed:needleAsset];
         if (needleImage) {
             self.needleLayer = [CALayer layer];

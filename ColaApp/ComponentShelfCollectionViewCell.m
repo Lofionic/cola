@@ -5,8 +5,9 @@
 //  Created by Chris on 04/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-
 #import "ComponentShelfCollectionViewCell.h"
+
+#import "ComponentShelfView.h"
 
 @implementation ComponentShelfCollectionViewCell
 

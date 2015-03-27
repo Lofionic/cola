@@ -5,8 +5,9 @@
 //  Created by Chris on 22/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-
 #import "ConnectorView.h"
+
+#import "defines.h"
 
 @interface ConnectorView ()
 
@@ -33,7 +34,7 @@
             connectorImageName = @"yellow";
         }
         
-        connectorImageName = [NSString stringWithFormat:@"ImageAssets/connector_%@", connectorImageName];
+        connectorImageName = [ASSETS_PATH_CONNECTORS stringByAppendingString:connectorImageName];
         UIImage *connectorImage = [UIImage imageNamed:connectorImageName];
         
         if (connectorImage) {

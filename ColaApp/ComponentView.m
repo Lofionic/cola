@@ -5,10 +5,11 @@
 //  Created by Chris on 23/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-
 #import "BuildViewController.h"
 
+#import "defines.h"
 #import "ComponentView.h"
+#import "ComponentDescription.h"
 #import "ConnectorView.h"
 #import "RotaryEncoder.h"
 
@@ -40,7 +41,7 @@
         
         UIImage *assetImage = nil;
         if (componentDescription.asset) {
-            self.asset = [NSString stringWithFormat:@"ImageAssets/Components/%@", componentDescription.asset];
+            self.asset = [ASSETS_PATH_COMPONENTS stringByAppendingString:componentDescription.asset];
             assetImage = [UIImage imageNamed:self.asset];
         }
         

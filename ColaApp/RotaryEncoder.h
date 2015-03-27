@@ -7,8 +7,8 @@
 //
 #import <ColaLib/ColaLib.h>
 #import <UIKit/UIKit.h>
-#import "ComponentDescription.h"
 
+@class EncoderDescription;
 @interface RotaryEncoder : UIControl
 
 @property (readonly, weak) COLComponentParameter *parameter;

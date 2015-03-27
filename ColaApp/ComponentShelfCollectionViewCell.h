@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ComponentShelfView.h"
 
+@class ComponentDescription;
+@class ComponentShelfView;
 @interface ComponentShelfCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, weak) ComponentShelfView *componentTrayView;
