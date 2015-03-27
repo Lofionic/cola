@@ -163,11 +163,11 @@
 			isa = PBXGroup;
 			children = (
 				6C2A5EA41A8C0B8D00ECEAB2 /* ColaApp.entitlements */,
-				6C8DD2961AC0DA2400320628 /* BuildView */,
-				6C0D487F1AC3662E008AD869 /* Keyboard */,
 				6C1DB6B11AADDEB60041F5F9 /* defines.h */,
 				6C2A5E231A8BF2CC00ECEAB2 /* AppDelegate.h */,
 				6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */,
+				6C8DD2961AC0DA2400320628 /* BuildView */,
+				6C0D487F1AC3662E008AD869 /* Keyboard */,
 				6C2A5E291A8BF2CC00ECEAB2 /* Main.storyboard */,
 				6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */,
 				6C2A5E2E1A8BF2CC00ECEAB2 /* LaunchScreen.xib */,

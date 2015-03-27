@@ -47,7 +47,7 @@ NSArray *componentCatalog;
     // Setup metrics
     kBuildViewWidth =       768;
     kBuildViewColumnWidth = 96;
-    kBuildViewRowHeight =   256;
+    kBuildViewRowHeight =   320;
     kToolbarHeight =        64;
     kComponentShelfHeight = 120;
     

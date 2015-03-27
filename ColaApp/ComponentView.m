@@ -85,14 +85,4 @@
     }
 }
 
--(void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
-    CGContextSetStrokeColorWithColor(ctx, [[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5] CGColor]);
-    CGContextSetLineWidth(ctx, 2);
-    CGContextStrokeRect(ctx, rect);
-}
-
 @end
