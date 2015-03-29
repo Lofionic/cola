@@ -109,6 +109,12 @@ static NSArray *cableColours;
     [keyboardOutView setCenter:CGPointMake(120, self.headerHeight / 2.0)];
     [keyboardOutView setDelegate:self];
     [self addSubview:keyboardOutView];
+    
+    COLComponentIO *keyboardGate = [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] outputForIndex:1];
+    ConnectorView *keyboardGateView = [[ConnectorView alloc] initWithComponentIO:keyboardGate];
+    [keyboardGateView setCenter:CGPointMake(168, self.headerHeight / 2.0)];
+    [keyboardGateView setDelegate:self];
+    [self addSubview:keyboardGateView];
 }
 
 @synthesize highlightedCellSet = _highlightedCellSet;

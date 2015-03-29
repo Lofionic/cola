@@ -15,7 +15,8 @@
 @property (nonatomic, strong) COLComponentOutput *mainOut;
 @property (nonatomic, strong) COLComponentInput *freqIn;
 
-@property (nonatomic, strong) COLComponentParameter *frequency;
+@property (nonatomic, strong) COLComponentParameter *rate;
+@property (nonatomic, strong) COLComponentParameter *waveform;
 
 @end
 
@@ -29,8 +30,12 @@
     self.freqIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"FreqIn"];
     [self setInputs:@[self.freqIn]];
     
-    self.frequency = [[COLComponentParameter alloc] initWithComponent:self withName:@"Freq"];
-    [self setParameters:@[self.frequency]];
+    self.rate = [[COLComponentParameter alloc] initWithComponent:self withName:@"Rate"];
+    [self.rate setNormalizedValue:0.5];
+    
+    self.waveform = [[COLComponentParameter alloc] initWithComponent:self withName:@"Wave"];
+    [self setParameters:@[self.rate, self.waveform]];
+
 }
 
 -(void)renderOutputs:(UInt32)numFrames {
@@ -45,18 +50,19 @@
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
     for (int i = 0; i < numFrames; i++) {
-        AudioSignalType freq;
+        AudioSignalType freq = FLT_MIN;
+        
         if ([self.freqIn isConnected]) {
             freq = frequencyBuffer[i] + 1;
         } else {
-            freq = [self.frequency outputAtDelta:i / (float)numFrames] * 10.0;
+            freq = [self.rate outputAtDelta:i / (float)numFrames] * 10.0;
         }
         
         phase += (2.0 * M_PI * (freq)) / sampleRate;
         if (phase > 2.0 * M_PI) {
             phase -= (2.0 * M_PI);
         }
-        mainBuffer[i] = 0.5 + (sin(phase) / 2);
+        mainBuffer[i] = sin(phase);
     }
 }
 

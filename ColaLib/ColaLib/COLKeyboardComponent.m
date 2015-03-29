@@ -13,9 +13,11 @@
     NSMutableArray *noteOns;
     AudioSignalType outputValue;
     float prevPitchbend;
+    bool gateOpen;
 }
 
 @property (nonatomic, strong) COLComponentOutput *keyboardOut;
+@property (nonatomic, strong) COLComponentOutput *gateOut;
 
 @property (nonatomic) BOOL gliss;
 @property (nonatomic) float pitchbend;
@@ -28,13 +30,15 @@
 -(instancetype)initWithContext:(COLAudioContext *)context {
     if (self = [super initWithContext:context]) {
         noteOns = [[NSMutableArray alloc] initWithCapacity:10];
+        gateOpen = NO;
     }
     return self;
 }
 
 -(void)initializeIO {
     self.keyboardOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOType1VOct withName:@"Out"];
-    [self setOutputs:@[self.keyboardOut]];
+    self.gateOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeGate withName:@"Gate"];
+    [self setOutputs:@[self.keyboardOut, self.gateOut]];
 }
 
 -(void)noteOn:(NSInteger)note {
@@ -92,18 +96,18 @@
 }
 
 -(void)openGate {
-    // Trigger open gate in every gate component
+    gateOpen = YES;
 
 }
 
 -(void)closeGate {
-    // Trigger close gate in every gate component
-
+    gateOpen = NO;
 }
 
 -(void)renderOutputs:(UInt32)numFrames {
     // Output Buffers
     AudioSignalType *keyboardOutBuffer = [self.keyboardOut prepareBufferOfSize:numFrames];
+    AudioSignalType *gateOutBuffer = [self.gateOut prepareBufferOfSize:numFrames];
     
     float pitchbendDelta = (self.pitchbend - prevPitchbend) / numFrames;
     
@@ -115,6 +119,12 @@
         adjustValue = (powf(powf(2, (1.0 / 12.0)), adjustValue * self.pitchWheelRange));
         
         keyboardOutBuffer[i] = outputValue * adjustValue;
+        
+        if (gateOpen) {
+            gateOutBuffer[i] = 1;
+        } else {
+            gateOutBuffer[i] = 0;
+        }
     }
     
     prevPitchbend = self.pitchbend;

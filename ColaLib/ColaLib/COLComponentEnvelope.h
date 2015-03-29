@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, kCOLEnvelopeState) {
     kCOLEnvelopeStateRelease
 };
 
-@interface COLCompenentEnvelope : COLComponent
+@interface COLComponentEnvelope : COLComponent
 
 @property (nonatomic) BOOL retriggers;
 

@@ -27,8 +27,12 @@
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame {
     
     COLComponent *component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:moduleDescription.type];
+    if (!component) {
+        return nil;
+    }
     
-    if (component && (self = [super initWithFrame:frame])) {
+    
+    if (self = [super initWithFrame:frame]) {
         self.component = component;
         
         if (moduleDescription.connectors) {
@@ -80,6 +84,8 @@
         if (rotaryEncoder) {
             [rotaryEncoder setCenter:thisEncoder.location];
             [self addSubview:rotaryEncoder];
+        } else {
+            NSLog(@"Warning: Parametner '%@' not found on component of type %@", thisEncoder.parameterName, [self.component class]);
         }
     }
 }

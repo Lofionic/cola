@@ -7,6 +7,6 @@
 //
 #import "COLComponent.h"
 
-@interface COLComponentOscillator : COLComponent
+@interface COLComponentVCO : COLComponent
 
 @end

@@ -32,7 +32,11 @@
 -(instancetype)initWithDescription:(EncoderDescription*)encoderDescription forComponent:(COLComponent*)component {
     
     COLComponentParameter *parameter = [component parameterNamed:encoderDescription.parameterName];
-    if (parameter && (self = [super init])) {
+    if (!parameter) {
+        return nil;
+    }
+    
+    if (self = [super init]) {
         self.parameter = parameter;
         self.value = 0;
         

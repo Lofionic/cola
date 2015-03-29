@@ -5,12 +5,12 @@
 //  Created by Chris on 28/02/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-#import "COLCompenentEnvelope.h"
+#import "COLComponentEnvelope.h"
 #import "COLAudioEnvironment.h"
 
 #define MEDIAN_WINDOW_SIZE 50
 
-@interface COLCompenentEnvelope() {
+@interface COLComponentEnvelope() {
     
     BOOL gateOpen;
     UInt32 gateOpenInterval;    // Number of samples gate has been open for
@@ -24,6 +24,7 @@
     
 }
 
+@property (nonatomic, strong) COLComponentInput *gate;
 @property (nonatomic, strong) COLComponentOutput *output;
 
 @property (nonatomic, strong) COLComponentParameter *attackTime;
@@ -33,7 +34,7 @@
 
 @end
 
-@implementation COLCompenentEnvelope
+@implementation COLComponentEnvelope
 
 -(instancetype)initWithContext:(COLAudioContext *)context {
     if (self = [super initWithContext:context]) {
@@ -51,13 +52,23 @@
 
 -(void)initializeIO {
     
+    self.gate = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeGate withName:@"Gate"];
+    [self setInputs:@[self.gate]];
+    
     self.output = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"Out"];
     [self setOutputs:@[self.output]];
     
-    self.attackTime = [[COLComponentParameter alloc] initWithComponent:self withName:@"AttackTime"];
-    self.decayTime = [[COLComponentParameter alloc] initWithComponent:self withName:@"DecayTime"];
-    self.sustainLevel = [[COLComponentParameter alloc] initWithComponent:self withName:@"SustainLevel"];
-    self.releaseTime = [[COLComponentParameter alloc] initWithComponent:self withName:@"ReleaseTime"];
+    self.attackTime = [[COLComponentParameter alloc] initWithComponent:self withName:@"Attack"];
+    [self.attackTime setNormalizedValue:0];
+    
+    self.decayTime = [[COLComponentParameter alloc] initWithComponent:self withName:@"Decay"];
+    [self.decayTime setNormalizedValue:1];
+    
+    self.sustainLevel = [[COLComponentParameter alloc] initWithComponent:self withName:@"Sustain"];
+    [self.sustainLevel setNormalizedValue:1];
+    
+    self.releaseTime = [[COLComponentParameter alloc] initWithComponent:self withName:@"Release"];
+    [self.releaseTime setNormalizedValue:0];
     
     [self setParameters:@[self.attackTime, self.decayTime, self.sustainLevel, self.releaseTime]];
 }
@@ -67,6 +78,8 @@
     [super renderOutputs:numFrames];
     
     AudioSignalType *outputBuffer = (AudioSignalType*)[self.output prepareBufferOfSize:numFrames];
+    
+    AudioSignalType *gateBuffer = [self.gate getBuffer:numFrames];
     
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
@@ -85,8 +98,15 @@
         
         
         // Iterate the gate position
-        
         envelopeState = kCOLEnvelopeStateClosed;
+        
+        float gate = gateBuffer[i];
+        
+        if (gateOpen && gate == 0) {
+            [self closeGate];
+        } else if (!gateOpen && gate == 1) {
+            [self openGate];
+        }
         
         if (gateOpen) {
             
@@ -155,7 +175,6 @@
         }
         
         outputValue = medianWindowSigma / MEDIAN_WINDOW_SIZE;
-        
         outputBuffer[i] = outputValue;
     }
 }

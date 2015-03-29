@@ -30,7 +30,7 @@
             } else if ([componentIO isKindOfClass:[COLComponentInput class]]) {
                 connectorAssetName = @"connector_green";
             }
-        } else if (componentIO.type == kComponentIOTypeControl || componentIO.type == kComponentIOType1VOct) {
+        } else if (componentIO.type == kComponentIOTypeControl || componentIO.type == kComponentIOType1VOct || componentIO.type == kComponentIOTypeGate) {
             connectorAssetName = @"connector_yellow";
         }
         

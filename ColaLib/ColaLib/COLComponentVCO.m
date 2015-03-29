@@ -5,14 +5,14 @@
 //  Created by Chris on 12/02/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-#import "COLComponentOscillator.h"
+#import "COLComponentVCO.h"
 #import "COLAudioEnvironment.h"
 #import "COLComponentInput.h"
 #import "COLKeyboardComponent.h"
 
 #define CV_FREQUENCY_RANGE 8372
 
-@interface COLComponentOscillator () {
+@interface COLComponentVCO () {
     Float64 phase;
 }
 
@@ -28,7 +28,7 @@
 
 @end
 
-@implementation COLComponentOscillator
+@implementation COLComponentVCO
 
 -(instancetype)initWithContext:(COLAudioContext *)context {
     if (self = [super initWithContext:context]) {
@@ -76,16 +76,18 @@
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
     for (int i = 0; i < numFrames; i++) {
-        AudioSignalType freq;
+        AudioSignalType freq = FLT_MIN;
+        
+        if ([self.keyboardIn isConnected]) {
+            freq = kbBuffer[i];
+        }
         
         if ([self.fmodIn isConnected]) {
-            freq = (fmBuffer[i]);
-        } else if ([self.keyboardIn isConnected]) {
-            freq = kbBuffer[i];
-        } else {
-            freq = 0;
+            float delta = i / (float)numFrames;
+            float lfoValue = powf(0.5, (-fmBuffer[i] * [self.fmAmt outputAtDelta:delta]));
+            freq *= lfoValue;
         }
-
+        
         phase += (M_PI * freq * CV_FREQUENCY_RANGE) / sampleRate;
         
         outBuffer[i] = sin(phase);;

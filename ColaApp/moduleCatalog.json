@@ -3,7 +3,7 @@
         {
             "name" : "VCO A",
             "width" : 2,
-            "type" : "kCOLComponentOscillator",
+            "type" : "kCOLComponentVCO",
             "view" : 
             {
                 "asset" : "vco_a",
@@ -60,28 +60,131 @@
             }
         },
         {
-            "name" : "LFO",
+            "name" : "LFO A",
             "width" : 1,
             "type" : "kCOLComponentLFO",
             "view" : {
+                "asset" : "lfo_a",
                 "connectors" : [
                     {
                         "type" : "output",
                         "connection" : "Out",
                         "x" : 48,
-                        "y" : 40
+                        "y" : 248
                     }
                     ],
                     "encoders" : [
                     {
                         "type" : "continuous",
-                        "parameter" : "Freq",
-                        "asset" : "small_white",
+                        "parameter" : "Rate",
+                        "asset" : "large_white",
                         "x" : 48,
-                        "y" : 85
+                        "y" : 72
+                    },
+                    {
+                        "type" : "continuous",
+                        "parameter" : "Wave",
+                        "asset" : "large_white",
+                        "x" : 48,
+                        "y" : 160
                     }
                 ]
             }     
+        },
+        {
+            "name" : "EG A",
+            "width" : 1,
+            "type" : "kCOLComponentEnvelope",
+            "view" : {
+                "asset" : "eg_a",
+                "connectors" : [
+                    {
+                        "type" : "input",
+                        "connection" : "Gate",
+                        "x" : 24,
+                        "y" : 264
+                    },
+                    {
+                        "type" : "output",
+                        "connection" : "Out",
+                        "x" : 72,
+                        "y" : 264
+                    }
+                ],
+                "encoders" : [
+                     {
+                        "type" : "continuous",
+                        "parameter" : "Attack",
+                        "asset" : "small_white",
+                        "x" : 32,
+                        "y" : 64
+                    },               
+                    {
+                        "type" : "continuous",
+                        "parameter" : "Decay",
+                        "asset" : "small_white",
+                        "x" : 32,
+                        "y" : 112
+                    }, 
+                    {
+                        "type" : "continuous",
+                        "parameter" : "Sustain",
+                        "asset" : "small_white",
+                        "x" : 32,
+                        "y" : 160
+                    }, 
+                    {
+                        "type" : "continuous",
+                        "parameter" : "Release",
+                        "asset" : "small_white",
+                        "x" : 32,
+                        "y" : 208
+                    }
+                ]
+            }
+        },
+        {
+            "name" : "VCA A",
+            "width" : 1,
+            "type" : "kCOLComponentVCA",
+            "view" : {
+                "connectors" : [
+                    {
+                        "type" : "input",
+                        "connection" : "In",
+                        "x" : 24,
+                        "y" : 264
+                    },
+                    {
+                        "type" : "output",
+                        "connection" : "Out",
+                        "x" : 72,
+                        "y" : 264
+                    },
+                    {
+                        "type" : "input",
+                        "connection" : "CV In",
+                        "x" : 32,
+                        "y" : 160
+                    }
+                ],
+                "encoders" : [
+                     {
+                        "type" : "continuous",
+                        "parameter" : "Level",
+                        "asset" : "small_white",
+                        "x" : 32,
+                        "y" : 64
+                    },               
+                    {
+                        "type" : "continuous",
+                        "parameter" : "CV Amt",
+                        "asset" : "small_white",
+                        "x" : 32,
+                        "y" : 112
+                    }
+                ]
+            }
         }
     ]
 }

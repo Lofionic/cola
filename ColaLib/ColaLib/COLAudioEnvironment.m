@@ -8,12 +8,9 @@
 #import <UIKit/UIKit.h>
 #import "COLAudioEnvironment.h"
 #import "COLAudioEngine.h"
-#import "COLComponent.h"
-#import "COLComponentOscillator.h"
-#import "COLComponents.h"
-#import "COLComponentLFO.h"
-#import "COLComponentWavePlayer.h"
 #import "COLAudioContext.h"
+#import "COLComponent.h"
+#import "COLComponents.h"
 
 @interface COLAudioEnvironment()
 
@@ -89,14 +86,16 @@
     COLAudioContext *context = [COLAudioContext globalContext];
     COLComponent *newComponent;
     
-    if ([componentType isEqualToString:kCOLComponentOscillator]) {
-        newComponent = [[COLComponentOscillator alloc] initWithContext:context];
+    if ([componentType isEqualToString:kCOLComponentVCO]) {
+        newComponent = [[COLComponentVCO alloc] initWithContext:context];
     } else if ([componentType isEqualToString:kCOLComponentLFO]) {
         newComponent = [[COLComponentLFO alloc] initWithContext:context];
     } else if ([componentType isEqualToString:kCOLComponentWavePlayer]) {
         newComponent = [[COLComponentWavePlayer alloc] initWithContext:context];
     } else if ([componentType isEqualToString:kCOLComponentEnvelope]) {
-        newComponent = [[COLCompenentEnvelope alloc] initWithContext:context];
+        newComponent = [[COLComponentEnvelope alloc] initWithContext:context];
+    } else if ([componentType isEqualToString:kCOLComponentVCA]) {
+        newComponent = [[COLComponentVCA alloc] initWithContext:context];
     }
     
     if (newComponent) {

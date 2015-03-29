@@ -9,10 +9,11 @@
 #ifndef ColaLib_COLComponents_h
 #define ColaLib_COLComponents_h
 
-#import "COLComponentOscillator.h"
+#import "COLComponentVCO.h"
 #import "COLComponentLFO.h"
 #import "COLComponentWavePlayer.h"
-#import "COLCompenentEnvelope.h"
+#import "COLComponentEnvelope.h"
 #import "COLKeyboardComponent.h"
+#import "COLComponentVCA.h"
 
 #endif
