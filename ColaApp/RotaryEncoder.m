@@ -65,7 +65,7 @@
 }
 
 -(void)updateNeedleAnimated:(BOOL)animated {
-    double theta = ((M_PI * 2.0) * self.value * 0.75) + (M_PI * (3.0 / 4.0));
+    double theta = ((M_PI * 2.0) * self.value * (5.0 / 6.0)) + (M_PI * (2.0 / 3.0));
     
     BOOL disableActions = [CATransaction disableActions];
     [CATransaction setDisableActions:!animated];

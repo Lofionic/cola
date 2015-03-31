@@ -33,7 +33,7 @@
     [self setOutputs:@[self.output]];
     
     self.level = [[COLComponentParameter alloc] initWithComponent:self withName:@"Level"];
-    [self.level setNormalizedValue:0.5];
+    [self.level setNormalizedValue:0];
     
     self.CVAmt = [[COLComponentParameter alloc] initWithComponent:self withName:@"CV Amt"];
     [self.CVAmt setNormalizedValue:0];
@@ -53,12 +53,14 @@
    
     for (int i = 0; i < numFrames; i++) {
         float delta = i / (float)numFrames;
-        AudioSignalType output = inputBuffer[i]  * [self.level outputAtDelta:delta];
-        
+        float amp = [self.level outputAtDelta:delta];
         if ([self.CVIn isConnected]) {
-            output = output + (((cvBuffer[i] * output) - output) * [self.CVAmt outputAtDelta:delta]);
+            amp = amp + (cvBuffer[i] * [self.CVAmt outputAtDelta:delta]);
+            amp = MIN(MAX(amp, 0), 1);
         }
-
+        
+        AudioSignalType output = inputBuffer[i]  *amp;
+        
         outputBuffer[i] = output;
     }
 }

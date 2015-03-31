@@ -89,21 +89,21 @@
         // Stroke Shadow
         CGContextAddPath(ctx, bezierPath.CGPath);
         CGContextSetStrokeColorWithColor(ctx, [[cable.colour darkerShade] CGColor]);
-        CGContextSetLineWidth(ctx, 8);
+        CGContextSetLineWidth(ctx, 6);
         CGContextSetLineCap(ctx, kCGLineCapRound);
         CGContextStrokePath(ctx);
         
         // Stroke Mid
         CGContextSetStrokeColorWithColor(ctx, [[cable.colour midShade] CGColor]);
         CGContextTranslateCTM(ctx, 0, -2);
-        CGContextSetLineWidth(ctx, 6);
+        CGContextSetLineWidth(ctx, 4);
         CGContextAddPath(ctx, bezierPath.CGPath);
         CGContextStrokePath(ctx);
         
         // Stroke Highlight
         CGContextSetStrokeColorWithColor(ctx, [[cable.colour lighterShade] CGColor]);
         CGContextTranslateCTM(ctx, 0, -2);
-        CGContextSetLineWidth(ctx, 2);
+        CGContextSetLineWidth(ctx, 1);
         CGContextAddPath(ctx, bezierPath.CGPath);
         CGContextStrokePath(ctx);
         

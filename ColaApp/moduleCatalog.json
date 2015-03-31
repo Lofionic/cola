@@ -11,20 +11,20 @@
                 {
                     "type" : "input",
                     "connection" : "Keyboard In",
-                    "x" : 48,
-                    "y" : 240
+                    "x" : 32,
+                    "y" : 280
                 },
                 {                   
                     "type" : "input",
                     "connection" : "FM In",
-                    "x" : 96,
-                    "y" : 240
+                    "x" : 48,
+                    "y" : 176
                 },
                 {                   
                     "type" : "output",
                     "connection" : "Out",
-                    "x" : 144,
-                    "y" : 240
+                    "x" : 160,
+                    "y" : 280
                 }
                 ],
                 "encoders" : [
@@ -32,29 +32,29 @@
                         "asset" : "large_white",
                         "type" : "continuous",
                         "parameter" : "Octave",
-                        "x" : 56,
-                        "y" : 72
+                        "x" : 48,
+                        "y" : 80
                     },
                     {
                         "asset" : "large_white",
                         "type" : "continuous",
                         "parameter" : "Waveform",
-                        "x" : 136,
-                        "y" : 72
+                        "x" : 104,
+                        "y" : 272
                     },
                     {
-                        "asset" : "small_white",
+                        "asset" : "large_white",
                         "type" : "continuous",
                         "parameter" : "Tune",
-                        "x" : 56,
-                        "y" : 152
+                        "x" : 144,
+                        "y" : 80
                     },
                     {
-                        "asset" : "small_white",
+                        "asset" : "large_white",
                         "type" : "continuous",
                         "parameter" : "FM Amt",
-                        "x" : 136,
-                        "y" : 152
+                        "x" : 144,
+                        "y" : 176
                     }
                 ]
             }
@@ -70,7 +70,7 @@
                         "type" : "output",
                         "connection" : "Out",
                         "x" : 48,
-                        "y" : 248
+                        "y" : 280
                     }
                     ],
                     "encoders" : [
@@ -79,14 +79,14 @@
                         "parameter" : "Rate",
                         "asset" : "large_white",
                         "x" : 48,
-                        "y" : 72
+                        "y" : 80
                     },
                     {
                         "type" : "continuous",
                         "parameter" : "Wave",
                         "asset" : "large_white",
                         "x" : 48,
-                        "y" : 160
+                        "y" : 176
                     }
                 ]
             }     
@@ -102,13 +102,13 @@
                         "type" : "input",
                         "connection" : "Gate",
                         "x" : 24,
-                        "y" : 264
+                        "y" : 280
                     },
                     {
                         "type" : "output",
                         "connection" : "Out",
                         "x" : 72,
-                        "y" : 264
+                        "y" : 280
                     }
                 ],
                 "encoders" : [
@@ -117,28 +117,28 @@
                         "parameter" : "Attack",
                         "asset" : "small_white",
                         "x" : 32,
-                        "y" : 64
+                        "y" : 56
                     },               
                     {
                         "type" : "continuous",
                         "parameter" : "Decay",
                         "asset" : "small_white",
                         "x" : 32,
-                        "y" : 112
+                        "y" : 104
                     }, 
                     {
                         "type" : "continuous",
                         "parameter" : "Sustain",
                         "asset" : "small_white",
                         "x" : 32,
-                        "y" : 160
+                        "y" : 152
                     }, 
                     {
                         "type" : "continuous",
                         "parameter" : "Release",
                         "asset" : "small_white",
                         "x" : 32,
-                        "y" : 208
+                        "y" : 200
                     }
                 ]
             }
@@ -148,40 +148,41 @@
             "width" : 1,
             "type" : "kCOLComponentVCA",
             "view" : {
+                "asset" : "vca_a",
                 "connectors" : [
                     {
                         "type" : "input",
                         "connection" : "In",
                         "x" : 24,
-                        "y" : 264
+                        "y" : 280
                     },
                     {
                         "type" : "output",
                         "connection" : "Out",
                         "x" : 72,
-                        "y" : 264
+                        "y" : 280
                     },
                     {
                         "type" : "input",
                         "connection" : "CV In",
-                        "x" : 32,
-                        "y" : 160
+                        "x" : 24,
+                        "y" : 192
                     }
                 ],
                 "encoders" : [
                      {
                         "type" : "continuous",
                         "parameter" : "Level",
-                        "asset" : "small_white",
-                        "x" : 32,
-                        "y" : 64
+                        "asset" : "large_white",
+                        "x" : 48,
+                        "y" : 80
                     },               
                     {
                         "type" : "continuous",
                         "parameter" : "CV Amt",
                         "asset" : "small_white",
-                        "x" : 32,
-                        "y" : 112
+                        "x" : 64,
+                        "y" : 168
                     }
                 ]
             }
