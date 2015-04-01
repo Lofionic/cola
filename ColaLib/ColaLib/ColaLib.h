@@ -9,4 +9,6 @@
 #import "COLAudioEnvironment.h"
 #import "COLAudioContext.h"
 #import "COLComponents.h"
+#import "COLContinuousParameter.h"
+#import "COLDiscreteParameter.h"
 

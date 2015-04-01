@@ -5,6 +5,8 @@
 //  Created by Chris on 12/02/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
+#import "COLContinuousParameter.h"
+#import "COLDiscreteParameter.h"
 #import "COLComponentVCO.h"
 #import "COLAudioEnvironment.h"
 #import "COLComponentInput.h"
@@ -16,15 +18,15 @@
     Float64 phase;
 }
 
-@property (nonatomic, strong) COLComponentInput *keyboardIn;
-@property (nonatomic, strong) COLComponentInput *fmodIn;
+@property (nonatomic, strong) COLComponentInput     *keyboardIn;
+@property (nonatomic, strong) COLComponentInput     *fmodIn;
 
-@property (nonatomic, strong) COLComponentOutput *out;
+@property (nonatomic, strong) COLComponentOutput    *out;
 
-@property (nonatomic, strong) COLComponentParameter *octave;
-@property (nonatomic, strong) COLComponentParameter *waveform;
-@property (nonatomic, strong) COLComponentParameter *tune;
-@property (nonatomic, strong) COLComponentParameter *fmAmt;
+@property (nonatomic, strong) COLDiscreteParameter      *range;
+@property (nonatomic, strong) COLDiscreteParameter      *waveform;
+@property (nonatomic, strong) COLContinuousParameter    *tune;
+@property (nonatomic, strong) COLContinuousParameter    *fmAmt;
 
 @end
 
@@ -48,16 +50,15 @@
     [self setOutputs:@[self.out]];
     
     // Parameters
-    self.octave = [[COLComponentParameter alloc] initWithComponent:self withName:@"Octave"];
-    [self.octave setNormalizedValue:0.5];
-    self.waveform = [[COLComponentParameter alloc] initWithComponent:self withName:@"Waveform"];
-    [self.waveform setNormalizedValue:0.5];
-    self.tune = [[COLComponentParameter alloc] initWithComponent:self withName:@"Tune"];
+    self.range = [[COLDiscreteParameter alloc] initWithComponent:self withName:@"Range" max:4];
+    [self.range setSelectedIndex:0];
+    self.waveform = [[COLDiscreteParameter alloc] initWithComponent:self withName:@"Waveform" max:5];
+    [self.waveform setSelectedIndex:0];
+    self.tune = [[COLContinuousParameter alloc] initWithComponent:self withName:@"Tune"];
     [self.tune setNormalizedValue:0.5];
-    self.fmAmt = [[COLComponentParameter alloc] initWithComponent:self withName:@"FM Amt"];
+    self.fmAmt = [[COLContinuousParameter alloc] initWithComponent:self withName:@"FM Amt"];
     [self.fmAmt setNormalizedValue:0.5];
-    [self setParameters:@[self.octave, self.waveform, self.tune, self.fmAmt]];
-
+    [self setParameters:@[self.range, self.waveform, self.tune, self.fmAmt]];
 }
 
 -(void)renderOutputs:(UInt32)numFrames {

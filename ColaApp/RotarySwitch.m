@@ -1,34 +1,34 @@
 //
-//  RotaryEncoder.m
+//  RotarySwitch.m
 //  ColaApp
 //
-//  Created by Chris on 23/03/2015.
+//  Created by Chris on 01/04/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-
-#import "RotaryEncoder.h"
+#import <ColaLib/ColaLib.h>
+#import "RotarySwitch.h"
 
 #import "defines.h"
 #import "ModuleDescription.h"
 
-@interface RotaryEncoder ()
+@interface RotarySwitch ()
 
-@property (nonatomic, weak) COLContinuousParameter   *parameter;
+@property (nonatomic, weak) COLDiscreteParameter   *parameter;
 @property (nonatomic, strong) CALayer               *needleLayer;
 
 @end
 
-@implementation RotaryEncoder {
+@implementation RotarySwitch {
     BOOL        tracking;
     CGFloat     trackingY;
-    double      trackingValue;
+    NSUInteger  trackingValue;
+    double      needleOffset;
 }
 
--(instancetype)initWithContinuousParameter:(COLContinuousParameter*)parameter Description:(ControlDescription*)controlDescription {
-    
+-(instancetype)initWithDiscreteParameter:(COLDiscreteParameter*)parameter Description:(ControlDescription*)controlDescription {
     if (self = [super init]) {
         self.parameter = parameter;
-        self.value = 0;
+        self.selectedIndex = 0;
         
         if (controlDescription.asset) {
             NSString *encoderAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:[@"encoder_" stringByAppendingString:controlDescription.asset]];
@@ -36,7 +36,7 @@
             if (encoderImage) {
                 [self.layer setContents:(id)encoderImage.CGImage];
             }
-
+            
             NSString *needleAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:[@"encoder_needle_" stringByAppendingString:controlDescription.asset]];
             UIImage *needleImage = [UIImage imageNamed:needleAsset];
             if (needleImage) {
@@ -55,17 +55,31 @@
 }
 
 -(void)updateFromParameter {
-    [self setValue:[self.parameter getNormalizedValue]];
+    [self setSelectedIndex:floor([self.parameter selectedIndex])];
+    [self updateNeedleAnimated:NO];
 }
 
 
 -(void)updateNeedleAnimated:(BOOL)animated {
-    double theta = ((M_PI * 2.0) * self.value * (5.0 / 6.0)) + (M_PI * (2.0 / 3.0));
+    double offset = (M_PI / 2.0) + (((self.parameter.maxIndex - 1) / 12.0) * M_PI);
+    double theta = ((M_PI * 2.0) * (self.selectedIndex / 12.0));
     
     BOOL disableActions = [CATransaction disableActions];
     [CATransaction setDisableActions:!animated];
-    [self.needleLayer setAffineTransform:CGAffineTransformRotate(CGAffineTransformIdentity, theta)];
+    [self.needleLayer setAffineTransform:CGAffineTransformRotate(CGAffineTransformIdentity, theta - offset)];
     [CATransaction setDisableActions:disableActions];
+}
+
+@synthesize selectedIndex = _selectedIndex;
+
+-(NSUInteger)selectedIndex {
+    return _selectedIndex;
+}
+
+-(void)setSelectedIndex:(NSUInteger)value {
+    if (value < self.parameter.maxIndex) {
+        _selectedIndex = value;
+    }
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -73,35 +87,25 @@
     
     UITouch *touch = [touches anyObject];
     trackingY = [touch locationInView:self].y;
-    trackingValue = self.value;
+    trackingValue = self.selectedIndex;
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     if (tracking) {
         UITouch *touch = [touches anyObject];
         CGFloat translation = trackingY - [touch locationInView:self].y;
-        CGFloat delta = translation / 200.0;
-        self.value = trackingValue + delta;
-        
-        self.value = MIN(1.0, self.value);
-        self.value = MAX(0.0, self.value);
-        
-        [self setNeedsDisplay];
-        
-        [self.parameter setNormalizedValue:self.value];
-        
+        NSInteger delta = floor(translation / 40.0);
+        if (delta > 1) {
+            delta = 1;
+        } else if (delta < -1) {
+            delta = -1;
+        }
+        if (self.selectedIndex != trackingValue + delta) {
+            self.selectedIndex = trackingValue + delta;
+            [self.parameter setSelectedIndex:self.selectedIndex];
+            [self updateNeedleAnimated:YES];
+        }
     }
-}
-
-@synthesize value = _value;
-
--(double)value {
-    return _value;
-}
-
--(void)setValue:(double)value {
-    _value = value;
-    [self updateNeedleAnimated:NO];
 }
 
 @end

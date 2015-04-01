@@ -11,7 +11,7 @@
 #import "ModuleView.h"
 #import "ModuleDescription.h"
 #import "ConnectorView.h"
-#import "RotaryEncoder.h"
+#import "ModuleControl.h"
 
 #define BACKGROUND_COLOUR [UIColor colorWithRed:64/255.0 green:64/255.0 blue:64/255.0 alpha:1]
 
@@ -39,8 +39,8 @@
             [self addConnectors:moduleDescription.connectors];
         }
         
-        if (moduleDescription.encoders) {
-            [self addEncoders:moduleDescription.encoders];
+        if (moduleDescription.controls) {
+            [self addControls:moduleDescription.controls];
         }
         
         UIImage *assetImage = nil;
@@ -77,15 +77,15 @@
     }
 }
 
--(void)addEncoders:(NSArray*)encoders {
+-(void)addControls:(NSArray*)controls {
   
-    for (EncoderDescription *thisEncoder in encoders) {
-        RotaryEncoder *rotaryEncoder = [[RotaryEncoder alloc] initWithDescription:thisEncoder forComponent:self.component];
-        if (rotaryEncoder) {
-            [rotaryEncoder setCenter:thisEncoder.location];
-            [self addSubview:rotaryEncoder];
-        } else {
-            NSLog(@"Warning: Parametner '%@' not found on component of type %@", thisEncoder.parameterName, [self.component class]);
+    for (ControlDescription *thisControl in controls) {
+        // Find the parameter
+        COLParameter *parameter = [self.component parameterNamed:thisControl.parameterName];
+        ModuleControl *newControl = [ModuleControl controlForParameter:parameter Description:thisControl];
+        if (newControl) {
+            [newControl setCenter:thisControl.location];
+            [self addSubview:newControl];
         }
     }
 }

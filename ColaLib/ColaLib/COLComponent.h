@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "COLComponentInput.h"
 #import "COLComponentOutput.h"
-#import "COLComponentParameter.h"
+#import "COLParameter.h"
 
 @class COLAudioEnvironment;
 @class COLAudioContext;
@@ -30,8 +30,8 @@
 -(COLComponentInput *)inputForIndex:(NSUInteger)index;
 -(COLComponentOutput *)inputNamed:(NSString*)name;
 
--(COLComponentParameter*)parameterForIndex:(NSUInteger)index;
--(COLComponentParameter *)parameterNamed:(NSString*)name;
+-(COLParameter*)parameterForIndex:(NSUInteger)index;
+-(COLParameter*)parameterNamed:(NSString*)name;
 
 -(instancetype)initWithContext:(COLAudioContext*)context;
 -(void)initializeIO;
@@ -43,7 +43,7 @@
 -(void)setParameters:(NSArray*)parameters;
 -(void)disconnectAll;
 
--(void)parameterDidChange:(COLComponentParameter*)parameter;
+-(void)parameterDidChange:(COLParameter*)parameter;
 
 void renderNumberOfFrames(COLComponent *component, UInt32 numFrames);
 

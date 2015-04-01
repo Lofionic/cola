@@ -7,9 +7,9 @@
 //
 #import <Foundation/Foundation.h>
 #import "COLComponent.h"
-#import "COLComponentParameter.h"
+#import "COLContinuousParameter.h"
 
-@interface COLComponentParameter() {
+@interface COLContinuousParameter() {
     float normalizedValue;
     
     float preValue;
@@ -22,13 +22,10 @@
 
 @end
 
-@implementation COLComponentParameter
+@implementation COLContinuousParameter
 
 -(instancetype)initWithComponent:(COLComponent*)component withName:(NSString*)name {
-    if (self = [super init]) {
-        self.component = component;
-        self.name = name;
-        
+    if (self = [super initWithComponent:component withName:name]) {
         preValue = 0;
         postValue = 0;
         pendingValue = 0;
@@ -41,6 +38,10 @@
         pendingValue = newValue;
         [self.component parameterDidChange:self];
     }
+}
+
+-(float)getNormalizedValue {
+    return pendingValue;
 }
 
 -(void)engineDidRender {
@@ -61,10 +62,6 @@
         cacheOut = f;
         return f;
     }
-}
-
--(float)getNormalizedValue {
-    return pendingValue;
 }
 
 @end

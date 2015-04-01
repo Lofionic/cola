@@ -17,7 +17,7 @@
 @property (readonly) NSUInteger         width;
 
 @property (readonly, strong) NSArray    *connectors;
-@property (readonly, strong) NSArray    *encoders;
+@property (readonly, strong) NSArray    *controls;
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
@@ -33,7 +33,7 @@
 
 @end
 
-@interface EncoderDescription : NSObject
+@interface ControlDescription : NSObject
 
 @property (readonly, strong) NSString   *type;
 @property (readonly, strong) NSString   *parameterName;

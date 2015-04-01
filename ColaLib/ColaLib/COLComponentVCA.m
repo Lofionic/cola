@@ -5,7 +5,7 @@
 //  Created by Chris on 29/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-
+#import "COLContinuousParameter.h"
 #import "COLComponentVCA.h"
 
 @interface COLComponentVCA ()
@@ -15,8 +15,8 @@
 
 @property (nonatomic, strong) COLComponentOutput *output;
 
-@property (nonatomic, strong) COLComponentParameter *level;
-@property (nonatomic, strong) COLComponentParameter *CVAmt;
+@property (nonatomic, strong) COLContinuousParameter *level;
+@property (nonatomic, strong) COLContinuousParameter *CVAmt;
 
 @end
 
@@ -32,10 +32,10 @@
     self.output = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeAudio withName:@"Out"];
     [self setOutputs:@[self.output]];
     
-    self.level = [[COLComponentParameter alloc] initWithComponent:self withName:@"Level"];
+    self.level = [[COLContinuousParameter alloc] initWithComponent:self withName:@"Level"];
     [self.level setNormalizedValue:0];
     
-    self.CVAmt = [[COLComponentParameter alloc] initWithComponent:self withName:@"CV Amt"];
+    self.CVAmt = [[COLContinuousParameter alloc] initWithComponent:self withName:@"CV Amt"];
     [self.CVAmt setNormalizedValue:0];
     
     [self setParameters:@[self.level, self.CVAmt]];

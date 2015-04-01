@@ -7,6 +7,7 @@
 //
 #import "COLComponentEnvelope.h"
 #import "COLAudioEnvironment.h"
+#import "COLContinuousParameter.h"
 
 #define MEDIAN_WINDOW_SIZE 50
 
@@ -27,10 +28,10 @@
 @property (nonatomic, strong) COLComponentInput *gate;
 @property (nonatomic, strong) COLComponentOutput *output;
 
-@property (nonatomic, strong) COLComponentParameter *attackTime;
-@property (nonatomic, strong) COLComponentParameter *decayTime;
-@property (nonatomic, strong) COLComponentParameter *sustainLevel;
-@property (nonatomic, strong) COLComponentParameter *releaseTime;
+@property (nonatomic, strong) COLContinuousParameter *attackTime;
+@property (nonatomic, strong) COLContinuousParameter *decayTime;
+@property (nonatomic, strong) COLContinuousParameter *sustainLevel;
+@property (nonatomic, strong) COLContinuousParameter *releaseTime;
 
 @end
 
@@ -58,16 +59,16 @@
     self.output = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"Out"];
     [self setOutputs:@[self.output]];
     
-    self.attackTime = [[COLComponentParameter alloc] initWithComponent:self withName:@"Attack"];
+    self.attackTime = [[COLContinuousParameter alloc] initWithComponent:self withName:@"Attack"];
     [self.attackTime setNormalizedValue:0];
     
-    self.decayTime = [[COLComponentParameter alloc] initWithComponent:self withName:@"Decay"];
+    self.decayTime = [[COLContinuousParameter alloc] initWithComponent:self withName:@"Decay"];
     [self.decayTime setNormalizedValue:1];
     
-    self.sustainLevel = [[COLComponentParameter alloc] initWithComponent:self withName:@"Sustain"];
+    self.sustainLevel = [[COLContinuousParameter alloc] initWithComponent:self withName:@"Sustain"];
     [self.sustainLevel setNormalizedValue:1];
     
-    self.releaseTime = [[COLComponentParameter alloc] initWithComponent:self withName:@"Release"];
+    self.releaseTime = [[COLContinuousParameter alloc] initWithComponent:self withName:@"Release"];
     [self.releaseTime setNormalizedValue:0];
     
     [self setParameters:@[self.attackTime, self.decayTime, self.sustainLevel, self.releaseTime]];

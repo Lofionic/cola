@@ -95,7 +95,7 @@
     return [self.parameters count];
 }
 
--(COLComponentParameter*)parameterForIndex:(NSUInteger)index {
+-(COLParameter*)parameterForIndex:(NSUInteger)index {
     if (index < [self.parameters count]) {
         return [self.parameters objectAtIndex:index];
     } else {
@@ -104,12 +104,12 @@
     }
 }
 
--(COLComponentParameter *)parameterNamed:(NSString*)name {
+-(COLParameter *)parameterNamed:(NSString*)name {
     
-    __block COLComponentParameter *result = nil;
+    __block COLParameter *result = nil;
     
     [self.parameters enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
-        COLComponentParameter *thisParameter = (COLComponentParameter*)obj;
+        COLParameter *thisParameter = (COLParameter*)obj;
         if ([thisParameter.name isEqualToString:name]) {
             result = thisParameter;
             *stop = YES;
@@ -130,7 +130,7 @@
         [thisInput engineDidRender];
     }
     
-    for (COLComponentParameter *thisParameter in self.parameters) {
+    for (COLParameter *thisParameter in self.parameters) {
         [thisParameter engineDidRender];
     }
 }
@@ -145,7 +145,7 @@
     }
 }
 
--(void)parameterDidChange:(COLComponentParameter *)parameter {
+-(void)parameterDidChange:(COLParameter *)parameter {
     
 }
 

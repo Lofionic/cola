@@ -5,6 +5,8 @@
 //  Created by Chris on 13/02/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
+#import "COLContinuousParameter.h"
+#import "COLDiscreteParameter.h"
 #import "COLComponentLFO.h"
 #import "COLAudioEnvironment.h"
 
@@ -15,8 +17,8 @@
 @property (nonatomic, strong) COLComponentOutput *mainOut;
 @property (nonatomic, strong) COLComponentInput *freqIn;
 
-@property (nonatomic, strong) COLComponentParameter *rate;
-@property (nonatomic, strong) COLComponentParameter *waveform;
+@property (nonatomic, strong) COLContinuousParameter *rate;
+@property (nonatomic, strong) COLDiscreteParameter *waveform;
 
 @end
 
@@ -30,10 +32,10 @@
     self.freqIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"FreqIn"];
     [self setInputs:@[self.freqIn]];
     
-    self.rate = [[COLComponentParameter alloc] initWithComponent:self withName:@"Rate"];
+    self.rate = [[COLContinuousParameter alloc] initWithComponent:self withName:@"Rate"];
     [self.rate setNormalizedValue:0.5];
     
-    self.waveform = [[COLComponentParameter alloc] initWithComponent:self withName:@"Wave"];
+    self.waveform = [[COLDiscreteParameter alloc] initWithComponent:self withName:@"Wave" max:5];
     [self setParameters:@[self.rate, self.waveform]];
 
 }

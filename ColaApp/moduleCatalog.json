@@ -27,11 +27,11 @@
                     "y" : 280
                 }
                 ],
-                "encoders" : [
+                "controls" : [
                     {
                         "asset" : "large_white",
                         "type" : "continuous",
-                        "parameter" : "Octave",
+                        "parameter" : "Range",
                         "x" : 48,
                         "y" : 80
                     },
@@ -73,7 +73,7 @@
                         "y" : 280
                     }
                     ],
-                    "encoders" : [
+                    "controls" : [
                     {
                         "type" : "continuous",
                         "parameter" : "Rate",
@@ -111,7 +111,7 @@
                         "y" : 280
                     }
                 ],
-                "encoders" : [
+                "controls" : [
                      {
                         "type" : "continuous",
                         "parameter" : "Attack",
@@ -169,7 +169,7 @@
                         "y" : 192
                     }
                 ],
-                "encoders" : [
+                "controls" : [
                      {
                         "type" : "continuous",
                         "parameter" : "Level",

@@ -8,6 +8,7 @@
 #import "COLDefines.h"
 #import "COLComponentWavePlayer.h"
 #import "COLAudioEnvironment.h"
+#import "COLContinuousParameter.h"
 #import <AudioToolbox/AudioToolbox.h>
 
 @interface COLComponentWavePlayer() {
@@ -26,7 +27,7 @@
 @property (nonatomic, strong) COLComponentInput *freqMod;
 @property (nonatomic, strong) COLComponentInput *ampIn;
 
-@property (nonatomic, strong) COLComponentParameter *speed;
+@property (nonatomic, strong) COLContinuousParameter *speed;
 
 @end
 
@@ -52,7 +53,7 @@
     self.ampIn = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"AmpIn"];
     [self setInputs:@[self.freqMod, self.ampIn]];
     
-    self.speed = [[COLComponentParameter alloc] initWithComponent:self withName:@"Speed"];
+    self.speed = [[COLContinuousParameter alloc] initWithComponent:self withName:@"Speed"];
     [self.speed setFunction:^float (float normalizedValue) {
         normalizedValue = 1 + (powf(normalizedValue - 0.5, 3) * 8);
         if (normalizedValue < 0.5) {

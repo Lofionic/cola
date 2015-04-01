@@ -18,4 +18,4 @@ extern NSArray *moduleCatalog;
 #define ASSETS_PATH             @"ImageAssets/"
 #define ASSETS_PATH_COMPONENTS  [ASSETS_PATH stringByAppendingString:@"components/"]
 #define ASSETS_PATH_CONNECTORS  [ASSETS_PATH stringByAppendingString:@"connectors/"]
-#define ASSETS_PATH_ENCODERS    [ASSETS_PATH stringByAppendingString:@"encoders/"]
+#define ASSETS_PATH_CONTROLS    [ASSETS_PATH stringByAppendingString:@"encoders/"]

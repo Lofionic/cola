@@ -17,7 +17,7 @@
 @property (nonatomic) NSUInteger width;
 
 @property (nonatomic, strong) NSArray *connectors;
-@property (nonatomic, strong) NSArray *encoders;
+@property (nonatomic, strong) NSArray *controls;
 
 @end
 
@@ -54,14 +54,14 @@
                 self.connectors = [NSArray arrayWithArray:connectorDescriptions];
             }
             
-            if ([viewInfo objectForKey:@"encoders"]) {
-                NSArray *encoders = [viewInfo objectForKey:@"encoders"];
-                NSMutableArray *encoderDescriptions = [[NSMutableArray alloc] initWithCapacity:[encoders count]];
-                for (NSDictionary *thisEncoder in encoders) {
-                    EncoderDescription *encoderDescription = [[EncoderDescription alloc] initWithDictionary:thisEncoder];
-                    [encoderDescriptions addObject:encoderDescription];
+            if ([viewInfo objectForKey:@"controls"]) {
+                NSArray *controls = [viewInfo objectForKey:@"controls"];
+                NSMutableArray *controlDescriptions = [[NSMutableArray alloc] initWithCapacity:[controls count]];
+                for (NSDictionary *thisControl in controls) {
+                    ControlDescription *controlDescription = [[ControlDescription alloc] initWithDictionary:thisControl];
+                    [controlDescriptions addObject:controlDescription];
                 }
-                self.encoders = [NSArray arrayWithArray:encoderDescriptions];
+                self.controls = [NSArray arrayWithArray:controlDescriptions];
             }
         }
     }
@@ -102,7 +102,7 @@
 
 @end
 
-@interface EncoderDescription ()
+@interface ControlDescription ()
 
 @property (nonatomic, strong) NSString   *type;
 @property (nonatomic, strong) NSString   *parameterName;
@@ -111,7 +111,7 @@
 
 @end
 
-@implementation EncoderDescription
+@implementation ControlDescription
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary {
     if (self = [super init]) {
