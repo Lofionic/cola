@@ -31,7 +31,6 @@
         return nil;
     }
     
-    
     if (self = [super initWithFrame:frame]) {
         self.component = component;
         
@@ -54,6 +53,16 @@
         } else {
             [self setBackgroundColor:BACKGROUND_COLOUR];
         }
+    }
+    return self;
+}
+
+
+-(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription {
+    
+    CGRect frame = CGRectMake(0, 0, moduleDescription.width * kBuildViewColumnWidth, 1 * kBuildViewRowHeight);
+    if (self = [self initWithModuleDescription:moduleDescription inFrame:frame]) {
+        
     }
     return self;
 }
@@ -88,6 +97,23 @@
             NSLog(@"Warning: Parametner '%@' not found on component of type %@", thisEncoder.parameterName, [self.component class]);
         }
     }
+}
+
+-(UIImage*)snapshot {
+    
+    CGSize imageSize = self.frame.size;
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, [[UIScreen mainScreen] scale]);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSaveGState(context);
+    [self.layer renderInContext:context];
+    CGContextRestoreGState(context);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return image;
 }
 
 @end

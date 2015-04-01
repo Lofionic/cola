@@ -15,7 +15,6 @@
 -(void)componentShelf:(ComponentShelfView*)componentTray didBeginDraggingModule:(ModuleDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
 -(void)componentShelf:(ComponentShelfView*)componentTray didContinueDraggingModule:(ModuleDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
 -(void)componentShelf:(ComponentShelfView*)componentTray didEndDraggingModule:(ModuleDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
-
 @end
 
 @interface ComponentShelfView : UIView <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>

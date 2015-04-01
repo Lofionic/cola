@@ -41,17 +41,6 @@
     
     ComponentShelfCollectionViewCell *cell = (ComponentShelfCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     
-    NSArray *colours = @[
-                         [UIColor redColor],
-                         [UIColor orangeColor],
-                         [UIColor yellowColor],
-                         [UIColor greenColor],
-                         [UIColor grayColor],
-                         [UIColor purpleColor]
-                         ];
-    
-    [cell.thumbnailImageView setBackgroundColor:[colours objectAtIndex:indexPath.row]];
-    
     [cell setModuleDescription:[moduleCatalog objectAtIndex:indexPath.row]];
     [cell setComponentShelf:self];
     
@@ -68,7 +57,7 @@
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(100, 100);
+    return CGSizeMake(kComponentShelfHeight * 0.6, kComponentShelfHeight);
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {

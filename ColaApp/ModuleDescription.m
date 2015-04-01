@@ -7,6 +7,7 @@
 //
 
 #import "ModuleDescription.h"
+#import "ModuleView.h"
 
 @interface ModuleDescription ()
 
@@ -18,6 +19,8 @@
 
 @property (nonatomic, strong) NSArray *connectors;
 @property (nonatomic, strong) NSArray *encoders;
+
+@property (nonatomic, strong) UIImage *thumbnail;
 
 @end
 
@@ -64,6 +67,10 @@
                 self.encoders = [NSArray arrayWithArray:encoderDescriptions];
             }
         }
+        
+        // Create the thumbnail
+        ModuleView *thumbnailView = [[ModuleView alloc] initWithModuleDescription:self];
+        self.thumbnail = [thumbnailView snapshot];
     }
     
     return self;

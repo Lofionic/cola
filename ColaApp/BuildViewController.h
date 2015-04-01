@@ -12,7 +12,6 @@
 
 @interface BuildViewController : UIViewController <ComponentShelfDelegate>
 
-
 +(BuildView*)buildView;
 
 @end

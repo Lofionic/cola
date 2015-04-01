@@ -8,10 +8,10 @@
 #import <UIKit/UIKit.h>
 
 extern CGFloat kComponentShelfHeight;
-extern CGFloat kToolbarHeight;
 extern CGFloat kBuildViewWidth;
 extern CGFloat kBuildViewRowHeight;
 extern CGFloat kBuildViewColumnWidth;
+extern CGFloat kKeyboardHeight;
 
 extern NSArray *moduleCatalog;
 
@@ -19,3 +19,7 @@ extern NSArray *moduleCatalog;
 #define ASSETS_PATH_COMPONENTS  [ASSETS_PATH stringByAppendingString:@"components/"]
 #define ASSETS_PATH_CONNECTORS  [ASSETS_PATH stringByAppendingString:@"connectors/"]
 #define ASSETS_PATH_ENCODERS    [ASSETS_PATH stringByAppendingString:@"encoders/"]
+
+#define TOOLBAR_BUILD_ICON_SELECTED         @"Icons/742-wrench-toolbar-selected"
+#define TOOLBAR_BUILD_ICON                  @"Icons/742-wrench-toolbar"
+#define TOOLBAR_KEYBOARD_ICON_SELECTED      @"Icons/967-piano-toolbar-selected"

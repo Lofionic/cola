@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import "ComponentShelfCollectionViewCell.h"
-
 #import "ComponentShelfView.h"
+#import "ModuleDescription.h"
 
 @implementation ComponentShelfCollectionViewCell
 
@@ -19,6 +19,7 @@
         
         self.thumbnailImageView = [[UIImageView alloc] init];
         [self.thumbnailImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.thumbnailImageView setContentMode:UIViewContentModeScaleAspectFit];
         [self addSubview:self.thumbnailImageView];
         
         [self addConstraint:[NSLayoutConstraint constraintWithItem:self.thumbnailImageView
@@ -43,15 +44,15 @@
                                                                                toItem:self
                                                                             attribute:NSLayoutAttributeHeight
                                                                            multiplier:0.8
-                                                                             constant:1]];
+                                                                             constant:0]];
         
         [self addConstraint:[NSLayoutConstraint constraintWithItem:self.thumbnailImageView
                                                                             attribute:NSLayoutAttributeWidth
                                                                             relatedBy:NSLayoutRelationEqual
                                                                                toItem:self.thumbnailImageView
                                                                             attribute:NSLayoutAttributeHeight
-                                                                           multiplier:2 / 3.0
-                                                                             constant:1]];
+                                                                           multiplier:1
+                                                                             constant:0]];
         
         UIGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
         [self addGestureRecognizer:panGesture];
@@ -60,13 +61,22 @@
     return self;
 }
 
+@synthesize moduleDescription = _moduleDescription;
+
+-(void)setModuleDescription:(ModuleDescription *)moduleDescription {
+    _moduleDescription = moduleDescription;
+    [self.thumbnailImageView setImage:_moduleDescription.thumbnail];
+}
+
+-(ModuleDescription*)moduleDescription {
+    return _moduleDescription;
+}
+
 -(void)handlePanGesture:(UIGestureRecognizer*)uigr {
     
     UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)uigr;
     
     if (panGesture.state == UIGestureRecognizerStateBegan) {
-        [self.thumbnailImageView setHidden:YES];
-        
         if ([[self.componentShelf delegate] respondsToSelector:@selector(componentShelf:didBeginDraggingModule:withGesture:)]) {
             [[self.componentShelf delegate] componentShelf:self.componentShelf didBeginDraggingModule:self.moduleDescription withGesture:panGesture];
         }
@@ -75,8 +85,6 @@
             [[self.componentShelf delegate] componentShelf:self.componentShelf didContinueDraggingModule:self.moduleDescription withGesture:panGesture];
         }
     } else if (uigr.state == UIGestureRecognizerStateEnded) {
-        [self.thumbnailImageView setHidden:NO];
-        
         if ([[self.componentShelf delegate] respondsToSelector:@selector(componentShelf:didEndDraggingModule:withGesture:)]) {
             [[self.componentShelf delegate] componentShelf:self.componentShelf didEndDraggingModule:self.moduleDescription withGesture:panGesture];
         }
