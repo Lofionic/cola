@@ -9,6 +9,7 @@
 #import "ModuleDescription.h"
 #import "BuildViewController.h"
 #import "KeyboardView.h"
+#import "BuildView.h"
 #import "ModuleView.h"
 
 static BuildView *buildView = nil;
@@ -45,6 +46,7 @@ static BuildView *buildView = nil;
     [self.buildView setContentInset:UIEdgeInsetsMake(0, 0, kKeyboardHeight, 0)];
     [self.buildView setScrollIndicatorInsets:UIEdgeInsetsMake(0, 0, kKeyboardHeight, 0)];
     [self.buildView setClipsToBounds:NO];
+    [self.buildView setBuildViewController:self];
     [self.view addSubview:self.buildView];
     
     buildView = self.buildView;
@@ -175,9 +177,9 @@ static BuildView *buildView = nil;
 
 #pragma mark ComponentShelf
 
--(void)componentShelf:(ComponentShelfView *)componentTray didBeginDraggingModule:(ModuleDescription*)module withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentShelf:(ComponentShelfView *)componentTray didBeginDraggingModule:(ModuleDescription*)module withGesture:(UIGestureRecognizer *)gesture {
     
-    CGPoint dragPoint = [panGesture locationInView:self.view];
+    CGPoint dragPoint = [gesture locationInView:self.view];
 
     self.dragView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, module.thumbnail.size.width, module.thumbnail.size.height)];
     [self.dragView setCenter:dragPoint];
@@ -188,26 +190,27 @@ static BuildView *buildView = nil;
     [self.view addSubview:self.dragView];
 }
 
--(void)componentShelf:(ComponentShelfView *)componentTray didContinueDraggingModule:(ModuleDescription*)module withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentShelf:(ComponentShelfView *)componentTray didContinueDraggingModule:(ModuleDescription*)module withGesture:(UIGestureRecognizer *)gesture {
     
-    CGPoint dragPoint = [panGesture locationInView:self.view];
+    CGPoint dragPoint = [gesture locationInView:self.view];
     [self.dragView setCenter:dragPoint];
     
-    NSSet *hoverSet = [self.buildView cellPathsForModuleOfWidth:module.width center:[panGesture locationInView:self.buildView]];
+    BOOL occupied;
+    NSSet *hoverSet = [self.buildView cellPathsForModuleOfWidth:module.width center:[gesture locationInView:self.buildView] occupied:&occupied];
     
-    if (hoverSet && [self.view hitTest:dragPoint withEvent:nil] == self.buildView) {
+    if (hoverSet && !occupied && [self.view hitTest:dragPoint withEvent:nil] == self.buildView) {
         [self.buildView setHighlightedCellSet:hoverSet];
     } else {
         [self.buildView setHighlightedCellSet:nil];
     }
 }
 
--(void)componentShelf:(ComponentShelfView *)componentTray didEndDraggingModule:(ModuleDescription*)module withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentShelf:(ComponentShelfView *)componentTray didEndDraggingModule:(ModuleDescription*)module withGesture:(UIGestureRecognizer *)gesture {
     [self.dragView removeFromSuperview];
     [self.buildView setHighlightedCellSet:nil];
     
-    if (panGesture.state != UIGestureRecognizerStateCancelled ){
-        CGPoint pointInWindow = [panGesture locationInView:self.view];
+    if (gesture.state != UIGestureRecognizerStateCancelled ){
+        CGPoint pointInWindow = [gesture locationInView:self.view];
         // Don't drop if drag is likely to have gone off-screen
         if (pointInWindow.x > 8 &&
             pointInWindow.x < self.view.frame.size.width - 8 &&
@@ -215,11 +218,13 @@ static BuildView *buildView = nil;
             pointInWindow.y < self.view.frame.size.height - 8) {
             if ([self.view hitTest:pointInWindow withEvent:nil] == self.buildView) {
                 // Add a component
-                [self.buildView addViewForModule:module atPoint:[panGesture locationInView:self.buildView]];
+                [self.buildView addViewForModule:module atPoint:[gesture locationInView:self.buildView]];
             }
         }
     }
 }
+
+#pragma Convenience Methods
 
 +(BuildView*)buildView {
     return buildView;

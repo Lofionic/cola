@@ -17,11 +17,14 @@
     
     if (self) {
         self.flowLayout = [[UICollectionViewFlowLayout alloc] init];
+        [self.flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+        
         self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.flowLayout];
         [self.collectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.collectionView setDelegate:self];
         [self.collectionView setDataSource:self];
         [self.collectionView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.7]];
+        [self.collectionView setCanCancelContentTouches:YES];
         
         [self.collectionView registerClass:[ComponentShelfCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
         [self addSubview:self.collectionView];
@@ -57,7 +60,7 @@
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(kComponentShelfHeight * 0.6, kComponentShelfHeight);
+    return CGSizeMake(120, kComponentShelfHeight);
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {

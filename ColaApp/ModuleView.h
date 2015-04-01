@@ -6,15 +6,25 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import <ColaLib/ColaLib.h>
-#import "ComponentShelfView.h"
 #import <UIKit/UIKit.h>
 
-@class ModuleDescription;
+@class ModuleView;
 
+@protocol ModuleViewDelegate <NSObject>
+
+-(void)moduleView:(ModuleView*)moduleView didBeginDraggingWithGesture:(UIGestureRecognizer*)gesture;
+-(void)moduleView:(ModuleView*)moduleView didContinueDraggingWithGesture:(UIGestureRecognizer*)gesture;
+-(void)moduleView:(ModuleView*)moduleView didEndDraggingWithGesture:(UIGestureRecognizer*)gesture;
+
+@end
+
+
+@class ModuleDescription;
 @interface ModuleView : UIView
 
-@property (weak) id<ComponentShelfDelegate> componentShelfDelegate;
-@property (readonly, weak) COLComponent *component;
+@property (nonatomic, weak) id<ModuleViewDelegate>  delegate;
+@property (readonly, weak) COLComponent             *component;
+@property (readonly, strong) ModuleDescription      *moduleDescription;
 
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame;
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription;

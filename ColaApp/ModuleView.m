@@ -17,8 +17,9 @@
 
 @interface ModuleView ()
 
-@property (nonatomic, weak) COLComponent    *component;
-@property (nonatomic, strong) NSString      *asset;
+@property (nonatomic, weak) COLComponent        *component;
+@property (nonatomic, strong) NSString          *asset;
+@property (nonatomic, strong) ModuleDescription *moduleDescription;
 
 @end
 
@@ -33,6 +34,7 @@
     
     if (self = [super initWithFrame:frame]) {
         self.component = component;
+        self.moduleDescription = moduleDescription;
         
         if (moduleDescription.connectors) {
             [self addConnectors:moduleDescription.connectors];
@@ -53,6 +55,10 @@
         } else {
             [self setBackgroundColor:BACKGROUND_COLOUR];
         }
+        
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+        [longPress setMinimumPressDuration:0.5f];
+        [self addGestureRecognizer:longPress];
     }
     return self;
 }
@@ -114,6 +120,24 @@
     UIGraphicsEndImageContext();
     
     return image;
+}
+
+-(void)handleLongPress:(UIGestureRecognizer*)uigr {
+    UILongPressGestureRecognizer *longPressGesture = (UILongPressGestureRecognizer*)uigr;
+    
+    if (longPressGesture.state == UIGestureRecognizerStateBegan) {
+        if ([self.delegate respondsToSelector:@selector(moduleView:didBeginDraggingWithGesture:)]) {
+            [self.delegate moduleView:self didBeginDraggingWithGesture:uigr];
+        }
+    } else if (longPressGesture.state == UIGestureRecognizerStateChanged) {
+        if ([self.delegate respondsToSelector:@selector(moduleView:didContinueDraggingWithGesture:)]) {
+            [self.delegate moduleView:self didContinueDraggingWithGesture:uigr];
+        }
+    } else if (longPressGesture.state == UIGestureRecognizerStateEnded) {
+        if ([self.delegate respondsToSelector:@selector(moduleView:didEndDraggingWithGesture:)]) {
+            [self.delegate moduleView:self didEndDraggingWithGesture:uigr];
+        }
+    }
 }
 
 @end

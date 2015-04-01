@@ -12,9 +12,9 @@
 @protocol ComponentShelfDelegate <NSObject>
 
 @optional
--(void)componentShelf:(ComponentShelfView*)componentTray didBeginDraggingModule:(ModuleDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
--(void)componentShelf:(ComponentShelfView*)componentTray didContinueDraggingModule:(ModuleDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
--(void)componentShelf:(ComponentShelfView*)componentTray didEndDraggingModule:(ModuleDescription*)component withGesture:(UIPanGestureRecognizer*)panGesture;
+-(void)componentShelf:(ComponentShelfView*)componentTray didBeginDraggingModule:(ModuleDescription*)component withGesture:(UIGestureRecognizer*)gesture;
+-(void)componentShelf:(ComponentShelfView*)componentTray didContinueDraggingModule:(ModuleDescription*)component withGesture:(UIGestureRecognizer*)gesture;
+-(void)componentShelf:(ComponentShelfView*)componentTray didEndDraggingModule:(ModuleDescription*)component withGesture:(UIGestureRecognizer*)gesture;
 @end
 
 @interface ComponentShelfView : UIView <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>

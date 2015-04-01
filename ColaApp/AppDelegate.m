@@ -8,6 +8,7 @@
 #import "defines.h"
 #import "AppDelegate.h"
 #import "BuildViewController.h"
+#import "ModuleDescription.h"
 
 @interface AppDelegate ()
 

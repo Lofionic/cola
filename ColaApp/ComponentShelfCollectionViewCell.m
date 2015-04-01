@@ -9,6 +9,13 @@
 #import "ComponentShelfView.h"
 #import "ModuleDescription.h"
 
+@interface ComponentShelfCollectionViewCell ()
+
+@property (nonatomic, strong) UIImageView *thumbnailImageView;
+@property (nonatomic, strong) UILabel *titleLabel;
+
+@end
+
 @implementation ComponentShelfCollectionViewCell
 
 -(instancetype)initWithFrame:(CGRect)frame {
@@ -16,47 +23,31 @@
     self = [super initWithFrame:frame];
     
     if (self) {
-        
         self.thumbnailImageView = [[UIImageView alloc] init];
         [self.thumbnailImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.thumbnailImageView setContentMode:UIViewContentModeScaleAspectFit];
         [self addSubview:self.thumbnailImageView];
+
+        self.titleLabel = [[UILabel alloc] init];
+        [self.titleLabel setText:@"TITLE"];
+        [self.titleLabel setFont:[UIFont fontWithName:@"DINAlternate-Bold" size:12]];
+        [self.titleLabel setTextAlignment:NSTextAlignmentCenter];
+        [self.titleLabel setTextColor:[UIColor whiteColor]];
+        [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self addSubview:self.titleLabel];
         
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.thumbnailImageView
-                                                         attribute:NSLayoutAttributeCenterX
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self
-                                                         attribute:NSLayoutAttributeCenterX
-                                                        multiplier:1
-                                                          constant:0]];
+        NSDictionary *viewsDictionary = @{
+                                          @"titleLabel"     :   self.titleLabel,
+                                          @"thumbnail"      :   self.thumbnailImageView
+                                          };
         
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.thumbnailImageView
-                                                         attribute:NSLayoutAttributeCenterY
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self
-                                                         attribute:NSLayoutAttributeCenterY
-                                                        multiplier:1
-                                                          constant:0]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[titleLabel]|" options:0 metrics:nil views:viewsDictionary]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[thumbnail]-|" options:0 metrics:nil views:viewsDictionary]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[thumbnail][titleLabel]-|" options:0 metrics:nil views:viewsDictionary]];
         
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.thumbnailImageView
-                                                                            attribute:NSLayoutAttributeHeight
-                                                                            relatedBy:NSLayoutRelationEqual
-                                                                               toItem:self
-                                                                            attribute:NSLayoutAttributeHeight
-                                                                           multiplier:0.8
-                                                                             constant:0]];
-        
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.thumbnailImageView
-                                                                            attribute:NSLayoutAttributeWidth
-                                                                            relatedBy:NSLayoutRelationEqual
-                                                                               toItem:self.thumbnailImageView
-                                                                            attribute:NSLayoutAttributeHeight
-                                                                           multiplier:1
-                                                                             constant:0]];
-        
-        UIGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
-        [self addGestureRecognizer:panGesture];
-        
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+        [longPress setMinimumPressDuration:0.5f];
+        [self addGestureRecognizer:longPress];
     }
     return self;
 }
@@ -66,31 +57,29 @@
 -(void)setModuleDescription:(ModuleDescription *)moduleDescription {
     _moduleDescription = moduleDescription;
     [self.thumbnailImageView setImage:_moduleDescription.thumbnail];
+    [self.titleLabel setText:_moduleDescription.name];
 }
 
 -(ModuleDescription*)moduleDescription {
     return _moduleDescription;
 }
 
--(void)handlePanGesture:(UIGestureRecognizer*)uigr {
-    
-    UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)uigr;
-    
-    if (panGesture.state == UIGestureRecognizerStateBegan) {
+-(void)handleLongPress:(UIGestureRecognizer*)uigr {
+    UILongPressGestureRecognizer *longPressGesture = (UILongPressGestureRecognizer*)uigr;
+
+    if (longPressGesture.state == UIGestureRecognizerStateBegan) {
         if ([[self.componentShelf delegate] respondsToSelector:@selector(componentShelf:didBeginDraggingModule:withGesture:)]) {
-            [[self.componentShelf delegate] componentShelf:self.componentShelf didBeginDraggingModule:self.moduleDescription withGesture:panGesture];
+            [[self.componentShelf delegate] componentShelf:self.componentShelf didBeginDraggingModule:self.moduleDescription withGesture:longPressGesture];
         }
-    } else if (panGesture.state == UIGestureRecognizerStateChanged) {
+    } else if (longPressGesture.state == UIGestureRecognizerStateChanged) {
         if ([[self.componentShelf delegate] respondsToSelector:@selector(componentShelf:didContinueDraggingModule:withGesture:)]) {
-            [[self.componentShelf delegate] componentShelf:self.componentShelf didContinueDraggingModule:self.moduleDescription withGesture:panGesture];
+            [[self.componentShelf delegate] componentShelf:self.componentShelf didContinueDraggingModule:self.moduleDescription withGesture:longPressGesture];
         }
-    } else if (uigr.state == UIGestureRecognizerStateEnded) {
+    } else if (longPressGesture.state == UIGestureRecognizerStateEnded) {
         if ([[self.componentShelf delegate] respondsToSelector:@selector(componentShelf:didEndDraggingModule:withGesture:)]) {
-            [[self.componentShelf delegate] componentShelf:self.componentShelf didEndDraggingModule:self.moduleDescription withGesture:panGesture];
+            [[self.componentShelf delegate] componentShelf:self.componentShelf didEndDraggingModule:self.moduleDescription withGesture:longPressGesture];
         }
     }
 }
-
-
 
 @end
