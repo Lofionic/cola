@@ -10,10 +10,9 @@
 
 @class ModuleDescription;
 @class ComponentShelfView;
-@interface ComponentShelfCollectionViewCell : UICollectionViewCell
+@interface ComponentShelfCollectionViewCell : UICollectionViewCell <UIGestureRecognizerDelegate>
 
 @property (nonatomic, weak) ComponentShelfView *componentShelf;
 @property (nonatomic, weak) ModuleDescription *moduleDescription;
-@property (nonatomic, strong) UIImageView *thumbnailImageView;
 
 @end

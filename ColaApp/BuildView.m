@@ -11,6 +11,8 @@
 #import "BuildViewGridLayer.h"
 #import "BuildViewHighlightLayer.h"
 #import "BuildViewCableLayer.h"
+#import "BuildViewController.h"
+#import "ModuleDescription.h"
 
 #import <ColaLib/ColaLib.h>
 
@@ -28,12 +30,15 @@
 
 @property (nonatomic, strong) NSMutableSet *occupiedCells;
 
-@property (nonatomic, strong) BuildViewGridLayer *gridLayer;
-@property (nonatomic, strong) BuildViewHighlightLayer *highlightLayer;
-@property (nonatomic, strong) BuildViewCableLayer *cableLayer;
+@property (nonatomic, strong) BuildViewGridLayer        *gridLayer;
+@property (nonatomic, strong) BuildViewHighlightLayer   *highlightLayer;
+@property (nonatomic, strong) BuildViewCableLayer       *cableLayer;
 
 @property (nonatomic, strong) NSMutableArray *cables;
 @property (nonatomic, strong) BuildViewCable *dragCable;
+
+@property (nonatomic, strong) ModuleView    *dragView;
+@property (nonatomic) CGPoint               dragOrigin;
 
 @end
 
@@ -59,7 +64,6 @@ static NSArray *cableColours;
                                       (self.rows * self.cellSize.height) + self.headerHeight
                                       );
 
-        [self setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0.0 alpha:1]];
         [self setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
         
         self.occupiedCells = [[NSMutableSet alloc] initWithCapacity:self.columns * self.rows];
@@ -145,7 +149,7 @@ static NSArray *cableColours;
     }
 }
 
--(NSSet*)cellPathsForModuleOfWidth:(NSUInteger)width center:(CGPoint)center {
+-(NSSet*)cellPathsForModuleOfWidth:(NSUInteger)width center:(CGPoint)center occupied:(BOOL*)occupied {
     NSInteger height = 1;
     CGPoint minPoint = CGPointMake(
                                    center.x - ((width - 1) * self.cellSize.width) / 2.0,
@@ -191,20 +195,19 @@ static NSArray *cableColours;
     }
     
     // Check if any cells are occupied
-    __block BOOL occupied = NO;
+    __block BOOL isOccupied = NO;
     [result enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
         BuildViewCellPath *cellPath = (BuildViewCellPath*)obj;
         if (cellOccupied[cellPath.row][cellPath.column]) {
-            occupied = YES;
+            isOccupied = YES;
             *stop = YES;
         }
     }];
     
-    if (!occupied) {
-        return [NSSet setWithSet:result];
-    } else {
-        return nil;
+    if (occupied) {
+        *occupied = isOccupied;
     }
+    return [NSSet setWithSet:result];
 }
 
 -(CGRect)rectForCellSet:(NSSet*)cellSet {
@@ -239,15 +242,16 @@ static NSArray *cableColours;
 }
 
 -(UIView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point {
-    NSSet *cellSet = [self cellPathsForModuleOfWidth:moduleDescription.width center:point];
+    BOOL occupied;
+    NSSet *cellSet = [self cellPathsForModuleOfWidth:moduleDescription.width center:point occupied:&occupied];
     
-    if (cellSet) {
+    if (cellSet && !occupied) {
         
         CGRect newFrame = [self rectForCellSet:cellSet];
         ModuleView *moduleView = [[ModuleView alloc] initWithModuleDescription:moduleDescription inFrame:newFrame];
-
+        
         if (moduleView) {
-
+            [moduleView setDelegate:self];
             [self addSubview:moduleView];
             
             // Add cells to occupied
@@ -262,19 +266,20 @@ static NSArray *cableColours;
     return nil;
 }
 
+
 -(COLComponent*)componentForModuleDescription:(ModuleDescription*)moduleDescription {
     COLComponent *result = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:moduleDescription.type];
     return result;
 }
 
-#pragma mark ConnectorView Delegate
+#pragma mark Cable Management
 
 -(void)connectorView:(ConnectorView *)connectorView didBeginDrag:(UIPanGestureRecognizer *)uigr {
     self.draggingConnector = connectorView;
     
     CGPoint point1 = [self convertPoint:connectorView.center fromView:connectorView.superview];
     CGPoint point2 = [uigr locationInView:self];
-    self.dragCable = [[BuildViewCable alloc] initWithPoint:point1 andPoint:point2];
+    self.dragCable = [[BuildViewCable alloc] initWithPoint:point1 andPoint:point2 inBuildView:self];
     
     // Remove any cables connected to this connector
     if (connectorView.cable) {
@@ -309,10 +314,13 @@ static NSArray *cableColours;
             CGPoint point1 = [self convertPoint:connectorView.center fromView:connectorView.superview];
             CGPoint point2 = [self convertPoint:hitConnector.center fromView:hitConnector.superview];
             
-            BuildViewCable *newCable = [[BuildViewCable alloc] initWithPoint:point1 andPoint:point2];
+            BuildViewCable *newCable = [[BuildViewCable alloc] initWithPoint:point1 andPoint:point2 inBuildView:self];
             [newCable setColour:[self.dragCable colour]];
             [connectorView setCable:newCable];
             [hitConnector setCable:newCable];
+            
+            [newCable setConnector1:connectorView];
+            [newCable setConnector2:hitConnector];
             
             [self.cables addObject:newCable];
         }
@@ -349,6 +357,106 @@ static NSArray *cableColours;
     return cableColours;
 }
 
+#pragma ModuleViewDelegate
+
+-(void)moduleView:(ModuleView *)moduleView didBeginDraggingWithGesture:(UIGestureRecognizer *)gesture {
+    if ([self.buildViewController buildMode]) {
+        [self popModuleView:moduleView];
+        
+        CGPoint dragPoint = [gesture locationInView:self];
+        [self.dragView setCenter:dragPoint];
+    }
+}
+
+-(void)moduleView:(ModuleView *)moduleView didContinueDraggingWithGesture:(UIGestureRecognizer *)gesture {
+    if (self.dragView) {
+        CGPoint dragPoint = [gesture locationInView:self];
+        [self.dragView setCenter:dragPoint];
+        
+        BOOL occupied;
+        NSSet *hoverSet = [self cellPathsForModuleOfWidth:moduleView.moduleDescription.width center:dragPoint occupied:&occupied];
+        
+        if (hoverSet && !occupied && [self.superview hitTest:[gesture locationInView:self.superview] withEvent:nil] == self) {
+            [self setHighlightedCellSet:hoverSet];
+        } else {
+            [self setHighlightedCellSet:nil];
+        }
+    }
+}
+
+-(void)moduleView:(ModuleView *)moduleView didEndDraggingWithGesture:(UIGestureRecognizer *)gesture {
+    if (self.dragView) {
+        [self setHighlightedCellSet:nil];
+        [self.dragView.layer setOpacity:1.0];
+        
+        BOOL modulePlaced = NO;
+        
+        if (gesture.state != UIGestureRecognizerStateCancelled ){
+            if ([self.superview hitTest:[gesture locationInView:self.superview] withEvent:nil] == self) {
+                // Move the module
+                modulePlaced = [self placeModuleView:self.dragView toPoint:[gesture locationInView:self]];
+                [self setDragView:nil];
+                return;
+            }
+        }
+        
+        if (!modulePlaced) {
+            // Module was not succesfully placed
+            // Bounce it back
+            [self placeModuleView:self.dragView toPoint:self.dragOrigin];
+        }
+        
+        self.dragView = nil;
+    }
+}
+
+
+-(void)popModuleView:(ModuleView*)moduleView {
+    self.dragView = moduleView;
+    self.dragOrigin = moduleView.center;
+    [self.dragView.layer setOpacity:0.5];
+    
+    [moduleView setUserInteractionEnabled:NO];
+    
+    // Deoccupy cells
+    NSSet *cellSet = [self cellPathsForModuleOfWidth:moduleView.moduleDescription.width center:moduleView.center occupied:nil];
+    [cellSet enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        BuildViewCellPath *cellPath = (BuildViewCellPath*)obj;
+        cellOccupied[cellPath.row][cellPath.column] = FALSE;
+    }];
+}
+
+-(BOOL)placeModuleView:(ModuleView*)moduleView toPoint:(CGPoint)point {
+    BOOL occupied;
+    NSSet *cellSet = [self cellPathsForModuleOfWidth:moduleView.moduleDescription.width center:point occupied:&occupied];
+    
+    [moduleView setUserInteractionEnabled:YES];
+    
+    if (cellSet && !occupied) {
+        [moduleView setFrame:[self rectForCellSet:cellSet]];
+        
+        // Add cells to occupied
+        [cellSet enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+            BuildViewCellPath *cellPath = (BuildViewCellPath*)obj;
+            cellOccupied[cellPath.row][cellPath.column] = TRUE;
+        }];
+        
+        // Update cables
+        for (BuildViewCable *thisCable in self.cables) {
+            if (thisCable.connector1.superview == moduleView || thisCable.connector2.superview == moduleView) {
+                [thisCable updatePoints];
+            }
+        }
+        
+        [self.cableLayer setNeedsDisplay];
+        
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+
 @end
 
 @interface BuildViewCellPath ()
@@ -368,14 +476,25 @@ static NSArray *cableColours;
 @end
 
 @implementation BuildViewCable
--(instancetype)initWithPoint:(CGPoint)point1 andPoint:(CGPoint)point2 {
+-(instancetype)initWithPoint:(CGPoint)point1 andPoint:(CGPoint)point2 inBuildView:(BuildView *)buildView {
     self = [super init];
     if (self) {
+        self.buildView = buildView;
         self.point1 = point1;
         self.point2 = point2;
         
         self.colour = [UIColor redColor];
     }
     return self;
+}
+
+-(void)updatePoints {
+    if (self.connector1) {
+        self.point1 = [self.buildView convertPoint:self.connector1.center fromView:self.connector1.superview];
+    }
+    
+    if (self.connector2) {
+        self.point2 = [self.buildView convertPoint:self.connector2.center fromView:self.connector2.superview];
+    }
 }
 @end

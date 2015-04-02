@@ -9,6 +9,8 @@
 #import "ModuleDescription.h"
 #import "BuildViewController.h"
 #import "KeyboardView.h"
+#import "BuildView.h"
+#import "ModuleView.h"
 
 static BuildView *buildView = nil;
 
@@ -20,6 +22,15 @@ static BuildView *buildView = nil;
 @property (nonatomic, strong) KeyboardView          *keyboardView;
 
 @property (nonatomic, strong) UIView                *dragView;
+@property (nonatomic, strong) ModuleView            *dragModule;
+
+@property (nonatomic, strong) UIBarButtonItem       *buildModeButton;
+@property (nonatomic, strong) UIImage               *buildIcon;
+@property (nonatomic ,strong) UIImage               *keyboardIcon;
+
+@property (nonatomic) BOOL buildMode;
+
+@property (nonatomic, strong) NSLayoutConstraint    *shiftBuildViewConstraint; // Constraint to shift the build view down when the build view appears
 
 @end
 
@@ -28,11 +39,14 @@ static BuildView *buildView = nil;
 -(void)viewDidLoad {
     
     [super viewDidLoad];
-
+    [self setAutomaticallyAdjustsScrollViewInsets:YES];
+    
     self.buildView = [[BuildView alloc] init];
     [self.buildView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.buildView setContentInset:UIEdgeInsetsMake(kToolbarHeight, 0, kComponentShelfHeight, 0)];
-    [self.buildView setScrollIndicatorInsets:UIEdgeInsetsMake(kToolbarHeight, 0, kComponentShelfHeight, 0)];
+    [self.buildView setContentInset:UIEdgeInsetsMake(0, 0, kKeyboardHeight, 0)];
+    [self.buildView setScrollIndicatorInsets:UIEdgeInsetsMake(0, 0, kKeyboardHeight, 0)];
+    [self.buildView setClipsToBounds:NO];
+    [self.buildView setBuildViewController:self];
     [self.view addSubview:self.buildView];
     
     buildView = self.buildView;
@@ -50,7 +64,8 @@ static BuildView *buildView = nil;
     NSDictionary *viewsDictionary = @{
                                       @"buildView"      :   self.buildView,
                                       @"componentShelf" :   self.componentShelf,
-                                      @"keyboardView"   :   self.keyboardView
+                                      @"keyboardView"   :   self.keyboardView,
+                                      @"topGuide"       :   self.topLayoutGuide
                                       };
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[componentShelf]|"
@@ -62,14 +77,17 @@ static BuildView *buildView = nil;
                                                                       options:0
                                                                       metrics:nil
                                                                         views:viewsDictionary]];
-    
     NSDictionary *metricsDictionary = @{
                                         @"buildViewWidth"       : [NSNumber numberWithFloat:kBuildViewWidth],
-                                        @"componentShelfHeight" : [NSNumber numberWithFloat:kComponentShelfHeight],
-                                        @"toolbarHeight"        : [NSNumber numberWithFloat:kToolbarHeight]
+                                        @"componentShelfHeight" : [NSNumber numberWithFloat:kComponentShelfHeight]
                                         };
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[keyboardView(componentShelfHeight)][componentShelf(componentShelfHeight)]|"
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topGuide][componentShelf(componentShelfHeight)]"
+                                                                      options:0
+                                                                      metrics:metricsDictionary
+                                                                        views:viewsDictionary]];
+
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[keyboardView(componentShelfHeight)]|"
                                                                       options:0
                                                                       metrics:metricsDictionary
                                                                         views:viewsDictionary]];
@@ -90,43 +108,109 @@ static BuildView *buildView = nil;
                                                          multiplier:1
                                                            constant:0]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[buildView]|"
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0@750-[buildView]|"
                                                                       options:0
                                                                       metrics:nil
                                                                         views:viewsDictionary]];
+    
+    self.shiftBuildViewConstraint = [NSLayoutConstraint constraintWithItem:self.buildView
+                                                                 attribute:NSLayoutAttributeTop
+                                                                 relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                                    toItem:self.topLayoutGuide
+                                                                 attribute:NSLayoutAttributeTop
+                                                                multiplier:1
+                                                                  constant:kComponentShelfHeight];
+    
+    [self.shiftBuildViewConstraint setPriority:UILayoutPriorityRequired];
+    [self.view addConstraint:self.shiftBuildViewConstraint];
+    
+    UIImage *wrenchIcon = [UIImage imageNamed:TOOLBAR_BUILD_ICON];
+    self.buildModeButton = [[UIBarButtonItem alloc] initWithImage:wrenchIcon style:UIBarButtonItemStylePlain target:self action:@selector(editTapped)];
+    [self.navigationItem setLeftBarButtonItem:self.buildModeButton];
+    [self setBuildMode:NO animated:NO];
 }
 
--(void)componentShelf:(ComponentShelfView *)componentTray didBeginDraggingModule:(ModuleDescription*)module withGesture:(UIPanGestureRecognizer *)panGesture {
-    CGPoint dragPoint = [panGesture locationInView:self.view];
+#pragma mark Toolbar
+
+-(void)editTapped {
+    if (!self.buildMode) {
+        [self setBuildMode:YES animated:YES];
+        
+    } else {
+        [self setBuildMode:NO animated:YES];
+        
+    }
+}
+
+-(void)setBuildMode:(BOOL)buildMode animated:(BOOL)animated {
+    self.buildMode = buildMode;
+    if (buildMode) {
+        // show shelf
+        if (animated) {
+            [self.shiftBuildViewConstraint setActive:YES];
+            [UIView animateWithDuration:0.2 animations:^ {
+                [self.componentShelf setTransform:CGAffineTransformIdentity];
+                [self.view layoutIfNeeded];
+
+            }];
+
+        } else {
+            [self.componentShelf setTransform:CGAffineTransformIdentity];
+            [self.shiftBuildViewConstraint setActive:YES];
+        }
+        [self.buildModeButton setImage:[UIImage imageNamed:TOOLBAR_BUILD_ICON_SELECTED]];
+    } else {
+        // Hide shelf, show keyboard
+        if (animated) {
+            [self.shiftBuildViewConstraint setActive:NO];
+            [UIView animateWithDuration:0.2 animations:^ {
+                [self.componentShelf setTransform:CGAffineTransformMakeTranslation(0, -kComponentShelfHeight - 40.0)];
+                [self.view layoutIfNeeded];
+            }];
+        } else {
+            [self.componentShelf setTransform:CGAffineTransformMakeTranslation(0, -kComponentShelfHeight - 40.0)];
+            [self.shiftBuildViewConstraint setActive:NO];
+        }
+        [self.buildModeButton setImage:[UIImage imageNamed:TOOLBAR_BUILD_ICON]];
+    }
+}
+
+#pragma mark ComponentShelf
+
+-(void)componentShelf:(ComponentShelfView *)componentTray didBeginDraggingModule:(ModuleDescription*)module withGesture:(UIGestureRecognizer *)gesture {
     
-    self.dragView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-    [self.dragView setBackgroundColor:[UIColor whiteColor]];
+    CGPoint dragPoint = [gesture locationInView:self.view];
+
+    self.dragView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, module.thumbnail.size.width, module.thumbnail.size.height)];
     [self.dragView setCenter:dragPoint];
     [self.dragView setUserInteractionEnabled:NO];
+    [self.dragView.layer setOpacity:0.5];
+    [self.dragView.layer setContents:(id)[module.thumbnail CGImage]];
     
     [self.view addSubview:self.dragView];
 }
 
--(void)componentShelf:(ComponentShelfView *)componentTray didContinueDraggingModule:(ModuleDescription*)module withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentShelf:(ComponentShelfView *)componentTray didContinueDraggingModule:(ModuleDescription*)module withGesture:(UIGestureRecognizer *)gesture {
     
-    CGPoint dragPoint = [panGesture locationInView:self.view];
+    CGPoint dragPoint = [gesture locationInView:self.view];
     [self.dragView setCenter:dragPoint];
     
-    NSSet *hoverSet = [self.buildView cellPathsForModuleOfWidth:module.width center:[panGesture locationInView:self.buildView]];
+    BOOL occupied;
+    NSSet *hoverSet = [self.buildView cellPathsForModuleOfWidth:module.width center:[gesture locationInView:self.buildView] occupied:&occupied];
     
-    if (hoverSet && [self.view hitTest:dragPoint withEvent:nil] == self.buildView) {
+    if (hoverSet && !occupied && [self.view hitTest:dragPoint withEvent:nil] == self.buildView) {
         [self.buildView setHighlightedCellSet:hoverSet];
     } else {
         [self.buildView setHighlightedCellSet:nil];
     }
 }
 
--(void)componentShelf:(ComponentShelfView *)componentTray didEndDraggingModule:(ModuleDescription*)module withGesture:(UIPanGestureRecognizer *)panGesture {
+-(void)componentShelf:(ComponentShelfView *)componentTray didEndDraggingModule:(ModuleDescription*)module withGesture:(UIGestureRecognizer *)gesture {
     [self.dragView removeFromSuperview];
     [self.buildView setHighlightedCellSet:nil];
     
-    if (panGesture.state != UIGestureRecognizerStateCancelled ){
-        CGPoint pointInWindow = [panGesture locationInView:self.view];
+    if (gesture.state != UIGestureRecognizerStateCancelled ){
+        CGPoint pointInWindow = [gesture locationInView:self.view];
         // Don't drop if drag is likely to have gone off-screen
         if (pointInWindow.x > 8 &&
             pointInWindow.x < self.view.frame.size.width - 8 &&
@@ -134,11 +218,13 @@ static BuildView *buildView = nil;
             pointInWindow.y < self.view.frame.size.height - 8) {
             if ([self.view hitTest:pointInWindow withEvent:nil] == self.buildView) {
                 // Add a component
-                [self.buildView addViewForModule:module atPoint:[panGesture locationInView:self.buildView]];
+                [self.buildView addViewForModule:module atPoint:[gesture locationInView:self.buildView]];
             }
         }
     }
 }
+
+#pragma Convenience Methods
 
 +(BuildView*)buildView {
     return buildView;

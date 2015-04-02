@@ -8,10 +8,10 @@
 #import <UIKit/UIKit.h>
 
 extern CGFloat kComponentShelfHeight;
-extern CGFloat kToolbarHeight;
 extern CGFloat kBuildViewWidth;
 extern CGFloat kBuildViewRowHeight;
 extern CGFloat kBuildViewColumnWidth;
+extern CGFloat kKeyboardHeight;
 
 extern NSArray *moduleCatalog;
 

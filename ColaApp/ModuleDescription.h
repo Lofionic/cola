@@ -19,6 +19,8 @@
 @property (readonly, strong) NSArray    *connectors;
 @property (readonly, strong) NSArray    *controls;
 
+@property (readonly, strong) UIImage    *thumbnail;
+
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
 @end

@@ -8,12 +8,26 @@
 #import <ColaLib/ColaLib.h>
 #import <UIKit/UIKit.h>
 
-@class ModuleDescription;
+@class ModuleView;
 
+@protocol ModuleViewDelegate <NSObject>
+
+-(void)moduleView:(ModuleView*)moduleView didBeginDraggingWithGesture:(UIGestureRecognizer*)gesture;
+-(void)moduleView:(ModuleView*)moduleView didContinueDraggingWithGesture:(UIGestureRecognizer*)gesture;
+-(void)moduleView:(ModuleView*)moduleView didEndDraggingWithGesture:(UIGestureRecognizer*)gesture;
+
+@end
+
+
+@class ModuleDescription;
 @interface ModuleView : UIView
 
-@property (readonly, weak) COLComponent *component;
+@property (nonatomic, weak) id<ModuleViewDelegate>  delegate;
+@property (readonly, weak) COLComponent             *component;
+@property (readonly, strong) ModuleDescription      *moduleDescription;
 
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame;
+-(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription;
+-(UIImage*)snapshot;
 
 @end

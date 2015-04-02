@@ -8,16 +8,17 @@
 #import "defines.h"
 #import "AppDelegate.h"
 #import "BuildViewController.h"
+#import "ModuleDescription.h"
 
 @interface AppDelegate ()
 
 @end
 
 CGFloat kComponentShelfHeight;
-CGFloat kToolbarHeight;
 CGFloat kBuildViewWidth;
 CGFloat kBuildViewColumnWidth;
 CGFloat kBuildViewRowHeight;
+CGFloat kKeyboardHeight;
 
 NSArray *moduleCatalog;
 
@@ -39,7 +40,11 @@ NSArray *moduleCatalog;
     [self.window makeKeyAndVisible];
     
     BuildViewController *buildViewController = [[BuildViewController alloc] init];
-    [self.window setRootViewController:buildViewController];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:buildViewController];
+    [navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+    
+    [self.window setRootViewController:navigationController];
     
     return YES;
 }
@@ -49,8 +54,8 @@ NSArray *moduleCatalog;
     kBuildViewWidth =       768;
     kBuildViewColumnWidth = 96;
     kBuildViewRowHeight =   320;
-    kToolbarHeight =        64;
-    kComponentShelfHeight = 120;
+    kComponentShelfHeight = 150;
+    kKeyboardHeight =       150;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         kBuildViewWidth =           320;
