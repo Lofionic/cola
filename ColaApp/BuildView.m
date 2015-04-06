@@ -13,7 +13,7 @@
 #import "BuildViewCableLayer.h"
 #import "BuildViewController.h"
 #import "ModuleDescription.h"
-
+#import "NSString+Random.h"
 #import <ColaLib/ColaLib.h>
 
 @interface BuildView () {
@@ -264,12 +264,6 @@ static NSArray *cableColours;
         }
     }
     return nil;
-}
-
-
--(COLComponent*)componentForModuleDescription:(ModuleDescription*)moduleDescription {
-    COLComponent *result = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:moduleDescription.type];
-    return result;
 }
 
 #pragma mark Cable Management

@@ -16,6 +16,8 @@
 #define kCOLComponentWavePlayer             @"kCOLComponentWavePlayer"
 #define kCOLComponentEnvelope               @"kCOLComponentEnvelope"
 #define kCOLComponentVCA                    @"kCOLComponentVCA"
+#define kCOLComponentMultiples              @"kCOLComponentMultiples"
+#define kCOLComponentMixer2                 @"kCOLComponentMixer2"
 
 #define kCOLOutputOscillatorMain            0
 #define kCOLInputOscillatorFreq             0

@@ -96,6 +96,10 @@
         newComponent = [[COLComponentEnvelope alloc] initWithContext:context];
     } else if ([componentType isEqualToString:kCOLComponentVCA]) {
         newComponent = [[COLComponentVCA alloc] initWithContext:context];
+    } else if ([componentType isEqualToString:kCOLComponentMultiples]) {
+        newComponent = [[COLComponentMultiples alloc] initWithContext:context];
+    } else if ([componentType isEqualToString:kCOLComponentMixer2]) {
+        newComponent = [[COLComponentMixer2 alloc] initWithContext:context];
     }
     
     if (newComponent) {

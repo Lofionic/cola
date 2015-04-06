@@ -42,4 +42,22 @@
         return _name;
     }
 }
+
+@synthesize connectedTo = _connectedTo;
+
+-(void)setConnectedTo:(id)connectedTo {
+    if (connectedTo) {
+        COLComponentIO *connectedToComponent = (COLComponentIO*)connectedTo;
+        NSLog(@"%@ connected to %@", [self nameWithComponent], [connectedToComponent nameWithComponent]);
+    } else {
+        NSLog(@"%@ disconnected", [self nameWithComponent]);
+    }
+    
+    _connectedTo = connectedTo;
+}
+
+-(id)connectedTo {
+    return _connectedTo;
+}
+
 @end

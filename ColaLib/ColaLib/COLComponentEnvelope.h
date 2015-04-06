@@ -20,7 +20,4 @@ typedef NS_ENUM(NSUInteger, kCOLEnvelopeState) {
 
 @property (nonatomic) BOOL retriggers;
 
--(void)openGate;
--(void)closeGate;
-
 @end

@@ -67,13 +67,13 @@
         [self disconnect];
     }
     
-    [[self connectedTo] setConnectedTo:nil];
+    if (input.isConnected) {
+        [input.connectedTo disconnect];
+    }
+    
     self.connectedTo = input;
     [input setConnectedTo:self];
-    
-    
-    NSLog(@"%@ connected to %@", self.name, input.name);
-        
+
     return TRUE;
 }
 
@@ -83,7 +83,6 @@
 
 -(BOOL)disconnect {
     if ([self isConnected]) {
-        NSLog(@"Disconnecting %@ from %@", self.name, [self.connectedTo nameWithComponent]);
         [self.connectedTo disconnect];
         self.connectedTo = nil;
         return TRUE;

@@ -25,6 +25,7 @@
 		6C2A5E301A8BF2CC00ECEAB2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5E2E1A8BF2CC00ECEAB2 /* LaunchScreen.xib */; };
 		6C2A5EA31A8C0B2A00ECEAB2 /* ToDo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5EA21A8C0B2A00ECEAB2 /* ToDo.txt */; };
 		6C2A5EA61A8C0B8D00ECEAB2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */; };
+		6C300BE61AD3182E00D51544 /* NSString+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C300BE51AD3182E00D51544 /* NSString+Random.m */; };
 		6C460D931A8D6B4C00161C0E /* libColaLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5E911A8BF30600ECEAB2 /* libColaLib.a */; };
 		6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C59C5651ABF4273001EE663 /* ConnectorView.m */; };
 		6C65A4E81A9125DD000D9192 /* gtr.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C65A4E71A9125DD000D9192 /* gtr.wav */; };
@@ -82,6 +83,8 @@
 		6C2A5EA21A8C0B2A00ECEAB2 /* ToDo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ToDo.txt; sourceTree = "<group>"; };
 		6C2A5EA41A8C0B8D00ECEAB2 /* ColaApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ColaApp.entitlements; sourceTree = "<group>"; };
 		6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		6C300BE41AD3182E00D51544 /* NSString+Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Random.h"; sourceTree = "<group>"; };
+		6C300BE51AD3182E00D51544 /* NSString+Random.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Random.m"; sourceTree = "<group>"; };
 		6C59C5641ABF4273001EE663 /* ConnectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorView.h; sourceTree = "<group>"; };
 		6C59C5651ABF4273001EE663 /* ConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorView.m; sourceTree = "<group>"; };
 		6C65A4E71A9125DD000D9192 /* gtr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gtr.wav; sourceTree = "<group>"; };
@@ -234,6 +237,8 @@
 				6C0F86D01AA7B2220092FB18 /* BuildViewController.m */,
 				6CDA9F121AA9017E00D64EB0 /* BuildView.h */,
 				6CDA9F131AA9017E00D64EB0 /* BuildView.m */,
+				6C300BE41AD3182E00D51544 /* NSString+Random.h */,
+				6C300BE51AD3182E00D51544 /* NSString+Random.m */,
 				6C1962411AC2408900E6A416 /* Layers */,
 				6CB5DA9A1AC582DF005D80FD /* ModuleView */,
 				6C0F86D91AA7BF070092FB18 /* ComponentShelf */,
@@ -356,6 +361,7 @@
 			files = (
 				6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */,
 				6C1201091AAE44D200C6ACB6 /* ModuleDescription.m in Sources */,
+				6C300BE61AD3182E00D51544 /* NSString+Random.m in Sources */,
 				6CDA9F141AA9017E00D64EB0 /* BuildView.m in Sources */,
 				6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */,
 				6C172A421ACC256100BE1418 /* ModuleControl.m in Sources */,

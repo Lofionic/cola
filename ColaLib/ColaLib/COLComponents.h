@@ -15,5 +15,7 @@
 #import "COLComponentEnvelope.h"
 #import "COLKeyboardComponent.h"
 #import "COLComponentVCA.h"
+#import "COLComponentMultiples.h"
+#import "COLComponentMixer2.h"
 
 #endif

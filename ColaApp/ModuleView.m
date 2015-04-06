@@ -12,6 +12,8 @@
 #import "ModuleDescription.h"
 #import "ConnectorView.h"
 #import "ModuleControl.h"
+#import "NSString+Random.h"
+#import "BuildView.h"
 
 #define BACKGROUND_COLOUR [UIColor colorWithRed:64/255.0 green:64/255.0 blue:64/255.0 alpha:1]
 
@@ -35,6 +37,10 @@
     if (self = [super initWithFrame:frame]) {
         self.component = component;
         self.moduleDescription = moduleDescription;
+        
+        NSString *componentName = [NSString stringWithFormat:@"%@_%@", NSStringFromClass([component class]), [NSString randomAlphanumericStringWithLength:4]];
+        [self.component setName:componentName];
+        NSLog(@"Component: %@ created.", componentName);
         
         if (moduleDescription.connectors) {
             [self addConnectors:moduleDescription.connectors];
