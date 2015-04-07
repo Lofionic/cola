@@ -50,10 +50,12 @@
     for (int i = 0; i < numFrames; i++) {
         
         float delta = (float)i / numFrames;
-        float input1Gain = [self.level1 outputAtDelta:delta];
-        float input2Gain = [self.level2 outputAtDelta:delta];
+        float input1Gain = [self.level1 outputAtDelta:delta] * 0.5f;
+        float input2Gain = [self.level2 outputAtDelta:delta] * 0.5f;
         
-        outputBuffer[i] = tanhf(((input1Buffer[i] * input1Gain) + (input2Buffer[i] * input2Gain)) * 4.0);
+        outputBuffer[i] = (input1Buffer[i] * input1Gain) + (input2Buffer[i] * input2Gain);
+        
+        //outputBuffer[i] = tanhf(((input1Buffer[i] * input1Gain) + (input2Buffer[i] * input2Gain)) * 0.5f);
     }
 }
 

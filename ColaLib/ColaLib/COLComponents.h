@@ -16,6 +16,7 @@
 #import "COLKeyboardComponent.h"
 #import "COLComponentVCA.h"
 #import "COLComponentMultiples.h"
+#import "COLComponentMultiplesKB.h"
 #import "COLComponentMixer2.h"
 
 #endif

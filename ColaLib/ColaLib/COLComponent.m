@@ -148,10 +148,7 @@
 }
 
 -(void)parameterDidChange:(COLParameter *)parameter {
-    if ([parameter isKindOfClass:[COLContinuousParameter class]]) {
-        COLContinuousParameter *continuousParameter = (COLContinuousParameter*)parameter;
-        NSLog(@"Parameter : %@ = %.2f", parameter.description, [continuousParameter outputAtDelta:1]);
-    }
+
 }
 
 -(void)dealloc {

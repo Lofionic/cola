@@ -22,13 +22,13 @@
 
 -(void)initializeIO {
     
-    self.inputA = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOType1VOct withName:@"In A"];
+    self.inputA = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"In A"];
     self.inputB = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"In B"];
     
     NSMutableArray *outputs = [[NSMutableArray alloc] initWithCapacity:8];
     for (NSInteger i = 0; i < 4; i++) {
         COLComponentOutput *newOutputA = [[COLComponentOutput alloc] initWithComponent:self
-                                                                               ofType:kComponentIOType1VOct
+                                                                               ofType:kComponentIOTypeControl
                                                                              withName:[NSString stringWithFormat:@"Out A%ld", (long)i + 1]];
         [outputs addObject:newOutputA];
     }
@@ -68,7 +68,7 @@
             
             COLComponentOutput *outB = [self.outputs objectAtIndex:j + 4];
             if ([outB isConnected]) {
-                outputBuffers[j][i] = inputBBuffer[i];
+                outputBuffers[j + 4][i] = inputBBuffer[i];
             }
         }
     }

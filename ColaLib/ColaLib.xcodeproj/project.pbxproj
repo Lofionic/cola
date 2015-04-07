@@ -46,6 +46,8 @@
 		6CB322F31A9BE2B30052AE50 /* COLComponentInput.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27C81A8D57AF00AFD384 /* COLComponentInput.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6CB322F41A9BE2B40052AE50 /* COLContinuousParameter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB322EC1A9BC1110052AE50 /* COLContinuousParameter.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6CB322F61A9BE5400052AE50 /* COLComponents.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB322F51A9BE5350052AE50 /* COLComponents.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		6CD59F1B1AD47DB300505985 /* COLComponentMultiplesKB.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD59F1A1AD47DB300505985 /* COLComponentMultiplesKB.m */; };
+		6CD59F1C1AD47E0600505985 /* COLComponentMultiplesKB.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CD59F191AD47DB300505985 /* COLComponentMultiplesKB.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -75,6 +77,7 @@
 				6C172A3A1ACC213500BE1418 /* COLDiscreteParameter.h in CopyFiles */,
 				6CB322F41A9BE2B40052AE50 /* COLContinuousParameter.h in CopyFiles */,
 				6C300BEF1AD33ACE00D51544 /* COLComponentMixer2.h in CopyFiles */,
+				6CD59F1C1AD47E0600505985 /* COLComponentMultiplesKB.h in CopyFiles */,
 				6C300BEB1AD3286300D51544 /* COLComponentMultiples.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,6 +125,8 @@
 		6CB322EC1A9BC1110052AE50 /* COLContinuousParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLContinuousParameter.h; sourceTree = "<group>"; };
 		6CB322ED1A9BC1110052AE50 /* COLContinuousParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLContinuousParameter.m; sourceTree = "<group>"; };
 		6CB322F51A9BE5350052AE50 /* COLComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponents.h; sourceTree = "<group>"; };
+		6CD59F191AD47DB300505985 /* COLComponentMultiplesKB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentMultiplesKB.h; sourceTree = "<group>"; };
+		6CD59F1A1AD47DB300505985 /* COLComponentMultiplesKB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentMultiplesKB.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +158,8 @@
 				6C5C5E0E1AC77AC5002BFA95 /* COLComponentVCA.m */,
 				6C300BE81AD3285C00D51544 /* COLComponentMultiples.h */,
 				6C300BE91AD3285C00D51544 /* COLComponentMultiples.m */,
+				6CD59F191AD47DB300505985 /* COLComponentMultiplesKB.h */,
+				6CD59F1A1AD47DB300505985 /* COLComponentMultiplesKB.m */,
 				6C300BEC1AD336EF00D51544 /* COLComponentMixer2.h */,
 				6C300BED1AD336EF00D51544 /* COLComponentMixer2.m */,
 			);
@@ -270,6 +277,7 @@
 				6C310D421A8D721900A97D82 /* COLComponentVCO.m in Sources */,
 				6C5C5E0F1AC77AC5002BFA95 /* COLComponentVCA.m in Sources */,
 				6C7B27CA1A8D57AF00AFD384 /* COLComponentInput.m in Sources */,
+				6CD59F1B1AD47DB300505985 /* COLComponentMultiplesKB.m in Sources */,
 				6C0D487D1AC358C2008AD869 /* COLKeyboardComponent.m in Sources */,
 				6C1154751A8E306D005CF194 /* COLComponentIO.m in Sources */,
 				6C172A381ACC20F100BE1418 /* COLParameter.m in Sources */,
