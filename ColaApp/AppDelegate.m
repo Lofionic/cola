@@ -110,7 +110,7 @@ NSArray *moduleCatalog;
 -(NSDictionary *)interAppInfoDictionary {
     return @{
              kDictionaryKeyComponentName : @"Cola Demo App",
-             kDictionaryKeyComponentMaufacturer : @"lfnc"
+             kDictionaryKeyComponentMaufacturer : @"lfco"
              };
 }
 

@@ -243,7 +243,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     }
     
     if (infoDictionary) {
-        NSLog(@"Initializing Inter-App Audio");
+        NSLog(@"Registering Inter-App Audio");
         self.isInterAppConnected = NO;
         
         // Add property listener for inter-app audio
@@ -252,7 +252,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 
         NSString *componentName = infoDictionary[kDictionaryKeyComponentName];
         NSString *componentManufacturer = infoDictionary[kDictionaryKeyComponentMaufacturer];
-        
+
         AudioComponentDescription audioComponentDescription = {
             kAudioUnitType_RemoteInstrument,
             'iasp',

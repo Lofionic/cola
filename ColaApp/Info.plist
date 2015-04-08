@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>manufacturer</key>
-			<string>lfnc</string>
+			<string>lfco</string>
 			<key>name</key>
 			<string>Cola Demo App</string>
 			<key>subtype</key>
@@ -24,7 +24,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>Lofionic.$(PRODUCT_NAME:rfc1034identifier)</string>
+	<string>com.lofionic.cola</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
