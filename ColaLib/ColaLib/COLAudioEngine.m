@@ -34,8 +34,8 @@
         // Init the master inputs
         self.masterInputL = [[COLAudioContext globalContext] masterInputAtIndex:0];
         self.masterInputR = [[COLAudioContext globalContext] masterInputAtIndex:1];
-
     }
+    
     return self;
 }
 

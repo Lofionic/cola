@@ -32,6 +32,7 @@
 
 +(instancetype)sharedEnvironment;
 -(void)start;
+-(BOOL)isInterAppAudioConnected;
 
 // Factory methods
 -(COLComponent*)createComponentOfType:(NSString *)componentType;

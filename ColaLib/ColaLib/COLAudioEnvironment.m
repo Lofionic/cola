@@ -134,4 +134,16 @@
     }
 }
 
+-(void)audioEngineInterAppAudioConnected:(COLAudioEngine *)audioEngine {
+    NSLog(@"Inter-app audio connected");
+}
+
+-(void)audioEngineInterAppAudioDisconnected:(COLAudioEngine *)audioEngine {
+    NSLog(@"Inter-app audio disconnected");
+}
+
+-(BOOL)isInterAppAudioConnected {
+    return [self.audioEngine isInterAppConnected];
+}
+
 @end

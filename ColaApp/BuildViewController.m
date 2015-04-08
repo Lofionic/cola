@@ -20,6 +20,7 @@ static BuildView *buildView = nil;
 
 @property (nonatomic, strong) ComponentShelfView    *componentShelf;
 @property (nonatomic, strong) KeyboardView          *keyboardView;
+@property (nonatomic, strong) UIView                *iaaView;
 
 @property (nonatomic, strong) UIView                *dragView;
 @property (nonatomic, strong) ModuleView            *dragModule;
@@ -128,6 +129,24 @@ static BuildView *buildView = nil;
     self.buildModeButton = [[UIBarButtonItem alloc] initWithImage:wrenchIcon style:UIBarButtonItemStylePlain target:self action:@selector(editTapped)];
     [self.navigationItem setLeftBarButtonItem:self.buildModeButton];
     [self setBuildMode:NO animated:NO];
+    
+    self.iaaView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 512, 512)];
+    [self.iaaView setBackgroundColor:[UIColor redColor]];
+    [self.iaaView setHidden:YES];
+    [self.view addSubview:self.iaaView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(appWillEnterForeground)
+                                                 name: UIApplicationWillEnterForegroundNotification
+                                               object: nil];
+}
+
+-(void)appWillEnterForeground {
+    if ([[COLAudioEnvironment sharedEnvironment] isInterAppAudioConnected]) {
+        [self.iaaView setHidden:NO];
+    } else {
+        [self.iaaView setHidden:YES];
+    }
 }
 
 #pragma mark Toolbar
@@ -138,7 +157,6 @@ static BuildView *buildView = nil;
         
     } else {
         [self setBuildMode:NO animated:YES];
-        
     }
 }
 
