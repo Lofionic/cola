@@ -20,7 +20,6 @@
 #define kCOLComponentMultiplesKB            @"kCOLComponentMultiplesKB"
 #define kCOLComponentMixer2                 @"kCOLComponentMixer2"
 
-
 #define kCOLOutputOscillatorMain            0
 #define kCOLInputOscillatorFreq             0
 #define kCOLInputOscillatorAmp              1
@@ -30,3 +29,14 @@
 
 #import <Foundation/Foundation.h>
 typedef Float32 AudioSignalType;
+
+
+// Wavetables
+#define WAVETABLE_SIZE      8196
+#define ANALOG_HARMONICS    50
+
+extern AudioSignalType sinWaveTable[WAVETABLE_SIZE];
+extern AudioSignalType triWaveTable[WAVETABLE_SIZE];
+extern AudioSignalType sawWaveTable[WAVETABLE_SIZE];
+extern AudioSignalType rampWaveTable[WAVETABLE_SIZE];
+extern AudioSignalType squareWaveTable[WAVETABLE_SIZE];

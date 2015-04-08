@@ -18,8 +18,6 @@
 -(AudioSignalType*)getBuffer:(UInt32)numFrames;
 -(AudioSignalType*)prepareBufferOfSize:(UInt32)numFrames;
 
--(void)engineDidRender;
-
 -(BOOL)connectTo:(COLComponentInput*)input;
 
 @end

@@ -32,6 +32,7 @@
 -(AudioSignalType*)prepareBufferOfSize:(UInt32)numFrames {
     // Create or resize the buffer, if necessary
     if (numFrames != bufferSize) {
+        NSLog(@"Creating buffer of size %u for output %@", (unsigned int)numFrames, [self nameWithComponent]);
         free(buffer);
         bufferSize = numFrames;
         buffer = (AudioSignalType*)malloc(bufferSize * sizeof(AudioSignalType));
@@ -75,10 +76,6 @@
     [input setConnectedTo:self];
 
     return TRUE;
-}
-
--(BOOL)isConnected {
-    return self.connectedTo != nil;
 }
 
 -(BOOL)disconnect {

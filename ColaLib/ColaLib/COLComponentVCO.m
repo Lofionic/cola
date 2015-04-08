@@ -11,20 +11,14 @@
 #import "COLAudioEnvironment.h"
 #import "COLComponentInput.h"
 #import "COLKeyboardComponent.h"
+#import "COLDefines.h"
 
 #define CV_FREQUENCY_RANGE  8372
-#define WAVETABLE_SIZE      8196
-#define ANALOG_HARMONICS    50
 
 @interface COLComponentVCO () {
     Float64 phase;
     
     AudioSignalType prevResult;
-    AudioSignalType sinWaveTable[WAVETABLE_SIZE];
-    AudioSignalType triWaveTable[WAVETABLE_SIZE];
-    AudioSignalType sawWaveTable[WAVETABLE_SIZE];
-    AudioSignalType squareWaveTable[WAVETABLE_SIZE];
-    
     NSInteger waveformIndex;
 }
 
@@ -41,78 +35,6 @@
 @end
 
 @implementation COLComponentVCO
-
--(instancetype)initWithContext:(COLAudioContext *)context {
-    if (self = [super initWithContext:context]) {
-        [self buildWavetables];
-    }
-    return self;
-}
-
--(void)buildWavetables {
-    // Generate Sin wavetable
-    for (int i = 0; i < WAVETABLE_SIZE; i++) {
-        double tablePhase = (i / (float)WAVETABLE_SIZE + 1.0) * (M_PI * 2);
-        AudioSignalType a = sin(tablePhase);
-        sinWaveTable[i] = a;
-    }
-    
-    // Generate Saw wavetable
-    for (int i = 0; i < WAVETABLE_SIZE; i++) {
-        double result = 0;
-        double tablePhase = (i / (float)WAVETABLE_SIZE + 1.0) * (M_PI * 2);
-        for (int j = 1; j <= ANALOG_HARMONICS; j++) {
-            result -= (sin(tablePhase * j) / j) / 2.0;
-        }
-        sawWaveTable[i] = (AudioSignalType)result;
-    }
-    
-    // Generate Tri wavetable
-    for (int i = 0; i < WAVETABLE_SIZE; i++) {
-        double result = 0;
-        double tablePhase = (i / (float)WAVETABLE_SIZE + 1.0) * (M_PI * 2);
-        
-        int harmonicNumber = 1;
-        bool inverse = false;
-        for (int j = 1; j < (ANALOG_HARMONICS * 2) + 1; j += 2) {
-            
-            harmonicNumber ++;
-            if (inverse) {
-                result -= sin(tablePhase * j) / powf(((j) + 1), 2) / 0.5f;
-                inverse = false;
-            } else {
-                result += sin(tablePhase * j) / powf(((j) + 1), 2) / 0.5f;
-                inverse = true;
-            }
-        }
-        
-        triWaveTable[i] = result;
-    }
-    
-    // Generate Square wavetable
-    for (int i = 0; i < WAVETABLE_SIZE; i++) {
-        double sum = 0;
-        float count = 0;
-        double tablePhase = (i / (float)WAVETABLE_SIZE + 1.0) * (M_PI * 2);
-        for (int j = 1; j < ANALOG_HARMONICS + 1;j += 2) {
-            sum += sin(tablePhase * j);
-            count ++;
-        }
-        sum /= count;
-        squareWaveTable[i] = 0;
-    }
-    
-    // NSLOG a wave
-    int res = 10;
-    for (int i = 0; i < res; i++) {
-        NSInteger sampleIndex = (i / (float)res) * WAVETABLE_SIZE;
-        AudioSignalType sample = triWaveTable[sampleIndex];
-        
-        NSInteger level = ((sample + 1) / 2.0) * 40;
-        NSString *padding = [@"" stringByPaddingToLength:level withString:@"-" startingAtIndex:0];
-        NSLog(@"%@", [padding stringByAppendingString:@"*"]);
-    }
-}
 
 -(void)initializeIO {
     // Inputs
@@ -142,9 +64,8 @@
 }
 
 -(void)renderOutputs:(UInt32)numFrames {
-
     [super renderOutputs:numFrames];
-
+    
     // Input Buffers
     AudioSignalType *fmBuffer = [self.fmodIn getBuffer:numFrames];
     
@@ -157,7 +78,7 @@
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
     for (int i = 0; i < numFrames; i++) {
-        
+
         float sampleIndexFloat = (phase / (M_PI * 2)) * (WAVETABLE_SIZE - 1);
         
         NSInteger waveform = [self.waveform selectedIndex];
@@ -192,7 +113,7 @@
         if ([self.keyboardIn isConnected]) {
             freq = kbBuffer[i];
         }
-        
+
         if ([self.fmodIn isConnected]) {
             float delta = i / (float)numFrames;
             float lfoValue = powf(0.5, (-fmBuffer[i] * [self.fmAmt outputAtDelta:delta]));
@@ -215,6 +136,7 @@
         
         outBuffer[i] = result;
         prevResult = result;
+        
     }
 }
 

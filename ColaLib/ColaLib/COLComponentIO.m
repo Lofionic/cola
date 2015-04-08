@@ -23,12 +23,14 @@
         self.component = component;
         self.type = type;
         self.name = name;
+
     }
     return self;
 }
 
 -(BOOL)isConnected {
-    return self.connectedTo != nil;
+    BOOL result = (self.connectedTo != nil);
+    return result;
 }
 
 -(BOOL)disconnect {
@@ -43,21 +45,8 @@
     }
 }
 
-@synthesize connectedTo = _connectedTo;
-
--(void)setConnectedTo:(id)connectedTo {
-    if (connectedTo) {
-        COLComponentIO *connectedToComponent = (COLComponentIO*)connectedTo;
-        NSLog(@"%@ connected to %@", [self nameWithComponent], [connectedToComponent nameWithComponent]);
-    } else {
-        NSLog(@"%@ disconnected", [self nameWithComponent]);
-    }
+-(void)engineDidRender {
     
-    _connectedTo = connectedTo;
-}
-
--(id)connectedTo {
-    return _connectedTo;
 }
 
 @end

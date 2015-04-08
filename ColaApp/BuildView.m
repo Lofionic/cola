@@ -351,7 +351,17 @@ static NSArray *cableColours;
 
 +(NSArray*)cableColours {
     if (!cableColours) {
-        cableColours = @[[UIColor redColor], [UIColor blueColor], [UIColor yellowColor], [UIColor greenColor], [UIColor orangeColor], [UIColor blackColor], [UIColor lightGrayColor]];
+        cableColours = @[[UIColor redColor],
+                         [UIColor blueColor],
+                         [UIColor yellowColor],
+                         [UIColor greenColor],
+                         [UIColor orangeColor],
+                         [UIColor grayColor],
+                         [UIColor lightGrayColor],
+                         [UIColor purpleColor],
+                         [UIColor brownColor],
+                         [UIColor cyanColor],
+                         [UIColor magentaColor]];
     }
     
     return cableColours;
@@ -395,8 +405,6 @@ static NSArray *cableColours;
             if ([self.superview hitTest:[gesture locationInView:self.superview] withEvent:nil] == self) {
                 // Move the module
                 modulePlaced = [self placeModuleView:self.dragView toPoint:[gesture locationInView:self]];
-                [self setDragView:nil];
-                return;
             }
         }
         

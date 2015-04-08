@@ -13,9 +13,6 @@
 
 @interface COLComponentInput : COLComponentIO
 
-@property (nonatomic, weak) COLComponentOutput *connectedTo;
-
 -(AudioSignalType*)getBuffer:(UInt32)numFrames;
--(void)engineDidRender;
 
 @end

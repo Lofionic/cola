@@ -9,14 +9,16 @@
 #import "COLComponentInput.h"
 #import "COLComponentOutput.h"
 
-@interface COLComponentInput () {
-    AudioSignalType *emptyBuffer;
-    UInt32 emptyBufferSize;
-}
+@interface COLComponentInput ()
+
+@property (nonatomic, weak) COLComponentOutput *connectedTo;
 
 @end
 
 @implementation COLComponentInput
+
+static AudioSignalType* emptyBuffer;
+static UInt32 emptyBufferSize;
 
 -(AudioSignalType *)getBuffer:(UInt32)numFrames {
     if (self.connectedTo) {
@@ -24,18 +26,19 @@
         if (buffer != NULL) {
             return buffer;
         } else {
-            // Can't provide buffer yet, probably because buffer is input is forming a ring
+            // Can't provide buffer yet, probably because buffer's input is forming a ring
             // Return an empty buffer
-            return [self emptyBuffer:numFrames];
+            return [COLComponentInput emptyBuffer:numFrames];
         }
     } else {
         // No connection - no signal. Return an empty buffer
-        return [self emptyBuffer:numFrames];
+        return [COLComponentInput emptyBuffer:numFrames];
     }
 }
 
--(AudioSignalType*)emptyBuffer:(UInt32)numFrames {
++(AudioSignalType*)emptyBuffer:(UInt32)numFrames {
     if (numFrames != emptyBufferSize) {
+        NSLog(@"Creating empty buffer of size %u", (unsigned int)numFrames);
         free(emptyBuffer);
         emptyBufferSize = numFrames;
         emptyBuffer = (AudioSignalType*)malloc(emptyBufferSize * sizeof(AudioSignalType));
@@ -46,10 +49,6 @@
 
 -(void)engineDidRender {
     [[self connectedTo] engineDidRender];
-}
-
--(BOOL)isConnected {
-    return self.connectedTo != nil;
 }
 
 -(BOOL)disconnect {

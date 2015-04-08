@@ -105,6 +105,8 @@
 }
 
 -(void)renderOutputs:(UInt32)numFrames {
+    [super renderOutputs:numFrames];
+    
     // Output Buffers
     AudioSignalType *keyboardOutBuffer = [self.keyboardOut prepareBufferOfSize:numFrames];
     AudioSignalType *gateOutBuffer = [self.gateOut prepareBufferOfSize:numFrames];

@@ -10,6 +10,13 @@
 #import "COLDefines.h"
 #import "COLComponentInput.h"
 #import "Endian.h"
+#import "COLDefines.h"
+
+AudioSignalType sinWaveTable[WAVETABLE_SIZE];
+AudioSignalType triWaveTable[WAVETABLE_SIZE];
+AudioSignalType sawWaveTable[WAVETABLE_SIZE];
+AudioSignalType rampWaveTable[WAVETABLE_SIZE];
+AudioSignalType squareWaveTable[WAVETABLE_SIZE];
 
 @interface COLAudioEngine() {
     Float64 sampleRate;
@@ -30,6 +37,9 @@
     self = [super init];
     if (self) {
         [self registerApplicationStateNotifications];
+        
+        // Build wavetables
+        [self buildWavetables];
         
         // Init the master inputs
         self.masterInputL = [[COLAudioContext globalContext] masterInputAtIndex:0];
@@ -155,27 +165,29 @@
 #pragma mark render
 static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
 {
+    @autoreleasepool {
+
     COLAudioEngine *audioEngine = (__bridge COLAudioEngine*)inRefCon;
-       
-    AudioSignalType *leftBuffer = [audioEngine.masterInputL getBuffer:inNumberFrames];
-    AudioSignalType *rightBuffer = [audioEngine.masterInputR getBuffer:inNumberFrames];
-    
+
+    AudioSignalType *leftBuffer = [[audioEngine masterInputL] getBuffer:inNumberFrames];
+    AudioSignalType *rightBuffer = [[audioEngine masterInputR] getBuffer:inNumberFrames];
+
+//    if (![audioEngine.masterInputR isConnected]) {
+//        rightBuffer = [audioEngine.masterInputL getBuffer:inNumberFrames];
+//    }
+
     AudioSignalType *outA = ioData->mBuffers[0].mData;
     AudioSignalType *outB = ioData->mBuffers[1].mData;
     
     for (int i = 0; i < inNumberFrames; i ++) {
         outA[i] = leftBuffer[i];
-        
-        if ([audioEngine.masterInputR isConnected]) {
-            outB[i] = rightBuffer[i];
-        } else {
-            outB[i] = leftBuffer[i];
-        }
+        outB[i] = rightBuffer[i];
+
     }
-    
+//
     [audioEngine.masterInputL engineDidRender];
     [audioEngine.masterInputR engineDidRender];
-    
+    }
     return noErr;
 }
 
@@ -344,6 +356,81 @@ static void checkError(OSStatus error, const char *operation) {
     fprintf(stderr, "Error: %s (%s)\n", operation, errorString); exit(1);
 }
 
+#pragma mark Wavetables
+
+-(void)buildWavetables {
+
+    // Sin wavetable
+    for (int i = 0; i < WAVETABLE_SIZE; i++) {
+        double tablePhase = (i / (float)WAVETABLE_SIZE + 1.0) * (M_PI * 2);
+        AudioSignalType a = sin(tablePhase);
+        sinWaveTable[i] = a;
+    }
+    
+    // Saw wavetable
+    for (int i = 0; i < WAVETABLE_SIZE; i++) {
+        double result = 0;
+        double tablePhase = (i / (float)WAVETABLE_SIZE + 1.0) * (M_PI * 2);
+        for (int j = 1; j <= ANALOG_HARMONICS; j++) {
+            result -= (sin(tablePhase * j) / j) / 2.0;
+        }
+        sawWaveTable[i] = (AudioSignalType)result;
+    }
+    
+    // Ramp wavetable
+    for (int i = 0; i < WAVETABLE_SIZE; i++) {
+        double result = 0;
+        double tablePhase = (i / (float)WAVETABLE_SIZE + 1.0) * (M_PI * 2);
+        for (int j = 1; j <= ANALOG_HARMONICS; j++) {
+            result += (sin(tablePhase * j) / j) / 2.0;
+        }
+        rampWaveTable[i] = (AudioSignalType)result;
+    }
+    
+    // Tri wavetable
+    for (int i = 0; i < WAVETABLE_SIZE; i++) {
+        double result = 0;
+        double tablePhase = (i / (float)WAVETABLE_SIZE + 1.0) * (M_PI * 2);
+        
+        int harmonicNumber = 1;
+        bool inverse = false;
+        for (int j = 1; j < (ANALOG_HARMONICS * 2) + 1; j += 2) {
+            
+            harmonicNumber ++;
+            if (inverse) {
+                result -= sin(tablePhase * j) / powf(((j) + 1), 2) / 0.5f;
+                inverse = false;
+            } else {
+                result += sin(tablePhase * j) / powf(((j) + 1), 2) / 0.5f;
+                inverse = true;
+            }
+        }
+        
+        triWaveTable[i] = result;
+    }
+    
+    // Square wavetable
+    for (int i = 0; i < WAVETABLE_SIZE; i++) {
+        double result = 0;
+        double tablePhase = (i / (float)WAVETABLE_SIZE + 1.0) * (M_PI * 2);
+        for (int j = 1; j < (ANALOG_HARMONICS * 2) + 1;j += 2) {
+            result += sin(tablePhase * j) / j;
+        }
+        squareWaveTable[i] = result;
+    }
+    
+    // NSLOG the waves
+    int res = 40;
+    for (int i = 0; i < res; i++) {
+        NSInteger sampleIndex = (i / (float)res) * WAVETABLE_SIZE;
+        AudioSignalType sample = squareWaveTable[sampleIndex];
+        
+        NSInteger level = ((sample + 1) / 2.0) * res * 2;
+        NSString *padding = [@"" stringByPaddingToLength:level withString:@"-" startingAtIndex:0];
+        NSLog(@"%@", [padding stringByAppendingString:@"*"]);
+    }
+}
+
 #pragma mark Cleanup
 
 -(void)cleanup {
@@ -361,6 +448,7 @@ static void checkError(OSStatus error, const char *operation) {
     
     [self removeObserver:self forKeyPath:UIApplicationDidEnterBackgroundNotification];
     [self removeObserver:self forKeyPath:UIApplicationWillEnterForegroundNotification];
+    [self removeObserver:self forKeyPath:AVAudioSessionMediaServicesWereResetNotification];
     [self removeObserver:self forKeyPath:UIApplicationWillTerminateNotification];
 }
 

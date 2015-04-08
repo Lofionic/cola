@@ -5,13 +5,15 @@
 //  Created by Chris on 13/02/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
+#import "COLDefines.h"
 #import "COLContinuousParameter.h"
 #import "COLDiscreteParameter.h"
 #import "COLComponentLFO.h"
 #import "COLAudioEnvironment.h"
 
 @interface COLComponentLFO () {
-    float phase;
+    Float64 phase;
+
 }
 
 @property (nonatomic, strong) COLComponentOutput *mainOut;
@@ -37,8 +39,8 @@
     
     self.waveform = [[COLDiscreteParameter alloc] initWithComponent:self withName:@"Wave" max:5];
     [self setParameters:@[self.rate, self.waveform]];
-
 }
+
 
 -(void)renderOutputs:(UInt32)numFrames {
     
@@ -47,7 +49,7 @@
     AudioSignalType *frequencyBuffer = [self.freqIn getBuffer:numFrames];
     
     // Output buffer
-    AudioSignalType *mainBuffer = [self.mainOut prepareBufferOfSize:numFrames];
+    AudioSignalType *outBuffer = [self.mainOut prepareBufferOfSize:numFrames];
 
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
@@ -64,7 +66,37 @@
         if (phase > 2.0 * M_PI) {
             phase -= (2.0 * M_PI);
         }
-        mainBuffer[i] = sin(phase);
+        
+        float sampleIndexFloat = (phase / (M_PI * 2)) * (WAVETABLE_SIZE - 1);
+        
+        NSInteger waveform = [self.waveform selectedIndex];
+        AudioSignalType sampleIndexLower = 0;
+        AudioSignalType sampleIndexUpper = 0;
+        if (waveform == 0) {
+            // Sinwave
+            sampleIndexLower = sinWaveTable[(int)floor(sampleIndexFloat)];
+            sampleIndexUpper = sinWaveTable[(int)ceil(sampleIndexFloat)];
+        } else if (waveform == 1) {
+            // Triwave
+            sampleIndexLower = triWaveTable[(int)floor(sampleIndexFloat)];
+            sampleIndexUpper = triWaveTable[(int)ceil(sampleIndexFloat)];
+        } else if (waveform == 2) {
+            // Sawtooth
+            sampleIndexLower = sawWaveTable[(int)floor(sampleIndexFloat)];
+            sampleIndexUpper = sawWaveTable[(int)ceil(sampleIndexFloat)];
+        } else if (waveform == 3) {
+            // Ramp
+            sampleIndexLower = rampWaveTable[(int)floor(sampleIndexFloat)];
+            sampleIndexUpper = rampWaveTable[(int)ceil(sampleIndexFloat)];
+        } else if (waveform == 4) {
+            // Square
+            sampleIndexLower = squareWaveTable[(int)floor(sampleIndexFloat)];
+            sampleIndexUpper = squareWaveTable[(int)ceil(sampleIndexFloat)];
+        }
+        
+        float remainder = fmodf(sampleIndexFloat, 1);
+        
+        outBuffer[i] = sampleIndexLower + (sampleIndexUpper - sampleIndexLower) * remainder;
     }
 }
 
