@@ -172,9 +172,9 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     AudioSignalType *leftBuffer = [[audioEngine masterInputL] getBuffer:inNumberFrames];
     AudioSignalType *rightBuffer = [[audioEngine masterInputR] getBuffer:inNumberFrames];
 
-//    if (![audioEngine.masterInputR isConnected]) {
-//        rightBuffer = [audioEngine.masterInputL getBuffer:inNumberFrames];
-//    }
+    if (![audioEngine.masterInputR isConnected]) {
+        rightBuffer = [audioEngine.masterInputL getBuffer:inNumberFrames];
+    }
 
     AudioSignalType *outA = ioData->mBuffers[0].mData;
     AudioSignalType *outB = ioData->mBuffers[1].mData;
@@ -184,7 +184,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         outB[i] = rightBuffer[i];
 
     }
-//
+
     [audioEngine.masterInputL engineDidRender];
     [audioEngine.masterInputR engineDidRender];
     }
