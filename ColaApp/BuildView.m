@@ -102,11 +102,17 @@ static NSArray *cableColours;
 }
 
 -(void)addGlobalIO {
-    COLComponentIO *mainIn = [[COLAudioContext globalContext] masterInputAtIndex:0];
-    ConnectorView *mainInConnectorView = [[ConnectorView alloc] initWithComponentIO:mainIn];
-    [mainInConnectorView setCenter:CGPointMake(24, self.headerHeight / 2.0)];
-    [mainInConnectorView setDelegate:self];
-    [self addSubview:mainInConnectorView];
+    COLComponentIO *mainInL = [[COLAudioContext globalContext] masterInputAtIndex:0];
+    ConnectorView *mainInLConnectorView = [[ConnectorView alloc] initWithComponentIO:mainInL];
+    [mainInLConnectorView setCenter:CGPointMake(600, self.headerHeight / 2.0)];
+    [mainInLConnectorView setDelegate:self];
+    [self addSubview:mainInLConnectorView];
+    
+    COLComponentIO *mainInR = [[COLAudioContext globalContext] masterInputAtIndex:1];
+    ConnectorView *mainInRConnectorView = [[ConnectorView alloc] initWithComponentIO:mainInR];
+    [mainInRConnectorView setCenter:CGPointMake(650, self.headerHeight / 2.0)];
+    [mainInRConnectorView setDelegate:self];
+    [self addSubview:mainInRConnectorView];
     
     COLComponentIO *keyboardOut = [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] outputForIndex:0];
     ConnectorView *keyboardOutView = [[ConnectorView alloc] initWithComponentIO:keyboardOut];

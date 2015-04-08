@@ -40,7 +40,6 @@
 }
 
 -(void)initializeAUGraph {
-    
     // Create the AUGraph
     NSLog(@"Creating AUGraph");
     checkError(NewAUGraph(&mGraph), "Cannot create new AUGraph");
@@ -165,12 +164,13 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     AudioSignalType *outB = ioData->mBuffers[1].mData;
     
     for (int i = 0; i < inNumberFrames; i ++) {
-//        AudioSignalType p = leftBuffer[i];
-//        if (p != 0)
-//        printf("%.5f\n", p);
-        
         outA[i] = leftBuffer[i];
-        outB[i] = rightBuffer[i];
+        
+        if ([audioEngine.masterInputR isConnected]) {
+            outB[i] = rightBuffer[i];
+        } else {
+            outB[i] = leftBuffer[i];
+        }
     }
     
     [audioEngine.masterInputL engineDidRender];
@@ -212,6 +212,11 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
                                                object: nil];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(mediaServicesWereReset)
+                                                 name: AVAudioSessionMediaServicesWereResetNotification
+                                               object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(appWillTerminate)
                                                  name: UIApplicationWillTerminateNotification
                                                object: nil];
@@ -229,8 +234,16 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     [self startStopEngine];
 }
 
+-(void)mediaServicesWereReset {
+    NSLog(@"Media services were reset");
+    // TODO: Clear up & rebuild audio engine
+    [self cleanup];
+    [self initializeAUGraph];
+}
+
 -(void)appWillTerminate {
     NSLog(@"App will terminate");
+    [self cleanup];
 }
 
 #pragma mark Inter App Audio
@@ -332,7 +345,20 @@ static void checkError(OSStatus error, const char *operation) {
 }
 
 #pragma mark Cleanup
+
+-(void)cleanup {
+    [self stopGraph];
+    [self setAudioSessionInActive];
+    
+    AUGraphClose(mGraph);
+    DisposeAUGraph(mGraph);
+
+    mGraph = nil;
+}
+
 -(void)dealloc {
+    [self cleanup];
+    
     [self removeObserver:self forKeyPath:UIApplicationDidEnterBackgroundNotification];
     [self removeObserver:self forKeyPath:UIApplicationWillEnterForegroundNotification];
     [self removeObserver:self forKeyPath:UIApplicationWillTerminateNotification];
