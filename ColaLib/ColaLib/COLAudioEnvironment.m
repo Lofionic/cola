@@ -108,6 +108,8 @@
     
     if (newComponent) {
         [self.components addObject:newComponent];
+        [newComponent assignUniqueName];
+        NSLog(@"Created component %@", newComponent.name);
     }
 
     return newComponent;
@@ -115,6 +117,7 @@
 
 -(BOOL)removeComponent:(COLComponent*)component {
     if ([self.components containsObject:component]) {
+        NSLog(@"Removing component %@", component.name);
         [component disconnectAll];
         [self.components removeObject:component];
         return TRUE;
@@ -126,6 +129,7 @@
 #pragma mark AudioEngine delegates
 
 -(NSDictionary *)interAppInfoDictionaryForAudioEngine:(COLAudioEngine *)audioEngine {
+    // Fetch the inter-app audio info from the app delegate
     if ([self.infoDelegate respondsToSelector:@selector(interAppInfoDictionary)]) {
         return [self.infoDelegate interAppInfoDictionary];
     }

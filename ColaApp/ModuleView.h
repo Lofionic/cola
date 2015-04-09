@@ -29,5 +29,6 @@
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame;
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription;
 -(UIImage*)snapshot;
+-(void)trash;
 
 @end

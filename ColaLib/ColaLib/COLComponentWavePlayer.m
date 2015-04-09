@@ -240,4 +240,7 @@
     }
 }
 
++(NSString *)defaultName {
+    return @"Wave";
+}
 @end

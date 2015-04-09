@@ -71,6 +71,7 @@
         // Create the thumbnail
         ModuleView *thumbnailView = [[ModuleView alloc] initWithModuleDescription:self];
         self.thumbnail = [thumbnailView snapshot];
+        [thumbnailView trash];
     }
     
     return self;

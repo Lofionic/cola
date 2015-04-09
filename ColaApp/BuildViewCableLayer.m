@@ -60,7 +60,7 @@
         CGContextFillEllipseInRect(ctx, CGRectOffset(rect1, 0, -2));
         CGContextFillEllipseInRect(ctx, CGRectOffset(rect2, 0, -2));
         
-        CGFloat hang = MIN(abs(cable.point2.x - cable.point1.x), 40);
+        CGFloat hang = MIN(fabs(cable.point2.x - cable.point1.x), 40);
         CGFloat bottom = MAX(cable.point1.y, cable.point2.y) + hang;
         
         CGFloat sway = (self.motionManager.deviceMotion.attitude.roll * 0.25);

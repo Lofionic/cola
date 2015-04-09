@@ -10,6 +10,7 @@
 
 @interface NSString (Random)
 
-+ (NSString *)randomAlphanumericStringWithLength:(NSInteger)length;
++(NSString *)randomAlphanumericStringWithLength:(NSInteger)length;
++(NSString *)randomName;
 
 @end

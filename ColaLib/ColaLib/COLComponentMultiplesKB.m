@@ -45,4 +45,8 @@
     [self setInputs:@[self.inputA, self.inputB]];
 }
 
++(NSString *)defaultName {
+    return @"Multi KB";
+}
+
 @end

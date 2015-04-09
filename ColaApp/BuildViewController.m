@@ -11,6 +11,7 @@
 #import "KeyboardView.h"
 #import "BuildView.h"
 #import "ModuleView.h"
+#import "ModuleCatalog.h"
 
 static BuildView *buildView = nil;
 
@@ -139,6 +140,14 @@ static BuildView *buildView = nil;
                                              selector: @selector(appWillEnterForeground)
                                                  name: UIApplicationWillEnterForegroundNotification
                                                object: nil];
+    
+    [self buildStartingBlock];
+}
+
+-(void)buildStartingBlock {
+    
+    [self.buildView addViewForModule:[[ModuleCatalog sharedCatalog] moduleOfType:kCOLComponentMultiplesKB] atPoint:CGPointMake(1, 1)];
+
 }
 
 -(void)appWillEnterForeground {

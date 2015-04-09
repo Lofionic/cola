@@ -132,4 +132,8 @@
     prevPitchbend = self.pitchbend;
 }
 
++(NSString *)defaultName {
+    return @"KB";
+}
+
 @end

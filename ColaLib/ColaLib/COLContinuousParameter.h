@@ -14,9 +14,6 @@ typedef float (^parameterFunction)(float inValue);
 
 @interface COLContinuousParameter : COLParameter
 
-@property (nonatomic, weak) COLComponent *component;
-@property (nonatomic, strong) NSString *name;
-
 @property (nonatomic, strong) parameterFunction function;
 
 -(void)setNormalizedValue:(float)newValue;

@@ -9,6 +9,7 @@
 #import "ComponentShelfCollectionViewCell.h"
 #import "ComponentShelfView.h"
 #import "ModuleDescription.h"
+#import "ModuleCatalog.h"
 
 @implementation ComponentShelfView
 
@@ -43,8 +44,7 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     ComponentShelfCollectionViewCell *cell = (ComponentShelfCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    
-    [cell setModuleDescription:[moduleCatalog objectAtIndex:indexPath.row]];
+    [cell setModuleDescription:[[[ModuleCatalog sharedCatalog] allModules] objectAtIndex:indexPath.row]];
     [cell setComponentShelf:self];
     
     return cell;
@@ -56,7 +56,7 @@
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [moduleCatalog count];
+    return [[[ModuleCatalog sharedCatalog] allModules] count];
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {

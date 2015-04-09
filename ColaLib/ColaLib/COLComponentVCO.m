@@ -140,4 +140,8 @@
     }
 }
 
++(NSString *)defaultName {
+    return @"VCO";
+}
+
 @end

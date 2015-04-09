@@ -200,4 +200,8 @@
     gateOpenInterval = 0;
 }
 
++(NSString *)defaultName {
+    return @"EG";
+}
+
 @end

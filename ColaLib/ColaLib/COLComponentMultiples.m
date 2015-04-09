@@ -74,4 +74,8 @@
     }
 }
 
++(NSString *)defaultName {
+    return @"Multi";
+}
+
 @end

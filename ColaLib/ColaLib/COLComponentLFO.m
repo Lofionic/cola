@@ -100,4 +100,8 @@
     }
 }
 
++(NSString *)defaultName {
+    return @"LFO";
+}
+
 @end

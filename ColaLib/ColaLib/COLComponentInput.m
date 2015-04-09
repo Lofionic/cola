@@ -11,8 +11,6 @@
 
 @interface COLComponentInput ()
 
-@property (nonatomic, weak) COLComponentOutput *connectedTo;
-
 @end
 
 @implementation COLComponentInput
@@ -22,7 +20,7 @@ static UInt32 emptyBufferSize;
 
 -(AudioSignalType *)getBuffer:(UInt32)numFrames {
     if (self.connectedTo) {
-        AudioSignalType* buffer = [[self connectedTo] getBuffer:numFrames];
+        AudioSignalType* buffer = [(COLComponentOutput*)[self connectedTo] getBuffer:numFrames];
         if (buffer != NULL) {
             return buffer;
         } else {

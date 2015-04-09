@@ -59,5 +59,8 @@
     }
 }
 
++(NSString *)defaultName {
+    return @"Mix2";
+}
 
 @end

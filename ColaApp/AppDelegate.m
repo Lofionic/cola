@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "BuildViewController.h"
 #import "ModuleDescription.h"
+#import "ModuleCatalog.h"
 
 @interface AppDelegate ()
 
@@ -20,15 +21,13 @@ CGFloat kBuildViewColumnWidth;
 CGFloat kBuildViewRowHeight;
 CGFloat kKeyboardHeight;
 
-NSArray *moduleCatalog;
-
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [self initLayoutMetrics];
-    [self initModuleCatalog];
+    [[ModuleCatalog sharedCatalog] loadFromURL:[[NSBundle mainBundle] URLForResource:@"moduleCatalog" withExtension:@"json"]];
     
     // Start audio engine
     [[COLAudioEnvironment sharedEnvironment] start];
@@ -45,6 +44,7 @@ NSArray *moduleCatalog;
     [navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     
     [self.window setRootViewController:navigationController];
+    
     
     return YES;
 }
@@ -63,27 +63,27 @@ NSArray *moduleCatalog;
     }
 }
 
-- (void)initModuleCatalog {
-    NSURL *moduleCatalogURL = [[NSBundle mainBundle] URLForResource:@"moduleCatalog" withExtension:@"json"];
-    if (moduleCatalogURL) {
-        NSError *dataError;
-        NSData *moduleCatalogData = [NSData dataWithContentsOfURL:moduleCatalogURL options:0 error:&dataError];
-        if (!dataError && moduleCatalogData) {
-            NSError *dictError;
-            NSDictionary *moduleCatalogJSON = [NSJSONSerialization JSONObjectWithData:moduleCatalogData options:0 error:&dictError];
-            if (!dictError && moduleCatalogJSON) {
-                NSArray *modules = [moduleCatalogJSON objectForKey:@"modules"];
-                __block NSMutableArray *moduleDescriptions = [[NSMutableArray alloc] initWithCapacity:[modules count]];
-                
-                [modules enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
-                    NSDictionary *moduleDictionary = (NSDictionary*)obj;
-                    [moduleDescriptions addObject:[[ModuleDescription alloc] initWithDictionary:moduleDictionary]];
-                }];
-                moduleCatalog = [NSArray arrayWithArray:moduleDescriptions];
-            }
-        }
-    }
-}
+//- (void)initModuleCatalog {
+//    NSURL *moduleCatalogURL = [[NSBundle mainBundle] URLForResource:@"moduleCatalog" withExtension:@"json"];
+//    if (moduleCatalogURL) {
+//        NSError *dataError;
+//        NSData *moduleCatalogData = [NSData dataWithContentsOfURL:moduleCatalogURL options:0 error:&dataError];
+//        if (!dataError && moduleCatalogData) {
+//            NSError *dictError;
+//            NSDictionary *moduleCatalogJSON = [NSJSONSerialization JSONObjectWithData:moduleCatalogData options:0 error:&dictError];
+//            if (!dictError && moduleCatalogJSON) {
+//                NSArray *modules = [moduleCatalogJSON objectForKey:@"modules"];
+//                __block NSMutableArray *moduleDescriptions = [[NSMutableArray alloc] initWithCapacity:[modules count]];
+//                
+//                [modules enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+//                    NSDictionary *moduleDictionary = (NSDictionary*)obj;
+//                    [moduleDescriptions addObject:[[ModuleDescription alloc] initWithDictionary:moduleDictionary]];
+//                }];
+//                moduleCatalog = [NSArray arrayWithArray:moduleDescriptions];
+//            }
+//        }
+//    }
+//}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

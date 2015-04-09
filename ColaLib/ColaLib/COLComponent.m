@@ -34,8 +34,27 @@
     return self;
 }
 
--(void)initializeIO {
+-(void)assignUniqueName {
+    NSUInteger componentCount = 0;
+    NSString *name;
+    BOOL uniqueName = NO;
     
+    while (!uniqueName) {
+        componentCount ++;
+        name = [NSString stringWithFormat:@"%@ %lu", [self.class defaultName], (unsigned long)componentCount];
+        uniqueName = YES;
+        for (COLComponent *thisComponent in [[COLAudioEnvironment sharedEnvironment] components]) {
+            if ([thisComponent.name isEqualToString:name]) {
+                uniqueName = NO;
+            }
+        }
+    };
+    
+    self.name = name;
+}
+
+-(void)initializeIO {
+    // Override this method to setup the component's IO & parameters
 }
 
 // Data source
@@ -153,6 +172,10 @@
 
 -(void)dealloc {
     NSLog(@"%@ dealloc", self.name);
+}
+
++(NSString*)defaultName {
+    return @"Component";
 }
 
 @end

@@ -37,11 +37,7 @@
     if (self = [super initWithFrame:frame]) {
         self.component = component;
         self.moduleDescription = moduleDescription;
-        
-        NSString *componentName = [NSString stringWithFormat:@"%@_%@", NSStringFromClass([component class]), [NSString randomAlphanumericStringWithLength:4]];
-        [self.component setName:componentName];
-        NSLog(@"Component: %@ created.", componentName);
-        
+
         if (moduleDescription.connectors) {
             [self addConnectors:moduleDescription.connectors];
         }
@@ -144,6 +140,11 @@
             [self.delegate moduleView:self didEndDraggingWithGesture:uigr];
         }
     }
+}
+
+-(void)trash {
+    [[COLAudioEnvironment sharedEnvironment] removeComponent:self.component];
+    [self removeFromSuperview];
 }
 
 @end

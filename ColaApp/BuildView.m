@@ -34,11 +34,13 @@
 @property (nonatomic, strong) BuildViewHighlightLayer   *highlightLayer;
 @property (nonatomic, strong) BuildViewCableLayer       *cableLayer;
 
-@property (nonatomic, strong) NSMutableArray *cables;
-@property (nonatomic, strong) BuildViewCable *dragCable;
+@property (nonatomic, strong) NSMutableArray            *cables;
+@property (nonatomic, strong) BuildViewCable            *dragCable;
 
-@property (nonatomic, strong) ModuleView    *dragView;
-@property (nonatomic) CGPoint               dragOrigin;
+@property (nonatomic, strong) ModuleView                *dragView;
+@property (nonatomic) CGPoint                           dragOrigin;
+
+@property (nonatomic, strong) NSMutableDictionary       *moduleViews;
 
 @end
 
@@ -74,6 +76,7 @@ static NSArray *cableColours;
         [self addLayers];
         
         self.cables = [[NSMutableArray alloc] initWithCapacity:200];
+        self.moduleViews = [[NSMutableDictionary alloc] initWithCapacity:100];
     }
     return self;
 }
@@ -265,6 +268,8 @@ static NSArray *cableColours;
                 BuildViewCellPath *cellPath = (BuildViewCellPath*)obj;
                 cellOccupied[cellPath.row][cellPath.column] = TRUE;
             }];
+            
+            [self.moduleViews setObject:moduleView forKey:[NSString randomName]];
             
             return moduleView;
         }

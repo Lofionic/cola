@@ -65,5 +65,8 @@
     }
 }
 
++(NSString *)defaultName {
+    return @"VCA";
+}
 
 @end

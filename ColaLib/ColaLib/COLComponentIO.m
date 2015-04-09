@@ -37,14 +37,6 @@
     return NO;
 }
 
--(NSString*)nameWithComponent {
-    if (self.component) {
-        return [NSString stringWithFormat:@"%@:%@", [self.component name], _name];
-    } else {
-        return _name;
-    }
-}
-
 -(void)engineDidRender {
     
 }

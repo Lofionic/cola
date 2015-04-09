@@ -32,7 +32,7 @@
 -(AudioSignalType*)prepareBufferOfSize:(UInt32)numFrames {
     // Create or resize the buffer, if necessary
     if (numFrames != bufferSize) {
-        NSLog(@"Creating buffer of size %u for output %@", (unsigned int)numFrames, [self nameWithComponent]);
+        NSLog(@"Creating buffer of size %u for component %@ output %@", (unsigned int)numFrames, [self component], [self name]);
         free(buffer);
         bufferSize = numFrames;
         buffer = (AudioSignalType*)malloc(bufferSize * sizeof(AudioSignalType));
