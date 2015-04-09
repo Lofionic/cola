@@ -1,3 +1,5 @@
+How to make inter-app audio work:
+
 Add 'Bundle display name' to plist:
     <key>CFBundleDisplayName</key>
     <string>Cola Demo App</string>
@@ -29,4 +31,4 @@ Implement interAppInfoDictionary method in app delegate:
                 kDictionaryKeyComponentName : @"Cola Demo App",
                 kDictionaryKeyComponentMaufacturer : @"lfnc"
         };
-    }
+    }X

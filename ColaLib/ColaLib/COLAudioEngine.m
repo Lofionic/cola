@@ -12,6 +12,7 @@
 #import "Endian.h"
 #import "COLDefines.h"
 
+// Extern wavetables used by components
 AudioSignalType sinWaveTable[WAVETABLE_SIZE];
 AudioSignalType triWaveTable[WAVETABLE_SIZE];
 AudioSignalType sawWaveTable[WAVETABLE_SIZE];
@@ -167,26 +168,29 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 {
     @autoreleasepool {
 
-    COLAudioEngine *audioEngine = (__bridge COLAudioEngine*)inRefCon;
+        COLAudioEngine *audioEngine = (__bridge COLAudioEngine*)inRefCon;
 
-    AudioSignalType *leftBuffer = [[audioEngine masterInputL] getBuffer:inNumberFrames];
-    AudioSignalType *rightBuffer = [[audioEngine masterInputR] getBuffer:inNumberFrames];
+        // Pull the buffer chain
+        AudioSignalType *leftBuffer = [[audioEngine masterInputL] getBuffer:inNumberFrames];
+        AudioSignalType *rightBuffer = [[audioEngine masterInputR] getBuffer:inNumberFrames];
 
-    if (![audioEngine.masterInputR isConnected]) {
-        rightBuffer = [audioEngine.masterInputL getBuffer:inNumberFrames];
-    }
+        // Split a mono signal if right is not connected
+        if (![audioEngine.masterInputR isConnected]) {
+            rightBuffer = [audioEngine.masterInputL getBuffer:inNumberFrames];
+        }
 
-    AudioSignalType *outA = ioData->mBuffers[0].mData;
-    AudioSignalType *outB = ioData->mBuffers[1].mData;
-    
-    for (int i = 0; i < inNumberFrames; i ++) {
-        outA[i] = leftBuffer[i];
-        outB[i] = rightBuffer[i];
+        AudioSignalType *outA = ioData->mBuffers[0].mData;
+        AudioSignalType *outB = ioData->mBuffers[1].mData;
+        
+        // Fill up the output buffer
+        for (int i = 0; i < inNumberFrames; i ++) {
+            outA[i] = leftBuffer[i];
+            outB[i] = rightBuffer[i];
+        }
 
-    }
-
-    [audioEngine.masterInputL engineDidRender];
-    [audioEngine.masterInputR engineDidRender];
+        [audioEngine.masterInputL engineDidRender];
+        [audioEngine.masterInputR engineDidRender];
+        
     }
     return noErr;
 }
