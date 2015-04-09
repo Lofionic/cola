@@ -1,6 +1,7 @@
 {
     "modules" : [
         {
+            "id" : "VCOA",
             "name" : "VCO A",
             "width" : 2,
             "type" : "kCOLComponentVCO",
@@ -60,6 +61,7 @@
             }
         },
         {
+            "id" : "LFOA",
             "name" : "LFO A",
             "width" : 1,
             "type" : "kCOLComponentLFO",
@@ -92,6 +94,7 @@
             }     
         },
         {
+            "id" : "EGA",
             "name" : "EG A",
             "width" : 1,
             "type" : "kCOLComponentEnvelope",
@@ -144,6 +147,7 @@
             }
         },
         {
+            "id" : "VCAA",
             "name" : "VCA A",
             "width" : 1,
             "type" : "kCOLComponentVCA",
@@ -188,6 +192,7 @@
             }
         },
         {
+            "id" : "MULT",
             "name" : "Multiples",
             "width" : 1,
             "type" : "kCOLComponentMultiples",
@@ -258,6 +263,7 @@
             }
         },
         {
+            "id" : "MUKB",
             "name" : "Multiples KB",
             "width" : 1,
             "type" : "kCOLComponentMultiplesKB",
@@ -328,6 +334,7 @@
             }
         },
         {
+            "id" : "MIX2",
             "name" : "Mixer 2",
             "width" : 1,
             "type" : "kCOLComponentMixer2",

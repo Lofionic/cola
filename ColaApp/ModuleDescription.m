@@ -11,6 +11,7 @@
 
 @interface ModuleDescription ()
 
+@property (nonatomic, strong) NSString *identifier;
 @property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *asset;
@@ -28,6 +29,10 @@
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary {
     if (self = [super init]) {
+        
+        if ([dictionary objectForKey:@"id"]) {
+            self.identifier = [dictionary objectForKey:@"id"];
+        }
         
         if ([dictionary objectForKey:@"name"]) {
             self.name = [dictionary objectForKey:@"name"];

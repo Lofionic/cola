@@ -131,6 +131,9 @@ static BuildView *buildView = nil;
     [self.navigationItem setLeftBarButtonItem:self.buildModeButton];
     [self setBuildMode:NO animated:NO];
     
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(saveTapped)];
+    [self.navigationItem setRightBarButtonItem:saveButton];
+    
     self.iaaView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 512, 512)];
     [self.iaaView setBackgroundColor:[UIColor redColor]];
     [self.iaaView setHidden:YES];
@@ -167,6 +170,11 @@ static BuildView *buildView = nil;
     } else {
         [self setBuildMode:NO animated:YES];
     }
+}
+
+-(void)saveTapped {
+    NSDictionary *dict = [self.buildView getPatchDictionary];
+    NSLog(@"%@", dict);
 }
 
 -(void)setBuildMode:(BOOL)buildMode animated:(BOOL)animated {

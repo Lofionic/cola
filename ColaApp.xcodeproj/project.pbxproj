@@ -191,10 +191,7 @@
 				6C1DB6B11AADDEB60041F5F9 /* defines.h */,
 				6C2A5E231A8BF2CC00ECEAB2 /* AppDelegate.h */,
 				6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */,
-				6C6DB53B1AD6B48C0001343E /* ModuleCatalog.h */,
-				6C6DB53C1AD6B48C0001343E /* ModuleCatalog.m */,
-				6C1201071AAE44D200C6ACB6 /* ModuleDescription.h */,
-				6C1201081AAE44D200C6ACB6 /* ModuleDescription.m */,
+				6C6DB53E1AD6C5480001343E /* ModuleCatalog */,
 				6C8DD2961AC0DA2400320628 /* BuildView */,
 				6C0D487F1AC3662E008AD869 /* KeyboardView */,
 				6C2A5E291A8BF2CC00ECEAB2 /* Main.storyboard */,
@@ -233,6 +230,17 @@
 				6C12010A1AAE49A100C6ACB6 /* moduleCatalog.json */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		6C6DB53E1AD6C5480001343E /* ModuleCatalog */ = {
+			isa = PBXGroup;
+			children = (
+				6C6DB53B1AD6B48C0001343E /* ModuleCatalog.h */,
+				6C6DB53C1AD6B48C0001343E /* ModuleCatalog.m */,
+				6C1201071AAE44D200C6ACB6 /* ModuleDescription.h */,
+				6C1201081AAE44D200C6ACB6 /* ModuleDescription.m */,
+			);
+			name = ModuleCatalog;
 			sourceTree = "<group>";
 		};
 		6C8DD2961AC0DA2400320628 /* BuildView */ = {

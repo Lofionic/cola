@@ -18,7 +18,3 @@
 -(ModuleDescription*)moduleOfType:(NSString*)type;
 
 @end
-
-@interface ModuleCatalogItem : NSObject
-
-@end

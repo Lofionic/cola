@@ -20,6 +20,7 @@ static UInt32 emptyBufferSize;
 
 -(AudioSignalType *)getBuffer:(UInt32)numFrames {
     if (self.connectedTo) {
+        NSAssert([self.connectedTo isKindOfClass:[COLComponentOutput class]], @"Input connectedTo must be COLComponentOUtput class");
         AudioSignalType* buffer = [(COLComponentOutput*)[self connectedTo] getBuffer:numFrames];
         if (buffer != NULL) {
             return buffer;

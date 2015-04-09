@@ -13,7 +13,6 @@
 #import "BuildViewCableLayer.h"
 #import "BuildViewController.h"
 #import "ModuleDescription.h"
-#import "NSString+Random.h"
 #import <ColaLib/ColaLib.h>
 
 @interface BuildView () {
@@ -269,7 +268,7 @@ static NSArray *cableColours;
                 cellOccupied[cellPath.row][cellPath.column] = TRUE;
             }];
             
-            [self.moduleViews setObject:moduleView forKey:[NSString randomName]];
+            [self.moduleViews setObject:moduleView forKey:moduleView.identifier];
             
             return moduleView;
         }
@@ -467,6 +466,46 @@ static NSArray *cableColours;
     } else {
         return NO;
     }
+}
+
+#pragma mark Load & Save
+
+-(NSDictionary*)getPatchDictionary {
+    // Create a dictionary of all the data needed to reassemble the patch
+    
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithCapacity:100]; // TODO: set capacity
+    
+    // Save modules
+    NSMutableDictionary *modules = [[NSMutableDictionary alloc] initWithCapacity:[self.moduleViews count]];
+    for (NSString *moduleKey in [self.moduleViews allKeys]) {
+        ModuleView *moduleView = [self.moduleViews objectForKey:moduleKey];
+        ModuleDescription *thisModuleDescription = moduleView.moduleDescription;
+        [modules setObject:thisModuleDescription.identifier forKey:moduleKey];
+    }
+    [result setObject:[NSDictionary dictionaryWithDictionary:modules] forKey:@"modules"];
+    
+    // Save connections
+    NSMutableArray *cables = [[NSMutableArray alloc] initWithCapacity:[self.cables count]];
+    for (BuildViewCable *thisCable in self.cables) {
+        
+        ModuleView *outputModule = (ModuleView*)[thisCable.connector1 superview];
+        NSString *outputConnection = thisCable.connector1.componentIO.name;
+        ModuleView *inputModule = (ModuleView*)[thisCable.connector2 superview];
+        NSString *inputConnection = thisCable.connector2.componentIO.name;
+        
+        NSDictionary *cableDictionary = @{
+                                          @"outputModule"       : outputModule.identifier,
+                                          @"outputConnection"   : outputConnection,
+                                          @"inputModule"        : inputModule.identifier,
+                                          @"inputConnection"    : inputConnection
+                                          };
+        
+        [cables addObject:cableDictionary];
+    }
+    [result setObject:cables forKey:@"cables"];
+    
+    
+    return [NSDictionary dictionaryWithDictionary:result];
 }
 
 
