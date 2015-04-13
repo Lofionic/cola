@@ -478,9 +478,33 @@ static NSArray *cableColours;
     // Save modules
     NSMutableDictionary *modules = [[NSMutableDictionary alloc] initWithCapacity:[self.moduleViews count]];
     for (NSString *moduleKey in [self.moduleViews allKeys]) {
+
         ModuleView *moduleView = [self.moduleViews objectForKey:moduleKey];
-        ModuleDescription *thisModuleDescription = moduleView.moduleDescription;
-        [modules setObject:thisModuleDescription.identifier forKey:moduleKey];
+        COLComponent *component = [moduleView component];
+        
+        NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] initWithCapacity:[component numberOfParameters]];
+        
+        for (NSUInteger i = 0; i < [component numberOfParameters]; i++) {
+            COLParameter *parameter = [component parameterForIndex:i];
+            
+            NSNumber *value;
+            if ([parameter isKindOfClass:[COLDiscreteParameter class]]) {
+                COLDiscreteParameter *discreteParameter = (COLDiscreteParameter*)parameter;
+                value = [NSNumber numberWithFloat:[discreteParameter selectedIndex]];
+            } else if ([parameter isKindOfClass:[COLContinuousParameter class]]) {
+                COLContinuousParameter *continuousParameter = (COLContinuousParameter*)parameter;
+                value = [NSNumber numberWithFloat:[continuousParameter getNormalizedValue]];
+            }
+            
+            [parameterDictionary setValue:value forKey:parameter.name];
+        }
+        
+        NSDictionary *moduleDictionary = @{
+                                           @"id"        :   moduleView.moduleDescription.identifier,
+                                           @"params"    :   parameterDictionary
+                                           };
+
+        [modules setObject:moduleDictionary forKey:moduleKey];
     }
     [result setObject:[NSDictionary dictionaryWithDictionary:modules] forKey:@"modules"];
     
