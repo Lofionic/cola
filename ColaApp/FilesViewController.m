@@ -47,6 +47,5 @@
     return CGSizeMake(120, 120);
 }
 
--collectionVie
 
 @end

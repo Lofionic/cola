@@ -377,6 +377,64 @@
                     }
                 ]
             }
+        },
+        {
+            "id" : "VCFA",
+            "name" : "VCF A",
+            "width" : 2,
+            "type" : "kCOLComponentVCF",
+            "view" : {
+                "asset" : "vcf_a",
+                "connectors" : [
+                    {
+                        "type" : "input",
+                        "connection" : "In",
+                        "x" : 32,
+                        "y" : 280
+                    },
+                    {
+                        "type" : "output",
+                        "connection" : "LP Out",
+                        "x" : 96,
+                        "y" : 280
+                    },
+                    {
+                        "type" : "output",
+                        "connection" : "HP Out",
+                        "x" : 160,
+                        "y" : 280
+                    },
+                    {
+                        "type" : "input",
+                        "connection" : "CV In",
+                        "x" : 48,
+                        "y" : 184
+                    }
+                ],
+                "controls" : [
+                     {
+                        "type" : "continuous",
+                        "parameter" : "Cutoff",
+                        "asset" : "large_white",
+                        "x" : 48,
+                        "y" : 80
+                    },               
+                    {
+                        "type" : "continuous",
+                        "parameter" : "Resonance",
+                        "asset" : "large_white",
+                        "x" : 144,
+                        "y" : 80
+                    },               
+                    {
+                        "type" : "continuous",
+                        "parameter" : "CV Amt",
+                        "asset" : "large_white",
+                        "x" : 144,
+                        "y" : 184
+                    }
+                ]
+            }
         }
     ]
 }

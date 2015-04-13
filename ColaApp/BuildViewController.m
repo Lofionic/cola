@@ -178,31 +178,8 @@ static BuildView *buildView = nil;
     NSDictionary *dict = [self.buildView getPatchDictionary];
     NSLog(@"%@", dict);
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Enter patch name"
-                                                                             message:@"Please enter a name to save this patch"
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textfield) {
-        [textfield setPlaceholder:@"Patch name"];
-        if (self.filename) {
-            [textfield setText:self.filename];
-        }
-    }];
-    
-    UIAlertAction *okAction = [UIAlertAction
-                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
-                               style:UIAlertActionStyleDefault
-                               handler:^(UIAlertAction *action)
-                               {
-                                   // Save file
-                                   NSLog(@"Saving file");
-                               }];
-    
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-
-    
+    FilesViewController *filesViewController = [[FilesViewController alloc] init];
+    [self.navigationController pushViewController:filesViewController animated:YES];
 }
 
 -(void)setBuildMode:(BOOL)buildMode animated:(BOOL)animated {

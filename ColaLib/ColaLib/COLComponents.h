@@ -18,5 +18,6 @@
 #import "COLComponentMultiples.h"
 #import "COLComponentMultiplesKB.h"
 #import "COLComponentMixer2.h"
+#import "COLComponentVCF.h"
 
 #endif

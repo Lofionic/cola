@@ -42,8 +42,9 @@
 -(void)loadPresets {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults objectForKey:kPresetsKey]) {
-        self.presets = [userDefaults objectForKey:kPresetsKey];
-        NSLog(@"Recalled %u preset(s)", [self.presets count]);
+        NSData *presetData = [userDefaults objectForKey:kPresetsKey];
+        self.presets = [NSKeyedUnarchiver unarchiveObjectWithData:presetData];
+        NSLog(@"Recalled %lu preset(s)", (unsigned long)[self.presets count]);
     } else {
         NSLog(@"Initializing factory presets");
         [self initFactoryPresets];
@@ -56,8 +57,10 @@
 }
 
 -(void)storePresets {
+    NSData *presetData = [NSKeyedArchiver archivedDataWithRootObject:self.presets];
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:self.presets forKey:kPresetsKey];
+    [userDefaults setObject:presetData forKey:kPresetsKey];
     
     [userDefaults synchronize];
 }
@@ -71,7 +74,6 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
                                                    inDomains:NSUserDomainMask] lastObject];
 }
-
 
 -(NSArray*)getPresetNames {
     NSMutableArray *presetNames = [[NSMutableArray alloc] initWithCapacity:[self.presets count]];
@@ -97,6 +99,9 @@
 
 @end
 
+#define kPresetNameKey          @"kPresetNameKey"
+#define kPresetDictionaryKey    @"kPresetDictionaryKey"
+
 @implementation Preset
 
 -(instancetype)initWithName:(NSString*)name dictionary:(NSDictionary*)dictionary {
@@ -106,6 +111,22 @@
     }
     return self;
 }
+
+-(void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.name forKey:kPresetNameKey];
+    [aCoder encodeObject:self.dictionary forKey:kPresetDictionaryKey];
+}
+
+-(id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+    if (self) {
+        self.name = [aDecoder decodeObjectForKey:kPresetNameKey];
+        self.dictionary = [aDecoder decodeObjectForKey:kPresetDictionaryKey];
+    }
+    return self;
+        
+}
+
 
 @end
 
