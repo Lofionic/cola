@@ -20,4 +20,6 @@ extern CGFloat kKeyboardHeight;
 
 #define TOOLBAR_BUILD_ICON_SELECTED         @"Icons/742-wrench-toolbar-selected"
 #define TOOLBAR_BUILD_ICON                  @"Icons/742-wrench-toolbar"
-#define TOOLBAR_KEYBOARD_ICON_SELECTED      @"Icons/967-piano-toolbar-selected"
+
+
+#define TOOLBAR_FILES_ICON                  @"Icons/928-inbox-files-toolbar"

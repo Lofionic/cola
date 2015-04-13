@@ -30,6 +30,7 @@
 -(COLComponentInput *)inputForIndex:(NSUInteger)index;
 -(COLComponentOutput *)inputNamed:(NSString*)name;
 
+-(NSUInteger)numberOfParameters;
 -(COLParameter*)parameterForIndex:(NSUInteger)index;
 -(COLParameter*)parameterNamed:(NSString*)name;
 
