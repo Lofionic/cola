@@ -18,7 +18,7 @@
 @property (readonly, weak) COLAudioContext  *context;
 @property (readonly, strong) NSArray        *outputs;
 @property (readonly, strong) NSArray        *inputs;
-@property (nonatomic, strong) NSString      *name;
+@property (nonatomic, strong) NSString      *identifier;
 
 @property (readonly) BOOL hasRendered;
 

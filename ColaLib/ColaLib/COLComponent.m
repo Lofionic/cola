@@ -44,13 +44,13 @@
         name = [NSString stringWithFormat:@"%@ %lu", [self.class defaultName], (unsigned long)componentCount];
         uniqueName = YES;
         for (COLComponent *thisComponent in [[COLAudioEnvironment sharedEnvironment] components]) {
-            if ([thisComponent.name isEqualToString:name]) {
+            if ([thisComponent.identifier isEqualToString:name]) {
                 uniqueName = NO;
             }
         }
     };
     
-    self.name = name;
+    self.identifier = name;
 }
 
 -(void)initializeIO {
@@ -120,7 +120,7 @@
     if (index < [self.parameters count]) {
         return [self.parameters objectAtIndex:index];
     } else {
-        NSLog(@"Warning: Invalid parameter index %lu for component %@", (unsigned long)index, self.name);
+        NSLog(@"Warning: Invalid parameter index %lu for component %@", (unsigned long)index, self.identifier);
         return nil;
     }
 }
@@ -171,7 +171,7 @@
 }
 
 -(void)dealloc {
-    NSLog(@"%@ dealloc", self.name);
+    NSLog(@"%@ dealloc", self.identifier);
 }
 
 +(NSString*)defaultName {

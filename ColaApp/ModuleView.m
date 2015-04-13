@@ -22,7 +22,6 @@
 @property (nonatomic, weak) COLComponent        *component;
 @property (nonatomic, strong) NSString          *asset;
 @property (nonatomic, strong) ModuleDescription *moduleDescription;
-@property (nonatomic, strong) NSString          *identifier;
 
 @end
 
@@ -63,7 +62,7 @@
         [longPress setMinimumPressDuration:0.5f];
         [self addGestureRecognizer:longPress];
         
-        self.identifier = [NSString randomName];
+        self.identifier = [NSString randomIdentifier];
     }
     return self;
 }

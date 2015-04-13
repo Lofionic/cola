@@ -34,6 +34,8 @@ static BuildView *buildView = nil;
 
 @property (nonatomic, strong) NSLayoutConstraint    *shiftBuildViewConstraint; // Constraint to shift the build view down when the build view appears
 
+@property (nonatomic, strong) NSString              *filename;
+
 @end
 
 @implementation BuildViewController
@@ -148,9 +150,7 @@ static BuildView *buildView = nil;
 }
 
 -(void)buildStartingBlock {
-    
     [self.buildView addViewForModule:[[ModuleCatalog sharedCatalog] moduleOfType:kCOLComponentMultiplesKB] atPoint:CGPointMake(1, 1)];
-
 }
 
 -(void)appWillEnterForeground {
@@ -175,6 +175,32 @@ static BuildView *buildView = nil;
 -(void)saveTapped {
     NSDictionary *dict = [self.buildView getPatchDictionary];
     NSLog(@"%@", dict);
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Enter patch name"
+                                                                             message:@"Please enter a name to save this patch"
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textfield) {
+        [textfield setPlaceholder:@"Patch name"];
+        if (self.filename) {
+            [textfield setText:self.filename];
+        }
+    }];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   // Save file
+                                   NSLog(@"Saving file");
+                               }];
+    
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+
+    
 }
 
 -(void)setBuildMode:(BOOL)buildMode animated:(BOOL)animated {

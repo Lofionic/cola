@@ -13,6 +13,7 @@
 #import "BuildViewCableLayer.h"
 #import "BuildViewController.h"
 #import "ModuleDescription.h"
+#import "MasterModuleView.h"
 #import <ColaLib/ColaLib.h>
 
 @interface BuildView () {
@@ -40,6 +41,8 @@
 @property (nonatomic) CGPoint                           dragOrigin;
 
 @property (nonatomic, strong) NSMutableDictionary       *moduleViews;
+
+@property (nonatomic, strong) MasterModuleView          *masterModuleView;
 
 @end
 
@@ -71,11 +74,13 @@ static NSArray *cableColours;
         [self setDelegate:self];
         self.delaysContentTouches = NO;
         
-        [self addGlobalIO];
         [self addLayers];
         
         self.cables = [[NSMutableArray alloc] initWithCapacity:200];
         self.moduleViews = [[NSMutableDictionary alloc] initWithCapacity:100];
+        
+        self.masterModuleView = [[MasterModuleView alloc] initWithFrame:CGRectMake(0, 0, kBuildViewWidth, self.headerHeight) buildView:self];
+        [self addSubview:self.masterModuleView];
     }
     return self;
 }
@@ -104,29 +109,7 @@ static NSArray *cableColours;
 }
 
 -(void)addGlobalIO {
-    COLComponentIO *mainInL = [[COLAudioContext globalContext] masterInputAtIndex:0];
-    ConnectorView *mainInLConnectorView = [[ConnectorView alloc] initWithComponentIO:mainInL];
-    [mainInLConnectorView setCenter:CGPointMake(600, self.headerHeight / 2.0)];
-    [mainInLConnectorView setDelegate:self];
-    [self addSubview:mainInLConnectorView];
-    
-    COLComponentIO *mainInR = [[COLAudioContext globalContext] masterInputAtIndex:1];
-    ConnectorView *mainInRConnectorView = [[ConnectorView alloc] initWithComponentIO:mainInR];
-    [mainInRConnectorView setCenter:CGPointMake(650, self.headerHeight / 2.0)];
-    [mainInRConnectorView setDelegate:self];
-    [self addSubview:mainInRConnectorView];
-    
-    COLComponentIO *keyboardOut = [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] outputForIndex:0];
-    ConnectorView *keyboardOutView = [[ConnectorView alloc] initWithComponentIO:keyboardOut];
-    [keyboardOutView setCenter:CGPointMake(120, self.headerHeight / 2.0)];
-    [keyboardOutView setDelegate:self];
-    [self addSubview:keyboardOutView];
-    
-    COLComponentIO *keyboardGate = [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] outputForIndex:1];
-    ConnectorView *keyboardGateView = [[ConnectorView alloc] initWithComponentIO:keyboardGate];
-    [keyboardGateView setCenter:CGPointMake(168, self.headerHeight / 2.0)];
-    [keyboardGateView setDelegate:self];
-    [self addSubview:keyboardGateView];
+
 }
 
 @synthesize highlightedCellSet = _highlightedCellSet;

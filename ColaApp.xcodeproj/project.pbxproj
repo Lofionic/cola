@@ -28,6 +28,8 @@
 		6C300BE61AD3182E00D51544 /* NSString+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C300BE51AD3182E00D51544 /* NSString+Random.m */; };
 		6C460D931A8D6B4C00161C0E /* libColaLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5E911A8BF30600ECEAB2 /* libColaLib.a */; };
 		6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C59C5651ABF4273001EE663 /* ConnectorView.m */; };
+		6C64D6FE1AD9394800012108 /* MasterModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D6FD1AD9394800012108 /* MasterModuleView.m */; };
+		6C64D7061AD9B0DD00012108 /* PresetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D7051AD9B0DD00012108 /* PresetController.m */; };
 		6C65A4E81A9125DD000D9192 /* gtr.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C65A4E71A9125DD000D9192 /* gtr.wav */; };
 		6C6DB53D1AD6B48C0001343E /* ModuleCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6DB53C1AD6B48C0001343E /* ModuleCatalog.m */; };
 		6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */; };
@@ -88,6 +90,10 @@
 		6C300BE51AD3182E00D51544 /* NSString+Random.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Random.m"; sourceTree = "<group>"; };
 		6C59C5641ABF4273001EE663 /* ConnectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorView.h; sourceTree = "<group>"; };
 		6C59C5651ABF4273001EE663 /* ConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorView.m; sourceTree = "<group>"; };
+		6C64D6FC1AD9394800012108 /* MasterModuleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterModuleView.h; sourceTree = "<group>"; };
+		6C64D6FD1AD9394800012108 /* MasterModuleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterModuleView.m; sourceTree = "<group>"; };
+		6C64D7041AD9B0DD00012108 /* PresetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresetController.h; sourceTree = "<group>"; };
+		6C64D7051AD9B0DD00012108 /* PresetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresetController.m; sourceTree = "<group>"; };
 		6C65A4E71A9125DD000D9192 /* gtr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gtr.wav; sourceTree = "<group>"; };
 		6C6DB53B1AD6B48C0001343E /* ModuleCatalog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleCatalog.h; sourceTree = "<group>"; };
 		6C6DB53C1AD6B48C0001343E /* ModuleCatalog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleCatalog.m; sourceTree = "<group>"; };
@@ -187,6 +193,7 @@
 		6C2A5E1E1A8BF2CC00ECEAB2 /* ColaApp */ = {
 			isa = PBXGroup;
 			children = (
+				6C64D7031AD9B06600012108 /* PresetController */,
 				6C2A5EA41A8C0B8D00ECEAB2 /* ColaApp.entitlements */,
 				6C1DB6B11AADDEB60041F5F9 /* defines.h */,
 				6C2A5E231A8BF2CC00ECEAB2 /* AppDelegate.h */,
@@ -218,6 +225,15 @@
 				6C2A5E911A8BF30600ECEAB2 /* libColaLib.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		6C64D7031AD9B06600012108 /* PresetController */ = {
+			isa = PBXGroup;
+			children = (
+				6C64D7041AD9B0DD00012108 /* PresetController.h */,
+				6C64D7051AD9B0DD00012108 /* PresetController.m */,
+			);
+			name = PresetController;
 			sourceTree = "<group>";
 		};
 		6C65A4E91A9125E1000D9192 /* Resources */ = {
@@ -266,6 +282,8 @@
 				6C8DD2941AC0C9CC00320628 /* ModuleView.m */,
 				6C59C5641ABF4273001EE663 /* ConnectorView.h */,
 				6C59C5651ABF4273001EE663 /* ConnectorView.m */,
+				6C64D6FC1AD9394800012108 /* MasterModuleView.h */,
+				6C64D6FD1AD9394800012108 /* MasterModuleView.m */,
 				6C172A431ACC256B00BE1418 /* Controls */,
 			);
 			name = ModuleView;
@@ -378,12 +396,14 @@
 				6CDA9F141AA9017E00D64EB0 /* BuildView.m in Sources */,
 				6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */,
 				6C172A421ACC256100BE1418 /* ModuleControl.m in Sources */,
+				6C64D6FE1AD9394800012108 /* MasterModuleView.m in Sources */,
 				6C1CF0E01AC206BD0004A2FA /* BuildViewHighlightLayer.m in Sources */,
 				6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */,
 				6C0F86D81AA7BEB70092FB18 /* ComponentShelfView.m in Sources */,
 				6C6DB53D1AD6B48C0001343E /* ModuleCatalog.m in Sources */,
 				6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */,
 				6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */,
+				6C64D7061AD9B0DD00012108 /* PresetController.m in Sources */,
 				6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */,
 				6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */,
 				6C1CF0E31AC20A020004A2FA /* BuildViewCableLayer.m in Sources */,

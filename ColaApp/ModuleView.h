@@ -24,7 +24,7 @@
 @property (nonatomic, weak) id<ModuleViewDelegate>  delegate;
 @property (readonly, weak) COLComponent             *component;
 @property (readonly, strong) ModuleDescription      *moduleDescription;
-@property (readonly, strong) NSString               *identifier;
+@property (nonatomic, strong) NSString              *identifier;
 
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame;
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription;

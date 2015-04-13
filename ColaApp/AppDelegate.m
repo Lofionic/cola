@@ -10,6 +10,7 @@
 #import "BuildViewController.h"
 #import "ModuleDescription.h"
 #import "ModuleCatalog.h"
+#import "PresetController.h"
 
 @interface AppDelegate ()
 
@@ -27,7 +28,12 @@ CGFloat kKeyboardHeight;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [self initLayoutMetrics];
+    
+    // Initialize module catalog
     [[ModuleCatalog sharedCatalog] loadFromURL:[[NSBundle mainBundle] URLForResource:@"moduleCatalog" withExtension:@"json"]];
+    
+    // Initialize presets
+    [[PresetController sharedController] loadPresets];
     
     // Start audio engine
     [[COLAudioEnvironment sharedEnvironment] start];
