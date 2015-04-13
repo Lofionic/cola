@@ -12,6 +12,7 @@
 #import "BuildView.h"
 #import "ModuleView.h"
 #import "ModuleCatalog.h"
+#import "FilesViewController.h"
 
 static BuildView *buildView = nil;
 
@@ -131,8 +132,9 @@ static BuildView *buildView = nil;
     [self.navigationItem setLeftBarButtonItem:self.buildModeButton];
     [self setBuildMode:NO animated:NO];
     
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(saveTapped)];
-    [self.navigationItem setRightBarButtonItem:saveButton];
+    UIImage *filesIcon = [UIImage imageNamed:TOOLBAR_FILES_ICON];
+    UIBarButtonItem *filesButton = [[UIBarButtonItem alloc] initWithImage:filesIcon style:UIBarButtonItemStylePlain target:self action:@selector(filesTapped)];
+    [self.navigationItem setRightBarButtonItem:filesButton];
     
     self.iaaView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 512, 512)];
     [self.iaaView setBackgroundColor:[UIColor redColor]];
@@ -172,9 +174,12 @@ static BuildView *buildView = nil;
     }
 }
 
--(void)saveTapped {
+-(void)filesTapped {
     NSDictionary *dict = [self.buildView getPatchDictionary];
     NSLog(@"%@", dict);
+    
+    FilesViewController *filesViewController = [[FilesViewController alloc] init];
+    [self.navigationController pushViewController:filesViewController animated:YES];
 }
 
 -(void)setBuildMode:(BOOL)buildMode animated:(BOOL)animated {

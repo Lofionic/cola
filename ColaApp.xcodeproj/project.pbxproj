@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C0B16B21ADBD5F70058BA18 /* FilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0B16B11ADBD5F70058BA18 /* FilesViewController.m */; };
 		6C0D48831AC3663D008AD869 /* KeyboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0D48821AC3663D008AD869 /* KeyboardView.m */; };
 		6C0F86D11AA7B2220092FB18 /* BuildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D01AA7B2220092FB18 /* BuildViewController.m */; };
 		6C0F86D81AA7BEB70092FB18 /* ComponentShelfView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D71AA7BEB70092FB18 /* ComponentShelfView.m */; };
@@ -50,6 +51,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6C0B16B01ADBD5F70058BA18 /* FilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilesViewController.h; sourceTree = "<group>"; };
+		6C0B16B11ADBD5F70058BA18 /* FilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesViewController.m; sourceTree = "<group>"; };
 		6C0D48811AC3663D008AD869 /* KeyboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardView.h; sourceTree = "<group>"; };
 		6C0D48821AC3663D008AD869 /* KeyboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardView.m; sourceTree = "<group>"; };
 		6C0F86CF1AA7B2220092FB18 /* BuildViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewController.h; sourceTree = "<group>"; };
@@ -117,6 +120,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6C0B16AE1ADBD5D40058BA18 /* FilesView */ = {
+			isa = PBXGroup;
+			children = (
+				6C0B16B01ADBD5F70058BA18 /* FilesViewController.h */,
+				6C0B16B11ADBD5F70058BA18 /* FilesViewController.m */,
+			);
+			name = FilesView;
+			sourceTree = "<group>";
+		};
 		6C0D487F1AC3662E008AD869 /* KeyboardView */ = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +199,7 @@
 		6C2A5E1E1A8BF2CC00ECEAB2 /* ColaApp */ = {
 			isa = PBXGroup;
 			children = (
+				6C0B16AE1ADBD5D40058BA18 /* FilesView */,
 				6C2A5EA41A8C0B8D00ECEAB2 /* ColaApp.entitlements */,
 				6C1DB6B11AADDEB60041F5F9 /* defines.h */,
 				6C2A5E231A8BF2CC00ECEAB2 /* AppDelegate.h */,
@@ -373,6 +386,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */,
+				6C0B16B21ADBD5F70058BA18 /* FilesViewController.m in Sources */,
 				6C1201091AAE44D200C6ACB6 /* ModuleDescription.m in Sources */,
 				6C300BE61AD3182E00D51544 /* NSString+Random.m in Sources */,
 				6CDA9F141AA9017E00D64EB0 /* BuildView.m in Sources */,
