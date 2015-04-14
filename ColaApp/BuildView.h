@@ -52,6 +52,6 @@
 -(UIView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point;
 -(CGRect)rectForCellSet:(NSSet*)cellSet;
 
--(NSDictionary*)getPatchDictionary;
+-(NSDictionary*)getPresetDictionary;
 
 @end

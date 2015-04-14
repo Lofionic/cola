@@ -453,7 +453,7 @@ static NSArray *cableColours;
 
 #pragma mark Load & Save
 
--(NSDictionary*)getPatchDictionary {
+-(NSDictionary*)getPresetDictionary {
     // Create a dictionary of all the data needed to reassemble the patch
     
     NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithCapacity:100]; // TODO: set capacity

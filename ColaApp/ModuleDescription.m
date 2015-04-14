@@ -8,6 +8,7 @@
 
 #import "ModuleDescription.h"
 #import "ModuleView.h"
+#import "UIView+Snapshot.h"
 
 @interface ModuleDescription ()
 

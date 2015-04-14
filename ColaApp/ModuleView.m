@@ -109,22 +109,7 @@
     }
 }
 
--(UIImage*)snapshot {
-    
-    CGSize imageSize = self.frame.size;
-    UIGraphicsBeginImageContextWithOptions(imageSize, NO, [[UIScreen mainScreen] scale]);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSaveGState(context);
-    [self.layer renderInContext:context];
-    CGContextRestoreGState(context);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    
-    UIGraphicsEndImageContext();
-    
-    return image;
-}
+
 
 -(void)handleLongPress:(UIGestureRecognizer*)uigr {
     UILongPressGestureRecognizer *longPressGesture = (UILongPressGestureRecognizer*)uigr;

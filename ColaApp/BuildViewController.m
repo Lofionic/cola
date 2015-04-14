@@ -13,6 +13,8 @@
 #import "ModuleView.h"
 #import "ModuleCatalog.h"
 #import "FilesViewController.h"
+#import "PresetController.h"
+#import "UIView+Snapshot.h"
 
 static BuildView *buildView = nil;
 
@@ -148,7 +150,7 @@ static BuildView *buildView = nil;
                                                  name: UIApplicationWillEnterForegroundNotification
                                                object: nil];
     
-    [self buildStartingBlock];
+    [[PresetController sharedController] recallPresetAtIndex:0];
 }
 
 -(void)buildStartingBlock {
@@ -168,18 +170,19 @@ static BuildView *buildView = nil;
 -(void)editTapped {
     if (!self.buildMode) {
         [self setBuildMode:YES animated:YES];
-        
     } else {
         [self setBuildMode:NO animated:YES];
     }
 }
 
 -(void)filesTapped {
-    NSDictionary *dict = [self.buildView getPatchDictionary];
+    NSDictionary *dict = [self.buildView getPresetDictionary];
     NSLog(@"%@", dict);
     
-    FilesViewController *filesViewController = [[FilesViewController alloc] init];
-    [self.navigationController pushViewController:filesViewController animated:YES];
+    [self savePresetCompletion:^(BOOL success) {
+        FilesViewController *filesViewController = [[FilesViewController alloc] init];
+        [self.navigationController pushViewController:filesViewController animated:YES];
+    }];
 }
 
 -(void)setBuildMode:(BOOL)buildMode animated:(BOOL)animated {
@@ -262,6 +265,24 @@ static BuildView *buildView = nil;
             }
         }
     }
+}
+
+#pragma LoadSave
+
+-(void)savePresetCompletion:(void (^)(BOOL success))completion {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
+        UIImage *thumbnail = [self.buildView snapshot];
+        NSDictionary *dictionary = [self.buildView getPresetDictionary];
+        
+        [[PresetController sharedController] updatePresetAtIndex:[[PresetController sharedController] selectedPresetIndex]
+                                                  withDictionary:dictionary
+                                                            name:nil
+                                                       thumbnail:thumbnail];
+       
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            completion(YES);
+        });
+    });
 }
 
 #pragma Convenience Methods

@@ -48,9 +48,9 @@ CGFloat kKeyboardHeight;
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:buildViewController];
     [navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
-    
+    [navigationController.navigationBar setTintColor:[UIColor lightGrayColor]];
+
     [self.window setRootViewController:navigationController];
-    
     
     return YES;
 }

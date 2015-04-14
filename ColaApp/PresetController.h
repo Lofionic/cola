@@ -6,14 +6,22 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class Preset;
 @interface PresetController : NSObject
 
 +(PresetController*)sharedController;
+
 -(void)loadPresets;
--(NSArray*)getPresetNames;
--(Preset*)getSelectedPreset;
+
+-(NSUInteger)presetCount;
+
+-(Preset*)recallPresetAtIndex:(NSUInteger)index;
+-(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail;
+
+-(Preset*)presetAtIndex:(NSUInteger)index;
+-(NSInteger)selectedPresetIndex;
 
 @end
 
@@ -22,6 +30,7 @@
 @property (readonly, strong) NSString *name;
 @property (readonly, strong) NSDictionary *dictionary;
 
--(instancetype)initWithName:(NSString*)name dictionary:(NSDictionary*)dictionary;
+-(instancetype)initWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail;
+-(void)updateWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail;
 
 @end
