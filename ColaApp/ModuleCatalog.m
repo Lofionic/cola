@@ -55,11 +55,23 @@
 }
 
 -(ModuleDescription*)moduleOfType:(NSString*)type {
-    
     __block ModuleDescription *result = nil;
     
     [self.moduleDescriptions enumerateObjectsUsingBlock:^(ModuleDescription* thisModule, NSUInteger index, BOOL* stop) {
         if ([thisModule.type isEqualToString:type]) {
+            result = thisModule;
+            *stop = YES;
+        }
+    }];
+    
+    return result;
+}
+
+-(ModuleDescription*)moduleWithIdentifier:(NSString*)identifier {
+    __block ModuleDescription *result = nil;
+    
+    [self.moduleDescriptions enumerateObjectsUsingBlock:^(ModuleDescription* thisModule, NSUInteger index, BOOL* stop) {
+        if ([thisModule.identifier isEqualToString:identifier]) {
             result = thisModule;
             *stop = YES;
         }

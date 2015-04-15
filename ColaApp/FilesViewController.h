@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class BuildViewController;
 @interface FilesViewController : UICollectionViewController <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+
+-(instancetype)initWithBuildViewController:(BuildViewController*)buildViewController;
 
 @end

@@ -5,11 +5,15 @@
 //  Created by Chris on 13/04/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-
+#import "defines.h"
 #import "FilesViewController.h"
 #import "PresetController.h"
+#import "BuildViewController.h"
 
 @interface FilesViewController ()
+
+@property (nonatomic, weak) BuildViewController *buildViewController;
+@property CGSize cellSize;
 
 @end
 
@@ -18,12 +22,14 @@
 @implementation FilesViewController
 
 
--(instancetype)init {
+-(instancetype)initWithBuildViewController:(BuildViewController*)buildViewController {
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
     
     if (self = [super initWithCollectionViewLayout:flowLayout]) {
+        self.buildViewController = buildViewController;
+        self.cellSize = CGSizeMake(180, 180);
     }
     return self;
 }
@@ -31,10 +37,31 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [self setTitle:@"Files"];
+    
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:CELL_IDENTIFIER];
     [self.collectionView setDelegate:self];
     [self.collectionView setDataSource:self];
     [self.collectionView setBackgroundColor:[UIColor colorWithWhite:0.1 alpha:1]];
+    
+    [self.navigationItem setHidesBackButton:YES animated:NO];
+    
+    UIBarButtonItem *addBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addTapped)];
+    [self.navigationItem setLeftBarButtonItem:addBarButtonItem];
+    
+    UIBarButtonItem *editBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editTapped)];
+    [self.navigationItem setRightBarButtonItem:editBarButtonItem];
+}
+
+-(void)addTapped {
+    [[PresetController sharedController] addNewPreset];
+    
+    NSArray *newIndexPath = @[[NSIndexPath indexPathForRow:[[PresetController sharedController] presetCount] - 1 inSection:0]];
+    [self.collectionView insertItemsAtIndexPaths:newIndexPath];
+}
+
+-(void)editTapped {
+    
 }
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -50,7 +77,7 @@
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(150, 150);
+    return self.cellSize;
 }
 
 -(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -58,19 +85,28 @@
     
     Preset *preset = [[PresetController sharedController] presetAtIndex:indexPath.row];
     
-    UIImageView *thumbnailView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 134, 100)];
-    [thumbnailView setBackgroundColor:[UIColor lightGrayColor]];
+    UIImageView *thumbnailView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, self.cellSize.width - 16, self.cellSize.height - 50)];
+    [thumbnailView setBackgroundColor:[UIColor clearColor]];
+    [thumbnailView setContentMode:UIViewContentModeScaleAspectFit];
+    if (preset.thumbnail) {
+        [thumbnailView setImage:preset.thumbnail];
+    }
     [cell addSubview:thumbnailView];
     
-    UILabel *presetNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 110, 134, 16)];
+    UILabel *presetNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, self.cellSize.height - 40, self.cellSize.width - 16, 16)];
     [presetNameLabel setText:preset.name];
     [presetNameLabel setTextAlignment:NSTextAlignmentCenter];
     [presetNameLabel setFont:[UIFont fontWithName:@"DINAlternate-Bold" size:14]];
     [presetNameLabel setTextColor:[UIColor whiteColor]];
     [cell addSubview:presetNameLabel];
     
-    UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 126, 134, 16)];
-    [dateLabel setText:@"SaveDate"];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.timeStyle = NSDateFormatterShortStyle;
+    dateFormatter.dateStyle = NSDateFormatterShortStyle;
+    dateFormatter.doesRelativeDateFormatting = YES;
+    
+    UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, self.cellSize.height - 24, self.cellSize.width - 16, 16)];
+    [dateLabel setText:[dateFormatter stringFromDate:preset.saveDate]];
     [dateLabel setTextAlignment:NSTextAlignmentCenter];
     [dateLabel setFont:[UIFont fontWithName:@"DINAlternate-Bold" size:10]];
     [dateLabel setTextColor:[UIColor lightGrayColor]];
@@ -84,6 +120,22 @@
     }
     
     return cell;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSInteger selectedIndex = indexPath.row;
+    
+    if (selectedIndex != [[PresetController sharedController] selectedPresetIndex]) {
+        Preset *selectedPreset = [[PresetController sharedController] recallPresetAtIndex:indexPath.row];
+        [self.collectionView reloadData];
+        
+        [self.buildViewController recallPreset:selectedPreset completion:^(BOOL success) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 @end

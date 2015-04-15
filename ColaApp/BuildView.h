@@ -53,5 +53,6 @@
 -(CGRect)rectForCellSet:(NSSet*)cellSet;
 
 -(NSDictionary*)getPresetDictionary;
+-(BOOL)buildFromDictionary:(NSDictionary*)dictionary;
 
 @end

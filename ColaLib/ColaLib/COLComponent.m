@@ -170,10 +170,6 @@
 
 }
 
--(void)dealloc {
-    NSLog(@"%@ dealloc", self.identifier);
-}
-
 +(NSString*)defaultName {
     return @"Component";
 }

@@ -47,7 +47,7 @@ static BuildView *buildView = nil;
     
     [super viewDidLoad];
     [self setAutomaticallyAdjustsScrollViewInsets:YES];
-    
+
     self.buildView = [[BuildView alloc] init];
     [self.buildView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.buildView setContentInset:UIEdgeInsetsMake(0, 0, kKeyboardHeight, 0)];
@@ -176,11 +176,17 @@ static BuildView *buildView = nil;
 }
 
 -(void)filesTapped {
-    NSDictionary *dict = [self.buildView getPresetDictionary];
-    NSLog(@"%@", dict);
+    if (self.buildMode) {
+        [self setBuildMode:NO animated:YES];
+    }
+    
+    UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
+    [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
+    [self.navigationController.view addSubview:blockingView];
     
     [self savePresetCompletion:^(BOOL success) {
-        FilesViewController *filesViewController = [[FilesViewController alloc] init];
+        [blockingView removeFromSuperview];
+        FilesViewController *filesViewController = [[FilesViewController alloc] initWithBuildViewController:self];
         [self.navigationController pushViewController:filesViewController animated:YES];
     }];
 }
@@ -271,7 +277,7 @@ static BuildView *buildView = nil;
 
 -(void)savePresetCompletion:(void (^)(BOOL success))completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
-        UIImage *thumbnail = [self.buildView snapshot];
+        UIImage *thumbnail = [self.view snapshot];
         NSDictionary *dictionary = [self.buildView getPresetDictionary];
         
         [[PresetController sharedController] updatePresetAtIndex:[[PresetController sharedController] selectedPresetIndex]
@@ -282,6 +288,15 @@ static BuildView *buildView = nil;
         dispatch_async(dispatch_get_main_queue(), ^ {
             completion(YES);
         });
+    });
+}
+
+-(void)recallPreset:(Preset*)preset completion:(void (^)(BOOL success))completion {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL success = [self.buildView buildFromDictionary:preset.dictionary];
+        if (completion) {
+            completion(success);
+        }
     });
 }
 

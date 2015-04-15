@@ -111,9 +111,7 @@
     
     if (newComponent) {
         [self.components addObject:newComponent];
-
         [newComponent assignUniqueName];
-        NSLog(@"Created component %@", newComponent.identifier);
     }
 
     return newComponent;
@@ -121,7 +119,6 @@
 
 -(BOOL)removeComponent:(COLComponent*)component {
     if ([self.components containsObject:component]) {
-        NSLog(@"Removing component %@", component.identifier);
         [component disconnectAll];
         [self.components removeObject:component];
         return TRUE;

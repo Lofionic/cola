@@ -41,6 +41,7 @@
 
 -(Preset*)recallPresetAtIndex:(NSUInteger)index {
     if (index < [self.presets count]) {
+        NSLog(@"Recalling preset %lu", (long)index);
         self.currentPreset = index;
         return [self.presets objectAtIndex:index];
     } else {
@@ -75,7 +76,7 @@
 }
 
 -(Preset*)getEmptyPreset {
-    return [[Preset alloc] initWithDictionary:@{@"modules" : @[], @"cables"  : @[]}
+    return [[Preset alloc] initWithDictionary:@{@"modules" : @{}, @"cables"  : @{}}
                                          name:@"Empty Preset"
                                     thumbnail:nil];
 }
@@ -93,14 +94,27 @@
     return self.currentPreset;
 }
 
+-(void)addNewPreset {
+    NSMutableArray *mutablePresets = [[NSMutableArray alloc] initWithArray:self.presets];
+    Preset *newPreset = [self getEmptyPreset];
+    [mutablePresets addObject:newPreset];
+    self.presets = [NSArray arrayWithArray:mutablePresets];
+    
+    [self syncPresets];
+}
+
 -(void)savePresetWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail {
     NSMutableArray *mutablePresets = [[NSMutableArray alloc] initWithArray:self.presets];
     Preset *newPreset = [[Preset alloc] initWithDictionary:dictionary name:name thumbnail:thumbnail];
     [mutablePresets addObject:newPreset];
     self.presets = [NSArray arrayWithArray:mutablePresets];
+    
+    [self syncPresets];
 }
 
 -(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail {
+    NSLog(@"Updating Preset %lu", (unsigned long)index);
+    
     Preset *preset = [self.presets objectAtIndex:index];
     [preset updateWithDictionary:dictionary name:name thumbnail:thumbnail];
     
@@ -110,7 +124,6 @@
 -(NSUInteger)presetCount {
     return [self.presets count];
 }
-
 
 @end
 

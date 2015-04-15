@@ -18,6 +18,7 @@
 -(NSUInteger)presetCount;
 
 -(Preset*)recallPresetAtIndex:(NSUInteger)index;
+-(void)addNewPreset;
 -(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail;
 
 -(Preset*)presetAtIndex:(NSUInteger)index;
@@ -27,8 +28,10 @@
 
 @interface Preset : NSObject <NSCoding>
 
-@property (readonly, strong) NSString *name;
-@property (readonly, strong) NSDictionary *dictionary;
+@property (readonly, strong) NSString       *name;
+@property (readonly, strong) NSDictionary   *dictionary;
+@property (readonly, strong) UIImage        *thumbnail;
+@property (readonly, strong) NSDate         *saveDate;
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail;
 -(void)updateWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail;

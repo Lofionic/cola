@@ -17,6 +17,8 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGContextSaveGState(context);
+    CGContextSetFillColorWithColor(context, [[UIColor blackColor] CGColor]);
+    CGContextFillRect(context, CGRectMake(0, 0, imageSize.width, imageSize.height));
     [self.layer renderInContext:context];
     CGContextRestoreGState(context);
     

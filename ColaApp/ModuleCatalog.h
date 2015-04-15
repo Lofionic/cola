@@ -16,5 +16,6 @@
 -(void)loadFromURL:(NSURL*)url;
 -(NSArray*)allModules;
 -(ModuleDescription*)moduleOfType:(NSString*)type;
+-(ModuleDescription*)moduleWithIdentifier:(NSString*)identifier;
 
 @end

@@ -14,6 +14,7 @@
 #import "BuildViewController.h"
 #import "ModuleDescription.h"
 #import "MasterModuleView.h"
+#import "ModuleCatalog.h"
 #import <ColaLib/ColaLib.h>
 
 @interface BuildView () {
@@ -28,11 +29,10 @@
 @property (nonatomic) NSUInteger rows;
 @property (nonatomic) NSUInteger columns;
 
-@property (nonatomic, strong) NSMutableSet *occupiedCells;
-
 @property (nonatomic, strong) BuildViewGridLayer        *gridLayer;
 @property (nonatomic, strong) BuildViewHighlightLayer   *highlightLayer;
 @property (nonatomic, strong) BuildViewCableLayer       *cableLayer;
+@property (nonatomic, strong) UIView                    *cableView;
 
 @property (nonatomic, strong) NSMutableArray            *cables;
 @property (nonatomic, strong) BuildViewCable            *dragCable;
@@ -70,7 +70,6 @@ static NSArray *cableColours;
 
         [self setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
         
-        self.occupiedCells = [[NSMutableSet alloc] initWithCapacity:self.columns * self.rows];
         [self setDelegate:self];
         self.delaysContentTouches = NO;
         
@@ -81,6 +80,9 @@ static NSArray *cableColours;
         
         self.masterModuleView = [[MasterModuleView alloc] initWithFrame:CGRectMake(0, 0, kBuildViewWidth, self.headerHeight) buildView:self];
         [self addSubview:self.masterModuleView];
+        
+        [self bringSubviewToFront:self.cableView];
+
     }
     return self;
 }
@@ -103,9 +105,18 @@ static NSArray *cableColours;
     [self.cableLayer setBuildView:self];
     [self.cableLayer setFrame:CGRectMake(0, 0, self.contentSize.width, self.contentSize.height)];
     [self.cableLayer setNeedsDisplay];
-    [self.layer insertSublayer:self.cableLayer above:self.layer];
-    [self.cableLayer setZPosition:1.0];
+    
+    self.cableView = [[UIView alloc] initWithFrame:self.bounds];
+    [self.cableView  setUserInteractionEnabled:NO];
+    [self.cableView  setAutoresizingMask:(UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight)];
+    [self.cableView .layer addSublayer:self.cableLayer];
+    [self addSubview:self.cableView ];
+    [self bringSubviewToFront:self.cableView];
+    
+    
+    //[self.layer insertSublayer:self.cableLayer above:self.layer];
 
+    //[self.cableLayer setZPosition:1.0];
 }
 
 -(void)addGlobalIO {
@@ -244,6 +255,7 @@ static NSArray *cableColours;
         if (moduleView) {
             [moduleView setDelegate:self];
             [self addSubview:moduleView];
+            [self bringSubviewToFront:self.cableView];
             
             // Add cells to occupied
             [cellSet enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
@@ -484,7 +496,8 @@ static NSArray *cableColours;
         
         NSDictionary *moduleDictionary = @{
                                            @"id"        :   moduleView.moduleDescription.identifier,
-                                           @"params"    :   parameterDictionary
+                                           @"params"    :   parameterDictionary,
+                                           @"center"    :   [NSValue valueWithCGPoint:moduleView.center]
                                            };
 
         [modules setObject:moduleDictionary forKey:moduleKey];
@@ -515,6 +528,46 @@ static NSArray *cableColours;
     return [NSDictionary dictionaryWithDictionary:result];
 }
 
+-(BOOL)buildFromDictionary:(NSDictionary*)dictionary {
+    
+    [self removeAll];
+    
+    BOOL success = YES;
+    
+    NSDictionary *modulesDictionaries = [dictionary objectForKey:@"modules"];
+    
+    NSLog(@"Restoring %lu modules", (unsigned long)[[modulesDictionaries allKeys] count]);
+    
+    for (NSString *moduleIdentifier in [modulesDictionaries allKeys]) {
+        NSDictionary *moduleDictionary = [modulesDictionaries objectForKey:moduleIdentifier];
+        CGPoint moduleCenter = [[moduleDictionary objectForKey:@"center"] CGPointValue];
+        ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[moduleDictionary objectForKey:@"id"]];
+        if (moduleDescription) {
+            [self addViewForModule:moduleDescription atPoint:moduleCenter];
+        } else {
+            success = NO;
+        }
+    }
+         
+    return success;
+}
+
+-(void)removeAll {
+    NSLog(@"Removing all modules");
+    
+    for (NSString *thisModuleIdentifier in [self.moduleViews allKeys]) {
+        ModuleView *moduleView = [self.moduleViews objectForKey:thisModuleIdentifier];
+        [moduleView trash];
+    }
+    
+    [self.moduleViews removeAllObjects];
+    
+    for (NSUInteger i = 0; i < 256; i++) {
+        for (NSUInteger j = 0; j < 256; j++) {
+            cellOccupied[i][j] = NO;
+        }
+    }
+}
 
 @end
 
