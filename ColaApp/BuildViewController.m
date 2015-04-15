@@ -277,7 +277,7 @@ static BuildView *buildView = nil;
 
 -(void)savePresetCompletion:(void (^)(BOOL success))completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
-        UIImage *thumbnail = [self.view snapshot];
+        UIImage *thumbnail = [self.buildView snapshot];
         NSDictionary *dictionary = [self.buildView getPresetDictionary];
         
         [[PresetController sharedController] updatePresetAtIndex:[[PresetController sharedController] selectedPresetIndex]

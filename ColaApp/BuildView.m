@@ -567,6 +567,8 @@ static NSArray *cableColours;
             cellOccupied[i][j] = NO;
         }
     }
+    
+    [self scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 }
 
 @end
