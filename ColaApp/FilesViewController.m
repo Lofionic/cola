@@ -123,19 +123,27 @@
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSInteger selectedIndex = indexPath.row;
+    NSUInteger selectedIndex = indexPath.row;
     
     if (selectedIndex != [[PresetController sharedController] selectedPresetIndex]) {
-        Preset *selectedPreset = [[PresetController sharedController] recallPresetAtIndex:indexPath.row];
-        [self.collectionView reloadData];
-        
-        [self.buildViewController recallPreset:selectedPreset completion:^(BOOL success) {
-            [self.navigationController popViewControllerAnimated:YES];
-        }];
-        
+        [self loadPresetAtIndex:selectedIndex];
     } else {
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+
+-(void)loadPresetAtIndex:(NSUInteger)index {
+    Preset *selectedPreset = [[PresetController sharedController] recallPresetAtIndex:index];
+    [self.collectionView reloadData];
+    
+    UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
+    [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
+    [self.navigationController.view addSubview:blockingView];
+    
+    [self.buildViewController recallPreset:selectedPreset completion:^(BOOL success) {
+        [blockingView removeFromSuperview];
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
 }
 
 @end
