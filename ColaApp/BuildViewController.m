@@ -30,10 +30,12 @@ static BuildView *buildView = nil;
 @property (nonatomic, strong) ModuleView            *dragModule;
 
 @property (nonatomic, strong) UIBarButtonItem       *buildModeButton;
+@property (nonatomic, strong) UIBarButtonItem       *keyboardButton;
 @property (nonatomic, strong) UIImage               *buildIcon;
 @property (nonatomic ,strong) UIImage               *keyboardIcon;
 
 @property (nonatomic) BOOL buildMode;
+@property (nonatomic) BOOL keyboardHidden;
 
 @property (nonatomic, strong) NSLayoutConstraint    *shiftBuildViewConstraint; // Constraint to shift the build view down when the build view appears
 
@@ -133,8 +135,12 @@ static BuildView *buildView = nil;
     
     UIImage *wrenchIcon = [UIImage imageNamed:TOOLBAR_BUILD_ICON];
     self.buildModeButton = [[UIBarButtonItem alloc] initWithImage:wrenchIcon style:UIBarButtonItemStylePlain target:self action:@selector(editTapped)];
-    [self.navigationItem setLeftBarButtonItem:self.buildModeButton];
     [self setBuildMode:NO animated:NO];
+    
+    UIImage *keyboardIcon = [UIImage imageNamed:TOOLBAR_PIANO_ICON];
+    self.keyboardButton = [[UIBarButtonItem alloc] initWithImage:keyboardIcon style:UIBarButtonItemStylePlain target:self action:@selector(keyboardTapped)];
+    [self.navigationItem setLeftBarButtonItems:@[self.buildModeButton, self.keyboardButton]];
+    [self setKeyboardHidden:NO animated:NO];
     
     UIImage *filesIcon = [UIImage imageNamed:TOOLBAR_FILES_ICON];
     UIBarButtonItem *filesButton = [[UIBarButtonItem alloc] initWithImage:filesIcon style:UIBarButtonItemStylePlain target:self action:@selector(filesTapped)];
@@ -175,6 +181,14 @@ static BuildView *buildView = nil;
     }
 }
 
+-(void)keyboardTapped {
+    if (!self.keyboardHidden) {
+        [self setKeyboardHidden:YES animated:YES];
+    } else {
+        [self setKeyboardHidden:NO animated:YES];
+    }
+}
+
 -(void)filesTapped {
     if (self.buildMode) {
         [self setBuildMode:NO animated:YES];
@@ -209,7 +223,7 @@ static BuildView *buildView = nil;
         }
         [self.buildModeButton setImage:[UIImage imageNamed:TOOLBAR_BUILD_ICON_SELECTED]];
     } else {
-        // Hide shelf, show keyboard
+        // Hide shelf
         if (animated) {
             [self.shiftBuildViewConstraint setActive:NO];
             [UIView animateWithDuration:0.2 animations:^ {
@@ -221,6 +235,43 @@ static BuildView *buildView = nil;
             [self.shiftBuildViewConstraint setActive:NO];
         }
         [self.buildModeButton setImage:[UIImage imageNamed:TOOLBAR_BUILD_ICON]];
+    }
+}
+
+-(void)setKeyboardHidden:(BOOL)keyboardHidden animated:(BOOL)animated {
+    self.keyboardHidden = keyboardHidden;
+    if (keyboardHidden) {
+        // Hide keyboard
+        UIEdgeInsets buildviewEdgeInsets = [self.buildView contentInset];
+        buildviewEdgeInsets.bottom = 0;
+        if (animated) {
+            [UIView animateWithDuration:0.2 animations:^ {
+                [self.keyboardView setTransform:CGAffineTransformMakeTranslation(0, self.keyboardView.frame.size.height)];
+                [self.buildView setContentInset:buildviewEdgeInsets];
+                [self.buildView setScrollIndicatorInsets:buildviewEdgeInsets];
+
+            }];
+        } else {
+            [self.keyboardView setTransform:CGAffineTransformMakeTranslation(0, self.keyboardView.frame.size.height)];
+            [self.buildView setContentInset:buildviewEdgeInsets];
+            [self.buildView setScrollIndicatorInsets:buildviewEdgeInsets];
+        }
+        [self.keyboardButton setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON]];
+    } else {
+        UIEdgeInsets buildviewEdgeInsets = [self.buildView contentInset];
+        buildviewEdgeInsets.bottom = self.keyboardView.frame.size.height;
+        if (animated) {
+            [UIView animateWithDuration:0.2 animations:^ {
+                [self.keyboardView setTransform:CGAffineTransformIdentity];
+                [self.buildView setContentInset:buildviewEdgeInsets];
+                [self.buildView setScrollIndicatorInsets:buildviewEdgeInsets];
+            }];
+        } else {
+            [self.keyboardView setTransform:CGAffineTransformIdentity];
+            [self.buildView setContentInset:buildviewEdgeInsets];
+            [self.buildView setScrollIndicatorInsets:buildviewEdgeInsets];
+        }
+        [self.keyboardButton setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON_SELECTED]];
     }
 }
 

@@ -17,10 +17,9 @@ extern CGFloat kKeyboardHeight;
 #define ASSETS_PATH_COMPONENTS  [ASSETS_PATH stringByAppendingString:@"components/"]
 #define ASSETS_PATH_CONNECTORS  [ASSETS_PATH stringByAppendingString:@"connectors/"]
 #define ASSETS_PATH_CONTROLS    [ASSETS_PATH stringByAppendingString:@"encoders/"]
-
 #define TOOLBAR_BUILD_ICON_SELECTED         @"Icons/742-wrench-toolbar-selected"
 #define TOOLBAR_BUILD_ICON                  @"Icons/742-wrench-toolbar"
-
+#define TOOLBAR_PIANO_ICON_SELECTED         @"Icons/967-piano-toolbar-selected"
+#define TOOLBAR_PIANO_ICON                  @"Icons/967-piano-toolbar"
 #define TOOLBAR_FILES_ICON                  @"Icons/928-inbox-files-toolbar"
-
 #define TOOLBAR_NEW_ICON                    @"Icons/709-plus-toolbar"
