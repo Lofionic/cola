@@ -548,8 +548,32 @@ static NSArray *cableColours;
             success = NO;
         }
     }
-         
+    
+    NSArray *cablesArray = [dictionary objectForKey:@"cables"];
+    
+    for (NSDictionary *thisCable in cablesArray) {
+        ModuleView *outModule = [self moduleWithIdentifier:[thisCable objectForKey:@"outputModule"]];
+        ModuleView *inModule = [self moduleWithIdentifier:[thisCable objectForKey:@"inputModule"]];
+        if (outModule && inModule) {
+            
+        }
+    }
+    
     return success;
+}
+
+-(ModuleView*)moduleWithIdentifier:(NSString*)identifier {
+    
+    __block ModuleView *result = nil;
+    
+    [self.moduleViews enumerateKeysAndObjectsUsingBlock:^(NSString *key, ModuleView *obj, BOOL *stop) {
+        if ([key isEqualToString:identifier]) {
+            result = obj;
+            *stop = YES;
+        }
+    }];
+    
+    return result;
 }
 
 -(void)removeAll {
@@ -561,6 +585,9 @@ static NSArray *cableColours;
     }
     
     [self.moduleViews removeAllObjects];
+    
+    [self.cables removeAllObjects];
+    [self.cableLayer setNeedsDisplay];
     
     for (NSUInteger i = 0; i < 256; i++) {
         for (NSUInteger j = 0; j < 256; j++) {
