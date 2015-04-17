@@ -17,7 +17,15 @@
 
 @property CGSize cellSize;
 
-@property (nonatomic) NSUInteger editingSelectedIndex;
+@property (nonatomic) NSMutableArray *selectedCellSet;
+@property (nonatomic, strong) UIBarButtonItem *editBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *addBarButtonItem;
+
+@property (nonatomic, strong) UIBarButtonItem *exportBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *trashBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *duplicateBarButtonItem;
+
+@property (nonatomic, strong) NSArray *editBarButtonItems;
 
 @end
 
@@ -50,13 +58,20 @@
     
     [self.navigationItem setHidesBackButton:YES animated:NO];
     
-    UIBarButtonItem *addBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addTapped)];
-    [self.navigationItem setLeftBarButtonItem:addBarButtonItem];
+    self.addBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addTapped)];
+    [self.navigationItem setLeftBarButtonItem:self.addBarButtonItem];
     
-    UIBarButtonItem *editBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editTapped)];
-    [self.navigationItem setRightBarButtonItem:editBarButtonItem];
+    self.editBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStylePlain target:self action:@selector(editTapped)];
+    [self.navigationItem setRightBarButtonItem:self.editBarButtonItem];
     
-    self.editingSelectedIndex = [[PresetController sharedController] selectedPresetIndex];
+    self.exportBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:nil];
+    self.trashBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashTapped)];
+    
+    UIImage* copyImage = [UIImage imageNamed:TOOLBAR_COPY_ICON];
+    self.duplicateBarButtonItem = [[UIBarButtonItem alloc] initWithImage:copyImage style:UIBarButtonItemStylePlain target:self action:nil];
+    self.editBarButtonItems = @[self.exportBarButtonItem, self.duplicateBarButtonItem, self.trashBarButtonItem];
+    
+    [self.collectionView setAllowsMultipleSelection:YES];
 }
 
 -(void)addTapped {
@@ -70,13 +85,48 @@
     if (self.editing) {
         [self setEditing:NO animated:YES];
     } else {
-        self.editingSelectedIndex = [[PresetController sharedController] selectedPresetIndex];
+        self.selectedCellSet = [[NSMutableArray alloc] initWithCapacity:[[PresetController sharedController] presetCount]];
+        [self.trashBarButtonItem setEnabled:NO];
+        [self.exportBarButtonItem setEnabled:NO];
+        [self.duplicateBarButtonItem setEnabled:NO];
         [self setEditing:YES animated:YES];
     }
 }
 
+-(void)trashTapped {
+
+    NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
+    for (NSIndexPath *indexPath in self.selectedCellSet) {
+        [indexSet addIndex:indexPath.row];
+    }
+    
+    [[PresetController sharedController] removePresetsAtIndexes:indexSet];
+    [self.collectionView deleteItemsAtIndexPaths:self.selectedCellSet];
+    
+    [self.trashBarButtonItem setEnabled:NO];
+    [self.exportBarButtonItem setEnabled:NO];
+    [self.duplicateBarButtonItem setEnabled:NO];
+
+}
+
 -(void)setEditing:(BOOL)editing animated:(BOOL)animated {
     [super setEditing:editing animated:animated];
+    
+    if (editing) {
+        [self.editBarButtonItem setTitle:@"Done"];
+        [self.navigationItem setLeftBarButtonItems:self.editBarButtonItems animated:YES];
+        
+        for (FilesViewControllerCell *thisCell in [self.collectionView visibleCells]) {
+            [thisCell startJiggling];
+        }        
+    } else {
+        [self.editBarButtonItem setTitle:@"Select"];
+        [self.navigationItem setLeftBarButtonItems:@[self.addBarButtonItem] animated:YES];
+        
+        for (FilesViewControllerCell *thisCell in [self.collectionView visibleCells]) {
+            [thisCell stopJiggling];
+        }
+    }
     
     [self.collectionView reloadData];
 }
@@ -102,14 +152,15 @@
     
     Preset *preset = [[PresetController sharedController] presetAtIndex:indexPath.row];
     [cell setPreset:preset];
-    [cell setEditing:self.editing];
     
-    if (self.editing && self.editingSelectedIndex == indexPath.row) {
-        [cell setBorder:YES];
+    if (self.editing && [self.selectedCellSet containsObject:indexPath]) {
+        [cell setSelectionColour:[UIColor redColor]];
+        [cell setSelected:YES];
     } else if (!self.editing && [[PresetController sharedController] selectedPresetIndex] == indexPath.row) {
-        [cell setBorder:YES];
+        [cell setSelectionColour:[UIColor whiteColor]];
+        [cell setSelected:YES];
     } else {
-        [cell setBorder:NO];
+        [cell setSelected:NO];
     }
     
     [cell updateContents];
@@ -117,18 +168,45 @@
     return cell;
 }
 
+-(void)updateEditBarButtons {
+    if ([self.selectedCellSet count] == 0) {
+        [self.trashBarButtonItem setEnabled:NO];
+        [self.duplicateBarButtonItem setEnabled:NO];
+        [self.exportBarButtonItem setEnabled:NO];
+    } else if ([self.selectedCellSet count] == 1) {
+        [self.trashBarButtonItem setEnabled:YES];
+        [self.duplicateBarButtonItem setEnabled:YES];
+        [self.exportBarButtonItem setEnabled:YES];
+    } else {
+        [self.trashBarButtonItem setEnabled:YES];
+        [self.duplicateBarButtonItem setEnabled:NO];
+        [self.exportBarButtonItem setEnabled:NO];
+    }
+}
+
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (self.editing) {
-        self.editingSelectedIndex = indexPath.row;
-        [self.collectionView reloadData];
+        FilesViewControllerCell *cell = (FilesViewControllerCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
+        [self.selectedCellSet addObject:indexPath];
+        [cell setSelectionColour:[UIColor redColor]];
+        [cell setSelected:YES];
+        [self updateEditBarButtons];
     } else {
         NSUInteger selectedIndex = indexPath.row;
-        
         if (selectedIndex != [[PresetController sharedController] selectedPresetIndex]) {
             [self loadPresetAtIndex:selectedIndex];
-        } else {
-            [self.navigationController popViewControllerAnimated:YES];
         }
+    }
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.editing) {
+        FilesViewControllerCell *cell = (FilesViewControllerCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
+        [self.selectedCellSet removeObject:indexPath];
+        [cell setSelected:NO];
+        [self updateEditBarButtons];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

@@ -39,7 +39,7 @@
 		6C94939A1A9D1BFB00B7A37C /* loop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C9493991A9D1BFB00B7A37C /* loop.wav */; };
 		6CB828381AC2F58000610DD4 /* ImageAssets in Resources */ = {isa = PBXBuildFile; fileRef = 6CB828371AC2F58000610DD4 /* ImageAssets */; };
 		6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */; };
-		6CBA6DC51AE04AA000E28195 /* FilesViewControllerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBA6DC41AE04AA000E28195 /* FilesViewControllerCell.m */; };
+		6CCA30B31AE10B5500CAF1AF /* FilesViewControllerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCA30B21AE10B5500CAF1AF /* FilesViewControllerCell.m */; };
 		6CDA9F141AA9017E00D64EB0 /* BuildView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDA9F131AA9017E00D64EB0 /* BuildView.m */; };
 		6CEF81151ACC779000FB1943 /* Icons in Resources */ = {isa = PBXBuildFile; fileRef = 6CEF81141ACC779000FB1943 /* Icons */; };
 /* End PBXBuildFile section */
@@ -113,7 +113,7 @@
 		6CB8283C1AC3077800610DD4 /* UIColor+Shades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Shades.h"; sourceTree = "<group>"; };
 		6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Shades.m"; sourceTree = "<group>"; };
 		6CBA6DC31AE04AA000E28195 /* FilesViewControllerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilesViewControllerCell.h; sourceTree = "<group>"; };
-		6CBA6DC41AE04AA000E28195 /* FilesViewControllerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesViewControllerCell.m; sourceTree = "<group>"; };
+		6CCA30B21AE10B5500CAF1AF /* FilesViewControllerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesViewControllerCell.m; sourceTree = "<group>"; };
 		6CDA9F121AA9017E00D64EB0 /* BuildView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildView.h; sourceTree = "<group>"; };
 		6CDA9F131AA9017E00D64EB0 /* BuildView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildView.m; sourceTree = "<group>"; };
 		6CEF81141ACC779000FB1943 /* Icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Icons; sourceTree = "<group>"; };
@@ -138,7 +138,7 @@
 				6C0B16B01ADBD5F70058BA18 /* FilesViewController.h */,
 				6C0B16B11ADBD5F70058BA18 /* FilesViewController.m */,
 				6CBA6DC31AE04AA000E28195 /* FilesViewControllerCell.h */,
-				6CBA6DC41AE04AA000E28195 /* FilesViewControllerCell.m */,
+				6CCA30B21AE10B5500CAF1AF /* FilesViewControllerCell.m */,
 			);
 			name = FilesView;
 			sourceTree = "<group>";
@@ -419,7 +419,7 @@
 				6C300BE61AD3182E00D51544 /* NSString+Random.m in Sources */,
 				6CDA9F141AA9017E00D64EB0 /* BuildView.m in Sources */,
 				6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */,
-				6CBA6DC51AE04AA000E28195 /* FilesViewControllerCell.m in Sources */,
+				6CCA30B31AE10B5500CAF1AF /* FilesViewControllerCell.m in Sources */,
 				6C172A421ACC256100BE1418 /* ModuleControl.m in Sources */,
 				6C64D6FE1AD9394800012108 /* MasterModuleView.m in Sources */,
 				6C1CF0E01AC206BD0004A2FA /* BuildViewHighlightLayer.m in Sources */,

@@ -22,5 +22,5 @@ extern CGFloat kKeyboardHeight;
 #define TOOLBAR_PIANO_ICON_SELECTED         @"Icons/967-piano-toolbar-selected"
 #define TOOLBAR_PIANO_ICON                  @"Icons/967-piano-toolbar"
 #define TOOLBAR_FILES_ICON                  @"Icons/928-inbox-files-toolbar"
-#define TOOLBAR_NEW_ICON                    @"Icons/709-plus-toolbar"
-#define CROSS_ICON                          @"Icons/433-x"
+#define TOOLBAR_COPY_ICON                   @"Icons/808-documents-toolbar"
+

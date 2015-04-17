@@ -20,6 +20,8 @@
 -(Preset*)recallPresetAtIndex:(NSUInteger)index;
 -(void)addNewPreset;
 -(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail;
+-(void)removePresetAtIndex:(NSUInteger)index;
+-(void)removePresetsAtIndexes:(NSIndexSet *)indexes;
 
 -(Preset*)presetAtIndex:(NSUInteger)index;
 -(NSInteger)selectedPresetIndex;

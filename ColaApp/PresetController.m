@@ -113,11 +113,32 @@
 }
 
 -(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail {
-    NSLog(@"Updating Preset %lu", (unsigned long)index);
+    NSLog(@"Updating preset %lu", (long)index);
     
     Preset *preset = [self.presets objectAtIndex:index];
     [preset updateWithDictionary:dictionary name:name thumbnail:thumbnail];
     
+    [self syncPresets];
+}
+
+-(void)removePresetAtIndex:(NSUInteger)index {
+    NSLog(@"Removing preset %lu", (long)index);
+
+    NSMutableArray *mutablePresets = [[NSMutableArray alloc] initWithArray:self.presets];
+    [mutablePresets removeObjectAtIndex:index];
+    self.presets = [NSArray arrayWithArray:mutablePresets];
+    
+    [self syncPresets];
+    
+    if (self.selectedPresetIndex == index) {
+        self.currentPreset = kNoPreset;
+    }
+}
+
+-(void)removePresetsAtIndexes:(NSIndexSet *)indexes {
+    NSMutableArray *mutablePresets = [[NSMutableArray alloc] initWithArray:self.presets];
+    [mutablePresets removeObjectsAtIndexes:indexes];
+    self.presets = [NSArray arrayWithArray:mutablePresets];
     [self syncPresets];
 }
 
