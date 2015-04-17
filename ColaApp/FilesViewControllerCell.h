@@ -12,7 +12,6 @@
 @interface FilesViewControllerCell : UICollectionViewCell
 
 @property (nonatomic, weak) Preset *preset;
-@property (nonatomic, strong) UIColor *selectionColour;
 
 -(void)updateContents;
 -(void)startJiggling;

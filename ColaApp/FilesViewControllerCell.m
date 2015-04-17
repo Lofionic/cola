@@ -73,7 +73,7 @@
     [super setSelected:selected];
     
     if (selected) {
-        [self.layer setBorderColor:[self.selectionColour CGColor]];
+        [self.layer setBorderColor:[[UIColor redColor] CGColor]];
     } else {
         [self.layer setBorderColor:[[UIColor clearColor] CGColor]];
     }
@@ -83,6 +83,19 @@
 
 -(BOOL)selected {
     return _selected;
+}
+
+
+@synthesize highlighted = _highlighted;
+
+-(void)setHighlighted:(BOOL)highlighted {
+    [super setHighlighted:highlighted];
+    
+    if (highlighted) {
+        [self.layer setBorderColor:[[UIColor whiteColor] CGColor]];
+    } else {
+        [self.layer setBorderColor:[[UIColor clearColor] CGColor]];
+    }
 }
 
 - (void)startJiggling {

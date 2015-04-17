@@ -153,14 +153,14 @@
     Preset *preset = [[PresetController sharedController] presetAtIndex:indexPath.row];
     [cell setPreset:preset];
     
-    if (self.editing && [self.selectedCellSet containsObject:indexPath]) {
-        [cell setSelectionColour:[UIColor redColor]];
-        [cell setSelected:YES];
-    } else if (!self.editing && [[PresetController sharedController] selectedPresetIndex] == indexPath.row) {
-        [cell setSelectionColour:[UIColor whiteColor]];
-        [cell setSelected:YES];
+    if (!self.editing && [[PresetController sharedController] selectedPresetIndex] == indexPath.row) {
+        [cell setHighlighted:YES];
     } else {
-        [cell setSelected:NO];
+        [cell setHighlighted:NO];
+    }
+    
+    if (self.editing) {
+        [cell startJiggling];
     }
     
     [cell updateContents];
@@ -186,42 +186,39 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (self.editing) {
-        FilesViewControllerCell *cell = (FilesViewControllerCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
-        [self.selectedCellSet addObject:indexPath];
-        [cell setSelectionColour:[UIColor redColor]];
-        [cell setSelected:YES];
-        [self updateEditBarButtons];
+    FilesViewControllerCell *cell = (FilesViewControllerCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
+    [self.selectedCellSet addObject:indexPath];
+    [cell setSelected:YES];
+    [self updateEditBarButtons];
     } else {
-        NSUInteger selectedIndex = indexPath.row;
-        if (selectedIndex != [[PresetController sharedController] selectedPresetIndex]) {
-            [self loadPresetAtIndex:selectedIndex];
-        }
+        [self loadPresetAtIndex:indexPath.row];
     }
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.editing) {
-        FilesViewControllerCell *cell = (FilesViewControllerCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
-        [self.selectedCellSet removeObject:indexPath];
-        [cell setSelected:NO];
-        [self updateEditBarButtons];
-    } else {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+    FilesViewControllerCell *cell = (FilesViewControllerCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
+    [self.selectedCellSet removeObject:indexPath];
+    [cell setSelected:NO];
+    [self updateEditBarButtons];
 }
 
 -(void)loadPresetAtIndex:(NSUInteger)index {
-    Preset *selectedPreset = [[PresetController sharedController] recallPresetAtIndex:index];
-    [self.collectionView reloadData];
     
-    UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
-    [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
-    [self.navigationController.view addSubview:blockingView];
-    
-    [self.buildViewController recallPreset:selectedPreset completion:^(BOOL success) {
-        [blockingView removeFromSuperview];
+    if (index == [[PresetController sharedController] selectedPresetIndex]) {
         [self.navigationController popViewControllerAnimated:YES];
-    }];
+    } else {
+        Preset *selectedPreset = [[PresetController sharedController] recallPresetAtIndex:index];
+        [self.collectionView reloadData];
+        
+        UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
+        [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
+        [self.navigationController.view addSubview:blockingView];
+        
+        [self.buildViewController recallPreset:selectedPreset completion:^(BOOL success) {
+            [blockingView removeFromSuperview];
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+    }
 }
 
 @end
