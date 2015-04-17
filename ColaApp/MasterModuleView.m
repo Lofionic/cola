@@ -47,6 +47,8 @@
     [keyboardGateView setCenter:CGPointMake(168, self.frame.size.height  / 2.0)];
     [keyboardGateView setDelegate:buildView];
     [self addSubview:keyboardGateView];
+    
+    self.connectorViews = @[mainInLConnectorView, mainInRConnectorView, keyboardOutView, keyboardGateView];
 }
 
 @end

@@ -12,5 +12,6 @@
 
 -(void)noteOn:(NSInteger)note;
 -(void)noteOff:(NSInteger)note;
+-(void)allNotesOff;
 
 @end

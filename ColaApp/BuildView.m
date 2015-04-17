@@ -15,6 +15,7 @@
 #import "ModuleDescription.h"
 #import "MasterModuleView.h"
 #import "ModuleCatalog.h"
+#import "ModuleControl.h"
 #import <ColaLib/ColaLib.h>
 
 @interface BuildView () {
@@ -82,7 +83,6 @@ static NSArray *cableColours;
         [self addSubview:self.masterModuleView];
         
         [self bringSubviewToFront:self.cableView];
-
     }
     return self;
 }
@@ -243,14 +243,14 @@ static NSArray *cableColours;
     return result;
 }
 
--(UIView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point {
+-(ModuleView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point identifier:(NSString*)identifier {
     BOOL occupied;
     NSSet *cellSet = [self cellPathsForModuleOfWidth:moduleDescription.width center:point occupied:&occupied];
     
     if (cellSet && !occupied) {
         
         CGRect newFrame = [self rectForCellSet:cellSet];
-        ModuleView *moduleView = [[ModuleView alloc] initWithModuleDescription:moduleDescription inFrame:newFrame];
+        ModuleView *moduleView = [[ModuleView alloc] initWithModuleDescription:moduleDescription inFrame:newFrame identifier:identifier];
         
         if (moduleView) {
             [moduleView setDelegate:self];
@@ -310,22 +310,26 @@ static NSArray *cableColours;
                 [self.cables removeObject:hitConnector.cable];
             }
             // Successful connection
-            CGPoint point1 = [self convertPoint:connectorView.center fromView:connectorView.superview];
-            CGPoint point2 = [self convertPoint:hitConnector.center fromView:hitConnector.superview];
-            
-            BuildViewCable *newCable = [[BuildViewCable alloc] initWithPoint:point1 andPoint:point2 inBuildView:self];
-            [newCable setColour:[self.dragCable colour]];
-            [connectorView setCable:newCable];
-            [hitConnector setCable:newCable];
-            
-            [newCable setConnector1:connectorView];
-            [newCable setConnector2:hitConnector];
-            
-            [self.cables addObject:newCable];
+            [self addCableFrom:connectorView to:hitConnector withColour:self.dragCable.colour];
         }
     }
     self.dragCable = nil;
     [self.cableLayer setNeedsDisplay];
+}
+
+-(void)addCableFrom:(ConnectorView*)connectorView1 to:(ConnectorView*)connectorView2 withColour:(UIColor*)colour {
+    CGPoint point1 = [self convertPoint:connectorView1.center fromView:connectorView1.superview];
+    CGPoint point2 = [self convertPoint:connectorView2.center fromView:connectorView2.superview];
+    
+    BuildViewCable *newCable = [[BuildViewCable alloc] initWithPoint:point1 andPoint:point2 inBuildView:self];
+    [newCable setColour:colour];
+    [connectorView1 setCable:newCable];
+    [connectorView2 setCable:newCable];
+    
+    [newCable setConnector1:connectorView1];
+    [newCable setConnector2:connectorView2];
+    
+    [self.cables addObject:newCable];
 }
 
 -(BOOL)connectorView:(ConnectorView*)connectorView1 connectWith:(ConnectorView*)connectorView2 {
@@ -517,7 +521,8 @@ static NSArray *cableColours;
                                           @"outputModule"       : outputModule.identifier,
                                           @"outputConnection"   : outputConnection,
                                           @"inputModule"        : inputModule.identifier,
-                                          @"inputConnection"    : inputConnection
+                                          @"inputConnection"    : inputConnection,
+                                          @"colour"             : thisCable.colour
                                           };
         
         [cables addObject:cableDictionary];
@@ -529,7 +534,7 @@ static NSArray *cableColours;
 }
 
 -(BOOL)buildFromDictionary:(NSDictionary*)dictionary {
-    
+
     [self removeAll];
     
     BOOL success = YES;
@@ -543,7 +548,13 @@ static NSArray *cableColours;
         CGPoint moduleCenter = [[moduleDictionary objectForKey:@"center"] CGPointValue];
         ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[moduleDictionary objectForKey:@"id"]];
         if (moduleDescription) {
-            [self addViewForModule:moduleDescription atPoint:moduleCenter];
+            ModuleView *moduleView;
+            if ((moduleView = [self addViewForModule:moduleDescription atPoint:moduleCenter identifier:moduleIdentifier])) {
+                // Set parameters
+                [moduleView setParametersFromDictionary:[moduleDictionary objectForKey:@"params"]];
+            } else {
+                success = NO;
+            }
         } else {
             success = NO;
         }
@@ -555,7 +566,17 @@ static NSArray *cableColours;
         ModuleView *outModule = [self moduleWithIdentifier:[thisCable objectForKey:@"outputModule"]];
         ModuleView *inModule = [self moduleWithIdentifier:[thisCable objectForKey:@"inputModule"]];
         if (outModule && inModule) {
-            
+            ConnectorView *outConnector = [outModule connectorForName:[thisCable objectForKey:@"outputConnection"]];
+            ConnectorView *inConnector = [inModule connectorForName:[thisCable objectForKey:@"inputConnection"]];
+            if (outConnector && inConnector) {
+                if ([self connectorView:outConnector connectWith:inConnector]) {
+                    [self addCableFrom:outConnector to:inConnector withColour:[thisCable objectForKey:@"colour"]];
+                } else {
+                    success = NO;
+                }
+            } else {
+                success = NO;
+            }
         }
     }
     
@@ -564,16 +585,20 @@ static NSArray *cableColours;
 
 -(ModuleView*)moduleWithIdentifier:(NSString*)identifier {
     
-    __block ModuleView *result = nil;
-    
-    [self.moduleViews enumerateKeysAndObjectsUsingBlock:^(NSString *key, ModuleView *obj, BOOL *stop) {
-        if ([key isEqualToString:identifier]) {
-            result = obj;
-            *stop = YES;
-        }
-    }];
-    
-    return result;
+    if ([identifier isEqualToString:@"Master"]) {
+        return self.masterModuleView;
+    } else {
+        __block ModuleView *result = nil;
+        
+        [self.moduleViews enumerateKeysAndObjectsUsingBlock:^(NSString *key, ModuleView *obj, BOOL *stop) {
+            if ([key isEqualToString:identifier]) {
+                result = obj;
+                *stop = YES;
+            }
+        }];
+        
+        return result;
+    }
 }
 
 -(void)removeAll {
@@ -594,6 +619,8 @@ static NSArray *cableColours;
             cellOccupied[i][j] = NO;
         }
     }
+    
+    [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
     
     [self scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 }

@@ -156,11 +156,8 @@ static BuildView *buildView = nil;
                                                  name: UIApplicationWillEnterForegroundNotification
                                                object: nil];
     
-    [[PresetController sharedController] recallPresetAtIndex:0];
-}
-
--(void)buildStartingBlock {
-    [self.buildView addViewForModule:[[ModuleCatalog sharedCatalog] moduleOfType:kCOLComponentMultiplesKB] atPoint:CGPointMake(1, 1)];
+    Preset *preset = [[PresetController sharedController] recallPresetAtIndex:0];
+    [self.buildView buildFromDictionary:preset.dictionary];
 }
 
 -(void)appWillEnterForeground {
@@ -193,6 +190,8 @@ static BuildView *buildView = nil;
     if (self.buildMode) {
         [self setBuildMode:NO animated:YES];
     }
+    
+    [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
     
     UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
     [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
@@ -318,7 +317,7 @@ static BuildView *buildView = nil;
             pointInWindow.y < self.view.frame.size.height - 8) {
             if ([self.view hitTest:pointInWindow withEvent:nil] == self.buildView) {
                 // Add a component
-                [self.buildView addViewForModule:module atPoint:[gesture locationInView:self.buildView]];
+                [self.buildView addViewForModule:module atPoint:[gesture locationInView:self.buildView] identifier:nil];
             }
         }
     }

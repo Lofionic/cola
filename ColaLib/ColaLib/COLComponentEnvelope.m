@@ -47,6 +47,8 @@
         }
         medianWindowSigma = 0;
         medianWindowPosition = 0;
+        
+        self.retriggers = YES;
     }
     return self;
 }

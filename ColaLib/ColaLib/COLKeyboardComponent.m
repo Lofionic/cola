@@ -36,8 +36,8 @@
 }
 
 -(void)initializeIO {
-    self.keyboardOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOType1VOct withName:@"Out"];
-    self.gateOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeGate withName:@"Gate"];
+    self.keyboardOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOType1VOct withName:@"1VOct Out"];
+    self.gateOut = [[COLComponentOutput alloc] initWithComponent:self ofType:kComponentIOTypeGate withName:@"Gate Out"];
     [self setOutputs:@[self.keyboardOut, self.gateOut]];
 }
 
@@ -84,15 +84,25 @@
     }
 }
 
+-(void)allNotesOff {
+    [noteOns removeAllObjects];
+    [self closeGate];
+    [self setFrequency];
+}
+
 -(void)setFrequency {
-    // play last note
-    NSInteger note = [[noteOns lastObject] integerValue];
-    
-    // Calculate note frequency
-    float frequency = powf(2, (note - 69) / 12.0) * 440;
-    
-    // Convert to decimal value
-    outputValue = frequency / CV_FREQUENCY_RANGE;
+    if ([noteOns count] > 0) {
+        // play last note
+        NSInteger note = [[noteOns lastObject] integerValue];
+        
+        // Calculate note frequency
+        float frequency = powf(2, (note - 69) / 12.0) * 440;
+        
+        // Convert to decimal value
+        outputValue = frequency / CV_FREQUENCY_RANGE;
+    } else {
+        outputValue = 0;
+    }
 }
 
 -(void)openGate {

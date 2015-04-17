@@ -49,7 +49,7 @@
 
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point;
 -(NSSet*)cellPathsForModuleOfWidth:(NSUInteger)width center:(CGPoint)center occupied:(BOOL*)occupied;
--(UIView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point;
+-(ModuleView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point identifier:(NSString*)identifier;
 -(CGRect)rectForCellSet:(NSSet*)cellSet;
 
 -(NSDictionary*)getPresetDictionary;

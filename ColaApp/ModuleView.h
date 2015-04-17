@@ -19,15 +19,22 @@
 @end
 
 @class ModuleDescription;
+@class ConnectorView;
+@class ModuleControl;
 @interface ModuleView : UIView
 
 @property (nonatomic, weak) id<ModuleViewDelegate>  delegate;
 @property (readonly, weak) COLComponent             *component;
 @property (readonly, strong) ModuleDescription      *moduleDescription;
 @property (nonatomic, strong) NSString              *identifier;
+@property (nonatomic, strong) NSArray               *connectorViews;
+@property (nonatomic, strong) NSArray               *controlViews;
 
--(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame;
+-(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame identifier:(NSString*)identifier;
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription;
+-(void)setParametersFromDictionary:(NSDictionary*)parametersDictionary;
 -(void)trash;
+
+-(ConnectorView*)connectorForName:(NSString*)name;
 
 @end
