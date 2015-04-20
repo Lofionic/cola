@@ -29,10 +29,8 @@ static BuildView *buildView = nil;
 @property (nonatomic, strong) UIView                *dragView;
 @property (nonatomic, strong) ModuleView            *dragModule;
 
-@property (nonatomic, strong) UIBarButtonItem       *buildModeButton;
-@property (nonatomic, strong) UIBarButtonItem       *keyboardButton;
-@property (nonatomic, strong) UIImage               *buildIcon;
-@property (nonatomic ,strong) UIImage               *keyboardIcon;
+@property (nonatomic, strong) UIBarButtonItem       *buildBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem       *keyboardBarButtonItem;
 
 @property (nonatomic) BOOL buildMode;
 @property (nonatomic) BOOL keyboardHidden;
@@ -48,12 +46,14 @@ static BuildView *buildView = nil;
 -(void)viewDidLoad {
     
     [super viewDidLoad];
-    [self setAutomaticallyAdjustsScrollViewInsets:YES];
 
+    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ImageAssets/sunset_ipad.jpg"]];
+    [backgroundView setFrame:self.view.bounds];
+    [backgroundView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
+    [self.view addSubview:backgroundView];
+    
     self.buildView = [[BuildView alloc] init];
     [self.buildView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.buildView setContentInset:UIEdgeInsetsMake(0, 0, kKeyboardHeight, 0)];
-    [self.buildView setScrollIndicatorInsets:UIEdgeInsetsMake(0, 0, kKeyboardHeight, 0)];
     [self.buildView setClipsToBounds:NO];
     [self.buildView setBuildViewController:self];
     [self.view addSubview:self.buildView];
@@ -69,7 +69,7 @@ static BuildView *buildView = nil;
     [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.keyboardView setKbComponent:[[COLAudioEnvironment sharedEnvironment] keyboardComponent]];
     [self.view addSubview:self.keyboardView];
-    
+
     NSDictionary *viewsDictionary = @{
                                       @"buildView"      :   self.buildView,
                                       @"componentShelf" :   self.componentShelf,
@@ -117,7 +117,7 @@ static BuildView *buildView = nil;
                                                          multiplier:1
                                                            constant:0]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0@750-[buildView]|"
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topGuide]-0@750-[buildView]|"
                                                                       options:0
                                                                       metrics:nil
                                                                         views:viewsDictionary]];
@@ -125,21 +125,21 @@ static BuildView *buildView = nil;
     self.shiftBuildViewConstraint = [NSLayoutConstraint constraintWithItem:self.buildView
                                                                  attribute:NSLayoutAttributeTop
                                                                  relatedBy:NSLayoutRelationGreaterThanOrEqual
-                                                                    toItem:self.topLayoutGuide
-                                                                 attribute:NSLayoutAttributeTop
+                                                                    toItem:self.componentShelf
+                                                                 attribute:NSLayoutAttributeBottom
                                                                 multiplier:1
-                                                                  constant:kComponentShelfHeight];
+                                                                  constant:0];
     
     [self.shiftBuildViewConstraint setPriority:UILayoutPriorityRequired];
     [self.view addConstraint:self.shiftBuildViewConstraint];
     
     UIImage *wrenchIcon = [UIImage imageNamed:TOOLBAR_BUILD_ICON];
-    self.buildModeButton = [[UIBarButtonItem alloc] initWithImage:wrenchIcon style:UIBarButtonItemStylePlain target:self action:@selector(editTapped)];
+    self.buildBarButtonItem = [[UIBarButtonItem alloc] initWithImage:wrenchIcon style:UIBarButtonItemStylePlain target:self action:@selector(editTapped)];
     [self setBuildMode:NO animated:NO];
     
     UIImage *keyboardIcon = [UIImage imageNamed:TOOLBAR_PIANO_ICON];
-    self.keyboardButton = [[UIBarButtonItem alloc] initWithImage:keyboardIcon style:UIBarButtonItemStylePlain target:self action:@selector(keyboardTapped)];
-    [self.navigationItem setLeftBarButtonItems:@[self.buildModeButton, self.keyboardButton]];
+    self.keyboardBarButtonItem = [[UIBarButtonItem alloc] initWithImage:keyboardIcon style:UIBarButtonItemStylePlain target:self action:@selector(keyboardTapped)];
+    [self.navigationItem setLeftBarButtonItems:@[self.buildBarButtonItem, self.keyboardBarButtonItem]];
     [self setKeyboardHidden:NO animated:NO];
     
     UIImage *filesIcon = [UIImage imageNamed:TOOLBAR_FILES_ICON];
@@ -158,6 +158,8 @@ static BuildView *buildView = nil;
     
     Preset *preset = [[PresetController sharedController] recallPresetAtIndex:0];
     [self.buildView buildFromDictionary:preset.dictionary];
+    
+
 }
 
 -(void)appWillEnterForeground {
@@ -220,7 +222,7 @@ static BuildView *buildView = nil;
             [self.componentShelf setTransform:CGAffineTransformIdentity];
             [self.shiftBuildViewConstraint setActive:YES];
         }
-        [self.buildModeButton setImage:[UIImage imageNamed:TOOLBAR_BUILD_ICON_SELECTED]];
+        [self.buildBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_BUILD_ICON_SELECTED]];
     } else {
         // Hide shelf
         if (animated) {
@@ -233,7 +235,7 @@ static BuildView *buildView = nil;
             [self.componentShelf setTransform:CGAffineTransformMakeTranslation(0, -kComponentShelfHeight - 40.0)];
             [self.shiftBuildViewConstraint setActive:NO];
         }
-        [self.buildModeButton setImage:[UIImage imageNamed:TOOLBAR_BUILD_ICON]];
+        [self.buildBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_BUILD_ICON]];
     }
 }
 
@@ -255,7 +257,7 @@ static BuildView *buildView = nil;
             [self.buildView setContentInset:buildviewEdgeInsets];
             [self.buildView setScrollIndicatorInsets:buildviewEdgeInsets];
         }
-        [self.keyboardButton setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON]];
+        [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON]];
     } else {
         UIEdgeInsets buildviewEdgeInsets = [self.buildView contentInset];
         buildviewEdgeInsets.bottom = self.keyboardView.frame.size.height;
@@ -270,7 +272,7 @@ static BuildView *buildView = nil;
             [self.buildView setContentInset:buildviewEdgeInsets];
             [self.buildView setScrollIndicatorInsets:buildviewEdgeInsets];
         }
-        [self.keyboardButton setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON_SELECTED]];
+        [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON_SELECTED]];
     }
 }
 

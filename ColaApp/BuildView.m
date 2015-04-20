@@ -41,6 +41,8 @@
 @property (nonatomic, strong) ModuleView                *dragView;
 @property (nonatomic) CGPoint                           dragOrigin;
 
+@property (nonatomic, strong) UIView                    *trashView;
+
 @property (nonatomic, strong) NSMutableDictionary       *moduleViews;
 
 @property (nonatomic, strong) MasterModuleView          *masterModuleView;
@@ -82,6 +84,11 @@ static NSArray *cableColours;
         self.masterModuleView = [[MasterModuleView alloc] initWithFrame:CGRectMake(0, 0, kBuildViewWidth, self.headerHeight) buildView:self];
         [self addSubview:self.masterModuleView];
         
+        self.trashView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kBuildViewWidth, self.headerHeight)];
+        [self.trashView setBackgroundColor:[UIColor whiteColor]];
+        [self.trashView setAlpha:0];
+        [self addSubview:self.trashView];
+        
         [self bringSubviewToFront:self.cableView];
     }
     return self;
@@ -112,15 +119,19 @@ static NSArray *cableColours;
     [self.cableView .layer addSublayer:self.cableLayer];
     [self addSubview:self.cableView ];
     [self bringSubviewToFront:self.cableView];
-    
-    
-    //[self.layer insertSublayer:self.cableLayer above:self.layer];
-
-    //[self.cableLayer setZPosition:1.0];
 }
 
--(void)addGlobalIO {
+-(void)setTrashViewHidden:(BOOL)hidden {
 
+    if (hidden) {
+        [UIView animateWithDuration:0.2 animations:^ {
+            [self.trashView setAlpha:0];
+        }];
+    } else {
+        [UIView animateWithDuration:0.2 animations:^ {
+            [self.trashView setAlpha:1];
+        }];
+    }
 }
 
 @synthesize highlightedCellSet = _highlightedCellSet;
@@ -302,13 +313,31 @@ static NSArray *cableColours;
 -(void)connectorView:(ConnectorView *)connectorView didEndDrag:(UIPanGestureRecognizer *)uigr {
     [self.cables removeObject:self.dragCable];
     
+
     UIView *hitView = [self hitTest:[uigr locationInView:self] withEvent:nil];
     if ([hitView isKindOfClass:[ConnectorView class]]) {
+        
         ConnectorView *hitConnector = (ConnectorView*)hitView;
-        if ([self connectorView:connectorView connectWith:hitConnector]) {
-            if (hitConnector.cable) {
-                [self.cables removeObject:hitConnector.cable];
+        
+        ConnectorView *outConnector;
+        ConnectorView *inConnector;
+        if ([hitConnector.componentIO isKindOfClass:[COLComponentOutput class]]) {
+            outConnector = hitConnector;
+            inConnector = connectorView;
+        } else {
+            outConnector = connectorView;
+            inConnector = hitConnector;
+        }
+        
+        if ([self connectorView:outConnector connectWith:inConnector]) {
+            if (inConnector.cable) {
+                [self.cables removeObject:inConnector.cable];
             }
+            
+            if (outConnector.cable) {
+                [self.cables removeObject:outConnector.cable];
+            }
+            
             // Successful connection
             [self addCableFrom:connectorView to:hitConnector withColour:self.dragCable.colour];
         }
@@ -378,6 +407,9 @@ static NSArray *cableColours;
         
         CGPoint dragPoint = [gesture locationInView:self];
         [self.dragView setCenter:dragPoint];
+        
+        [self.cableView setHidden:YES];
+        [self setTrashViewHidden:NO];
     }
 }
 
@@ -398,27 +430,62 @@ static NSArray *cableColours;
 }
 
 -(void)moduleView:(ModuleView *)moduleView didEndDraggingWithGesture:(UIGestureRecognizer *)gesture {
+
+    
     if (self.dragView) {
+        
         [self setHighlightedCellSet:nil];
-        [self.dragView.layer setOpacity:1.0];
         
-        BOOL modulePlaced = NO;
-        
-        if (gesture.state != UIGestureRecognizerStateCancelled ){
-            if ([self.superview hitTest:[gesture locationInView:self.superview] withEvent:nil] == self) {
-                // Move the module
-                modulePlaced = [self placeModuleView:self.dragView toPoint:[gesture locationInView:self]];
+        UIView *hitView = [self hitTest:[gesture locationInView:self] withEvent:nil];
+        if (hitView == self.trashView) {
+            
+            // Module was trashed
+            [self trashModuleView:moduleView];
+            self.dragView = nil;
+            
+        } else {
+            
+            [self.dragView.layer setOpacity:1.0];
+            
+            BOOL modulePlaced = NO;
+            
+            if (gesture.state != UIGestureRecognizerStateCancelled ){
+                if ([self.superview hitTest:[gesture locationInView:self.superview] withEvent:nil] == self) {
+                    // Move the module
+                    modulePlaced = [self placeModuleView:self.dragView toPoint:[gesture locationInView:self]];
+                }
             }
+            
+            if (!modulePlaced) {
+                // Module was not succesfully placed
+                // Bounce it back
+                [self placeModuleView:self.dragView toPoint:self.dragOrigin];
+            }
+            
+            self.dragView = nil;
         }
         
-        if (!modulePlaced) {
-            // Module was not succesfully placed
-            // Bounce it back
-            [self placeModuleView:self.dragView toPoint:self.dragOrigin];
-        }
-        
-        self.dragView = nil;
+        [self.cableView setHidden:NO];
+        [self setTrashViewHidden:YES];
     }
+}
+
+-(void)trashModuleView:(ModuleView*)moduleView {
+    
+    // Remove any cables connected to this module
+    for (ConnectorView *thisConnector in moduleView.connectorViews) {
+        if (thisConnector.cable) {
+            [self.cables removeObject:thisConnector.cable];
+        }
+    }
+    [self.cableLayer setNeedsDisplay];
+
+    // Remove from module dictionary
+    [self.moduleViews removeObjectForKey:moduleView.identifier];
+
+    // Trash the module
+    [moduleView trash];
+    
 }
 
 

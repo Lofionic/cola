@@ -20,6 +20,13 @@
 
 @implementation BuildViewCableLayer
 
+-(instancetype)init {
+    if (self = [super init]) {
+        self.contentsScale = [[UIScreen mainScreen] scale];
+    }
+    return self;
+}
+
 //- (instancetype)init
 //{
 //    self = [super init];
@@ -59,7 +66,9 @@
         CGContextSetFillColorWithColor(ctx, [[UIColor lightGrayColor] CGColor]);
         CGContextFillEllipseInRect(ctx, CGRectOffset(rect1, 0, -2));
         CGContextFillEllipseInRect(ctx, CGRectOffset(rect2, 0, -2));
-        
+    }
+    
+    for (BuildViewCable *cable in self.buildView.cables) {
         CGFloat hang = MIN(fabs(cable.point2.x - cable.point1.x), 40);
         CGFloat bottom = MAX(cable.point1.y, cable.point2.y) + hang;
         

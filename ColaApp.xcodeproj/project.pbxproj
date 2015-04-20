@@ -223,8 +223,8 @@
 				6C8DD2961AC0DA2400320628 /* BuildView */,
 				6C0D487F1AC3662E008AD869 /* KeyboardView */,
 				6C2A5E291A8BF2CC00ECEAB2 /* Main.storyboard */,
-				6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */,
 				6C2A5E2E1A8BF2CC00ECEAB2 /* LaunchScreen.xib */,
+				6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */,
 				6C65A4E91A9125E1000D9192 /* Resources */,
 				6C2A5E1F1A8BF2CC00ECEAB2 /* Supporting Files */,
 			);

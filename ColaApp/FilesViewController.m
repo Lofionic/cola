@@ -54,9 +54,7 @@
     [self.collectionView registerClass:[FilesViewControllerCell class] forCellWithReuseIdentifier:CELL_IDENTIFIER];
     [self.collectionView setDelegate:self];
     [self.collectionView setDataSource:self];
-    [self.collectionView setBackgroundColor:[UIColor colorWithWhite:0.1 alpha:1]];
-    
-    [self.navigationItem setHidesBackButton:YES animated:NO];
+    [self.collectionView setBackgroundView: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ImageAssets/sunset_ipad.jpg"]]];
     
     self.addBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addTapped)];
     [self.navigationItem setLeftBarButtonItem:self.addBarButtonItem];

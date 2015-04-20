@@ -18,5 +18,6 @@
 +(BuildView*)buildView;
 
 -(void)recallPreset:(Preset*)preset completion:(void (^)(BOOL success))completion;
+-(void)setKeyboardHidden:(BOOL)keyboardHidden animated:(BOOL)animated;
 
 @end

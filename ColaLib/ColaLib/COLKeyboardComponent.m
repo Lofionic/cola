@@ -14,6 +14,7 @@
     AudioSignalType outputValue;
     float prevPitchbend;
     bool gateOpen;
+    bool gateTrigger;
 }
 
 @property (nonatomic, strong) COLComponentOutput *keyboardOut;
@@ -31,6 +32,7 @@
     if (self = [super initWithContext:context]) {
         noteOns = [[NSMutableArray alloc] initWithCapacity:10];
         gateOpen = NO;
+        self.gliss = NO;
     }
     return self;
 }
@@ -107,6 +109,7 @@
 
 -(void)openGate {
     gateOpen = YES;
+    gateTrigger = YES;
 
 }
 
@@ -137,6 +140,11 @@
         } else {
             gateOutBuffer[i] = 0;
         }
+    }
+    
+    if (gateTrigger && gateOpen) {
+        gateOutBuffer[0] = 0;
+        gateTrigger = NO;
     }
     
     prevPitchbend = self.pitchbend;
