@@ -42,6 +42,7 @@
         }
         
         UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureHandler:)];
+        [panGesture setCancelsTouchesInView:NO];
         [self addGestureRecognizer:panGesture];
     }
     

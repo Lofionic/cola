@@ -15,11 +15,13 @@
 #import "FilesViewController.h"
 #import "PresetController.h"
 #import "UIView+Snapshot.h"
+#import "BuildViewScrollView.h"
 
 static BuildView *buildView = nil;
 
 @interface BuildViewController()
 
+@property (nonatomic, strong) BuildViewScrollView   *buildViewScrollView;
 @property (nonatomic, strong) BuildView             *buildView;
 
 @property (nonatomic, strong) ComponentShelfView    *componentShelf;
@@ -52,11 +54,19 @@ static BuildView *buildView = nil;
     [backgroundView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
     [self.view addSubview:backgroundView];
     
-    self.buildView = [[BuildView alloc] init];
-    [self.buildView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    self.buildViewScrollView = [[BuildViewScrollView alloc] init];
+    [self.buildViewScrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.buildViewScrollView setClipsToBounds:NO];
+    [self.view addSubview:self.buildViewScrollView];
+    
+    self.buildView = [[BuildView alloc] initWithScrollView:self.buildViewScrollView];
+    [self.buildView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
     [self.buildView setClipsToBounds:NO];
     [self.buildView setBuildViewController:self];
-    [self.view addSubview:self.buildView];
+    [self.buildViewScrollView addSubview:self.buildView];
+    [self.buildViewScrollView setDelegate:self];
+//    [self.buildViewScrollView setMaximumZoomScale:1];
+//    [self.buildViewScrollView setMinimumZoomScale:0.5];
     
     buildView = self.buildView;
     
@@ -71,7 +81,7 @@ static BuildView *buildView = nil;
     [self.view addSubview:self.keyboardView];
 
     NSDictionary *viewsDictionary = @{
-                                      @"buildView"      :   self.buildView,
+                                      @"buildView"      :   self.buildViewScrollView,
                                       @"componentShelf" :   self.componentShelf,
                                       @"keyboardView"   :   self.keyboardView,
                                       @"topGuide"       :   self.topLayoutGuide
@@ -243,34 +253,34 @@ static BuildView *buildView = nil;
     self.keyboardHidden = keyboardHidden;
     if (keyboardHidden) {
         // Hide keyboard
-        UIEdgeInsets buildviewEdgeInsets = [self.buildView contentInset];
+        UIEdgeInsets buildviewEdgeInsets = [self.buildViewScrollView contentInset];
         buildviewEdgeInsets.bottom = 0;
         if (animated) {
             [UIView animateWithDuration:0.2 animations:^ {
                 [self.keyboardView setTransform:CGAffineTransformMakeTranslation(0, self.keyboardView.frame.size.height)];
-                [self.buildView setContentInset:buildviewEdgeInsets];
-                [self.buildView setScrollIndicatorInsets:buildviewEdgeInsets];
+                [self.buildViewScrollView setContentInset:buildviewEdgeInsets];
+                [self.buildViewScrollView setScrollIndicatorInsets:buildviewEdgeInsets];
 
             }];
         } else {
             [self.keyboardView setTransform:CGAffineTransformMakeTranslation(0, self.keyboardView.frame.size.height)];
-            [self.buildView setContentInset:buildviewEdgeInsets];
-            [self.buildView setScrollIndicatorInsets:buildviewEdgeInsets];
+            [self.buildViewScrollView setContentInset:buildviewEdgeInsets];
+            [self.buildViewScrollView setScrollIndicatorInsets:buildviewEdgeInsets];
         }
         [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON]];
     } else {
-        UIEdgeInsets buildviewEdgeInsets = [self.buildView contentInset];
+        UIEdgeInsets buildviewEdgeInsets = [self.buildViewScrollView contentInset];
         buildviewEdgeInsets.bottom = self.keyboardView.frame.size.height;
         if (animated) {
             [UIView animateWithDuration:0.2 animations:^ {
                 [self.keyboardView setTransform:CGAffineTransformIdentity];
-                [self.buildView setContentInset:buildviewEdgeInsets];
-                [self.buildView setScrollIndicatorInsets:buildviewEdgeInsets];
+                [self.buildViewScrollView setContentInset:buildviewEdgeInsets];
+                [self.buildViewScrollView setScrollIndicatorInsets:buildviewEdgeInsets];
             }];
         } else {
             [self.keyboardView setTransform:CGAffineTransformIdentity];
-            [self.buildView setContentInset:buildviewEdgeInsets];
-            [self.buildView setScrollIndicatorInsets:buildviewEdgeInsets];
+            [self.buildViewScrollView setContentInset:buildviewEdgeInsets];
+            [self.buildViewScrollView setScrollIndicatorInsets:buildviewEdgeInsets];
         }
         [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON_SELECTED]];
     }
@@ -352,10 +362,16 @@ static BuildView *buildView = nil;
     });
 }
 
-#pragma Convenience Methods
+#pragma mark Convenience Methods
 
 +(BuildView*)buildView {
     return buildView;
+}
+
+#pragma mark UIScrollView delegate
+
+-(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return self.buildView;
 }
 
 @end

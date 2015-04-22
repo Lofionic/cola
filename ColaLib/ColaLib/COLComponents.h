@@ -19,5 +19,6 @@
 #import "COLComponentMultiplesKB.h"
 #import "COLComponentMixer2.h"
 #import "COLComponentVCF.h"
+#import "COLComponentPan.h"
 
 #endif

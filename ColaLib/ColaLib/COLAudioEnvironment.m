@@ -105,6 +105,8 @@
         newComponent = [[COLComponentMixer2 alloc] initWithContext:context];
     } else if ([componentType isEqualToString:kCOLComponentVCF]) {
         newComponent = [[COLComponentVCF alloc] initWithContext:context];
+    } else if ([componentType isEqualToString:kCOLComponentPan]) {
+        newComponent = [[COLComponentPan alloc] initWithContext:context];
     } else {
         NSLog(@"Unknown component type : %@", componentType);
     }

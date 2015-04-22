@@ -34,6 +34,7 @@
 		6C64D7061AD9B0DD00012108 /* PresetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D7051AD9B0DD00012108 /* PresetController.m */; };
 		6C65A4E81A9125DD000D9192 /* gtr.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C65A4E71A9125DD000D9192 /* gtr.wav */; };
 		6C6DB53D1AD6B48C0001343E /* ModuleCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6DB53C1AD6B48C0001343E /* ModuleCatalog.m */; };
+		6C7459021AE84D3200AEC106 /* BuildViewScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7459011AE84D3200AEC106 /* BuildViewScrollView.m */; };
 		6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */; };
 		6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2941AC0C9CC00320628 /* ModuleView.m */; };
 		6C94939A1A9D1BFB00B7A37C /* loop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C9493991A9D1BFB00B7A37C /* loop.wav */; };
@@ -104,6 +105,8 @@
 		6C65A4E71A9125DD000D9192 /* gtr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gtr.wav; sourceTree = "<group>"; };
 		6C6DB53B1AD6B48C0001343E /* ModuleCatalog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleCatalog.h; sourceTree = "<group>"; };
 		6C6DB53C1AD6B48C0001343E /* ModuleCatalog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleCatalog.m; sourceTree = "<group>"; };
+		6C7459001AE84D3200AEC106 /* BuildViewScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewScrollView.h; sourceTree = "<group>"; };
+		6C7459011AE84D3200AEC106 /* BuildViewScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildViewScrollView.m; sourceTree = "<group>"; };
 		6C8DD28F1AC0AB1200320628 /* RotaryEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotaryEncoder.h; sourceTree = "<group>"; };
 		6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotaryEncoder.m; sourceTree = "<group>"; };
 		6C8DD2931AC0C9CC00320628 /* ModuleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleView.h; sourceTree = "<group>"; };
@@ -285,6 +288,8 @@
 			children = (
 				6C0F86CF1AA7B2220092FB18 /* BuildViewController.h */,
 				6C0F86D01AA7B2220092FB18 /* BuildViewController.m */,
+				6C7459001AE84D3200AEC106 /* BuildViewScrollView.h */,
+				6C7459011AE84D3200AEC106 /* BuildViewScrollView.m */,
 				6CDA9F121AA9017E00D64EB0 /* BuildView.h */,
 				6CDA9F131AA9017E00D64EB0 /* BuildView.m */,
 				6C300BE41AD3182E00D51544 /* NSString+Random.h */,
@@ -430,6 +435,7 @@
 				6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */,
 				6C64D7061AD9B0DD00012108 /* PresetController.m in Sources */,
 				6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */,
+				6C7459021AE84D3200AEC106 /* BuildViewScrollView.m in Sources */,
 				6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */,
 				6C1CF0E31AC20A020004A2FA /* BuildViewCableLayer.m in Sources */,
 				6C172A311ACC1EDD00BE1418 /* RotarySwitch.m in Sources */,

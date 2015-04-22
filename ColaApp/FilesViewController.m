@@ -92,7 +92,6 @@
 }
 
 -(void)trashTapped {
-
     NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
     for (NSIndexPath *indexPath in self.selectedCellSet) {
         [indexSet addIndex:indexPath.row];
@@ -104,7 +103,8 @@
     [self.trashBarButtonItem setEnabled:NO];
     [self.exportBarButtonItem setEnabled:NO];
     [self.duplicateBarButtonItem setEnabled:NO];
-
+    
+    [self.selectedCellSet removeAllObjects];
 }
 
 -(void)setEditing:(BOOL)editing animated:(BOOL)animated {

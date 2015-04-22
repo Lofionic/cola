@@ -20,7 +20,6 @@
 
 @interface BuildView () {
     bool cellOccupied[256][256];
-
 }
 
 @property (nonatomic, strong) ConnectorView *draggingConnector;
@@ -46,6 +45,7 @@
 @property (nonatomic, strong) NSMutableDictionary       *moduleViews;
 
 @property (nonatomic, strong) MasterModuleView          *masterModuleView;
+@property (nonatomic, weak) UIScrollView                *scrollView;
 
 @end
 
@@ -54,9 +54,11 @@
 
 static NSArray *cableColours;
 
--(instancetype)init {
-    self = [super init];
+-(instancetype)initWithScrollView:(UIScrollView *)scrollView {
+    self = [super initWithFrame:scrollView.bounds];
     if (self) {
+        self.scrollView = scrollView;
+
         self.columns = kBuildViewWidth / kBuildViewColumnWidth;
         self.rows = 4;
         
@@ -66,15 +68,13 @@ static NSArray *cableColours;
         self.cellSize = CGSizeMake(columnWidth, rowHeight);
         self.headerHeight = 64;
         
-        self.contentSize = CGSizeMake(
+        self.scrollView.contentSize = CGSizeMake(
                                       self.columns * self.cellSize.width,
                                       (self.rows * self.cellSize.height) + self.headerHeight
                                       );
 
-        [self setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
-        
-        [self setDelegate:self];
-        self.delaysContentTouches = NO;
+        [self.scrollView setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
+        self.scrollView.delaysContentTouches = NO;
         
         [self addLayers];
         
@@ -98,19 +98,19 @@ static NSArray *cableColours;
 -(void)addLayers {
     self.gridLayer = [BuildViewGridLayer layer];
     [self.gridLayer setBuildView:self];
-    [self.gridLayer setFrame:CGRectMake(0, 0, self.contentSize.width, self.contentSize.height)];
+    [self.gridLayer setFrame:CGRectMake(0, 0, self.scrollView.contentSize.width, self.scrollView.contentSize.height)];
     [self.gridLayer setNeedsDisplay];
     [self.layer addSublayer:self.gridLayer];
     
     self.highlightLayer = [BuildViewHighlightLayer layer];
     [self.highlightLayer setBuildView:self];
-    [self.highlightLayer setFrame:CGRectMake(0, 0, self.contentSize.width, self.contentSize.height)];
+    [self.highlightLayer setFrame:CGRectMake(0, 0, self.scrollView.contentSize.width, self.scrollView.contentSize.height)];
     [self.highlightLayer setNeedsDisplay];
     [self.layer addSublayer:self.highlightLayer];
     
     self.cableLayer = [BuildViewCableLayer layer];
     [self.cableLayer setBuildView:self];
-    [self.cableLayer setFrame:CGRectMake(0, 0, self.contentSize.width, self.contentSize.height)];
+    [self.cableLayer setFrame:CGRectMake(0, 0, self.scrollView.contentSize.width, self.scrollView.contentSize.height)];
     [self.cableLayer setNeedsDisplay];
     
     self.cableView = [[UIView alloc] initWithFrame:self.bounds];
@@ -150,8 +150,8 @@ static NSArray *cableColours;
 
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point {
     // Return the cell path for a point within the view's coordinate space
-    if (point.x >= 0 && point.x <= self.contentSize.width &&
-        point.y >= self.headerHeight && point.y <= self.contentSize.height) {
+    if (point.x >= 0 && point.x <= self.scrollView.contentSize.width &&
+        point.y >= self.headerHeight && point.y <= self.scrollView.contentSize.height) {
     
         NSUInteger column = point.x / self.cellSize.width;
         NSUInteger row = (point.y - self.headerHeight) / self.cellSize.height;
@@ -306,6 +306,7 @@ static NSArray *cableColours;
 }
 
 -(void)connectorView:(ConnectorView *)connectorView didContinueDrag:(UIPanGestureRecognizer *)uigr {
+    
     [self.dragCable setPoint2:[uigr locationInView:self]];
     [self.cableLayer setNeedsDisplay];
 }
@@ -415,7 +416,11 @@ static NSArray *cableColours;
 
 -(void)moduleView:(ModuleView *)moduleView didContinueDraggingWithGesture:(UIGestureRecognizer *)gesture {
     if (self.dragView) {
+        
         CGPoint dragPoint = [gesture locationInView:self];
+        
+        dragPoint = [gesture locationInView:self];
+        
         [self.dragView setCenter:dragPoint];
         
         BOOL occupied;
@@ -689,7 +694,11 @@ static NSArray *cableColours;
     
     [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
     
-    [self scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+    [self.scrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+}
+
+-(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return self;
 }
 
 @end
@@ -732,4 +741,7 @@ static NSArray *cableColours;
         self.point2 = [self.buildView convertPoint:self.connector2.center fromView:self.connector2.superview];
     }
 }
+
+
+
 @end

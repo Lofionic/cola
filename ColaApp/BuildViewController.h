@@ -11,7 +11,7 @@
 
 @class BuildView;
 @class Preset;
-@interface BuildViewController : UIViewController <ComponentShelfDelegate>
+@interface BuildViewController : UIViewController <UIScrollViewDelegate, ComponentShelfDelegate>
 
 @property (readonly) BOOL buildMode;
 

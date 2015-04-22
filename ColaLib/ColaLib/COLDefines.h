@@ -20,6 +20,7 @@
 #define kCOLComponentMultiplesKB            @"kCOLComponentMultiplesKB"
 #define kCOLComponentMixer2                 @"kCOLComponentMixer2"
 #define kCOLComponentVCF                    @"kCOLComponentVCF"
+#define kCOLComponentPan                    @"kCOLComponentPan"
 
 #define kCOLOutputOscillatorMain            0
 #define kCOLInputOscillatorFreq             0
