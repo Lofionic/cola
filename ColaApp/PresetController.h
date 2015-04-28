@@ -24,7 +24,8 @@
 -(void)removePresetsAtIndexes:(NSIndexSet *)indexes;
 
 -(Preset*)presetAtIndex:(NSUInteger)index;
--(NSInteger)selectedPresetIndex;
+
+@property (nonatomic, readonly) NSInteger selectedPresetIndex;
 
 @end
 

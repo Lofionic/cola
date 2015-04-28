@@ -103,6 +103,8 @@
             [connectorView setDelegate:[BuildViewController buildView]];
             [self addSubview:connectorView];
             [connectorViews addObject:connectorView];
+        } else {
+            NSLog(@"Error!");
         }
     }
     

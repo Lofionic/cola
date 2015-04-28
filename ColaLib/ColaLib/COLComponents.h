@@ -20,5 +20,7 @@
 #import "COLComponentMixer2.h"
 #import "COLComponentVCF.h"
 #import "COLComponentPan.h"
+#import "COLComponentRingModulator.h"
+#import "COLComponentSequencer.h"
 
 #endif

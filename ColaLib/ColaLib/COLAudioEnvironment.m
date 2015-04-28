@@ -107,6 +107,10 @@
         newComponent = [[COLComponentVCF alloc] initWithContext:context];
     } else if ([componentType isEqualToString:kCOLComponentPan]) {
         newComponent = [[COLComponentPan alloc] initWithContext:context];
+    } else if ([componentType isEqualToString:kCOLComponentRingModulator]){
+        newComponent = [[COLComponentRingModulator alloc] initWithContext:context];
+    } else if ([componentType isEqualToString:kCOLComponentSequencer]) {
+        newComponent = [[COLComponentSequencer alloc] initWithContext:context];
     } else {
         NSLog(@"Unknown component type : %@", componentType);
     }

@@ -13,7 +13,7 @@
 
 @interface PresetController ()
 
-@property (nonatomic) NSInteger         currentPreset;
+@property (nonatomic) NSInteger         selectedPresetIndex;
 @property (nonatomic, strong) NSArray   *presets;
 
 @end
@@ -34,7 +34,7 @@
 
 -(instancetype)init {
     if (self = [super init]) {
-        self.currentPreset = kNoPreset;
+        self.selectedPresetIndex = kNoPreset;
     }
     return self;
 }
@@ -42,7 +42,7 @@
 -(Preset*)recallPresetAtIndex:(NSUInteger)index {
     if (index < [self.presets count]) {
         NSLog(@"Recalling preset %lu", (long)index);
-        self.currentPreset = index;
+        self.selectedPresetIndex = index;
         return [self.presets objectAtIndex:index];
     } else {
         return nil;
@@ -90,10 +90,6 @@
     return [self.presets objectAtIndex:index];
 }
 
--(NSInteger)selectedPresetIndex {
-    return self.currentPreset;
-}
-
 -(void)addNewPreset {
     NSMutableArray *mutablePresets = [[NSMutableArray alloc] initWithArray:self.presets];
     Preset *newPreset = [self getEmptyPreset];
@@ -131,7 +127,7 @@
     [self syncPresets];
     
     if (self.selectedPresetIndex == index) {
-        self.currentPreset = kNoPreset;
+        self.selectedPresetIndex = kNoPreset;
     }
 }
 
@@ -140,6 +136,10 @@
     [mutablePresets removeObjectsAtIndexes:indexes];
     self.presets = [NSArray arrayWithArray:mutablePresets];
     [self syncPresets];
+    
+    if ([indexes containsIndex:self.selectedPresetIndex]) {
+        self.selectedPresetIndex = kNoPreset;
+    }
 }
 
 -(NSUInteger)presetCount {

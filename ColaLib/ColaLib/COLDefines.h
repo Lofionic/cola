@@ -21,6 +21,9 @@
 #define kCOLComponentMixer2                 @"kCOLComponentMixer2"
 #define kCOLComponentVCF                    @"kCOLComponentVCF"
 #define kCOLComponentPan                    @"kCOLComponentPan"
+#define kCOLComponentRingModulator          @"kCOLComponentRingModulator"
+#define kCOLComponentSequencer              @"kCOLComponentSequencer"
+
 
 #define kCOLOutputOscillatorMain            0
 #define kCOLInputOscillatorFreq             0

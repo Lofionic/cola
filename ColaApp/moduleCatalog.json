@@ -436,7 +436,7 @@
             }
             },
             {
-            "id" : "Pan",
+            "id" : "PAN",
             "name" : "Pan",
             "width" : 1,
             "type" : "kCOLComponentPan",
@@ -477,6 +477,73 @@
                            "y" : 72
                            }
                            ]
+                }
+            },
+            {
+                "id" : "RING",
+                "name" : "Ring Modulator",
+                "width" : 1,
+                "type" : "kCOLComponentRingModulator",
+                "view" : {
+                    "connectors" : [
+                        {
+                                 "type" : "input",
+                                 "connection" : "In 1",
+                                 "x" : 24,
+                                 "y" : 280
+                             },
+                             {
+                                 "type" : "input",
+                                 "connection" : "In 2",
+                                 "x" : 72,
+                                 "y" : 280
+                             },
+                             {
+                                 "type" : "output",
+                                 "connection" : "Out",
+                                 "x" : 48,
+                                 "y" : 162
+                             }
+                    ],
+                    "controls" : [
+                           {
+                           "type" : "continuous",
+                           "parameter" : "Mix",
+                           "asset" : "large_white",
+                           "x" : 48,
+                           "y" : 72
+                           }
+                           ]
+                }
+            },
+                        {
+                "id" : "SEQ",
+                "name" : "Sequencer",
+                "width" : 3,
+                "type" : "kCOLComponentSequencer",
+                "view" : {
+                    "connectors" : [
+                        { "type" : "output", "connection" : "Pitch", "x" : 24, "y" : 280  },
+                        { "type" : "output", "connection" : "Gate", "x" : 64, "y" : 280  }
+                    ],
+                    "controls" : [
+                           { "type" : "continuous", "parameter" : "Pitch 1", "asset" : "small_white", "x" : 24, "y" : 56 },
+                           { "type" : "continuous", "parameter" : "Pitch 2", "asset" : "small_white", "x" : 58, "y" : 56 },
+                           { "type" : "continuous", "parameter" : "Pitch 3", "asset" : "small_white", "x" : 92, "y" : 56 },
+                           { "type" : "continuous", "parameter" : "Pitch 4", "asset" : "small_white", "x" : 126, "y" : 56 },
+                           { "type" : "continuous", "parameter" : "Pitch 5", "asset" : "small_white", "x" : 160, "y" : 56 },
+                           { "type" : "continuous", "parameter" : "Pitch 6", "asset" : "small_white", "x" : 194, "y" : 56 },
+                           { "type" : "continuous", "parameter" : "Pitch 7", "asset" : "small_white", "x" : 228, "y" : 56 },
+                           { "type" : "continuous", "parameter" : "Pitch 8", "asset" : "small_white", "x" : 262, "y" : 56 },
+                           { "type" : "continuous", "parameter" : "Pitch 9", "asset" : "small_white", "x" : 24, "y" : 162 },
+                           { "type" : "continuous", "parameter" : "Pitch 10", "asset" : "small_white", "x" : 58, "y" : 162 },
+                           { "type" : "continuous", "parameter" : "Pitch 11", "asset" : "small_white", "x" : 92, "y" : 162 },
+                           { "type" : "continuous", "parameter" : "Pitch 12", "asset" : "small_white", "x" : 126, "y" : 162 },
+                           { "type" : "continuous", "parameter" : "Pitch 13", "asset" : "small_white", "x" : 160, "y" : 162 },
+                           { "type" : "continuous", "parameter" : "Pitch 14", "asset" : "small_white", "x" : 194, "y" : 162 },
+                           { "type" : "continuous", "parameter" : "Pitch 15", "asset" : "small_white", "x" : 228, "y" : 162 },
+                           { "type" : "continuous", "parameter" : "Pitch 16", "asset" : "small_white", "x" : 262, "y" : 162 }
+                    ]
                 }
             }
 

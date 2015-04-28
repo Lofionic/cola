@@ -186,6 +186,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         for (int i = 0; i < inNumberFrames; i ++) {
             outA[i] = leftBuffer[i];
             outB[i] = rightBuffer[i];
+            
         }
 
         [audioEngine.masterInputL engineDidRender];
