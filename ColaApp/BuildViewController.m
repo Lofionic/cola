@@ -56,11 +56,10 @@ static BuildView *buildView = nil;
     
     self.buildViewScrollView = [[BuildViewScrollView alloc] init];
     [self.buildViewScrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.buildViewScrollView setClipsToBounds:NO];
+    [self.buildViewScrollView setClipsToBounds:YES];
     [self.view addSubview:self.buildViewScrollView];
     
     self.buildView = [[BuildView alloc] initWithScrollView:self.buildViewScrollView];
-    [self.buildView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
     [self.buildView setClipsToBounds:NO];
     [self.buildView setBuildViewController:self];
     [self.buildViewScrollView addSubview:self.buildView];
@@ -96,9 +95,11 @@ static BuildView *buildView = nil;
                                                                       options:0
                                                                       metrics:nil
                                                                         views:viewsDictionary]];
+    
     NSDictionary *metricsDictionary = @{
                                         @"buildViewWidth"       : [NSNumber numberWithFloat:kBuildViewWidth],
-                                        @"componentShelfHeight" : [NSNumber numberWithFloat:kComponentShelfHeight]
+                                        @"componentShelfHeight" : [NSNumber numberWithFloat:kComponentShelfHeight],
+                                        @"keyboardHeight"       : [NSNumber numberWithFloat:kKeyboardHeight]
                                         };
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topGuide][componentShelf(componentShelfHeight)]"
@@ -106,12 +107,12 @@ static BuildView *buildView = nil;
                                                                       metrics:metricsDictionary
                                                                         views:viewsDictionary]];
 
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[keyboardView(componentShelfHeight)]|"
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[keyboardView(keyboardHeight)]|"
                                                                       options:0
                                                                       metrics:metricsDictionary
                                                                         views:viewsDictionary]];
     
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.buildView
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.buildViewScrollView
                                                           attribute:NSLayoutAttributeWidth
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:nil
@@ -119,7 +120,7 @@ static BuildView *buildView = nil;
                                                          multiplier:1
                                                            constant:kBuildViewWidth]];
     
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.buildView
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.buildViewScrollView
                                                           attribute:NSLayoutAttributeCenterX
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:self.view
@@ -132,7 +133,7 @@ static BuildView *buildView = nil;
                                                                       metrics:nil
                                                                         views:viewsDictionary]];
     
-    self.shiftBuildViewConstraint = [NSLayoutConstraint constraintWithItem:self.buildView
+    self.shiftBuildViewConstraint = [NSLayoutConstraint constraintWithItem:self.buildViewScrollView
                                                                  attribute:NSLayoutAttributeTop
                                                                  relatedBy:NSLayoutRelationGreaterThanOrEqual
                                                                     toItem:self.componentShelf
@@ -257,20 +258,20 @@ static BuildView *buildView = nil;
         buildviewEdgeInsets.bottom = 0;
         if (animated) {
             [UIView animateWithDuration:0.2 animations:^ {
-                [self.keyboardView setTransform:CGAffineTransformMakeTranslation(0, self.keyboardView.frame.size.height)];
+                [self.keyboardView setTransform:CGAffineTransformMakeTranslation(0, kKeyboardHeight)];
                 [self.buildViewScrollView setContentInset:buildviewEdgeInsets];
                 [self.buildViewScrollView setScrollIndicatorInsets:buildviewEdgeInsets];
 
             }];
         } else {
-            [self.keyboardView setTransform:CGAffineTransformMakeTranslation(0, self.keyboardView.frame.size.height)];
+            [self.keyboardView setTransform:CGAffineTransformMakeTranslation(0, kKeyboardHeight)];
             [self.buildViewScrollView setContentInset:buildviewEdgeInsets];
             [self.buildViewScrollView setScrollIndicatorInsets:buildviewEdgeInsets];
         }
         [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON]];
     } else {
         UIEdgeInsets buildviewEdgeInsets = [self.buildViewScrollView contentInset];
-        buildviewEdgeInsets.bottom = self.keyboardView.frame.size.height;
+        buildviewEdgeInsets.bottom = kKeyboardHeight;
         if (animated) {
             [UIView animateWithDuration:0.2 animations:^ {
                 [self.keyboardView setTransform:CGAffineTransformIdentity];
@@ -314,6 +315,7 @@ static BuildView *buildView = nil;
     } else {
         [self.buildView setHighlightedCellSet:nil];
     }
+    
 }
 
 -(void)componentShelf:(ComponentShelfView *)componentTray didEndDraggingModule:(ModuleDescription*)module withGesture:(UIGestureRecognizer *)gesture {

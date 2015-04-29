@@ -18,6 +18,7 @@
 @implementation BuildViewScrollView
 
 -(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+
     // Nothing underneath this view should be hit
     UIView *hit = [super hitTest:point withEvent:event];
     if (!hit) {

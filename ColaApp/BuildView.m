@@ -55,7 +55,8 @@
 static NSArray *cableColours;
 
 -(instancetype)initWithScrollView:(UIScrollView *)scrollView {
-    self = [super initWithFrame:scrollView.bounds];
+    
+    self = [super init];
     if (self) {
         self.scrollView = scrollView;
 
@@ -68,10 +69,13 @@ static NSArray *cableColours;
         self.cellSize = CGSizeMake(columnWidth, rowHeight);
         self.headerHeight = 64;
         
-        self.scrollView.contentSize = CGSizeMake(
-                                      self.columns * self.cellSize.width,
+        CGSize buildViewSize = CGSizeMake(
+                                      kBuildViewWidth,
                                       (self.rows * self.cellSize.height) + self.headerHeight
                                       );
+        
+        [self setFrame:CGRectMake(0, 0, kBuildViewWidth, buildViewSize.height)];
+        [self.scrollView setContentSize:buildViewSize];
 
         [self.scrollView setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
         self.scrollView.delaysContentTouches = NO;
