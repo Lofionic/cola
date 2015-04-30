@@ -9,6 +9,7 @@
 #import "COLComponentSequencer.h"
 #import "COLAudioEnvironment.h"
 #import "COLDiscreteParameter.h"
+#import "COLContinuousParameter.h"
 
 #define CV_FREQUENCY_RANGE 8372 // C9
 
@@ -47,14 +48,27 @@
     
     NSMutableArray *controls = [[NSMutableArray alloc] initWithCapacity:48];
     NSMutableArray *pitchControls = [[NSMutableArray alloc] initWithCapacity:16];
+    NSMutableArray *gateControls = [[NSMutableArray alloc] initWithCapacity:16];
     
     for (int i = 0; i < 16; i++) {
         NSString *name = [NSString stringWithFormat:@"Pitch %lu", (long)i + 1];
-        COLDiscreteParameter *control = [[COLDiscreteParameter alloc] initWithComponent:self withName:name max:11];
-        [pitchControls addObject:control];
-        [controls addObject:control];
+        COLContinuousParameter *pitchControl = [[COLContinuousParameter alloc] initWithComponent:self withName:name];
+        [pitchControl setFunction:^float(float inValue) {
+            float outValue = roundf(inValue * 12);
+            
+            return outValue;
+        }];
+        
+        [pitchControls addObject:pitchControl];
+        [controls addObject:pitchControl];
+        
+        name = [NSString stringWithFormat:@"Gate %lu", (long)i + 1];
+        COLDiscreteParameter *gateControl = [[COLDiscreteParameter alloc] initWithComponent:self withName:name max:3];
+        [gateControls addObject:gateControl];
+        [controls addObject:gateControl];
     }
     
+    self.gateControls = gateControls;
     self.pitchControls = pitchControls;
     [self setParameters:controls];
 }

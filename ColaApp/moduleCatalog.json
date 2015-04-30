@@ -542,7 +542,23 @@
                            { "type" : "continuous", "parameter" : "Pitch 13", "asset" : "small_white", "x" : 160, "y" : 162 },
                            { "type" : "continuous", "parameter" : "Pitch 14", "asset" : "small_white", "x" : 194, "y" : 162 },
                            { "type" : "continuous", "parameter" : "Pitch 15", "asset" : "small_white", "x" : 228, "y" : 162 },
-                           { "type" : "continuous", "parameter" : "Pitch 16", "asset" : "small_white", "x" : 262, "y" : 162 }
+                           { "type" : "continuous", "parameter" : "Pitch 16", "asset" : "small_white", "x" : 262, "y" : 162 },
+                          { "type" : "continuous", "parameter" : "Gate 1", "asset" : "small_white", "x" : 24, "y" : 96 },
+                          { "type" : "continuous", "parameter" : "Gate 2", "asset" : "small_white", "x" : 58, "y" : 96 },
+                          { "type" : "continuous", "parameter" : "Gate 3", "asset" : "small_white", "x" : 92, "y" : 96 },
+                          { "type" : "continuous", "parameter" : "Gate 4", "asset" : "small_white", "x" : 126, "y" : 96 },
+                          { "type" : "continuous", "parameter" : "Gate 5", "asset" : "small_white", "x" : 160, "y" : 96 },
+                          { "type" : "continuous", "parameter" : "Gate 6", "asset" : "small_white", "x" : 194, "y" : 96 },
+                          { "type" : "continuous", "parameter" : "Gate 7", "asset" : "small_white", "x" : 228, "y" : 96 },
+                          { "type" : "continuous", "parameter" : "Gate 8", "asset" : "small_white", "x" : 262, "y" : 96 },
+                          { "type" : "continuous", "parameter" : "Gate 9", "asset" : "small_white", "x" : 24, "y" : 202 },
+                          { "type" : "continuous", "parameter" : "Gate 10", "asset" : "small_white", "x" : 58, "y" : 202 },
+                          { "type" : "continuous", "parameter" : "Gate 11", "asset" : "small_white", "x" : 92, "y" : 202 },
+                          { "type" : "continuous", "parameter" : "Gate 12", "asset" : "small_white", "x" : 126, "y" : 202 },
+                          { "type" : "continuous", "parameter" : "Gate 13", "asset" : "small_white", "x" : 160, "y" : 202 },
+                          { "type" : "continuous", "parameter" : "Gate 14", "asset" : "small_white", "x" : 194, "y" : 202 },
+                          { "type" : "continuous", "parameter" : "Gate 15", "asset" : "small_white", "x" : 228, "y" : 202 },
+                          { "type" : "continuous", "parameter" : "Gate 16", "asset" : "small_white", "x" : 262, "y" : 202 }
                     ]
                 }
             }
