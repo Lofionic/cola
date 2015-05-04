@@ -88,4 +88,9 @@
     }
 }
 
+-(void)doDisconnect {
+    [self.connectedTo disconnect];
+    self.connectedTo = nil;
+}
+
 @end

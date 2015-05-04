@@ -19,6 +19,8 @@
     Float64 bpm;
     NSUInteger step;
     
+    float frequency;
+    
 }
 
 @property (nonatomic, strong) COLComponentOutput *pitchOut;
@@ -81,6 +83,7 @@
     Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
     AudioSignalType *pitchOutputBuffer = [self.pitchOut prepareBufferOfSize:numFrames];
+    AudioSignalType *gateOutputBuffer = [self.gateOut prepareBufferOfSize:numFrames];
     
     for (int i = 0; i < numFrames; i++) {
         
@@ -95,9 +98,20 @@
             timeInMS -= msPerStep;
         }
         
-        COLDiscreteParameter *pitchParameter = [self.pitchControls objectAtIndex:step];
-        NSInteger note =  48 + [pitchParameter selectedIndex];
-        float frequency = powf(2, (note - 69) / 12.0) * 440;
+        gateOutputBuffer[i] = 0;
+        
+        COLDiscreteParameter *gateParameter = [self.gateControls objectAtIndex:step];
+        if ([gateParameter selectedIndex] == 1) {
+            float stepDelta = timeInMS / msPerStep;
+            if (stepDelta < 0.5) {
+                gateOutputBuffer[i] = 1;
+            }
+            COLContinuousParameter *pitchParameter = [self.pitchControls objectAtIndex:step];
+            NSInteger pitchOutput = [pitchParameter outputAtDelta:((float)i / numFrames)];
+            
+            NSInteger note =  60 + pitchOutput;
+            frequency = powf(2, (note - 69) / 12.0) * 440;
+        }
         
         pitchOutputBuffer[i] = frequency / CV_FREQUENCY_RANGE;
     }
