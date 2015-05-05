@@ -51,6 +51,8 @@
 		6CB322F31A9BE2B30052AE50 /* COLComponentInput.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27C81A8D57AF00AFD384 /* COLComponentInput.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6CB322F41A9BE2B40052AE50 /* COLContinuousParameter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB322EC1A9BC1110052AE50 /* COLContinuousParameter.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6CB322F61A9BE5400052AE50 /* COLComponents.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB322F51A9BE5350052AE50 /* COLComponents.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		6CB62D0D1AF96E560049F760 /* COLComponentNoiseGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB62D0C1AF96E560049F760 /* COLComponentNoiseGenerator.m */; };
+		6CB62D0F1AF96FD80049F760 /* COLComponentNoiseGenerator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CB62D0B1AF96E560049F760 /* COLComponentNoiseGenerator.h */; };
 		6CBB7CFF1AEED877006DD7A1 /* COLComponentRingModulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB7CFE1AEED877006DD7A1 /* COLComponentRingModulator.m */; };
 		6CBB7D001AEED88C006DD7A1 /* COLComponentRingModulator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CBB7CFD1AEED877006DD7A1 /* COLComponentRingModulator.h */; };
 		6CBB7D031AEEF0B9006DD7A1 /* COLComponentSequencer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB7D021AEEF0B9006DD7A1 /* COLComponentSequencer.m */; };
@@ -92,6 +94,7 @@
 				6CBB7D001AEED88C006DD7A1 /* COLComponentRingModulator.h in CopyFiles */,
 				6C6132411ADC5FF90060C221 /* COLComponentVCF.h in CopyFiles */,
 				6CBB7D041AEF11E8006DD7A1 /* COLComponentSequencer.h in CopyFiles */,
+				6CB62D0F1AF96FD80049F760 /* COLComponentNoiseGenerator.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,6 +147,8 @@
 		6CB322EC1A9BC1110052AE50 /* COLContinuousParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLContinuousParameter.h; sourceTree = "<group>"; };
 		6CB322ED1A9BC1110052AE50 /* COLContinuousParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLContinuousParameter.m; sourceTree = "<group>"; };
 		6CB322F51A9BE5350052AE50 /* COLComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponents.h; sourceTree = "<group>"; };
+		6CB62D0B1AF96E560049F760 /* COLComponentNoiseGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentNoiseGenerator.h; sourceTree = "<group>"; };
+		6CB62D0C1AF96E560049F760 /* COLComponentNoiseGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentNoiseGenerator.m; sourceTree = "<group>"; };
 		6CBB7CFD1AEED877006DD7A1 /* COLComponentRingModulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentRingModulator.h; sourceTree = "<group>"; };
 		6CBB7CFE1AEED877006DD7A1 /* COLComponentRingModulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentRingModulator.m; sourceTree = "<group>"; };
 		6CBB7D011AEEF0B9006DD7A1 /* COLComponentSequencer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentSequencer.h; sourceTree = "<group>"; };
@@ -193,6 +198,8 @@
 				6CBB7CFE1AEED877006DD7A1 /* COLComponentRingModulator.m */,
 				6CBB7D011AEEF0B9006DD7A1 /* COLComponentSequencer.h */,
 				6CBB7D021AEEF0B9006DD7A1 /* COLComponentSequencer.m */,
+				6CB62D0B1AF96E560049F760 /* COLComponentNoiseGenerator.h */,
+				6CB62D0C1AF96E560049F760 /* COLComponentNoiseGenerator.m */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -310,6 +317,7 @@
 				6CBB7D031AEEF0B9006DD7A1 /* COLComponentSequencer.m in Sources */,
 				6C7458FE1AE835AE00AEC106 /* COLComponentPan.m in Sources */,
 				6C310D421A8D721900A97D82 /* COLComponentVCO.m in Sources */,
+				6CB62D0D1AF96E560049F760 /* COLComponentNoiseGenerator.m in Sources */,
 				6C5C5E0F1AC77AC5002BFA95 /* COLComponentVCA.m in Sources */,
 				6C64D7021AD9A4A900012108 /* NSString+Random.m in Sources */,
 				6C7B27CA1A8D57AF00AFD384 /* COLComponentInput.m in Sources */,

@@ -22,9 +22,7 @@
 		6C21D86A1ADD2AC000CCFDD4 /* UIView+Snapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C21D8691ADD2AC000CCFDD4 /* UIView+Snapshot.m */; };
 		6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E211A8BF2CC00ECEAB2 /* main.m */; };
 		6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */; };
-		6C2A5E2B1A8BF2CC00ECEAB2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5E291A8BF2CC00ECEAB2 /* Main.storyboard */; };
 		6C2A5E2D1A8BF2CC00ECEAB2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */; };
-		6C2A5E301A8BF2CC00ECEAB2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5E2E1A8BF2CC00ECEAB2 /* LaunchScreen.xib */; };
 		6C2A5EA31A8C0B2A00ECEAB2 /* Interapp.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5EA21A8C0B2A00ECEAB2 /* Interapp.txt */; };
 		6C2A5EA61A8C0B8D00ECEAB2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */; };
 		6C300BE61AD3182E00D51544 /* NSString+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C300BE51AD3182E00D51544 /* NSString+Random.m */; };
@@ -401,9 +399,7 @@
 			files = (
 				6CEF81151ACC779000FB1943 /* Icons in Resources */,
 				6C94939A1A9D1BFB00B7A37C /* loop.wav in Resources */,
-				6C2A5E2B1A8BF2CC00ECEAB2 /* Main.storyboard in Resources */,
 				6C12010B1AAE49A100C6ACB6 /* moduleCatalog.json in Resources */,
-				6C2A5E301A8BF2CC00ECEAB2 /* LaunchScreen.xib in Resources */,
 				6C2A5EA31A8C0B2A00ECEAB2 /* Interapp.txt in Resources */,
 				6CB828381AC2F58000610DD4 /* ImageAssets in Resources */,
 				6C65A4E81A9125DD000D9192 /* gtr.wav in Resources */,

@@ -30,7 +30,7 @@ static UInt32 emptyBufferSize;
             if (self.isDisconnecting) {
                 // Attenuate the signal before disconnecting
                 for (int i = 0; i < numFrames; i++) {
-                    self.attenuation -= 1.0/2000;
+                    self.attenuation -= 1.0/10000;
                     if (self.attenuation < 0) {
                         self.attenuation = 0;
                     }
@@ -42,7 +42,7 @@ static UInt32 emptyBufferSize;
             } else if (self.isConnecting) {
                 // Attenuate the signal whilst connecting
                 for (int i = 0; i < numFrames; i++) {
-                    self.attenuation += 1.0/2000;
+                    self.attenuation += 1.0/10000;
                     if (self.attenuation > 1) {
                         self.attenuation = 1;
                     }

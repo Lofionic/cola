@@ -23,6 +23,7 @@
 #define kCOLComponentPan                    @"kCOLComponentPan"
 #define kCOLComponentRingModulator          @"kCOLComponentRingModulator"
 #define kCOLComponentSequencer              @"kCOLComponentSequencer"
+#define kCOLComponentNoiseGenerator         @"kCOLComponentNoiseGenerator"
 
 
 #define kCOLOutputOscillatorMain            0

@@ -22,5 +22,6 @@
 #import "COLComponentPan.h"
 #import "COLComponentRingModulator.h"
 #import "COLComponentSequencer.h"
+#import "COLComponentNoiseGenerator.h"
 
 #endif
