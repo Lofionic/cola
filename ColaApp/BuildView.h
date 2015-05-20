@@ -31,7 +31,7 @@
 
 @class BuildViewController;
 @class ModuleDescription;
-@interface BuildView : UIView <ConnectorViewDelegate, ModuleViewDelegate>
+@interface BuildView : UIView <ConnectorViewDelegate, ModuleViewDelegate, UIScrollViewDelegate>
 
 -(instancetype)initWithScrollView:(UIScrollView *)scrollView;
 

@@ -37,7 +37,7 @@
 @property (nonatomic, strong) NSMutableArray            *cables;
 @property (nonatomic, strong) BuildViewCable            *dragCable;
 
-@property (nonatomic, strong) ModuleView                *dragView;
+@property (nonatomic, strong) ModuleView                *draggingModuleView;
 @property (nonatomic) CGPoint                           dragOrigin;
 
 @property (nonatomic, strong) UIView                    *trashView;
@@ -411,7 +411,7 @@ static NSArray *cableColours;
         [self popModuleView:moduleView];
         
         CGPoint dragPoint = [gesture locationInView:self];
-        [self.dragView setCenter:dragPoint];
+        [self.draggingModuleView setCenter:dragPoint];
         
         [self.cableView setHidden:YES];
         [self setTrashViewHidden:NO];
@@ -419,13 +419,13 @@ static NSArray *cableColours;
 }
 
 -(void)moduleView:(ModuleView *)moduleView didContinueDraggingWithGesture:(UIGestureRecognizer *)gesture {
-    if (self.dragView) {
+    if (self.draggingModuleView) {
         
         CGPoint dragPoint = [gesture locationInView:self];
         
         dragPoint = [gesture locationInView:self];
         
-        [self.dragView setCenter:dragPoint];
+        [self.draggingModuleView setCenter:dragPoint];
         
         BOOL occupied;
         NSSet *hoverSet = [self cellPathsForModuleOfWidth:moduleView.moduleDescription.width center:dragPoint occupied:&occupied];
@@ -439,9 +439,8 @@ static NSArray *cableColours;
 }
 
 -(void)moduleView:(ModuleView *)moduleView didEndDraggingWithGesture:(UIGestureRecognizer *)gesture {
-
     
-    if (self.dragView) {
+    if (self.draggingModuleView) {
         
         [self setHighlightedCellSet:nil];
         
@@ -450,28 +449,28 @@ static NSArray *cableColours;
             
             // Module was trashed
             [self trashModuleView:moduleView];
-            self.dragView = nil;
+            self.draggingModuleView = nil;
             
         } else {
             
-            [self.dragView.layer setOpacity:1.0];
+            [self.draggingModuleView.layer setOpacity:1.0];
             
             BOOL modulePlaced = NO;
             
             if (gesture.state != UIGestureRecognizerStateCancelled ){
                 if ([self.superview hitTest:[gesture locationInView:self.superview] withEvent:nil] == self) {
                     // Move the module
-                    modulePlaced = [self placeModuleView:self.dragView toPoint:[gesture locationInView:self]];
+                    modulePlaced = [self placeModuleView:self.draggingModuleView toPoint:[gesture locationInView:self]];
                 }
             }
             
             if (!modulePlaced) {
                 // Module was not succesfully placed
                 // Bounce it back
-                [self placeModuleView:self.dragView toPoint:self.dragOrigin];
+                [self placeModuleView:self.draggingModuleView toPoint:self.dragOrigin];
             }
             
-            self.dragView = nil;
+            self.draggingModuleView = nil;
         }
         
         [self.cableView setHidden:NO];
@@ -499,9 +498,9 @@ static NSArray *cableColours;
 
 
 -(void)popModuleView:(ModuleView*)moduleView {
-    self.dragView = moduleView;
+    self.draggingModuleView = moduleView;
     self.dragOrigin = moduleView.center;
-    [self.dragView.layer setOpacity:0.5];
+    [self.draggingModuleView.layer setOpacity:0.5];
     
     [moduleView setUserInteractionEnabled:NO];
     
@@ -705,6 +704,16 @@ static NSArray *cableColours;
     return self;
 }
 
+-(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    // If the build scrollview scrolls while we're dragging, we need to update the location of the thing we're dragging.
+    if (self.draggingConnector) {
+        // We are dragging a cable
+        [self connectorView:self.draggingConnector didContinueDrag:[[self.draggingConnector gestureRecognizers] objectAtIndex:0]];
+    } else if (self.draggingModuleView) {
+        [self moduleView:self.draggingModuleView didContinueDraggingWithGesture:[[self.draggingModuleView gestureRecognizers] objectAtIndex:0]];
+    }
+}
+
 @end
 
 @interface BuildViewCellPath ()
@@ -745,7 +754,5 @@ static NSArray *cableColours;
         self.point2 = [self.buildView convertPoint:self.connector2.center fromView:self.connector2.superview];
     }
 }
-
-
 
 @end

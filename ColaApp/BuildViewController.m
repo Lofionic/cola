@@ -63,7 +63,7 @@ static BuildView *buildView = nil;
     [self.buildView setClipsToBounds:NO];
     [self.buildView setBuildViewController:self];
     [self.buildViewScrollView addSubview:self.buildView];
-    [self.buildViewScrollView setDelegate:self];
+    [self.buildViewScrollView setDelegate:self.buildView];
 //    [self.buildViewScrollView setMaximumZoomScale:1];
 //    [self.buildViewScrollView setMinimumZoomScale:0.5];
     
@@ -368,12 +368,6 @@ static BuildView *buildView = nil;
 
 +(BuildView*)buildView {
     return buildView;
-}
-
-#pragma mark UIScrollView delegate
-
--(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return self.buildView;
 }
 
 @end
