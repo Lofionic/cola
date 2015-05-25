@@ -81,7 +81,8 @@
             self.touchPoint = CGPointMake(self.touchPoint.x, self.touchPoint.y - deltaY);
         } else if (self.touchPoint.y > (self.frame.size.height * 0.7) + self.contentOffset.y) {
             // Audoscroll down
-            CGFloat targetY = MIN(self.touchPoint.y + (self.frame.size.height / 2.0), self.contentSize.height);
+            
+            CGFloat targetY = MIN(self.touchPoint.y + (self.frame.size.height / 2.0), self.contentSize.height - 1    );
             CGRect targetRect = CGRectMake(0, targetY, 1, 1);
             
             self.autoscrolling = YES;

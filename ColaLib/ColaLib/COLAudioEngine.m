@@ -428,7 +428,7 @@ static void checkError(OSStatus error, const char *operation) {
     int res = 40;
     for (int i = 0; i < res; i++) {
         NSInteger sampleIndex = (i / (float)res) * WAVETABLE_SIZE;
-        AudioSignalType sample = squareWaveTable[sampleIndex];
+        AudioSignalType sample = sinWaveTable[sampleIndex];
         
         NSInteger level = ((sample + 1) / 2.0) * res * 2;
         NSString *padding = [@"" stringByPaddingToLength:level withString:@"-" startingAtIndex:0];
