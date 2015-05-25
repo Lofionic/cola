@@ -18,6 +18,13 @@
 
 @implementation BuildViewScrollView
 
+-(instancetype)init {
+    if (self = [super init]) {
+        self.enableAutoscroll = NO;
+    }
+    return self;
+}
+
 -(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     // Nothing underneath this view should be hit
     UIView *hit = [super hitTest:point withEvent:event];
@@ -35,7 +42,6 @@
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-
     
     CGPoint previousTouchPoint = self.touchPoint;
     
@@ -59,26 +65,32 @@
 }
 
 -(void)autoScroll {
-    // Scroll if necessary
-    if (self.touchPoint.y < (self.frame.size.height / 3.0) + self.bounds.origin.y) {
-        // Audoscroll up
-        CGFloat targetY = MAX(self.touchPoint.y - (self.frame.size.height / 3.0), 0);
-        CGRect targetRect = CGRectMake(0, targetY, 1, 1);
-        self.autoscrolling = YES;
-        [self scrollRectToVisible:targetRect animated:YES];
+    
+    if (!self.tracking) {
+    
+        // Auto-scroll if necessary
+        if (self.touchPoint.y < (self.frame.size.height * 0.3) + self.contentOffset.y) {
+            // Audoscroll up
+            CGFloat targetY = MAX(self.touchPoint.y - (self.frame.size.height / 2.0), 0);
+            CGRect targetRect = CGRectMake(0, targetY, 1, 1);
+            
+            self.autoscrolling = YES;
+            [self scrollRectToVisible:targetRect animated:YES];
+            
+            CGFloat deltaY = self.touchPoint.y - targetY;
+            self.touchPoint = CGPointMake(self.touchPoint.x, self.touchPoint.y - deltaY);
+        } else if (self.touchPoint.y > (self.frame.size.height * 0.7) + self.contentOffset.y) {
+            // Audoscroll down
+            CGFloat targetY = MIN(self.touchPoint.y + (self.frame.size.height / 2.0), self.contentSize.height);
+            CGRect targetRect = CGRectMake(0, targetY, 1, 1);
+            
+            self.autoscrolling = YES;
+            [self scrollRectToVisible:targetRect animated:YES];
+            
+            CGFloat deltaY = self.touchPoint.y - targetY;
+            self.touchPoint = CGPointMake(self.touchPoint.x, self.touchPoint.y - deltaY);
+        }
         
-        CGFloat deltaY = self.touchPoint.y - targetY;
-        self.touchPoint = CGPointMake(self.touchPoint.x, self.touchPoint.y - deltaY);
-    } else if (self.touchPoint.y > (self.frame.size.height / 2.0) + self.bounds.origin.y) {
-        // Audoscroll down
-        CGFloat targetY = MIN(self.touchPoint.y + (self.frame.size.height / 2.0), self.contentSize.height);
-        CGRect targetRect = CGRectMake(0, targetY, 1, 1);
-        
-        self.autoscrolling = YES;
-        [self scrollRectToVisible:targetRect animated:YES];
-        
-        CGFloat deltaY = self.touchPoint.y - targetY;
-        self.touchPoint = CGPointMake(self.touchPoint.x, self.touchPoint.y - deltaY);
     }
 }
 

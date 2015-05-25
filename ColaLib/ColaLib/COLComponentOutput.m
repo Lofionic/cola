@@ -65,16 +65,20 @@
     }
     
     if (self.isConnected) {
+        [self.connectedTo disconnect];
         [self disconnect];
     }
-    
+
     if (input.isConnected) {
+        NSLog(@"Input is connected");
         [input.connectedTo disconnect];
     }
     
     self.connectedTo = input;
     [input setConnectedTo:self];
 
+    NSLog(@"Connecting %@ to %@", self.name, self.connectedTo.name);
+    
     return TRUE;
 }
 

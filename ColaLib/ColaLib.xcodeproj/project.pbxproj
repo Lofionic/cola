@@ -59,6 +59,7 @@
 		6CBB7D041AEF11E8006DD7A1 /* COLComponentSequencer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CBB7D011AEEF0B9006DD7A1 /* COLComponentSequencer.h */; };
 		6CD59F1B1AD47DB300505985 /* COLComponentMultiplesKB.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD59F1A1AD47DB300505985 /* COLComponentMultiplesKB.m */; };
 		6CD59F1C1AD47E0600505985 /* COLComponentMultiplesKB.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CD59F191AD47DB300505985 /* COLComponentMultiplesKB.h */; };
+		6CE5819E1B13A97800CD8B62 /* COLTransportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE5819D1B13A97800CD8B62 /* COLTransportController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -155,6 +156,8 @@
 		6CBB7D021AEEF0B9006DD7A1 /* COLComponentSequencer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentSequencer.m; sourceTree = "<group>"; };
 		6CD59F191AD47DB300505985 /* COLComponentMultiplesKB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentMultiplesKB.h; sourceTree = "<group>"; };
 		6CD59F1A1AD47DB300505985 /* COLComponentMultiplesKB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentMultiplesKB.m; sourceTree = "<group>"; };
+		6CE5819C1B13A97800CD8B62 /* COLTransportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLTransportController.h; sourceTree = "<group>"; };
+		6CE5819D1B13A97800CD8B62 /* COLTransportController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLTransportController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,6 +250,8 @@
 				6C172A4B1ACC49B700BE1418 /* COLDiscreteParameter.m */,
 				6C64D7001AD9A4A900012108 /* NSString+Random.h */,
 				6C64D7011AD9A4A900012108 /* NSString+Random.m */,
+				6CE5819C1B13A97800CD8B62 /* COLTransportController.h */,
+				6CE5819D1B13A97800CD8B62 /* COLTransportController.m */,
 				6C11547B1A8E346E005CF194 /* Components */,
 			);
 			path = ColaLib;
@@ -326,6 +331,7 @@
 				6C0D487D1AC358C2008AD869 /* COLKeyboardComponent.m in Sources */,
 				6C1154751A8E306D005CF194 /* COLComponentIO.m in Sources */,
 				6C172A381ACC20F100BE1418 /* COLParameter.m in Sources */,
+				6CE5819E1B13A97800CD8B62 /* COLTransportController.m in Sources */,
 				6C8C15931ADC51DC0077460A /* COLComponentVCF.m in Sources */,
 				6C65A4E61A9117CF000D9192 /* COLComponentWavePlayer.m in Sources */,
 				6C7B27C71A8D578F00AFD384 /* COLComponentOutput.m in Sources */,

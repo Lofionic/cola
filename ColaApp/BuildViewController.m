@@ -64,8 +64,8 @@ static BuildView *buildView = nil;
     [self.buildView setBuildViewController:self];
     [self.buildViewScrollView addSubview:self.buildView];
     [self.buildViewScrollView setDelegate:self.buildView];
-//    [self.buildViewScrollView setMaximumZoomScale:1];
-//    [self.buildViewScrollView setMinimumZoomScale:0.5];
+//   [self.buildViewScrollView setMaximumZoomScale:2];
+//   [self.buildViewScrollView setMinimumZoomScale:1];
     
     buildView = self.buildView;
     
@@ -169,8 +169,6 @@ static BuildView *buildView = nil;
     
     Preset *preset = [[PresetController sharedController] recallPresetAtIndex:0];
     [self.buildView buildFromDictionary:preset.dictionary];
-    
-
 }
 
 -(void)appWillEnterForeground {
@@ -299,6 +297,8 @@ static BuildView *buildView = nil;
     [self.dragView.layer setOpacity:0.5];
     [self.dragView.layer setContents:(id)[module.thumbnail CGImage]];
     
+    [self.buildViewScrollView setEnableAutoscroll:YES];
+    
     [self.view addSubview:self.dragView];
 }
 
@@ -321,6 +321,8 @@ static BuildView *buildView = nil;
 -(void)componentShelf:(ComponentShelfView *)componentTray didEndDraggingModule:(ModuleDescription*)module withGesture:(UIGestureRecognizer *)gesture {
     [self.dragView removeFromSuperview];
     [self.buildView setHighlightedCellSet:nil];
+    
+    [self.buildViewScrollView setEnableAutoscroll:NO];
     
     if (gesture.state != UIGestureRecognizerStateCancelled ){
         CGPoint pointInWindow = [gesture locationInView:self.view];

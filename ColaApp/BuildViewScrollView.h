@@ -10,4 +10,6 @@
 
 @interface BuildViewScrollView : UIScrollView
 
+@property (nonatomic) BOOL enableAutoscroll;
+
 @end

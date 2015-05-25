@@ -11,6 +11,7 @@
 #import "COLComponentInput.h"
 #import "Endian.h"
 #import "COLDefines.h"
+#import "COLTransportController.h"
 
 // Extern wavetables used by components
 AudioSignalType sinWaveTable[WAVETABLE_SIZE];
@@ -169,7 +170,9 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     @autoreleasepool {
 
         COLAudioEngine *audioEngine = (__bridge COLAudioEngine*)inRefCon;
-
+        COLTransportController *transportController = [[COLAudioEnvironment sharedEnvironment] transportController];
+        [transportController renderOutputs:inNumberFrames];
+        
         // Pull the buffer chain
         AudioSignalType *leftBuffer = [[audioEngine masterInputL] getBuffer:inNumberFrames];
         AudioSignalType *rightBuffer = [[audioEngine masterInputR] getBuffer:inNumberFrames];
@@ -186,12 +189,9 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         for (int i = 0; i < inNumberFrames; i ++) {
             outA[i] = leftBuffer[i];
             outB[i] = rightBuffer[i];
-            
         }
-
         [audioEngine.masterInputL engineDidRender];
         [audioEngine.masterInputR engineDidRender];
-        
     }
     return noErr;
 }

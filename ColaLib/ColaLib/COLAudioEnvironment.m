@@ -11,6 +11,7 @@
 #import "COLAudioContext.h"
 #import "COLComponent.h"
 #import "COLComponents.h"
+#import "COLTransportController.h"
 #import "NSString+Random.h"
 
 @interface COLAudioEnvironment()
@@ -18,6 +19,9 @@
 @property (nonatomic, strong) COLAudioEngine*   audioEngine;
 @property (nonatomic, strong) NSMutableArray    *components;
 @property (nonatomic) Float64                   sampleRate;
+
+@property (nonatomic, strong) COLKeyboardComponent      *keyboardComponent;
+@property (nonatomic, strong) COLTransportController    *transportController;
 
 @end
 
@@ -51,12 +55,14 @@
         self.components = [[NSMutableArray alloc] initWithCapacity:10];
         
         self.keyboardComponent = [[COLKeyboardComponent alloc] initWithContext:[COLAudioContext globalContext]];
+        self.transportController = [[COLTransportController alloc] init];
     }
     return self;
 }
 
 -(void)start {
     [self.audioEngine initializeAUGraph];
+    [self.transportController start];
 }
 
 -(BOOL)connectComponent:(COLComponent*)component outputIndex:(NSInteger)outputIndex toMasterIndex:(NSInteger)masterIndex {

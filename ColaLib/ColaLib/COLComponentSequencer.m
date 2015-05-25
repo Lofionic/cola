@@ -10,14 +10,11 @@
 #import "COLAudioEnvironment.h"
 #import "COLDiscreteParameter.h"
 #import "COLContinuousParameter.h"
+#import "COLTransportController.h"
 
 #define CV_FREQUENCY_RANGE 8372 // C9
 
 @interface COLComponentSequencer () {
-    
-    Float64 timeInMS;
-    Float64 bpm;
-    NSUInteger step;
     
     float frequency;
     
@@ -32,15 +29,6 @@
 @end
 
 @implementation COLComponentSequencer
-
--(instancetype)initWithContext:(COLAudioContext *)context {
-    if (self = [super initWithContext:context]) {
-        bpm = 120.0;
-        step = 0;
-        timeInMS = 0;
-    }
-    return self;
-}
 
 -(void)initializeIO {
     
@@ -78,32 +66,20 @@
 -(void)renderOutputs:(UInt32)numFrames {
     [super renderOutputs:numFrames];
     
-    Float64 msPerBeat = (60 / bpm) * 1000;
-    Float64 msPerStep = msPerBeat / 4.0;
-    Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
-    
     AudioSignalType *pitchOutputBuffer = [self.pitchOut prepareBufferOfSize:numFrames];
     AudioSignalType *gateOutputBuffer = [self.gateOut prepareBufferOfSize:numFrames];
     
+    COLTransportController *transportController = [[COLAudioEnvironment sharedEnvironment] transportController];
+    
     for (int i = 0; i < numFrames; i++) {
         
-        timeInMS += 1000 / sampleRate;
-        
-        while (timeInMS > msPerStep) {
-            step ++;
-            if (step > 15) {
-                step = 0;
-            }
-            
-            timeInMS -= msPerStep;
-        }
+        UInt16 step = transportController.stepBuffer[i];
         
         gateOutputBuffer[i] = 0;
         
         COLDiscreteParameter *gateParameter = [self.gateControls objectAtIndex:step];
         if ([gateParameter selectedIndex] == 1) {
-            float stepDelta = timeInMS / msPerStep;
-            if (stepDelta < 0.5) {
+            if (transportController.stepDeltaBuffer[i] < 0.8) {
                 gateOutputBuffer[i] = 1;
             }
             COLContinuousParameter *pitchParameter = [self.pitchControls objectAtIndex:step];

@@ -22,13 +22,15 @@
 @end
 
 @class COLKeyboardComponent;
+@class COLTransportController;
 @interface COLAudioEnvironment : NSObject <COLAudioEngineDelegate>
 
 @property (nonatomic, weak) id      infoDelegate;
 @property (readonly) COLAudioEngine *audioEngine;
 @property (readonly) Float64        sampleRate;
 
-@property (nonatomic, strong) COLKeyboardComponent  *keyboardComponent;
+@property (readonly, strong) COLKeyboardComponent       *keyboardComponent;
+@property (readonly, strong) COLTransportController     *transportController;
 
 +(instancetype)sharedEnvironment;
 -(void)start;
