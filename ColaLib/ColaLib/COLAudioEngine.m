@@ -30,6 +30,9 @@ AudioSignalType squareWaveTable[WAVETABLE_SIZE];
 @property (nonatomic, weak) COLComponentInput *masterInputL;
 @property (nonatomic, weak) COLComponentInput *masterInputR;
 
+@property (nonatomic) BOOL isMuting;
+@property (nonatomic) Float32 attenuation;
+
 @end
 
 @implementation COLAudioEngine
@@ -46,6 +49,8 @@ AudioSignalType squareWaveTable[WAVETABLE_SIZE];
         // Init the master inputs
         self.masterInputL = [[COLAudioContext globalContext] masterInputAtIndex:0];
         self.masterInputR = [[COLAudioContext globalContext] masterInputAtIndex:1];
+        
+        self.attenuation = 1.0;
     }
     
     return self;
@@ -163,32 +168,57 @@ AudioSignalType squareWaveTable[WAVETABLE_SIZE];
     }
 }
 
+-(void)mute {
+    self.isMuting = YES;
+}
+
+-(void)unmute {
+    self.isMuting = NO;
+}
 
 #pragma mark render
 static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
 {
     @autoreleasepool {
-
         COLAudioEngine *audioEngine = (__bridge COLAudioEngine*)inRefCon;
         COLTransportController *transportController = [[COLAudioEnvironment sharedEnvironment] transportController];
         [transportController renderOutputs:inNumberFrames];
         
+        AudioSignalType *leftBuffer;
+        AudioSignalType *rightBuffer;
+        AudioSignalType *outA;
+        AudioSignalType *outB;
+        
+
         // Pull the buffer chain
-        AudioSignalType *leftBuffer = [[audioEngine masterInputL] getBuffer:inNumberFrames];
-        AudioSignalType *rightBuffer = [[audioEngine masterInputR] getBuffer:inNumberFrames];
+        leftBuffer = [[audioEngine masterInputL] getBuffer:inNumberFrames];
+        rightBuffer = [[audioEngine masterInputR] getBuffer:inNumberFrames];
 
         // Split a mono signal if right is not connected
         if (![audioEngine.masterInputR isConnected]) {
             rightBuffer = [audioEngine.masterInputL getBuffer:inNumberFrames];
         }
 
-        AudioSignalType *outA = ioData->mBuffers[0].mData;
-        AudioSignalType *outB = ioData->mBuffers[1].mData;
+        outA = ioData->mBuffers[0].mData;
+        outB = ioData->mBuffers[1].mData;
+    
         
         // Fill up the output buffer
         for (int i = 0; i < inNumberFrames; i ++) {
-            outA[i] = leftBuffer[i];
-            outB[i] = rightBuffer[i];
+
+            outA[i] = leftBuffer[i] * audioEngine.attenuation;
+            outB[i] = rightBuffer[i] * audioEngine.attenuation;
+
+            
+            if (audioEngine.isMuting && audioEngine.attenuation > 0.0) {
+                Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
+                Float32 newAttenuation = MAX(audioEngine.attenuation -= attenuationDelta, 0.0);
+                [audioEngine setAttenuation:newAttenuation];
+            } else if (!audioEngine.isMuting && audioEngine.attenuation < 1.0) {
+                Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
+                Float32 newAttenuation = MIN(audioEngine.attenuation += attenuationDelta, 1.0);
+                [audioEngine setAttenuation:newAttenuation];
+            }
         }
         [audioEngine.masterInputL engineDidRender];
         [audioEngine.masterInputR engineDidRender];

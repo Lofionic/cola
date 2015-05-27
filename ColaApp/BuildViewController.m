@@ -33,13 +33,16 @@ static BuildView *buildView = nil;
 
 @property (nonatomic, strong) UIBarButtonItem       *buildBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem       *keyboardBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem       *playStopBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem       *saveBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem       *filesBarButtonItem;
 
 @property (nonatomic) BOOL buildMode;
 @property (nonatomic) BOOL keyboardHidden;
 
 @property (nonatomic, strong) NSLayoutConstraint    *shiftBuildViewConstraint; // Constraint to shift the build view down when the build view appears
 
-@property (nonatomic, strong) NSString              *filename;
+@property (nonatomic, strong) Preset *preset;
 
 @end
 
@@ -150,12 +153,20 @@ static BuildView *buildView = nil;
     
     UIImage *keyboardIcon = [UIImage imageNamed:TOOLBAR_PIANO_ICON];
     self.keyboardBarButtonItem = [[UIBarButtonItem alloc] initWithImage:keyboardIcon style:UIBarButtonItemStylePlain target:self action:@selector(keyboardTapped)];
-    [self.navigationItem setLeftBarButtonItems:@[self.buildBarButtonItem, self.keyboardBarButtonItem]];
+    
+    UIImage *playIcon = [UIImage imageNamed:TOOLBAR_PLAY_ICON];
+    self.playStopBarButtonItem = [[UIBarButtonItem alloc] initWithImage:playIcon style:UIBarButtonItemStylePlain target:self action:@selector(playStopTapped)];
+
+    [self.navigationItem setLeftBarButtonItems:@[self.buildBarButtonItem, self.keyboardBarButtonItem, self.playStopBarButtonItem]];
     [self setKeyboardHidden:NO animated:NO];
     
     UIImage *filesIcon = [UIImage imageNamed:TOOLBAR_FILES_ICON];
-    UIBarButtonItem *filesButton = [[UIBarButtonItem alloc] initWithImage:filesIcon style:UIBarButtonItemStylePlain target:self action:@selector(filesTapped)];
-    [self.navigationItem setRightBarButtonItem:filesButton];
+    self.filesBarButtonItem = [[UIBarButtonItem alloc] initWithImage:filesIcon style:UIBarButtonItemStylePlain target:self action:@selector(filesTapped)];
+    
+    UIImage *saveIcon = [UIImage imageNamed:TOOLBAR_SAVE_ICON];
+    self.saveBarButtonItem = [[UIBarButtonItem alloc] initWithImage:saveIcon style:UIBarButtonItemStylePlain target:self action:@selector(saveTapped)];
+    
+    [self.navigationItem setRightBarButtonItems:@[self.filesBarButtonItem, self.saveBarButtonItem]];
     
     self.iaaView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 512, 512)];
     [self.iaaView setBackgroundColor:[UIColor redColor]];
@@ -167,8 +178,21 @@ static BuildView *buildView = nil;
                                                  name: UIApplicationWillEnterForegroundNotification
                                                object: nil];
     
-    Preset *preset = [[PresetController sharedController] recallPresetAtIndex:0];
-    [self.buildView buildFromDictionary:preset.dictionary];
+    self.preset = [[PresetController sharedController] recallPresetAtIndex:0];
+    [self.buildView buildFromDictionary:[self.preset dictionary]];
+    
+    // Register for updates form the transport controller
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedOfTransportUpdate:) name:kCOLEventTransportStateUpdated object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [[[COLAudioEnvironment sharedEnvironment] transportController] stop];
+    [[[COLAudioEnvironment sharedEnvironment] transportController] stopAndReset];
+    [[COLAudioEnvironment sharedEnvironment] mute];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [[COLAudioEnvironment sharedEnvironment] unmute];
 }
 
 -(void)appWillEnterForeground {
@@ -204,15 +228,18 @@ static BuildView *buildView = nil;
     
     [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
     
-    UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
-    [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
-    [self.navigationController.view addSubview:blockingView];
-    
     [self savePresetCompletion:^(BOOL success) {
-        [blockingView removeFromSuperview];
         FilesViewController *filesViewController = [[FilesViewController alloc] initWithBuildViewController:self];
         [self.navigationController pushViewController:filesViewController animated:YES];
     }];
+}
+
+-(void)saveTapped {
+    if (self.buildMode) {
+        [self setBuildMode:NO animated:YES];
+    }
+    
+    [self savePresetCompletion:nil];
 }
 
 -(void)setBuildMode:(BOOL)buildMode animated:(BOOL)animated {
@@ -285,6 +312,25 @@ static BuildView *buildView = nil;
     }
 }
 
+#pragma mark Transport
+
+-(void)playStopTapped {
+    COLTransportController *transport = [[COLAudioEnvironment sharedEnvironment] transportController];
+    if (transport.isPlaying) {
+        [transport stopAndReset];
+    } else {
+        [transport start];
+    }
+}
+
+-(void)notifiedOfTransportUpdate:(NSNotification*)note {
+    if ([[[COLAudioEnvironment sharedEnvironment] transportController] isPlaying]) {
+        [self.playStopBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_STOP_ICON]];
+    } else {
+        [self.playStopBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PLAY_ICON]];
+    }
+}
+
 #pragma mark ComponentShelf
 
 -(void)componentShelf:(ComponentShelfView *)componentTray didBeginDraggingModule:(ModuleDescription*)module withGesture:(UIGestureRecognizer *)gesture {
@@ -342,6 +388,28 @@ static BuildView *buildView = nil;
 #pragma LoadSave
 
 -(void)savePresetCompletion:(void (^)(BOOL success))completion {
+    
+    UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
+    [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.6]];
+    [self.navigationController.view addSubview:blockingView];
+    
+    UILabel *blockingViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
+                                                                           (blockingView.bounds.size.height / 2.0) - 64.0,
+                                                                           blockingView.bounds.size.width,
+                                                                           64)];
+    [blockingViewLabel setTextAlignment:NSTextAlignmentCenter];
+    [blockingViewLabel setTextColor:[UIColor whiteColor]];
+    [blockingViewLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20]];
+    [blockingViewLabel setText:@"Saving..."];
+    [blockingView addSubview:blockingViewLabel];
+    
+    UIProgressView *progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(blockingView.bounds.size.width / 2.0 - 100,
+                                                                                    blockingView.bounds.size.height / 2.0,
+                                                                                    200,
+                                                                                    64)];
+    [progressView setProgress:0.0];
+    [blockingView addSubview:progressView];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
         UIImage *thumbnail = [self.buildView snapshot];
         NSDictionary *dictionary = [self.buildView getPresetDictionary];
@@ -349,10 +417,15 @@ static BuildView *buildView = nil;
         [[PresetController sharedController] updatePresetAtIndex:[[PresetController sharedController] selectedPresetIndex]
                                                   withDictionary:dictionary
                                                             name:nil
-                                                       thumbnail:thumbnail];
-       
+                                                       thumbnail:thumbnail
+                                                        progress:^ (float progress){
+                                                            [progressView setProgress:progress animated:YES];;
+                                                        }];
         dispatch_async(dispatch_get_main_queue(), ^ {
-            completion(YES);
+            if (completion) {
+                completion(YES);
+            }
+            [blockingView removeFromSuperview];
         });
     });
 }
@@ -370,6 +443,10 @@ static BuildView *buildView = nil;
 
 +(BuildView*)buildView {
     return buildView;
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

@@ -73,10 +73,14 @@
 }
 
 -(void)addTapped {
-    [[PresetController sharedController] addNewPreset];
     
+    [[PresetController sharedController] addNewPreset];
+
     NSArray *newIndexPath = @[[NSIndexPath indexPathForRow:[[PresetController sharedController] presetCount] - 1 inSection:0]];
-    [self.collectionView insertItemsAtIndexPaths:newIndexPath];
+    
+    [self.collectionView performBatchUpdates:^ {
+        [self.collectionView insertItemsAtIndexPaths:newIndexPath];
+    } completion:nil];
 }
 
 -(void)editTapped {
@@ -113,9 +117,11 @@
     if (editing) {
         [self.editBarButtonItem setTitle:@"Done"];
         [self.navigationItem setLeftBarButtonItems:self.editBarButtonItems animated:YES];
+        [self.selectedCellSet removeAllObjects];
         
         for (FilesViewControllerCell *thisCell in [self.collectionView visibleCells]) {
             [thisCell startJiggling];
+            [thisCell setHighlighted:NO];
         }        
     } else {
         [self.editBarButtonItem setTitle:@"Select"];
@@ -123,10 +129,13 @@
         
         for (FilesViewControllerCell *thisCell in [self.collectionView visibleCells]) {
             [thisCell stopJiggling];
+            [thisCell setSelected:NO];
         }
+        
+        NSUInteger selectedPresetIndex = [[PresetController sharedController] selectedPresetIndex];
+        FilesViewControllerCell *selectedCell = (FilesViewControllerCell*)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:selectedPresetIndex inSection:0]];
+        [selectedCell setHighlighted:YES];
     }
-    
-    [self.collectionView reloadData];
 }
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -159,6 +168,8 @@
     
     if (self.editing) {
         [cell startJiggling];
+    } else {
+        [cell stopJiggling];
     }
     
     [cell updateContents];

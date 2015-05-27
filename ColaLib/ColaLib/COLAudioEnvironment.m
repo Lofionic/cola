@@ -62,7 +62,13 @@
 
 -(void)start {
     [self.audioEngine initializeAUGraph];
-    [self.transportController start];
+}
+
+-(void)mute {
+    [self.audioEngine mute];
+}
+-(void)unmute {
+    [self.audioEngine unmute];
 }
 
 -(BOOL)connectComponent:(COLComponent*)component outputIndex:(NSInteger)outputIndex toMasterIndex:(NSInteger)masterIndex {

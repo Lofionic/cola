@@ -60,6 +60,7 @@
 		6CD59F1B1AD47DB300505985 /* COLComponentMultiplesKB.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD59F1A1AD47DB300505985 /* COLComponentMultiplesKB.m */; };
 		6CD59F1C1AD47E0600505985 /* COLComponentMultiplesKB.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CD59F191AD47DB300505985 /* COLComponentMultiplesKB.h */; };
 		6CE5819E1B13A97800CD8B62 /* COLTransportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE5819D1B13A97800CD8B62 /* COLTransportController.m */; };
+		6CF090E11B151ACA0075F409 /* COLTransportController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE5819C1B13A97800CD8B62 /* COLTransportController.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -91,6 +92,7 @@
 				6C300BEF1AD33ACE00D51544 /* COLComponentMixer2.h in CopyFiles */,
 				6CD59F1C1AD47E0600505985 /* COLComponentMultiplesKB.h in CopyFiles */,
 				6C300BEB1AD3286300D51544 /* COLComponentMultiples.h in CopyFiles */,
+				6CF090E11B151ACA0075F409 /* COLTransportController.h in CopyFiles */,
 				6C7458FF1AE837D200AEC106 /* COLComponentPan.h in CopyFiles */,
 				6CBB7D001AEED88C006DD7A1 /* COLComponentRingModulator.h in CopyFiles */,
 				6C6132411ADC5FF90060C221 /* COLComponentVCF.h in CopyFiles */,

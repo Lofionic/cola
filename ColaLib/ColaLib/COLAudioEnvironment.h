@@ -36,6 +36,9 @@
 -(void)start;
 -(BOOL)isInterAppAudioConnected;
 
+-(void)mute;
+-(void)unmute;
+
 // Factory methods
 -(COLComponent*)createComponentOfType:(NSString *)componentType;
 -(BOOL)removeComponent:(COLComponent*)component;

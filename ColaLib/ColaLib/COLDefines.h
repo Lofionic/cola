@@ -25,6 +25,7 @@
 #define kCOLComponentSequencer              @"kCOLComponentSequencer"
 #define kCOLComponentNoiseGenerator         @"kCOLComponentNoiseGenerator"
 
+#define kCOLEventTransportStateUpdated          @"kCOLEventTransportStateUpdated"
 
 #define kCOLOutputOscillatorMain            0
 #define kCOLInputOscillatorFreq             0

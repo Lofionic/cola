@@ -12,11 +12,11 @@
 
 @property (nonatomic, readonly) UInt16  *stepBuffer;
 @property (nonatomic, readonly) Float32 *stepDeltaBuffer;
-@property (readonly) BOOL playing;
+@property (readonly) BOOL isPlaying;
 
 -(void)renderOutputs:(UInt32)numFrames;
 -(void)start;
 -(void)stop;
--(void)reset;
+-(void)stopAndReset;
 
 @end

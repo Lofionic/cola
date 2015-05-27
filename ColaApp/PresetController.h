@@ -11,6 +11,8 @@
 @class Preset;
 @interface PresetController : NSObject
 
+typedef void (^ProgressBlock)(float progress);
+
 +(PresetController*)sharedController;
 
 -(void)loadPresets;
@@ -19,7 +21,7 @@
 
 -(Preset*)recallPresetAtIndex:(NSUInteger)index;
 -(void)addNewPreset;
--(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail;
+-(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress;
 -(void)removePresetAtIndex:(NSUInteger)index;
 -(void)removePresetsAtIndexes:(NSIndexSet *)indexes;
 

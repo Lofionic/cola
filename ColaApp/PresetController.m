@@ -108,13 +108,37 @@
     [self syncPresets];
 }
 
--(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail {
+-(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress {
     NSLog(@"Updating preset %lu", (long)index);
     
+    if (progress) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            progress(0.33);
+        });
+    }
+
     Preset *preset = [self.presets objectAtIndex:index];
+    
+    if (progress) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            progress(0.66);
+        });
+    }
+    
     [preset updateWithDictionary:dictionary name:name thumbnail:thumbnail];
+    if (progress) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            progress(1.0);
+        });
+    }
     
     [self syncPresets];
+    
+    if (progress) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            progress(1.0);
+        });
+    }
 }
 
 -(void)removePresetAtIndex:(NSUInteger)index {

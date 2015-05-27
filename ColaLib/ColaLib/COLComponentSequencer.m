@@ -77,16 +77,18 @@
         
         gateOutputBuffer[i] = 0;
         
-        COLDiscreteParameter *gateParameter = [self.gateControls objectAtIndex:step];
-        if ([gateParameter selectedIndex] == 1) {
-            if (transportController.stepDeltaBuffer[i] < 0.8) {
-                gateOutputBuffer[i] = 1;
+        if ([transportController isPlaying]) {
+            COLDiscreteParameter *gateParameter = [self.gateControls objectAtIndex:step];
+            if ([gateParameter selectedIndex] == 1) {
+                if (transportController.stepDeltaBuffer[i] < 0.8) {
+                    gateOutputBuffer[i] = 1;
+                }
+                COLContinuousParameter *pitchParameter = [self.pitchControls objectAtIndex:step];
+                NSInteger pitchOutput = [pitchParameter outputAtDelta:((float)i / numFrames)];
+                
+                NSInteger note =  60 + pitchOutput;
+                frequency = powf(2, (note - 69) / 12.0) * 440;
             }
-            COLContinuousParameter *pitchParameter = [self.pitchControls objectAtIndex:step];
-            NSInteger pitchOutput = [pitchParameter outputAtDelta:((float)i / numFrames)];
-            
-            NSInteger note =  60 + pitchOutput;
-            frequency = powf(2, (note - 69) / 12.0) * 440;
         }
         
         pitchOutputBuffer[i] = frequency / CV_FREQUENCY_RANGE;

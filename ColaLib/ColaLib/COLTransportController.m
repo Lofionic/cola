@@ -17,7 +17,7 @@
     UInt32 bufferSize;
 }
 
-@property (nonatomic) BOOL playing;
+@property (nonatomic) BOOL isPlaying;
 @property (nonatomic) UInt16  *stepBuffer;
 @property (nonatomic) Float32 *stepDeltaBuffer;
 
@@ -35,16 +35,28 @@
 }
 
 -(void)start {
-    self.playing = YES;
+    self.isPlaying = YES;
+    [self postUpdateNotification];
 }
 
 -(void)stop {
-    self.playing = NO;
+    self.isPlaying = NO;
+    [self postUpdateNotification];
 }
 
--(void)reset {
+-(void)stopAndReset {
+    self.isPlaying = NO;
     timeInMS = 0;
     step = 0;
+    [self postUpdateNotification];
+}
+
+-(void)postUpdateNotification {
+    NSDictionary *notificationUserInfo = @{
+                                           @"transportController" : self
+                                           };
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCOLEventTransportStateUpdated object:nil userInfo:notificationUserInfo];
 }
 
 -(void)renderOutputs:(UInt32)numFrames {
@@ -67,7 +79,7 @@
     
     for (int i = 0; i < numFrames; i++) {
         
-        if (self.playing) {
+        if (self.isPlaying) {
             timeInMS += 1000 / sampleRate;
             while (timeInMS > msPerStep) {
                 step ++;

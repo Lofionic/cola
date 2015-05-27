@@ -28,7 +28,13 @@
 @property (readonly, weak) COLComponentInput *masterInputL;
 @property (readonly, weak) COLComponentInput *masterInputR;
 
+@property (readonly) BOOL isMuting;
+@property (readonly) Float32 attenuation;
+
 -(void)initializeAUGraph;
 -(void)startStopEngine;
+
+-(void)mute;
+-(void)unmute;
 
 @end
