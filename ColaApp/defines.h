@@ -27,3 +27,12 @@ extern CGFloat kKeyboardHeight;
 #define TOOLBAR_STOP_ICON                   @"Icons/1243-stop-toolbar"
 #define TOOLBAR_SAVE_ICON                   @"Icons/785-floppy-disk-toolbar"
 
+// Transport Buttons
+#define TRANSPORT_ICON_PLAY         @"Icons/Transport/play_button"
+#define TRANSPORT_ICON_PAUSE        @"Icons/Transport/pause_button"
+#define TRANSPORT_ICON_RECORD       @"Icons/Transport/record_button"
+#define TRANSPORT_ICON_RECORD_ON    @"Icons/Transport/record_button_on"
+#define TRANSPORT_ICON_REWIND       @"Icons/Transport/rewind_button"
+#define TRANSPROT_ICON_REWIND_ON    @"Icons/Transport/rewind_button_on"
+
+

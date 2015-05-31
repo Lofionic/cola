@@ -16,6 +16,7 @@
 #import "PresetController.h"
 #import "UIView+Snapshot.h"
 #import "BuildViewScrollView.h"
+#import "IAAView.h"
 
 static BuildView *buildView = nil;
 
@@ -26,7 +27,8 @@ static BuildView *buildView = nil;
 
 @property (nonatomic, strong) ComponentShelfView    *componentShelf;
 @property (nonatomic, strong) KeyboardView          *keyboardView;
-@property (nonatomic, strong) UIView                *iaaView;
+
+@property (nonatomic, strong) IAAView               *iaaView;
 
 @property (nonatomic, strong) UIView                *dragView;
 @property (nonatomic, strong) ModuleView            *dragModule;
@@ -168,8 +170,7 @@ static BuildView *buildView = nil;
     
     [self.navigationItem setRightBarButtonItems:@[self.filesBarButtonItem, self.saveBarButtonItem]];
     
-    self.iaaView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 512, 512)];
-    [self.iaaView setBackgroundColor:[UIColor redColor]];
+    self.iaaView = [[IAAView alloc] initWithFrame:CGRectMake(0, 44, self.view.frame.size.width, 58)];
     [self.iaaView setHidden:YES];
     [self.view addSubview:self.iaaView];
     
@@ -197,9 +198,12 @@ static BuildView *buildView = nil;
 
 -(void)appWillEnterForeground {
     if ([[COLAudioEnvironment sharedEnvironment] isInterAppAudioConnected]) {
+        [self.iaaView updateContents];
         [self.iaaView setHidden:NO];
+        [self.playStopBarButtonItem setEnabled:NO];
     } else {
         [self.iaaView setHidden:YES];
+        [self.playStopBarButtonItem setEnabled:YES];
     }
 }
 
@@ -437,6 +441,12 @@ static BuildView *buildView = nil;
             completion(success);
         }
     });
+}
+
+#pragma mark InterAppAudio
+
+-(void)iaaHostIconTapped {
+    
 }
 
 #pragma mark Convenience Methods

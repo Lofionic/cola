@@ -12,6 +12,7 @@
 #import "Endian.h"
 #import "COLDefines.h"
 #import "COLTransportController.h"
+#import "Audiobus.h"
 
 // Extern wavetables used by components
 AudioSignalType sinWaveTable[WAVETABLE_SIZE];
@@ -20,18 +21,27 @@ AudioSignalType sawWaveTable[WAVETABLE_SIZE];
 AudioSignalType rampWaveTable[WAVETABLE_SIZE];
 AudioSignalType squareWaveTable[WAVETABLE_SIZE];
 
+HostCallbackInfo *callbackInfo;
+
 @interface COLAudioEngine() {
     Float64 sampleRate;
 }
 
 @property (nonatomic) BOOL isForeground;
 @property (nonatomic) BOOL isInterAppConnected;
+@property (nonatomic) BOOL isHostPlaying;
+@property (nonatomic) BOOL isHostRecording;
+@property (nonatomic) Float64 playTime;
 
 @property (nonatomic, weak) COLComponentInput *masterInputL;
 @property (nonatomic, weak) COLComponentInput *masterInputR;
 
 @property (nonatomic) BOOL isMuting;
 @property (nonatomic) Float32 attenuation;
+
+@property (nonatomic, strong) ABAudiobusController *audiobusController;
+
+@property (nonatomic, strong) UIImage *iaaHostImage;
 
 @end
 
@@ -279,6 +289,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     NSLog(@"App will enter foreground");
     self.isForeground = YES;
     [self startStopEngine];
+    [self updateTransportStateFromHostCallback];
 }
 
 -(void)mediaServicesWereReset {
@@ -334,6 +345,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         
     } else if (inID == kAudioOutputUnitProperty_HostTransportState) {
         // HostTransportState has changed
+        [self interAppAudioHostTransportStateChanged];
     }
 }
 
@@ -346,11 +358,61 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
             self.isInterAppConnected = connected;
             if (self.isInterAppConnected) {
                 [self interAppDidConnect];
+                self.iaaHostImage = AudioOutputUnitGetHostIcon(mRemoteIO, 114);
             } else {
                 [self interAppDidDisconnect];
             }
         }
     };
+}
+
+-(void)interAppAudioHostTransportStateChanged {
+    [self getHostCallbackInfo];
+    [self updateTransportStateFromHostCallback];
+    
+}
+
+-(void)updateTransportStateFromHostCallback {
+    if (self.isInterAppConnected && self.isForeground && ![self.audiobusController audiobusConnected]) {
+        if (!callbackInfo) {
+            [self getHostCallbackInfo];
+        }
+        if (callbackInfo) {
+            Boolean isPlaying  = self.isHostPlaying;
+            Boolean isRecording = self.isHostRecording;
+            Float64 outCurrentSampleInTimeLine = 0;
+            void * hostUserData = callbackInfo->hostUserData;
+            OSStatus result =  callbackInfo->transportStateProc2(hostUserData,
+                                                                 &isPlaying,
+                                                                 &isRecording, NULL,
+                                                                 &outCurrentSampleInTimeLine,
+                                                                 NULL, NULL, NULL);
+            if (result == noErr) {
+                self.isHostPlaying = isPlaying;
+                self.isHostRecording = isRecording;
+                self.playTime = outCurrentSampleInTimeLine;
+            } else {
+                NSLog(@"Error occured fetching callBackInfo->transportStateProc2 : %d", (int)result);
+            }
+            [[[COLAudioEnvironment sharedEnvironment] transportController] interappAudioTransportStateDidChange];
+        }
+    }
+}
+
+-(void)getHostCallbackInfo {
+    if (self.isInterAppConnected) {
+        if (callbackInfo) {
+            free(callbackInfo);
+        }
+        UInt32 dataSize = sizeof(HostCallbackInfo);
+        callbackInfo = (HostCallbackInfo*) malloc(dataSize);
+        OSStatus result = AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_HostCallbacks, kAudioUnitScope_Global, 0, callbackInfo, &dataSize);
+        if (result != noErr) {
+            NSLog(@"Error occured fetching kAudioUnitProperty_HostCallbacks : %d", (int)result);
+            free(callbackInfo);
+            callbackInfo = NULL;
+        }
+    }
 }
 
 -(void)interAppDidConnect {
@@ -362,6 +424,17 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 -(void)interAppDidDisconnect {
     NSLog(@"IAA disconnected");
     [self startStopEngine];
+}
+
+-(void)iaaGotoHost {
+    if (mRemoteIO && self.isInterAppConnected) {
+        CFURLRef instrumentUrl;
+        UInt32 dataSize = sizeof(instrumentUrl);
+        OSStatus result = AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_PeerURL, kAudioUnitScope_Global, 0, &instrumentUrl, &dataSize);
+        if (result == noErr) {
+            [[UIApplication sharedApplication] openURL:(__bridge NSURL*)instrumentUrl];
+        }
+    }
 }
 
 #pragma mark Utility

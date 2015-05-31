@@ -18,5 +18,6 @@
 -(void)start;
 -(void)stop;
 -(void)stopAndReset;
+-(void)interappAudioTransportStateDidChange;
 
 @end

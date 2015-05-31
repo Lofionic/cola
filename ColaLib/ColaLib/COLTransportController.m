@@ -8,6 +8,7 @@
 
 #import "COLTransportController.h"
 #import "COLAudioEnvironment.h"
+#import "COLAudioEngine.h"
 
 @interface COLTransportController () {
     Float64 timeInMS;
@@ -91,6 +92,17 @@
         }
         self.stepBuffer[i] = step;
         self.stepDeltaBuffer[i] = timeInMS / msPerStep;
+    }
+}
+
+-(void)interappAudioTransportStateDidChange {
+    COLAudioEngine *engine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
+    if (engine.isHostPlaying && !self.isPlaying) {
+        self.isPlaying = YES;
+        [self postUpdateNotification];
+    } else if (!engine.isHostPlaying && self.isPlaying) {
+        self.isPlaying = NO;
+        [self postUpdateNotification];
     }
 }
 

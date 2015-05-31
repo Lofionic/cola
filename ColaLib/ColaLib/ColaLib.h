@@ -8,6 +8,7 @@
 #import "COLDefines.h"
 #import "COLAudioEnvironment.h"
 #import "COLAudioContext.h"
+#import "COLAudioEngine.h"
 #import "COLComponents.h"
 #import "COLParameter.h"
 #import "COLContinuousParameter.h"

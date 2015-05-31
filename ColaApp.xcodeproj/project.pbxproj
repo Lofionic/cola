@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6C0B16B21ADBD5F70058BA18 /* FilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0B16B11ADBD5F70058BA18 /* FilesViewController.m */; };
+		6C0BAEBE1B1BBA94007314CB /* IAAView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0BAEBD1B1BBA94007314CB /* IAAView.m */; };
 		6C0D48831AC3663D008AD869 /* KeyboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0D48821AC3663D008AD869 /* KeyboardView.m */; };
 		6C0F86D11AA7B2220092FB18 /* BuildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D01AA7B2220092FB18 /* BuildViewController.m */; };
 		6C0F86D81AA7BEB70092FB18 /* ComponentShelfView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F86D71AA7BEB70092FB18 /* ComponentShelfView.m */; };
@@ -30,12 +31,10 @@
 		6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C59C5651ABF4273001EE663 /* ConnectorView.m */; };
 		6C64D6FE1AD9394800012108 /* MasterModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D6FD1AD9394800012108 /* MasterModuleView.m */; };
 		6C64D7061AD9B0DD00012108 /* PresetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D7051AD9B0DD00012108 /* PresetController.m */; };
-		6C65A4E81A9125DD000D9192 /* gtr.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C65A4E71A9125DD000D9192 /* gtr.wav */; };
 		6C6DB53D1AD6B48C0001343E /* ModuleCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6DB53C1AD6B48C0001343E /* ModuleCatalog.m */; };
 		6C7459021AE84D3200AEC106 /* BuildViewScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7459011AE84D3200AEC106 /* BuildViewScrollView.m */; };
 		6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */; };
 		6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2941AC0C9CC00320628 /* ModuleView.m */; };
-		6C94939A1A9D1BFB00B7A37C /* loop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6C9493991A9D1BFB00B7A37C /* loop.wav */; };
 		6CB828381AC2F58000610DD4 /* ImageAssets in Resources */ = {isa = PBXBuildFile; fileRef = 6CB828371AC2F58000610DD4 /* ImageAssets */; };
 		6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */; };
 		6CCA30B31AE10B5500CAF1AF /* FilesViewControllerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCA30B21AE10B5500CAF1AF /* FilesViewControllerCell.m */; };
@@ -56,6 +55,8 @@
 /* Begin PBXFileReference section */
 		6C0B16B01ADBD5F70058BA18 /* FilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilesViewController.h; sourceTree = "<group>"; };
 		6C0B16B11ADBD5F70058BA18 /* FilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesViewController.m; sourceTree = "<group>"; };
+		6C0BAEBC1B1BBA94007314CB /* IAAView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAAView.h; sourceTree = "<group>"; };
+		6C0BAEBD1B1BBA94007314CB /* IAAView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAAView.m; sourceTree = "<group>"; };
 		6C0D48811AC3663D008AD869 /* KeyboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardView.h; sourceTree = "<group>"; };
 		6C0D48821AC3663D008AD869 /* KeyboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardView.m; sourceTree = "<group>"; };
 		6C0F86CF1AA7B2220092FB18 /* BuildViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewController.h; sourceTree = "<group>"; };
@@ -100,7 +101,6 @@
 		6C64D6FD1AD9394800012108 /* MasterModuleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterModuleView.m; sourceTree = "<group>"; };
 		6C64D7041AD9B0DD00012108 /* PresetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresetController.h; sourceTree = "<group>"; };
 		6C64D7051AD9B0DD00012108 /* PresetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresetController.m; sourceTree = "<group>"; };
-		6C65A4E71A9125DD000D9192 /* gtr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gtr.wav; sourceTree = "<group>"; };
 		6C6DB53B1AD6B48C0001343E /* ModuleCatalog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleCatalog.h; sourceTree = "<group>"; };
 		6C6DB53C1AD6B48C0001343E /* ModuleCatalog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleCatalog.m; sourceTree = "<group>"; };
 		6C7459001AE84D3200AEC106 /* BuildViewScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewScrollView.h; sourceTree = "<group>"; };
@@ -109,7 +109,6 @@
 		6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotaryEncoder.m; sourceTree = "<group>"; };
 		6C8DD2931AC0C9CC00320628 /* ModuleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleView.h; sourceTree = "<group>"; };
 		6C8DD2941AC0C9CC00320628 /* ModuleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleView.m; sourceTree = "<group>"; };
-		6C9493991A9D1BFB00B7A37C /* loop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = loop.wav; sourceTree = "<group>"; };
 		6CB828371AC2F58000610DD4 /* ImageAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ImageAssets; sourceTree = "<group>"; };
 		6CB8283C1AC3077800610DD4 /* UIColor+Shades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Shades.h"; sourceTree = "<group>"; };
 		6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Shades.m"; sourceTree = "<group>"; };
@@ -263,8 +262,6 @@
 			children = (
 				6CEF81141ACC779000FB1943 /* Icons */,
 				6CB828371AC2F58000610DD4 /* ImageAssets */,
-				6C65A4E71A9125DD000D9192 /* gtr.wav */,
-				6C9493991A9D1BFB00B7A37C /* loop.wav */,
 				6C12010A1AAE49A100C6ACB6 /* moduleCatalog.json */,
 			);
 			name = Resources;
@@ -286,6 +283,8 @@
 			children = (
 				6C0F86CF1AA7B2220092FB18 /* BuildViewController.h */,
 				6C0F86D01AA7B2220092FB18 /* BuildViewController.m */,
+				6C0BAEBC1B1BBA94007314CB /* IAAView.h */,
+				6C0BAEBD1B1BBA94007314CB /* IAAView.m */,
 				6C7459001AE84D3200AEC106 /* BuildViewScrollView.h */,
 				6C7459011AE84D3200AEC106 /* BuildViewScrollView.m */,
 				6CDA9F121AA9017E00D64EB0 /* BuildView.h */,
@@ -398,11 +397,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CEF81151ACC779000FB1943 /* Icons in Resources */,
-				6C94939A1A9D1BFB00B7A37C /* loop.wav in Resources */,
 				6C12010B1AAE49A100C6ACB6 /* moduleCatalog.json in Resources */,
 				6C2A5EA31A8C0B2A00ECEAB2 /* Interapp.txt in Resources */,
 				6CB828381AC2F58000610DD4 /* ImageAssets in Resources */,
-				6C65A4E81A9125DD000D9192 /* gtr.wav in Resources */,
 				6C2A5E2D1A8BF2CC00ECEAB2 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,6 +411,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C0BAEBE1B1BBA94007314CB /* IAAView.m in Sources */,
 				6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */,
 				6C0B16B21ADBD5F70058BA18 /* FilesViewController.m in Sources */,
 				6C1201091AAE44D200C6ACB6 /* ModuleDescription.m in Sources */,

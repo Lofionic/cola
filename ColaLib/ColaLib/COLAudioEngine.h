@@ -12,6 +12,7 @@
 #import <CoreAudio/CoreAudioTypes.h>
 #import "COLAudioEnvironment.h"
 
+@class ABAudiobusController;
 @class COLAudioEngine;
 @class COLComponentInput;
 
@@ -24,17 +25,26 @@
 
 @property (readonly) BOOL isForeground;
 @property (readonly) BOOL isInterAppConnected;
+@property (readonly) BOOL isHostPlaying;
+@property (readonly) BOOL isHostRecording;
+@property (readonly) Float64 playTime;
 
 @property (readonly, weak) COLComponentInput *masterInputL;
 @property (readonly, weak) COLComponentInput *masterInputR;
 
+@property (readonly, strong) ABAudiobusController *audiobusController;
+
 @property (readonly) BOOL isMuting;
 @property (readonly) Float32 attenuation;
+
+@property (readonly, strong) UIImage *iaaHostImage;
 
 -(void)initializeAUGraph;
 -(void)startStopEngine;
 
 -(void)mute;
 -(void)unmute;
+
+-(void)iaaGotoHost;
 
 @end
