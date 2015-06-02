@@ -39,6 +39,9 @@ static BuildView *buildView = nil;
 @property (nonatomic, strong) UIBarButtonItem       *saveBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem       *filesBarButtonItem;
 
+@property (nonatomic, strong) NSLayoutConstraint    *keyboardPositionConstraint;
+@property (nonatomic, strong) NSLayoutConstraint    *iaaPositionConstraint;
+
 @property (nonatomic) BOOL buildMode;
 @property (nonatomic) BOOL keyboardHidden;
 
@@ -69,9 +72,6 @@ static BuildView *buildView = nil;
     [self.buildView setBuildViewController:self];
     [self.buildViewScrollView addSubview:self.buildView];
     [self.buildViewScrollView setDelegate:self.buildView];
-//   [self.buildViewScrollView setMaximumZoomScale:2];
-//   [self.buildViewScrollView setMinimumZoomScale:1];
-    
     buildView = self.buildView;
     
     self.componentShelf = [[ComponentShelfView alloc] init];
@@ -83,12 +83,19 @@ static BuildView *buildView = nil;
     [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.keyboardView setKbComponent:[[COLAudioEnvironment sharedEnvironment] keyboardComponent]];
     [self.view addSubview:self.keyboardView];
+    
+    self.iaaView = [[IAAView alloc] init];
+    [self.iaaView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.iaaView setHidden:YES];
+    [self.view addSubview:self.iaaView];
 
     NSDictionary *viewsDictionary = @{
                                       @"buildView"      :   self.buildViewScrollView,
                                       @"componentShelf" :   self.componentShelf,
                                       @"keyboardView"   :   self.keyboardView,
-                                      @"topGuide"       :   self.topLayoutGuide
+                                      @"iaaView"        :   self.iaaView,
+                                      @"topGuide"       :   self.topLayoutGuide,
+                                      @"bottomGuide"    :   self.bottomLayoutGuide
                                       };
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[componentShelf]|"
@@ -101,6 +108,11 @@ static BuildView *buildView = nil;
                                                                       metrics:nil
                                                                         views:viewsDictionary]];
     
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[iaaView]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:viewsDictionary]];
+    
     NSDictionary *metricsDictionary = @{
                                         @"buildViewWidth"       : [NSNumber numberWithFloat:kBuildViewWidth],
                                         @"componentShelfHeight" : [NSNumber numberWithFloat:kComponentShelfHeight],
@@ -108,11 +120,6 @@ static BuildView *buildView = nil;
                                         };
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topGuide][componentShelf(componentShelfHeight)]"
-                                                                      options:0
-                                                                      metrics:metricsDictionary
-                                                                        views:viewsDictionary]];
-
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[keyboardView(keyboardHeight)]|"
                                                                       options:0
                                                                       metrics:metricsDictionary
                                                                         views:viewsDictionary]];
@@ -133,9 +140,37 @@ static BuildView *buildView = nil;
                                                          multiplier:1
                                                            constant:0]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topGuide]-0@750-[buildView]|"
+    // Constraints used to show / hide keyboard & iaaview
+    self.iaaPositionConstraint = [NSLayoutConstraint constraintWithItem:self.iaaView
+                                                              attribute:NSLayoutAttributeBottom
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:self.keyboardView
+                                                              attribute:NSLayoutAttributeTop
+                                                             multiplier:1
+                                                               constant:0];
+    
+    self.keyboardPositionConstraint = [NSLayoutConstraint constraintWithItem:self.keyboardView
+                                                                   attribute:NSLayoutAttributeBottom
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:self.bottomLayoutGuide
+                                                                   attribute:NSLayoutAttributeCenterY
+                                                                  multiplier:1
+                                                                    constant:0];
+    
+    [self.view addConstraint:self.iaaPositionConstraint];
+    [self.view addConstraint:self.keyboardPositionConstraint];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.keyboardView
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:nil
+                                                          attribute:NSLayoutAttributeNotAnAttribute
+                                                         multiplier:1
+                                                           constant:kKeyboardHeight]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topGuide]-0@750-[buildView][iaaView]"
                                                                       options:0
-                                                                      metrics:nil
+                                                                      metrics:metricsDictionary
                                                                         views:viewsDictionary]];
     
     self.shiftBuildViewConstraint = [NSLayoutConstraint constraintWithItem:self.buildViewScrollView
@@ -160,7 +195,6 @@ static BuildView *buildView = nil;
     self.playStopBarButtonItem = [[UIBarButtonItem alloc] initWithImage:playIcon style:UIBarButtonItemStylePlain target:self action:@selector(playStopTapped)];
 
     [self.navigationItem setLeftBarButtonItems:@[self.buildBarButtonItem, self.keyboardBarButtonItem, self.playStopBarButtonItem]];
-    [self setKeyboardHidden:NO animated:NO];
     
     UIImage *filesIcon = [UIImage imageNamed:TOOLBAR_FILES_ICON];
     self.filesBarButtonItem = [[UIBarButtonItem alloc] initWithImage:filesIcon style:UIBarButtonItemStylePlain target:self action:@selector(filesTapped)];
@@ -170,15 +204,16 @@ static BuildView *buildView = nil;
     
     [self.navigationItem setRightBarButtonItems:@[self.filesBarButtonItem, self.saveBarButtonItem]];
     
-    self.iaaView = [[IAAView alloc] initWithFrame:CGRectMake(0, 44, self.view.frame.size.width, 58)];
-    [self.iaaView setHidden:YES];
-    [self.view addSubview:self.iaaView];
-    
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(appWillEnterForeground)
                                                  name: UIApplicationWillEnterForegroundNotification
                                                object: nil];
     
+    // Setup initial view
+    [self setKeyboardHidden:NO animated:NO];
+    [self setIaaViewHidden:YES];
+    
+    // Load initial preset
     self.preset = [[PresetController sharedController] recallPresetAtIndex:0];
     [self.buildView buildFromDictionary:[self.preset dictionary]];
     
@@ -189,7 +224,6 @@ static BuildView *buildView = nil;
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
     [[COLAudioEnvironment sharedEnvironment] unmute];
 }
 
@@ -204,11 +238,10 @@ static BuildView *buildView = nil;
 
 -(void)appWillEnterForeground {
     if ([[COLAudioEnvironment sharedEnvironment] isInterAppAudioConnected]) {
-        [self.iaaView updateContents];
-        [self.iaaView setHidden:NO];
+        [self setIaaViewHidden:NO];
         [self.playStopBarButtonItem setEnabled:NO];
     } else {
-        [self.iaaView setHidden:YES];
+        [self setIaaViewHidden:YES];
         [self.playStopBarButtonItem setEnabled:YES];
     }
 }
@@ -285,38 +318,40 @@ static BuildView *buildView = nil;
     }
 }
 
+
+-(void)setIaaViewHidden:(BOOL)hidden {
+    [self.iaaView setHidden:hidden];
+    if (hidden) {
+        [self.iaaPositionConstraint setConstant:58];
+    } else {
+        [self.iaaView updateContents];
+        [self.iaaPositionConstraint setConstant:0];
+    }
+}
+
+
 -(void)setKeyboardHidden:(BOOL)keyboardHidden animated:(BOOL)animated {
     self.keyboardHidden = keyboardHidden;
     if (keyboardHidden) {
         // Hide keyboard
-        UIEdgeInsets buildviewEdgeInsets = [self.buildViewScrollView contentInset];
-        buildviewEdgeInsets.bottom = 0;
         if (animated) {
-            [UIView animateWithDuration:0.2 animations:^ {
-                [self.keyboardView setTransform:CGAffineTransformMakeTranslation(0, kKeyboardHeight)];
-                [self.buildViewScrollView setContentInset:buildviewEdgeInsets];
-                [self.buildViewScrollView setScrollIndicatorInsets:buildviewEdgeInsets];
-
+            [UIView animateWithDuration:0.2f animations:^ {
+                [self.keyboardPositionConstraint setConstant:kKeyboardHeight];
+                [self.view layoutIfNeeded];
             }];
         } else {
-            [self.keyboardView setTransform:CGAffineTransformMakeTranslation(0, kKeyboardHeight)];
-            [self.buildViewScrollView setContentInset:buildviewEdgeInsets];
-            [self.buildViewScrollView setScrollIndicatorInsets:buildviewEdgeInsets];
+            [self.keyboardPositionConstraint setConstant:kKeyboardHeight];
         }
         [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON]];
     } else {
-        UIEdgeInsets buildviewEdgeInsets = [self.buildViewScrollView contentInset];
-        buildviewEdgeInsets.bottom = kKeyboardHeight;
+        // Show keyboard
         if (animated) {
-            [UIView animateWithDuration:0.2 animations:^ {
-                [self.keyboardView setTransform:CGAffineTransformIdentity];
-                [self.buildViewScrollView setContentInset:buildviewEdgeInsets];
-                [self.buildViewScrollView setScrollIndicatorInsets:buildviewEdgeInsets];
+            [UIView animateWithDuration:0.2f animations:^ {
+                [self.keyboardPositionConstraint setConstant:0];
+                [self.view layoutIfNeeded];
             }];
         } else {
-            [self.keyboardView setTransform:CGAffineTransformIdentity];
-            [self.buildViewScrollView setContentInset:buildviewEdgeInsets];
-            [self.buildViewScrollView setScrollIndicatorInsets:buildviewEdgeInsets];
+            [self.keyboardPositionConstraint setConstant:0];
         }
         [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON_SELECTED]];
     }

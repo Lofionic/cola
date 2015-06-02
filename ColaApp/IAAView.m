@@ -20,8 +20,8 @@
 
 @implementation IAAView
 
--(instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+-(instancetype)init {
+    if (self = [super init]) {
         [self setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8]];
         
         self.hostImageView = [[UIImageView alloc] init];
@@ -55,7 +55,7 @@
                                           @"hostImage":self.hostImageView,
                                           @"rewindButton":self.rewindButton,
                                           @"playButton":self.playButton,
-                                          @"recordButton":self.recordButton
+                                          @"recordButton":self.recordButton,
                                           };
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-4-[hostImage(50)]-4-|"
                                                                     options:0

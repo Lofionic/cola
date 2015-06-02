@@ -65,7 +65,6 @@
 }
 
 -(void)autoScroll {
-    
     if (!self.tracking) {
         // Auto-scroll if necessary
         if (self.touchPoint.y < (self.frame.size.height * 0.3) + self.contentOffset.y) {
