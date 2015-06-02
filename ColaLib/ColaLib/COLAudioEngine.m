@@ -28,10 +28,13 @@ HostCallbackInfo *callbackInfo;
 }
 
 @property (nonatomic) BOOL isForeground;
-@property (nonatomic) BOOL isInterAppConnected;
+@property (nonatomic) BOOL iaaConnected;
 @property (nonatomic) BOOL isHostPlaying;
 @property (nonatomic) BOOL isHostRecording;
 @property (nonatomic) Float64 playTime;
+@property (nonatomic) Float64 iaaTempo;
+@property (nonatomic) Float64 iaaCurrentBeat;
+
 
 @property (nonatomic, weak) COLComponentInput *masterInputL;
 @property (nonatomic, weak) COLComponentInput *masterInputR;
@@ -120,7 +123,7 @@ HostCallbackInfo *callbackInfo;
 #pragma mark Start and Stop
 -(void)startStopEngine {
     // Starts and stops graph according to app state
-    if (self.isForeground || self.isInterAppConnected) {
+    if (self.isForeground || self.iaaConnected) {
         NSLog(@"App is foreground or Inter-App connected");
         
         sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
@@ -199,7 +202,9 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         AudioSignalType *outA;
         AudioSignalType *outB;
         
-
+        // Sync with iaa
+        [audioEngine updateHostBeatAndTempo];
+        
         // Pull the buffer chain
         leftBuffer = [[audioEngine masterInputL] getBuffer:inNumberFrames];
         rightBuffer = [[audioEngine masterInputR] getBuffer:inNumberFrames];
@@ -212,7 +217,6 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         outA = ioData->mBuffers[0].mData;
         outB = ioData->mBuffers[1].mData;
     
-        
         // Fill up the output buffer
         for (int i = 0; i < inNumberFrames; i ++) {
 
@@ -232,6 +236,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         }
         [audioEngine.masterInputL engineDidRender];
         [audioEngine.masterInputR engineDidRender];
+        
     }
     return noErr;
 }
@@ -315,7 +320,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     
     if (infoDictionary) {
         NSLog(@"Registering Inter-App Audio");
-        self.isInterAppConnected = NO;
+        self.iaaConnected = NO;
         
         // Add property listener for inter-app audio
         checkError(AudioUnitAddPropertyListener(mRemoteIO, kAudioUnitProperty_IsInterAppConnected, audioUnitPropertyListenerDispatcher, (__bridge void*)self), "Error setting IAA connected property listener");
@@ -354,9 +359,9 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         UInt32 connected;
         UInt32 dataSize = sizeof(UInt32);
         checkError(AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_IsInterAppConnected, kAudioUnitScope_Global, 0, &connected, &dataSize), "Error getting IsInterAppConnected property");
-        if (connected != self.isInterAppConnected) {
-            self.isInterAppConnected = connected;
-            if (self.isInterAppConnected) {
+        if (connected != self.iaaConnected) {
+            self.iaaConnected = connected;
+            if (self.iaaConnected) {
                 [self interAppDidConnect];
                 self.iaaHostImage = AudioOutputUnitGetHostIcon(mRemoteIO, 114);
             } else {
@@ -369,11 +374,10 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 -(void)interAppAudioHostTransportStateChanged {
     [self getHostCallbackInfo];
     [self updateTransportStateFromHostCallback];
-    
 }
 
 -(void)updateTransportStateFromHostCallback {
-    if (self.isInterAppConnected && self.isForeground && ![self.audiobusController audiobusConnected]) {
+    if (self.iaaConnected) {
         if (!callbackInfo) {
             [self getHostCallbackInfo];
         }
@@ -382,6 +386,8 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
             Boolean isRecording = self.isHostRecording;
             Float64 outCurrentSampleInTimeLine = 0;
             void * hostUserData = callbackInfo->hostUserData;
+            
+            // Get transport state
             OSStatus result =  callbackInfo->transportStateProc2(hostUserData,
                                                                  &isPlaying,
                                                                  &isRecording, NULL,
@@ -394,13 +400,38 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
             } else {
                 NSLog(@"Error occured fetching callBackInfo->transportStateProc2 : %d", (int)result);
             }
+            
             [[[COLAudioEnvironment sharedEnvironment] transportController] interappAudioTransportStateDidChange];
         }
     }
 }
 
+-(void)updateHostBeatAndTempo {
+    if (self.iaaConnected) {
+        if (!callbackInfo) {
+            [self getHostCallbackInfo];
+        }
+        if (callbackInfo) {
+            Float64 outCurrentBeat;
+            Float64 outTempo;
+            
+            void * hostUserData = callbackInfo->hostUserData;
+            OSStatus result = callbackInfo->beatAndTempoProc(hostUserData,
+                                                    &outCurrentBeat,
+                                                    &outTempo);
+            
+            if (result == noErr) {
+                self.iaaCurrentBeat = outCurrentBeat;
+                self.iaaTempo = outTempo;
+            } else  {
+                NSLog(@"Error occured fetching callbackInfo->beatAndTempProc : %d", (int)result);
+            }
+        }
+    }
+}
+
 -(void)getHostCallbackInfo {
-    if (self.isInterAppConnected) {
+    if (self.iaaConnected) {
         if (callbackInfo) {
             free(callbackInfo);
         }
@@ -427,7 +458,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 }
 
 -(void)iaaGotoHost {
-    if (mRemoteIO && self.isInterAppConnected) {
+    if (mRemoteIO && self.iaaConnected) {
         CFURLRef instrumentUrl;
         UInt32 dataSize = sizeof(instrumentUrl);
         OSStatus result = AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_PeerURL, kAudioUnitScope_Global, 0, &instrumentUrl, &dataSize);
@@ -435,6 +466,30 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
             [[UIApplication sharedApplication] openURL:(__bridge NSURL*)instrumentUrl];
         }
     }
+}
+
+#pragma mark Inter app audio transport 
+
+// Send transport state to remote host
+-(void)sendStateToRemoteHost:(AudioUnitRemoteControlEvent)state {
+    // Send a remote control message back to host
+    if (self.iaaConnected && mRemoteIO) {
+        UInt32 controlEvent = state;
+        UInt32 dataSize = sizeof(controlEvent);
+        checkError(AudioUnitSetProperty(mRemoteIO, kAudioOutputUnitProperty_RemoteControlToHost, kAudioUnitScope_Global, 0, &controlEvent, dataSize), "Failed sendStateToRemoteHost");
+    }
+}
+
+-(void)iaaToggleRecord {
+    [self sendStateToRemoteHost:kAudioUnitRemoteControlEvent_ToggleRecord];
+}
+
+-(void)iaaTogglePlay {
+    [self sendStateToRemoteHost:kAudioUnitRemoteControlEvent_TogglePlayPause];
+}
+
+-(void)iaaRewind {
+    [self sendStateToRemoteHost:kAudioUnitRemoteControlEvent_Rewind];
 }
 
 #pragma mark Utility

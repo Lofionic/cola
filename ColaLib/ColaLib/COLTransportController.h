@@ -10,8 +10,7 @@
 
 @interface COLTransportController : NSObject
 
-@property (nonatomic, readonly) UInt16  *stepBuffer;
-@property (nonatomic, readonly) Float32 *stepDeltaBuffer;
+@property (nonatomic, readonly) Float64 *beatBuffer;
 @property (readonly) BOOL isPlaying;
 
 -(void)renderOutputs:(UInt32)numFrames;

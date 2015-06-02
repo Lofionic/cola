@@ -24,10 +24,12 @@
 @property (nonatomic, weak) id<COLAudioEngineDelegate>  delegate;
 
 @property (readonly) BOOL isForeground;
-@property (readonly) BOOL isInterAppConnected;
+@property (readonly) BOOL iaaConnected;
 @property (readonly) BOOL isHostPlaying;
 @property (readonly) BOOL isHostRecording;
 @property (readonly) Float64 playTime;
+@property (readonly) Float64 iaaTempo;
+@property (readonly) Float64 iaaCurrentBeat;
 
 @property (readonly, weak) COLComponentInput *masterInputL;
 @property (readonly, weak) COLComponentInput *masterInputR;
@@ -46,5 +48,8 @@
 -(void)unmute;
 
 -(void)iaaGotoHost;
+-(void)iaaToggleRecord;
+-(void)iaaTogglePlay;
+-(void)iaaRewind;
 
 @end

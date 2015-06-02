@@ -73,14 +73,22 @@
     
     for (int i = 0; i < numFrames; i++) {
         
-        UInt16 step = transportController.stepBuffer[i];
+        Float64 currentBeat = transportController.beatBuffer[i];
         
+        if (currentBeat > 0) {
+            currentBeat = fmodf(currentBeat, 4);
+        }
+        
+        currentBeat = currentBeat * 4.0;
+        
+        UInt16 step = floor(currentBeat);
+    
         gateOutputBuffer[i] = 0;
         
-        if ([transportController isPlaying]) {
+        if ([transportController isPlaying] && currentBeat >= 0) {
             COLDiscreteParameter *gateParameter = [self.gateControls objectAtIndex:step];
             if ([gateParameter selectedIndex] == 1) {
-                if (transportController.stepDeltaBuffer[i] < 0.8) {
+                if (currentBeat - step < 0.8) {
                     gateOutputBuffer[i] = 1;
                 }
                 COLContinuousParameter *pitchParameter = [self.pitchControls objectAtIndex:step];

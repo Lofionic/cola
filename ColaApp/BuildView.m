@@ -421,7 +421,7 @@ static NSArray *cableColours;
 -(void)moduleView:(ModuleView *)moduleView didContinueDraggingWithGesture:(UIGestureRecognizer *)gesture {
     if (self.draggingModuleView) {
         
-        CGPoint dragPoint = [gesture locationInView:self];
+        CGPoint dragPoint;
         
         dragPoint = [gesture locationInView:self];
         

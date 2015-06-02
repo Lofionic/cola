@@ -169,7 +169,7 @@
 }
 
 -(BOOL)isInterAppAudioConnected {
-    return [self.audioEngine isInterAppConnected];
+    return [self.audioEngine iaaConnected];
 }
 
 @end

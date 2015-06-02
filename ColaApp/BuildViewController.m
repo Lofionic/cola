@@ -186,15 +186,21 @@ static BuildView *buildView = nil;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedOfTransportUpdate:) name:kCOLEventTransportStateUpdated object:nil];
 }
 
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    [[COLAudioEnvironment sharedEnvironment] unmute];
+}
+
 -(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
     [[[COLAudioEnvironment sharedEnvironment] transportController] stop];
     [[[COLAudioEnvironment sharedEnvironment] transportController] stopAndReset];
     [[COLAudioEnvironment sharedEnvironment] mute];
 }
 
--(void)viewWillAppear:(BOOL)animated {
-    [[COLAudioEnvironment sharedEnvironment] unmute];
-}
 
 -(void)appWillEnterForeground {
     if ([[COLAudioEnvironment sharedEnvironment] isInterAppAudioConnected]) {
@@ -328,11 +334,18 @@ static BuildView *buildView = nil;
 }
 
 -(void)notifiedOfTransportUpdate:(NSNotification*)note {
-    if ([[[COLAudioEnvironment sharedEnvironment] transportController] isPlaying]) {
-        [self.playStopBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_STOP_ICON]];
-    } else {
-        [self.playStopBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PLAY_ICON]];
-    }
+    
+    __weak BuildViewController *weakSelf = self;
+    
+    dispatch_async(dispatch_get_main_queue(), ^ {
+        [weakSelf.iaaView updateContents];
+        
+        if ([[[COLAudioEnvironment sharedEnvironment] transportController] isPlaying]) {
+            [weakSelf.playStopBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_STOP_ICON]];
+        } else {
+            [weakSelf.playStopBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PLAY_ICON]];
+        }
+    });
 }
 
 #pragma mark ComponentShelf
@@ -441,12 +454,6 @@ static BuildView *buildView = nil;
             completion(success);
         }
     });
-}
-
-#pragma mark InterAppAudio
-
--(void)iaaHostIconTapped {
-    
 }
 
 #pragma mark Convenience Methods

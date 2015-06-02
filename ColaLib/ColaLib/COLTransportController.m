@@ -13,14 +13,14 @@
 @interface COLTransportController () {
     Float64 timeInMS;
     NSUInteger step;
-    Float64 bpm;
+    Float64 tempo;
     
     UInt32 bufferSize;
+    Float64 currentBeat;
 }
 
 @property (nonatomic) BOOL isPlaying;
-@property (nonatomic) UInt16  *stepBuffer;
-@property (nonatomic) Float32 *stepDeltaBuffer;
+@property (nonatomic) Float64 *beatBuffer;
 
 @end
 
@@ -30,7 +30,7 @@
     if (self = [super init]) {
         timeInMS = 0;
         step = 0;
-        bpm = 120;
+        tempo = 120;
     }
     return self;
 }
@@ -61,40 +61,31 @@
 }
 
 -(void)renderOutputs:(UInt32)numFrames {
-
     // Prepare the step buffer
     if (numFrames != bufferSize) {
         NSLog(@"Transport controller creating step buffer of size : %i", (unsigned int)numFrames);
-        free(self.stepBuffer);
+        free(self.beatBuffer);
         bufferSize = numFrames;
-        self.stepBuffer = (UInt16*)malloc(bufferSize * sizeof(UInt16));
-        memset(self.stepBuffer, 0, bufferSize * sizeof(UInt16));
-        
-        self.stepDeltaBuffer = (Float32*)malloc(bufferSize * sizeof(Float32));
-        memset(self.stepDeltaBuffer, 0, bufferSize * sizeof(Float32));
+        self.beatBuffer = (Float64*)malloc(bufferSize * sizeof(Float64));
+        memset(self.beatBuffer, 0, bufferSize * sizeof(Float64));
     }
+
+    [self syncWithIAA];
     
-    Float64 msPerBeat = (60 / bpm) * 1000;
-    Float64 msPerStep = msPerBeat / 4.0;
-    Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
+    Float64 barLength = (60 / tempo) * 4;
+    Float64 barSamples = barLength * [[COLAudioEnvironment sharedEnvironment] sampleRate];
+    Float64 sampleDelta = 4.0 / barSamples;
     
     for (int i = 0; i < numFrames; i++) {
         
         if (self.isPlaying) {
-            timeInMS += 1000 / sampleRate;
-            while (timeInMS > msPerStep) {
-                step ++;
-                if (step > 15) {
-                    step = 0;
-                }
-                timeInMS -= msPerStep;
-            }
+            self.beatBuffer[i] = currentBeat;
+            currentBeat += sampleDelta;
         }
-        self.stepBuffer[i] = step;
-        self.stepDeltaBuffer[i] = timeInMS / msPerStep;
     }
 }
 
+// Manage sync with IAA transport
 -(void)interappAudioTransportStateDidChange {
     COLAudioEngine *engine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
     if (engine.isHostPlaying && !self.isPlaying) {
@@ -103,6 +94,14 @@
     } else if (!engine.isHostPlaying && self.isPlaying) {
         self.isPlaying = NO;
         [self postUpdateNotification];
+    }
+}
+
+-(void)syncWithIAA {
+    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
+    if (audioEngine.iaaConnected) {
+        currentBeat = audioEngine.iaaCurrentBeat;
+        tempo = audioEngine.iaaTempo;
     }
 }
 
