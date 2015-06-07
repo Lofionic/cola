@@ -4,7 +4,7 @@
             "id" : "VCOA",
             "name" : "VCO A",
             "width" : 2,
-            "type" : "kCOLComponentVCO",
+            "type" : "COLComponentVCO",
             "view" : 
             {
                 "asset" : "vco_a",
@@ -64,7 +64,7 @@
             "id" : "LFOA",
             "name" : "LFO A",
             "width" : 1,
-            "type" : "kCOLComponentLFO",
+            "type" : "COLComponentLFO",
             "view" : {
                 "asset" : "lfo_a",
                 "connectors" : [
@@ -97,7 +97,7 @@
             "id" : "EGA",
             "name" : "EG A",
             "width" : 1,
-            "type" : "kCOLComponentEnvelope",
+            "type" : "COLComponentEnvelope",
             "view" : {
                 "asset" : "eg_a",
                 "connectors" : [
@@ -150,7 +150,7 @@
             "id" : "VCAA",
             "name" : "VCA A",
             "width" : 1,
-            "type" : "kCOLComponentVCA",
+            "type" : "COLComponentVCA",
             "view" : {
                 "asset" : "vca_a",
                 "connectors" : [
@@ -195,7 +195,7 @@
             "id" : "MULT",
             "name" : "Multiples",
             "width" : 1,
-            "type" : "kCOLComponentMultiples",
+            "type" : "COLComponentMultiples",
             "view" : {
                 "asset" : "multiples",
                 "connectors" : [
@@ -262,11 +262,12 @@
                 ]
             }
         },
+                 
         {
             "id" : "MUKB",
             "name" : "Multiples KB",
             "width" : 1,
-            "type" : "kCOLComponentMultiplesKB",
+            "type" : "COLComponentMultiplesKB",
             "view" : {
                 "asset" : "multiples_kb",
                 "connectors" : [
@@ -337,7 +338,7 @@
             "id" : "MIX2",
             "name" : "Mixer 2",
             "width" : 1,
-            "type" : "kCOLComponentMixer2",
+            "type" : "COLComponentMixer2",
             "view" : {
                 "asset" : "mixer2",
                 "connectors" : [
@@ -381,7 +382,7 @@
             "id" : "VCFA",
             "name" : "VCF A",
             "width" : 2,
-            "type" : "kCOLComponentVCF",
+            "type" : "COLComponentVCF",
             "view" : {
                 "asset" : "vcf_a",
                 "connectors" : [
@@ -439,7 +440,7 @@
         "id" : "PAN",
         "name" : "Pan",
         "width" : 1,
-        "type" : "kCOLComponentPan",
+        "type" : "COLComponentPan",
         "view" : {
             "asset" : "pan",
             "connectors" : [
@@ -483,7 +484,7 @@
             "id" : "RING",
             "name" : "Ring Modulator",
             "width" : 1,
-            "type" : "kCOLComponentRingModulator",
+            "type" : "COLComponentRingModulator",
             "view" : {
                 "connectors" : [
                     {
@@ -516,11 +517,56 @@
                        ]
             }
         },
+                 {
+                 "id" : "DELAY",
+                 "name" : "Delay",
+                 "width" : 1,
+                 "type" : "COLComponentDelay",
+                 "view" : {
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "input",
+                                 "x" : 48,
+                                 "y" : 280
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "output",
+                                 "x" : 48,
+                                 "y" : 162
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "continuous",
+                               "parameter" : "mix",
+                               "asset" : "small_white",
+                               "x" : 48,
+                               "y" : 32
+                               },
+                               {
+                               "type" : "continuous",
+                               "parameter" : "feedback",
+                               "asset" : "small_white",
+                               "x" : 48,
+                               "y" : 72
+                               },
+                               {
+                               "type" : "continuous",
+                               "parameter" : "delayTime",
+                               "asset" : "small_white",
+                               "x" : 48,
+                               "y" : 112
+                               }
+                               ]
+                 }
+                 },
         {
             "id" : "SEQ",
             "name" : "Sequencer",
             "width" : 3,
-            "type" : "kCOLComponentSequencer",
+            "type" : "COLComponentSequencer",
             "view" : {
                 "connectors" : [
                     { "type" : "output", "connection" : "Pitch", "x" : 24, "y" : 280  },
@@ -566,7 +612,7 @@
             "id" : "NG",
             "name" : "Noise Generator",
             "width" : 1,
-            "type" : "kCOLComponentNoiseGenerator",
+            "type" : "COLComponentNoiseGenerator",
             "view" : {
                 "connectors" : [
                 { "type" : "output", "connection" : "Output", "x" : 24, "y" : 280  }

@@ -18,6 +18,8 @@
 -(AudioSignalType*)getBuffer:(UInt32)numFrames;
 -(AudioSignalType*)prepareBufferOfSize:(UInt32)numFrames;
 
+@property (nonatomic, weak) COLComponentInput *linkedInput;
+
 -(BOOL)connectTo:(COLComponentInput*)input;
 
 @end

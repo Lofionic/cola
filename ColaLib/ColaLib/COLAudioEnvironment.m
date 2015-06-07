@@ -125,6 +125,8 @@
         newComponent = [[COLComponentSequencer alloc] initWithContext:context];
     } else if ([componentType isEqualToString:kCOLComponentNoiseGenerator]) {
         newComponent = [[COLComponentNoiseGenerator alloc] initWithContext:context];
+    } else if ([componentType isEqualToString:kCOLComponentDelay]) {
+        newComponent = [[COLComponentDelay alloc] initWithContext:context];
     } else {
         NSLog(@"Unknown component type : %@", componentType);
     }

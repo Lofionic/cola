@@ -32,6 +32,8 @@
             }
         } else if (componentIO.type == kComponentIOTypeControl || componentIO.type == kComponentIOType1VOct || componentIO.type == kComponentIOTypeGate) {
             connectorAssetName = @"connector_yellow";
+        } else {
+            connectorAssetName = @"connector_blue";
         }
         
         connectorAssetName = [ASSETS_PATH_CONNECTORS stringByAppendingString:connectorAssetName];

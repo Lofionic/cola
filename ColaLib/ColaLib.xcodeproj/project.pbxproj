@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C02D56E1B237DC200297F52 /* COLComponentDelay.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C02D56D1B237DC200297F52 /* COLComponentDelay.m */; };
+		6C02D56F1B237DE900297F52 /* COLComponentDelay.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C02D56C1B237DC200297F52 /* COLComponentDelay.h */; };
 		6C0BAEAE1B1BB06A007314CB /* libAudiobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0BAEAD1B1BB06A007314CB /* libAudiobus.a */; };
 		6C0D487D1AC358C2008AD869 /* COLKeyboardComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0D487C1AC358C2008AD869 /* COLKeyboardComponent.m */; };
 		6C0D487E1AC365BC008AD869 /* COLKeyboardComponent.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C0D487B1AC358C2008AD869 /* COLKeyboardComponent.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -99,12 +101,15 @@
 				6C6132411ADC5FF90060C221 /* COLComponentVCF.h in CopyFiles */,
 				6CBB7D041AEF11E8006DD7A1 /* COLComponentSequencer.h in CopyFiles */,
 				6CB62D0F1AF96FD80049F760 /* COLComponentNoiseGenerator.h in CopyFiles */,
+				6C02D56F1B237DE900297F52 /* COLComponentDelay.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6C02D56C1B237DC200297F52 /* COLComponentDelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentDelay.h; sourceTree = "<group>"; };
+		6C02D56D1B237DC200297F52 /* COLComponentDelay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentDelay.m; sourceTree = "<group>"; };
 		6C0BAEAD1B1BB06A007314CB /* libAudiobus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAudiobus.a; sourceTree = "<group>"; };
 		6C0BAEAF1B1BB071007314CB /* ABAudiobusController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABAudiobusController.h; sourceTree = "<group>"; };
 		6C0BAEB01B1BB071007314CB /* ABAudioUnitFader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABAudioUnitFader.h; sourceTree = "<group>"; };
@@ -242,6 +247,8 @@
 				6CBB7D021AEEF0B9006DD7A1 /* COLComponentSequencer.m */,
 				6CB62D0B1AF96E560049F760 /* COLComponentNoiseGenerator.h */,
 				6CB62D0C1AF96E560049F760 /* COLComponentNoiseGenerator.m */,
+				6C02D56C1B237DC200297F52 /* COLComponentDelay.h */,
+				6C02D56D1B237DC200297F52 /* COLComponentDelay.m */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -371,6 +378,7 @@
 				6C0D487D1AC358C2008AD869 /* COLKeyboardComponent.m in Sources */,
 				6C1154751A8E306D005CF194 /* COLComponentIO.m in Sources */,
 				6C172A381ACC20F100BE1418 /* COLParameter.m in Sources */,
+				6C02D56E1B237DC200297F52 /* COLComponentDelay.m in Sources */,
 				6CE5819E1B13A97800CD8B62 /* COLTransportController.m in Sources */,
 				6C8C15931ADC51DC0077460A /* COLComponentVCF.m in Sources */,
 				6C65A4E61A9117CF000D9192 /* COLComponentWavePlayer.m in Sources */,

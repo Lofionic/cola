@@ -54,16 +54,37 @@
         return FALSE;
     }
     
-    if (input.type != self.type) {
-        NSLog(@"Connection failed : Output and input types must match");
-        return FALSE;
-    }
+    // Validate connection type
     
-    if (input.component == self.component) {
-        NSLog(@"Connection failed : Component cannot connect to self");
-        return FALSE;
+    if ([input isDynamic]) {
+        // Connecting to a dynamic input
+        [input makeDynamicConnectionWithOutput:self];
+    } else {
+        if ([self isDynamic]) {
+            // Dynamic output
+            if (self.linkedInput) {
+                if ([self.linkedInput type] != input.type) {
+                    NSLog(@"Connection failed : dynamic output's linked input does not match input type");
+                    return FALSE;
+                }
+            } else {
+                NSLog(@"Connection failed : Attempted to connect dynamic output with no linked input");
+                return FALSE;
+            }
+            
+        } else {
+        if (input.type != self.type) {
+                NSLog(@"Connection failed : Output and input types must match");
+                return FALSE;
+            }
+            
+            if (input.component == self.component) {
+                NSLog(@"Connection failed : Component cannot connect to self");
+                return FALSE;
+            }
+        }
     }
-    
+
     if (self.isConnected) {
         [self.connectedTo disconnect];
         [self disconnect];
@@ -95,6 +116,23 @@
 -(void)doDisconnect {
     [self.connectedTo disconnect];
     self.connectedTo = nil;
+}
+
+@synthesize type = _type;
+-(kComponentIOType)type {
+    if (_type != kComponentIOTypeDynamic) {
+        return _type;
+    } else {
+        return [self.linkedInput type];
+    }
+}
+
+-(void)setType:(kComponentIOType)newType {
+    _type = newType;
+}
+
+-(BOOL)isDynamic {
+    return _type == kComponentIOTypeDynamic;
 }
 
 @end

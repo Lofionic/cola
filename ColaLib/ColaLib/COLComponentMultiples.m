@@ -22,22 +22,25 @@
 
 -(void)initializeIO {
     
-    self.inputA = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"In A"];
-    self.inputB = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeControl withName:@"In B"];
+    self.inputA = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeDynamic withName:@"In A"];
+    self.inputB = [[COLComponentInput alloc] initWithComponent:self ofType:kComponentIOTypeDynamic withName:@"In B"];
     
     NSMutableArray *outputs = [[NSMutableArray alloc] initWithCapacity:8];
     for (NSInteger i = 0; i < 4; i++) {
         COLComponentOutput *newOutputA = [[COLComponentOutput alloc] initWithComponent:self
-                                                                               ofType:kComponentIOTypeControl
+                                                                               ofType:kComponentIOTypeDynamic
                                                                              withName:[NSString stringWithFormat:@"Out A%ld", (long)i + 1]];
+        [newOutputA setLinkedInput:self.inputA];
         [outputs addObject:newOutputA];
     }
     
     for (NSInteger i = 0; i < 4; i++) {
         COLComponentOutput *newOutputB = [[COLComponentOutput alloc] initWithComponent:self
-                                                           ofType:kComponentIOTypeControl
+                                                           ofType:kComponentIOTypeDynamic
                                                          withName:[NSString stringWithFormat:@"Out B%ld", (long)i + 1]];
         
+        
+        [newOutputB setLinkedInput:self.inputB];
         [outputs addObject:newOutputB];
     }
     

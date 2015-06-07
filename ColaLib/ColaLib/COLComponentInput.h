@@ -14,5 +14,6 @@
 @interface COLComponentInput : COLComponentIO
 
 -(AudioSignalType*)getBuffer:(UInt32)numFrames;
+-(BOOL)makeDynamicConnectionWithOutput:(COLComponentOutput*)output;
 
 @end

@@ -219,6 +219,9 @@ static BuildView *buildView = nil;
     
     // Register for updates form the transport controller
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedOfTransportUpdate:) name:kCOLEventTransportStateUpdated object:nil];
+
+    // We need to know when a dynamic input has disconnected its linked outputs
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dynamicInputDidForceDisconnect:) name:kCOLEventDynamicInputDidForceDisconnect object:nil];
 }
 
 
@@ -381,6 +384,11 @@ static BuildView *buildView = nil;
             [weakSelf.playStopBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PLAY_ICON]];
         }
     });
+}
+
+-(void)dynamicInputDidForceDisconnect:(NSNotification*)note {
+    [self.buildView forceDisconnect:note.userInfo];
+    
 }
 
 #pragma mark ComponentShelf

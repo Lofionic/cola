@@ -23,5 +23,6 @@
 #import "COLComponentRingModulator.h"
 #import "COLComponentSequencer.h"
 #import "COLComponentNoiseGenerator.h"
+#import "COLComponentDelay.h"
 
 #endif

@@ -56,5 +56,6 @@
 
 -(NSDictionary*)getPresetDictionary;
 -(BOOL)buildFromDictionary:(NSDictionary*)dictionary;
+-(void)forceDisconnect:(NSDictionary*)userInfo;
 
 @end

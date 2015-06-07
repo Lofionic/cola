@@ -41,4 +41,10 @@
     
 }
 
+-(BOOL)isDynamic {
+    return NO;
+}
+
+@dynamic type;
+
 @end

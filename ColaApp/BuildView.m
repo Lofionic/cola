@@ -386,6 +386,21 @@ static NSArray *cableColours;
     }
 }
 
+-(void)forceDisconnect:(NSDictionary *)userInfo {
+    // The engine has forced a disconnect
+    NSArray *disconnectedOutputs = [userInfo objectForKey:@"disconnectedOutputs"];
+    for (COLComponentOutput *thisOutput in disconnectedOutputs) {
+        for (BuildViewCable *thisCable in [self.cables copy]) {
+            if (thisCable.connector1.componentIO == thisOutput ||
+                thisCable.connector2.componentIO == thisOutput) {
+                [self disconnectConnectorView:thisCable.connector1];
+                [self.cables removeObject:thisCable];
+            }
+        }
+    }
+    
+}
+
 +(NSArray*)cableColours {
     if (!cableColours) {
         cableColours = @[[UIColor redColor],

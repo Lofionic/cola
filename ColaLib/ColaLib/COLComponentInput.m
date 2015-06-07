@@ -8,6 +8,7 @@
 #import "COLDefines.h"
 #import "COLComponentInput.h"
 #import "COLComponentOutput.h"
+#import "COLComponent.h"
 
 @interface COLComponentInput ()
 
@@ -68,5 +69,57 @@ static UInt32 emptyBufferSize;
 -(COLComponentIO*)connectedTo {
     return _connectedTo;
 }
+
+-(BOOL)makeDynamicConnectionWithOutput:(COLComponentOutput *)output {
+    if ([self isDynamic]) {
+        kComponentIOType dynamicType = output.type;
+        NSArray *componentOutputs = [[self.component outputs] copy];
+        NSMutableArray *disconnectedOutputs = [[NSMutableArray alloc] initWithCapacity:componentOutputs.count];
+        for (COLComponentOutput *thisOutput in componentOutputs) {
+            if ([thisOutput isDynamic] &&
+                [thisOutput connectedTo] &&
+                thisOutput.linkedInput == self &&
+                [[thisOutput connectedTo] type] != dynamicType) {
+                    // thisOutput is dynamically linked to this input
+                [thisOutput disconnect];
+                [disconnectedOutputs addObject:thisOutput];
+            }
+        }
+        
+        if ([disconnectedOutputs count] > 0) {
+            NSDictionary *userInfo = @{
+                                       @"input" :   self,
+                                       @"disconnectedOutputs" : disconnectedOutputs
+                                       };
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kCOLEventDynamicInputDidForceDisconnect
+                                                                object:nil
+                                                              userInfo:userInfo];
+        }
+        
+        return true;
+    } else {
+        NSLog(@"Error : Attempted to make dynamic connection with an input that is not dynamic.");
+        return false;
+    }
+}
+
+@synthesize type = _type;
+-(kComponentIOType)type {
+    if (_type != kComponentIOTypeDynamic || !self.connectedTo) {
+        return _type;
+    } else {
+        return [self.connectedTo type];
+    }
+}
+
+-(void)setType:(kComponentIOType)newType {
+    _type = newType;
+}
+
+-(BOOL)isDynamic {
+    return _type == kComponentIOTypeDynamic;
+}
+
 
 @end

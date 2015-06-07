@@ -12,7 +12,8 @@ typedef NS_ENUM(NSUInteger, kComponentIOType) {
     kComponentIOTypeAudio,
     kComponentIOTypeControl,
     kComponentIOType1VOct,
-    kComponentIOTypeGate
+    kComponentIOTypeGate,
+    kComponentIOTypeDynamic
 };
 
 @interface COLComponentIO : NSObject
@@ -25,7 +26,7 @@ typedef NS_ENUM(NSUInteger, kComponentIOType) {
 -(instancetype)initWithComponent:(COLComponent*)component ofType:(kComponentIOType)type withName:(NSString*)name;
 -(BOOL)isConnected;
 -(void)engineDidRender;
-
+-(BOOL)isDynamic;
 -(BOOL)disconnect;
 
 @end
