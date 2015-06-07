@@ -70,7 +70,6 @@
         memset(self.beatBuffer, 0, bufferSize * sizeof(Float64));
     }
 
-    [self syncWithIAA];
     
     Float64 barLength = (60 / tempo) * 4;
     Float64 barSamples = barLength * [[COLAudioEnvironment sharedEnvironment] sampleRate];
@@ -83,12 +82,16 @@
             currentBeat += sampleDelta;
         }
     }
+    
+    [self syncWithIAA];
 }
 
 // Manage sync with IAA transport
 -(void)interappAudioTransportStateDidChange {
     COLAudioEngine *engine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
     if (engine.isHostPlaying && !self.isPlaying) {
+        
+        [self syncWithIAA];
         self.isPlaying = YES;
         [self postUpdateNotification];
     } else if (!engine.isHostPlaying && self.isPlaying) {
@@ -100,8 +103,12 @@
 -(void)syncWithIAA {
     COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
     if (audioEngine.iaaConnected) {
-        currentBeat = audioEngine.iaaCurrentBeat;
-        tempo = audioEngine.iaaTempo;
+        Float64 iaaTempo = audioEngine.iaaTempo;
+        if (iaaTempo > 0) {
+            tempo = iaaTempo;
+            currentBeat = audioEngine.iaaCurrentBeat;
+        }
+        
     }
 }
 
