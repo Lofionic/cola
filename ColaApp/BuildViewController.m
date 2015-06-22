@@ -64,7 +64,6 @@ static BuildView *buildView = nil;
     
     self.buildViewScrollView = [[BuildViewScrollView alloc] init];
     [self.buildViewScrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.buildViewScrollView setClipsToBounds:YES];
     [self.view addSubview:self.buildViewScrollView];
     
     self.buildView = [[BuildView alloc] initWithScrollView:self.buildViewScrollView];
@@ -402,9 +401,7 @@ static BuildView *buildView = nil;
     [self.dragView setUserInteractionEnabled:NO];
     [self.dragView.layer setOpacity:0.5];
     [self.dragView.layer setContents:(id)[module.thumbnail CGImage]];
-    
-    [self.buildViewScrollView setEnableAutoscroll:YES];
-    
+
     [self.view addSubview:self.dragView];
 }
 
@@ -427,9 +424,7 @@ static BuildView *buildView = nil;
 -(void)componentShelf:(ComponentShelfView *)componentTray didEndDraggingModule:(ModuleDescription*)module withGesture:(UIGestureRecognizer *)gesture {
     [self.dragView removeFromSuperview];
     [self.buildView setHighlightedCellSet:nil];
-    
-    [self.buildViewScrollView setEnableAutoscroll:NO];
-    
+
     if (gesture.state != UIGestureRecognizerStateCancelled ){
         CGPoint pointInWindow = [gesture locationInView:self.view];
         // Don't drop if drag is likely to have gone off-screen

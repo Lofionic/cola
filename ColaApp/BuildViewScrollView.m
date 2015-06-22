@@ -7,6 +7,7 @@
 //
 
 #import "BuildViewScrollView.h"
+#define TOUCH_MOVEMENT_THRESHOLD    10
 
 @interface BuildViewScrollView ()
 
@@ -21,6 +22,7 @@
 -(instancetype)init {
     if (self = [super init]) {
         self.enableAutoscroll = NO;
+        self.clipsToBounds = NO;
     }
     return self;
 }
@@ -42,7 +44,6 @@
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    
     CGPoint previousTouchPoint = self.touchPoint;
     
     UITouch *touch = [touches anyObject];
@@ -50,7 +51,7 @@
 
     CGFloat touchDelta = sqrt(pow(ABS(self.touchPoint.x - previousTouchPoint.x) + ABS(self.touchPoint.y - previousTouchPoint.y),2.0));
     
-    if (touchDelta > 10) {
+    if (touchDelta > TOUCH_MOVEMENT_THRESHOLD) {
         [self.autoscrollTimer invalidate];
         self.autoscrollTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
     }
@@ -65,7 +66,7 @@
 }
 
 -(void)autoScroll {
-    if (!self.tracking) {
+    if (!self.tracking && self.enableAutoscroll) {
         // Auto-scroll if necessary
         if (self.touchPoint.y < (self.frame.size.height * 0.3) + self.contentOffset.y) {
             // Audoscroll up
@@ -89,7 +90,6 @@
             CGFloat deltaY = self.touchPoint.y - targetY;
             self.touchPoint = CGPointMake(self.touchPoint.x, self.touchPoint.y - deltaY);
         }
-        
     }
 }
 

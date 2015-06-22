@@ -10,6 +10,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    BuildViewCableBehaviourDrag,
+    BuildViewCableBehaviourDraw
+} BuildViewCableBehaviour;
+
 @interface BuildViewCellPath : NSObject
 -(instancetype)initWithColumn:(NSUInteger)column Row:(NSUInteger)row;
 @property (readonly) NSUInteger column;
@@ -27,6 +32,7 @@
 @property (nonatomic) CGPoint point1;
 @property (nonatomic) CGPoint point2;
 @property (nonatomic, strong) UIColor *colour;
+
 @end
 
 @class BuildViewController;
@@ -44,6 +50,8 @@
 @property (readonly) CGFloat headerHeight;
 @property (readonly) NSUInteger rows;
 @property (readonly) NSUInteger columns;
+
+@property (nonatomic) BuildViewCableBehaviour cableBehaviour;
 
 @property CGFloat test;
 

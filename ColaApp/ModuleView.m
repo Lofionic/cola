@@ -26,7 +26,6 @@
 @property (nonatomic, strong) NSString          *asset;
 @property (nonatomic, strong) ModuleDescription *moduleDescription;
 
-
 @end
 
 @implementation ModuleView
@@ -60,6 +59,13 @@
             [self.layer setContents:(id)assetImage.CGImage];
         } else {
             [self setBackgroundColor:BACKGROUND_COLOUR];
+            UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 16)];
+            [titleLabel setFont:[UIFont systemFontOfSize:10]];
+            [titleLabel setTextColor:[UIColor whiteColor]];
+            [titleLabel setText:[moduleDescription.name uppercaseString]];
+            [titleLabel setTextAlignment:NSTextAlignmentCenter];
+            [titleLabel setFont:[UIFont fontWithName:@"DINAlternate-Bold" size:10]];
+            [self addSubview:titleLabel];
         }
         
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
@@ -185,6 +191,20 @@
         if ([self.delegate respondsToSelector:@selector(moduleView:didEndDraggingWithGesture:)]) {
             [self.delegate moduleView:self didEndDraggingWithGesture:uigr];
         }
+    }
+}
+
+-(void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    if (!self.asset) {
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        CGContextSetStrokeColorWithColor(ctx, [[UIColor blackColor] CGColor]);
+        CGContextSetLineWidth(ctx, 2);
+        
+        CGRect insetRect = CGRectInset(self.bounds, 1 , 1);
+    
+        
+        CGContextStrokeRect(ctx, insetRect);
     }
 }
 

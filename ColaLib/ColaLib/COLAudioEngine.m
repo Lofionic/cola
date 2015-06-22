@@ -193,8 +193,6 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 {
     @autoreleasepool {
         COLAudioEngine *audioEngine = (__bridge COLAudioEngine*)inRefCon;
-        COLTransportController *transportController = [[COLAudioEnvironment sharedEnvironment] transportController];
-        [transportController renderOutputs:inNumberFrames];
         
         AudioSignalType *leftBuffer;
         AudioSignalType *rightBuffer;
@@ -204,11 +202,15 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         // Sync with iaa
         [audioEngine updateHostBeatAndTempo];
         
+        // Fill the beat buffer
+        COLTransportController *transportController = [[COLAudioEnvironment sharedEnvironment] transportController];
+        [transportController renderOutputs:inNumberFrames];
+        
         // Pull the buffer chain
         leftBuffer = [[audioEngine masterInputL] getBuffer:inNumberFrames];
         rightBuffer = [[audioEngine masterInputR] getBuffer:inNumberFrames];
 
-        // Split a mono signal if right is not connected
+        // Split left channel into across both channels, if right is not connected
         if (![audioEngine.masterInputR isConnected]) {
             rightBuffer = [audioEngine.masterInputL getBuffer:inNumberFrames];
         }
@@ -369,7 +371,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 }
 
 -(void)interAppAudioHostTransportStateChanged {
-    [self getHostCallbackInfo];
+    //[self getHostCallbackInfo];
     [self updateTransportStateFromHostCallback];
 }
 

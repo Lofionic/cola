@@ -62,9 +62,7 @@ const float maxDelayTimeMS = 2000;
     
     AudioSignalType* inputBuffer = [self.input getBuffer:numFrames];
     AudioSignalType* outputBuffer = [self.output prepareBufferOfSize:numFrames];
-    
-    Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
-    
+  
     for (int i = 0; i < numFrames; i++) {
         float delta = i / (float) numFrames;
         

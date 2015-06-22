@@ -78,10 +78,8 @@
         if (currentBeat > 0) {
             currentBeat = fmodf(currentBeat, 4);
         }
-        
-        currentBeat = currentBeat * 4.0;
-        
-        UInt16 step = floor(currentBeat);
+
+        UInt16 step = floor(currentBeat * 4.0);
     
         gateOutputBuffer[i] = 0;
         

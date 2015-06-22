@@ -16,7 +16,10 @@
 #import "MasterModuleView.h"
 #import "ModuleCatalog.h"
 #import "ModuleControl.h"
+#import "BuildViewScrollView.h"
+
 #import <ColaLib/ColaLib.h>
+
 
 @interface BuildView () {
     bool cellOccupied[256][256];
@@ -45,7 +48,7 @@
 @property (nonatomic, strong) NSMutableDictionary       *moduleViews;
 
 @property (nonatomic, strong) MasterModuleView          *masterModuleView;
-@property (nonatomic, weak) UIScrollView                *scrollView;
+@property (nonatomic, weak) BuildViewScrollView         *scrollView;
 
 @end
 
@@ -54,7 +57,7 @@
 
 static NSArray *cableColours;
 
--(instancetype)initWithScrollView:(UIScrollView *)scrollView {
+-(instancetype)initWithScrollView:(BuildViewScrollView *)scrollView {
     
     self = [super init];
     if (self) {
@@ -94,6 +97,11 @@ static NSArray *cableColours;
         [self addSubview:self.trashView];
         
         [self bringSubviewToFront:self.cableView];
+        
+        self.cableBehaviour = BuildViewCableBehaviourDrag;
+        
+        self.clipsToBounds = NO;
+        [self.cableView setClipsToBounds:NO];
     }
     return self;
 }
@@ -289,23 +297,47 @@ static NSArray *cableColours;
 #pragma mark Cable Management
 
 -(void)connectorView:(ConnectorView *)connectorView didBeginDrag:(UIPanGestureRecognizer *)uigr {
-    self.draggingConnector = connectorView;
     
-    CGPoint point1 = [self convertPoint:connectorView.center fromView:connectorView.superview];
-    CGPoint point2 = [uigr locationInView:self];
-    self.dragCable = [[BuildViewCable alloc] initWithPoint:point1 andPoint:point2 inBuildView:self];
-    
-    // Remove any cables connected to this connector
-    if (connectorView.cable) {
-        [self.dragCable setColour:connectorView.cable.colour];
+    if (!connectorView.cable || self.cableBehaviour == BuildViewCableBehaviourDraw) {
+        // Connector view is not connected or draw behaviour is enabled
+        self.draggingConnector = connectorView;
+        
+        CGPoint point1 = [self convertPoint:connectorView.center fromView:connectorView.superview];
+        CGPoint point2 = [uigr locationInView:self];
+        self.dragCable = [[BuildViewCable alloc] initWithPoint:point1 andPoint:point2 inBuildView:self];
+        
+        // Remove any cables connected to this connector
+        if (connectorView.cable) {
+            [self.dragCable setColour:connectorView.cable.colour];
+            [self.cables removeObject:connectorView.cable];
+            [self.cableLayer setNeedsDisplay];
+            [self disconnectConnectorView:connectorView];
+        } else {
+            NSInteger randomColour = arc4random_uniform((UInt32)[[BuildView cableColours] count]);
+            [self.dragCable setColour:[[BuildView cableColours] objectAtIndex:randomColour]];
+        }
+    } else{
+        // Connector view is connected and drag behaviour is enabled
+        UIColor *cableColour = connectorView.cable.colour;
+        
         [self.cables removeObject:connectorView.cable];
         [self.cableLayer setNeedsDisplay];
         [self disconnectConnectorView:connectorView];
-    } else {
-        NSInteger randomColour = arc4random_uniform((UInt32)[[BuildView cableColours] count]);
-        [self.dragCable setColour:[[BuildView cableColours] objectAtIndex:randomColour]];
+        
+        if (connectorView == connectorView.cable.connector1) {
+            self.draggingConnector = connectorView.cable.connector2;
+        } else {
+            self.draggingConnector = connectorView.cable.connector1;
+        }
+        
+        CGPoint point1 = [self convertPoint:self.draggingConnector.center fromCoordinateSpace:self.draggingConnector.superview];
+        CGPoint point2 = [uigr locationInView:self];
+        self.dragCable = [[BuildViewCable alloc] initWithPoint:point1 andPoint:point2 inBuildView:self];
+        [self.dragCable setColour:cableColour];
+        
     }
     
+    [self.scrollView setEnableAutoscroll:YES];
     [self.cables addObject:self.dragCable];
 }
 
@@ -316,8 +348,11 @@ static NSArray *cableColours;
 }
 
 -(void)connectorView:(ConnectorView *)connectorView didEndDrag:(UIPanGestureRecognizer *)uigr {
+    [self.scrollView setEnableAutoscroll:NO];
     [self.cables removeObject:self.dragCable];
     
+    // In case we are changing a connection rather than drawing a new one
+    connectorView = self.draggingConnector;
 
     UIView *hitView = [self hitTest:[uigr locationInView:self] withEvent:nil];
     if ([hitView isKindOfClass:[ConnectorView class]]) {
@@ -424,6 +459,7 @@ static NSArray *cableColours;
 -(void)moduleView:(ModuleView *)moduleView didBeginDraggingWithGesture:(UIGestureRecognizer *)gesture {
     if ([self.buildViewController buildMode]) {
         [self popModuleView:moduleView];
+        [self.scrollView setEnableAutoscroll:YES];
         
         CGPoint dragPoint = [gesture locationInView:self];
         [self.draggingModuleView setCenter:dragPoint];
@@ -454,6 +490,8 @@ static NSArray *cableColours;
 }
 
 -(void)moduleView:(ModuleView *)moduleView didEndDraggingWithGesture:(UIGestureRecognizer *)gesture {
+    
+    [self.scrollView setEnableAutoscroll:NO];
     
     if (self.draggingModuleView) {
         
@@ -516,6 +554,7 @@ static NSArray *cableColours;
     self.draggingModuleView = moduleView;
     self.dragOrigin = moduleView.center;
     [self.draggingModuleView.layer setOpacity:0.5];
+    [moduleView.superview bringSubviewToFront:moduleView];
     
     [moduleView setUserInteractionEnabled:NO];
     
@@ -549,6 +588,7 @@ static NSArray *cableColours;
             }
         }
         
+        [self bringSubviewToFront:self.cableView];
         [self.cableLayer setNeedsDisplay];
         
         return YES;
