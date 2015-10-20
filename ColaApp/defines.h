@@ -9,6 +9,7 @@
 
 extern CGFloat kComponentShelfHeight;
 extern CGFloat kBuildViewWidth;
+extern CGFloat kBuildViewPadding;
 extern CGFloat kBuildViewRowHeight;
 extern CGFloat kBuildViewColumnWidth;
 extern CGFloat kKeyboardHeight;

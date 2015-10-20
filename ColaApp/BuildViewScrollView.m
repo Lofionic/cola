@@ -5,7 +5,7 @@
 //  Created by Chris on 22/04/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-
+#import "defines.h"
 #import "BuildViewScrollView.h"
 #define TOUCH_MOVEMENT_THRESHOLD    10
 
@@ -15,6 +15,8 @@
 @property NSTimer*  autoscrollTimer;
 @property BOOL      autoscrolling;
 
+@property UIImageView *backgroundImageView;
+
 @end
 
 @implementation BuildViewScrollView
@@ -23,8 +25,19 @@
     if (self = [super init]) {
         self.enableAutoscroll = NO;
         self.clipsToBounds = NO;
+        
+        UIImage *backgroundImage = [[UIImage imageNamed:@"buildview_background"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, kBuildViewPadding + 1, 0, kBuildViewPadding + 1) resizingMode:UIImageResizingModeTile];
+        self.backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+        [self addSubview:self.backgroundImageView];
     }
     return self;
+}
+
+-(void)layoutSubviews {
+    [super layoutSubviews];
+    
+    // Stretch the background image downwards to match content
+    [self.backgroundImageView setFrame:CGRectMake(0, 0, self.bounds.size.width, self.contentSize.height)];
 }
 
 -(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {

@@ -57,7 +57,8 @@ static BuildView *buildView = nil;
     
     [super viewDidLoad];
 
-    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ImageAssets/sunset_ipad.jpg"]];
+    UIImageView *backgroundView = [[UIImageView alloc] init];
+    [backgroundView setBackgroundColor:[UIColor blackColor]];
     [backgroundView setFrame:self.view.bounds];
     [backgroundView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
     [self.view addSubview:backgroundView];
@@ -129,7 +130,7 @@ static BuildView *buildView = nil;
                                                              toItem:nil
                                                           attribute:NSLayoutAttributeNotAnAttribute
                                                          multiplier:1
-                                                           constant:kBuildViewWidth]];
+                                                           constant:kBuildViewWidth + (kBuildViewPadding * 2.0)]];
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.buildViewScrollView
                                                           attribute:NSLayoutAttributeCenterX
@@ -466,7 +467,7 @@ static BuildView *buildView = nil;
     [blockingView addSubview:progressView];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
-        UIImage *thumbnail = [self.buildView snapshot];
+        UIImage *thumbnail = [self.buildViewScrollView snapshot];
         NSDictionary *dictionary = [self.buildView getPresetDictionary];
         
         [[PresetController sharedController] updatePresetAtIndex:[[PresetController sharedController] selectedPresetIndex]

@@ -77,7 +77,7 @@ static NSArray *cableColours;
                                       (self.rows * self.cellSize.height) + self.headerHeight
                                       );
         
-        [self setFrame:CGRectMake(0, 0, kBuildViewWidth, buildViewSize.height)];
+        [self setFrame:CGRectMake(kBuildViewPadding, 0, kBuildViewWidth, buildViewSize.height)];
         [self.scrollView setContentSize:buildViewSize];
 
         [self.scrollView setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
@@ -100,7 +100,7 @@ static NSArray *cableColours;
         
         self.cableBehaviour = BuildViewCableBehaviourDrag;
         
-        self.clipsToBounds = NO;
+        [self setClipsToBounds:NO];
         [self.cableView setClipsToBounds:NO];
     }
     return self;
@@ -658,8 +658,7 @@ static NSArray *cableColours;
         [cables addObject:cableDictionary];
     }
     [result setObject:cables forKey:@"cables"];
-    
-    
+        
     return [NSDictionary dictionaryWithDictionary:result];
 }
 

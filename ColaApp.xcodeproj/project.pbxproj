@@ -86,7 +86,6 @@
 		6C2A5E211A8BF2CC00ECEAB2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6C2A5E231A8BF2CC00ECEAB2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		6C2A5E2A1A8BF2CC00ECEAB2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6C2A5E2F1A8BF2CC00ECEAB2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		6C2A5E8B1A8BF30500ECEAB2 /* ColaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ColaLib.xcodeproj; path = ColaLib/ColaLib.xcodeproj; sourceTree = "<group>"; };
@@ -222,7 +221,6 @@
 				6C8DD2961AC0DA2400320628 /* BuildView */,
 				6C0D487F1AC3662E008AD869 /* KeyboardView */,
 				6C0B16AE1ADBD5D40058BA18 /* FilesView */,
-				6C2A5E291A8BF2CC00ECEAB2 /* Main.storyboard */,
 				6C2A5E2E1A8BF2CC00ECEAB2 /* LaunchScreen.xib */,
 				6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */,
 				6C65A4E91A9125E1000D9192 /* Resources */,
@@ -443,14 +441,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		6C2A5E291A8BF2CC00ECEAB2 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6C2A5E2A1A8BF2CC00ECEAB2 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		6C2A5E2E1A8BF2CC00ECEAB2 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -566,7 +556,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lofionic.cola;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -591,7 +581,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lofionic.cola;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

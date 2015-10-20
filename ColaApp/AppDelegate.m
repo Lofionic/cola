@@ -18,6 +18,7 @@
 
 CGFloat kComponentShelfHeight;
 CGFloat kBuildViewWidth;
+CGFloat kBuildViewPadding;
 CGFloat kBuildViewColumnWidth;
 CGFloat kBuildViewRowHeight;
 CGFloat kKeyboardHeight;
@@ -48,7 +49,7 @@ CGFloat kKeyboardHeight;
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:buildViewController];
     [navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
-    [navigationController.navigationBar setTintColor:[UIColor lightGrayColor]];
+    [navigationController.navigationBar setTintColor:[UIColor whiteColor]];
 
     [self.window setRootViewController:navigationController];
     
@@ -57,14 +58,16 @@ CGFloat kKeyboardHeight;
 
 - (void)initLayoutMetrics {
     // Setup metrics
-    kBuildViewWidth =       768;
-    kBuildViewColumnWidth = 96;
+    kBuildViewWidth =       720;
+    kBuildViewPadding =     24;
+    kBuildViewColumnWidth = 90;
     kBuildViewRowHeight =   320;
     kComponentShelfHeight = 150;
     kKeyboardHeight =       150;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         kBuildViewWidth =           320;
+        kBuildViewPadding =         0;
         kBuildViewColumnWidth =     64;
     }
 }

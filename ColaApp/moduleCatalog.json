@@ -7,7 +7,7 @@
             "type" : "COLComponentVCO",
             "view" : 
             {
-                "asset" : "vco_a",
+                "asset" : "vco_a_w",
                 "connectors" : [
                 {
                     "type" : "input",
