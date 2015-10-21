@@ -36,19 +36,19 @@
     CGContextSetStrokeColorWithColor(ctx, [UIColor darkGrayColor].CGColor);
     CGContextSetLineWidth(ctx, 0.5);
     
-    CGFloat yPosition = self.buildView.headerHeight - 16;
-    do {
-        for (CGFloat xPosition = 0; xPosition < self.bounds.size.width; xPosition += self.buildView.cellSize.width) {
-            CGRect rect = CGRectMake(xPosition, yPosition, self.buildView.cellSize.width, 16);
-            CGContextDrawImage(ctx, rect, [self.rackUpperImageRef CGImage]);
-            
-            rect = CGRectOffset(rect, 0, 16);
-            CGContextDrawImage(ctx, rect, [self.rackLowerImageRef CGImage]);
-        }
-        
-        yPosition += self.buildView.cellSize.height;
-        
-    } while (yPosition <= self.bounds.size.height);
+//    CGFloat yPosition = self.buildView.headerHeight - 16;
+//    do {
+//        for (CGFloat xPosition = 0; xPosition < self.bounds.size.width; xPosition += self.buildView.cellSize.width) {
+//            CGRect rect = CGRectMake(xPosition, yPosition, self.buildView.cellSize.width, 16);
+//            CGContextDrawImage(ctx, rect, [self.rackUpperImageRef CGImage]);
+//            
+//            rect = CGRectOffset(rect, 0, 16);
+//            CGContextDrawImage(ctx, rect, [self.rackLowerImageRef CGImage]);
+//        }
+//        
+//        yPosition += self.buildView.cellSize.height;
+//        
+//    } while (yPosition <= self.bounds.size.height);
 }
 
 @end
