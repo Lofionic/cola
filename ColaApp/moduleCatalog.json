@@ -71,8 +71,8 @@
                     {
                         "type" : "output",
                         "connection" : "Out",
-                        "x" : 48,
-                        "y" : 280
+                        "x" : 45,
+                        "y" : 270
                     }
                     ],
                     "controls" : [
@@ -80,15 +80,15 @@
                         "type" : "continuous",
                         "parameter" : "Rate",
                         "asset" : "large_white",
-                        "x" : 48,
-                        "y" : 80
+                        "x" : 45,
+                        "y" : 70
                     },
                     {
                         "type" : "continuous",
                         "parameter" : "Wave",
                         "asset" : "large_white",
-                        "x" : 48,
-                        "y" : 176
+                        "x" : 45,
+                        "y" : 170
                     }
                 ]
             }     
