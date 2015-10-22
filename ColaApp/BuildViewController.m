@@ -57,8 +57,7 @@ static BuildView *buildView = nil;
     
     [super viewDidLoad];
 
-    UIImageView *backgroundView = [[UIImageView alloc] init];
-    [backgroundView setBackgroundColor:[UIColor blackColor]];
+    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"wallpaper"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeTile]];
     [backgroundView setFrame:self.view.bounds];
     [backgroundView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
     [self.view addSubview:backgroundView];

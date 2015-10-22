@@ -26,7 +26,7 @@
         self.enableAutoscroll = NO;
         self.clipsToBounds = NO;
         
-        UIImage *backgroundImage = [[UIImage imageNamed:@"build_background"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, kBuildViewPadding, 0, kBuildViewPadding) resizingMode:UIImageResizingModeTile];
+        UIImage *backgroundImage = [[UIImage imageNamed:@"buildview_background"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, kBuildViewPadding, 0, kBuildViewPadding) resizingMode:UIImageResizingModeTile];
         self.backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
         [self addSubview:self.backgroundImageView];
     }

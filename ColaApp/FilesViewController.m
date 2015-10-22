@@ -41,7 +41,7 @@
     
     if (self = [super initWithCollectionViewLayout:flowLayout]) {
         self.buildViewController = buildViewController;
-        self.cellSize = CGSizeMake(180, 180);
+        self.cellSize = CGSizeMake(200, 200);
     }
     return self;
 }
@@ -55,8 +55,9 @@
     [self.collectionView setDelegate:self];
     [self.collectionView setDataSource:self];
 
-    UIImageView *backgroundView = [[UIImageView alloc] init];
-    [backgroundView setBackgroundColor:[UIColor colorWithWhite:0.1 alpha:1]];
+    UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    [backgroundView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1]];
     [self.collectionView setBackgroundView:backgroundView];
     
     self.addBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addTapped)];
@@ -134,10 +135,6 @@
             [thisCell stopJiggling];
             [thisCell setSelected:NO];
         }
-        
-        NSUInteger selectedPresetIndex = [[PresetController sharedController] selectedPresetIndex];
-        FilesViewControllerCell *selectedCell = (FilesViewControllerCell*)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:selectedPresetIndex inSection:0]];
-        [selectedCell setHighlighted:YES];
     }
 }
 
@@ -162,12 +159,7 @@
     
     Preset *preset = [[PresetController sharedController] presetAtIndex:indexPath.row];
     [cell setPreset:preset];
-    
-    if (!self.editing && [[PresetController sharedController] selectedPresetIndex] == indexPath.row) {
-        [cell setHighlighted:YES];
-    } else {
-        [cell setHighlighted:NO];
-    }
+    [cell setHighlighted:NO];
     
     if (self.editing) {
         [cell startJiggling];

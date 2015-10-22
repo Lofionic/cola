@@ -14,6 +14,7 @@
 @interface FilesViewControllerCell()
 
 @property (nonatomic, strong) UIImageView   *thumbnailView;
+@property (nonatomic, strong) UIView        *thumbnailContainerView;
 @property (nonatomic, strong) UILabel       *presetNameLabel;
 @property (nonatomic, strong) UILabel       *dateLabel;
 @property (nonatomic, strong) UIImageView   *deleteImage;
@@ -27,25 +28,45 @@
 -(instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         
-        self.thumbnailView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 16, frame.size.width - 16, frame.size.height - 58)];
-        [self.thumbnailView setBackgroundColor:[UIColor clearColor]];
-        [self.thumbnailView setContentMode:UIViewContentModeScaleAspectFit];
-        [self.contentView addSubview:self.thumbnailView];
+        self.thumbnailContainerView = [[UIView alloc] init];
+        [self.thumbnailContainerView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.contentView addSubview:self.thumbnailContainerView];
         
-        self.presetNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, frame.size.height - 40, frame.size.width - 16, 16)];
+        self.thumbnailView = [[UIImageView alloc] init];
+        [self.thumbnailView setContentMode:UIViewContentModeScaleAspectFit];
+        [self.thumbnailView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.thumbnailContainerView addSubview:self.thumbnailView];
+        
+        self.presetNameLabel = [[UILabel alloc] init];
         [self.presetNameLabel setTextAlignment:NSTextAlignmentCenter];
         [self.presetNameLabel setFont:[UIFont fontWithName:@"DINAlternate-Bold" size:14]];
         [self.presetNameLabel setTextColor:[UIColor whiteColor]];
+        [self.presetNameLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.contentView addSubview:self.presetNameLabel];
         
-        self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, frame.size.height - 24, frame.size.width - 16, 16)];
+        self.dateLabel = [[UILabel alloc] init];
         [self.dateLabel setTextAlignment:NSTextAlignmentCenter];
         [self.dateLabel setFont:[UIFont fontWithName:@"DINAlternate-Bold" size:10]];
-        [self.dateLabel setTextColor:[UIColor lightGrayColor]];
+        [self.dateLabel setTextColor:[UIColor grayColor]];
+        [self.dateLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.contentView addSubview:self.dateLabel];
         
-        [self.layer setBorderColor:[[UIColor clearColor] CGColor]];
-        [self.layer setBorderWidth:2.0];
+        // Layout
+        NSDictionary *viewsDictionary = @{
+                                          @"thumbnail"          :   self.thumbnailView,
+                                          @"thumbnailContainer" :   self.thumbnailContainerView,
+                                          @"nameLabel"          :   self.presetNameLabel,
+                                          @"dateLabel"          :   self.dateLabel
+                                          };
+        
+        [self.thumbnailContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[thumbnail]-8-|" options:0 metrics:nil views:viewsDictionary]];
+        [self.thumbnailContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[thumbnail]-8-|" options:0 metrics:nil views:viewsDictionary]];
+        
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[thumbnailContainer]-8-|" options:0 metrics:nil views:viewsDictionary]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[thumbnailContainer]-8-[nameLabel]-4-[dateLabel]-8-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:viewsDictionary]];
+        
+        [[self.thumbnailContainerView layer] setBorderColor:[[UIColor clearColor] CGColor]];
+        [[self.thumbnailContainerView layer] setBorderWidth:2.0];
     }
     return self;
 }
@@ -73,9 +94,9 @@
     [super setSelected:selected];
     
     if (selected) {
-        [self.layer setBorderColor:[[UIColor redColor] CGColor]];
+        [[self.thumbnailContainerView layer] setBorderColor:[[UIColor redColor] CGColor]];
     } else {
-        [self.layer setBorderColor:[[UIColor clearColor] CGColor]];
+        [[self.thumbnailContainerView layer] setBorderColor:[[UIColor clearColor] CGColor]];
     }
     
     _selected = selected;
