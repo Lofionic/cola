@@ -39,8 +39,12 @@
 -(void)mute;
 -(void)unmute;
 
+-(void)exportEnvironment;
+
 // Factory methods
 -(COLComponent*)createComponentOfType:(NSString *)componentType;
 -(BOOL)removeComponent:(COLComponent*)component;
+
+@property (readonly) NSMutableArray *components;
 
 @end

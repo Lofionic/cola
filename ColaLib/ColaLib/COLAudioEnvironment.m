@@ -13,6 +13,7 @@
 #import "COLComponents.h"
 #import "COLTransportController.h"
 #import "NSString+Random.h"
+#import "COLExporter.h"
 
 @interface COLAudioEnvironment()
 
@@ -172,6 +173,10 @@
 
 -(BOOL)isInterAppAudioConnected {
     return [self.audioEngine iaaConnected];
+}
+
+-(void)exportEnvironment {
+    [COLExporter getJSONObjectForEnvironment:self];
 }
 
 @end

@@ -95,11 +95,13 @@
         [bezierPath moveToPoint:left];
         [bezierPath addCurveToPoint:right controlPoint1:controlPoint1 controlPoint2:controlPoint2];
         
+        CGContextSetLineCap(ctx, kCGLineCapRound);
+        
         // Stroke Shadow
         CGContextAddPath(ctx, bezierPath.CGPath);
         CGContextSetStrokeColorWithColor(ctx, [[cable.colour darkerShade] CGColor]);
         CGContextSetLineWidth(ctx, 6);
-        CGContextSetLineCap(ctx, kCGLineCapRound);
+
         CGContextStrokePath(ctx);
         
         // Stroke Mid

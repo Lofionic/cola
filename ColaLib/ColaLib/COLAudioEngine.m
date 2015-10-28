@@ -35,7 +35,6 @@ HostCallbackInfo *callbackInfo;
 @property (nonatomic) Float64 iaaTempo;
 @property (nonatomic) Float64 iaaCurrentBeat;
 
-
 @property (nonatomic, weak) COLComponentInput *masterInputL;
 @property (nonatomic, weak) COLComponentInput *masterInputR;
 
@@ -234,6 +233,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
                 [audioEngine setAttenuation:newAttenuation];
             }
         }
+        
         [audioEngine.masterInputL engineDidRender];
         [audioEngine.masterInputR engineDidRender];
     }

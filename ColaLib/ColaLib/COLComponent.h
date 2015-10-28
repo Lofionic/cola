@@ -49,6 +49,4 @@
 -(void)assignUniqueName;
 +(NSString*)defaultName;
 
-void renderNumberOfFrames(COLComponent *component, UInt32 numFrames);
-
 @end

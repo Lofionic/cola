@@ -280,6 +280,8 @@ static BuildView *buildView = nil;
 }
 
 -(void)saveTapped {
+    [[COLAudioEnvironment sharedEnvironment] exportEnvironment];
+    
     if (self.buildMode) {
         [self setBuildMode:NO animated:YES];
     }

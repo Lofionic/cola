@@ -174,4 +174,8 @@
     return @"Component";
 }
 
+void renderComponentOutputs(COLComponent *component, UInt32 numframes) {
+    
+}
+
 @end

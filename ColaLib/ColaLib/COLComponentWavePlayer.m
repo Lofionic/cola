@@ -240,6 +240,10 @@
     }
 }
 
+void renderOutputs(COLComponent *component, UInt32 numframes) {
+    printf("MEH");
+}
+
 +(NSString *)defaultName {
     return @"Wave";
 }
