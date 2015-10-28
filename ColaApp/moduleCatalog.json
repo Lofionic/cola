@@ -7,25 +7,25 @@
             "type" : "COLComponentVCO",
             "view" : 
             {
-                "asset" : "vco_a_w",
+                "asset" : "vco_a",
                 "connectors" : [
                 {
                     "type" : "input",
                     "connection" : "Keyboard In",
-                    "x" : 32,
-                    "y" : 280
+                    "x" : 45,
+                    "y" : 270
                 },
                 {                   
                     "type" : "input",
                     "connection" : "FM In",
-                    "x" : 48,
-                    "y" : 176
+                    "x" : 90,
+                    "y" : 220
                 },
                 {                   
                     "type" : "output",
                     "connection" : "Out",
-                    "x" : 160,
-                    "y" : 280
+                    "x" : 135,
+                    "y" : 270
                 }
                 ],
                 "controls" : [
@@ -33,29 +33,29 @@
                         "asset" : "large_white",
                         "type" : "continuous",
                         "parameter" : "Range",
-                        "x" : 48,
-                        "y" : 80
+                        "x" : 50,
+                        "y" : 70
                     },
                     {
                         "asset" : "large_white",
                         "type" : "continuous",
                         "parameter" : "Waveform",
-                        "x" : 104,
-                        "y" : 272
+                        "x" : 130,
+                        "y" : 170
                     },
                     {
                         "asset" : "large_white",
                         "type" : "continuous",
                         "parameter" : "Tune",
-                        "x" : 144,
-                        "y" : 80
+                        "x" : 130,
+                        "y" : 70
                     },
                     {
                         "asset" : "large_white",
                         "type" : "continuous",
                         "parameter" : "FM Amt",
-                        "x" : 144,
-                        "y" : 176
+                        "x" : 50,
+                        "y" : 170
                     }
                 ]
             }
