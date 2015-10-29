@@ -107,7 +107,7 @@
     
     for (UITouch* thisTouch in touches) {
         
-        NSNumber *thisTouchRef = [NSNumber numberWithInt:(int)thisTouch];
+        NSNumber *thisTouchRef = [NSNumber numberWithInt:(int)(size_t)thisTouch];
         
         CGPoint touchLocation = [thisTouch locationInView:self];
         CGPoint touchNormalized = CGPointMake(
@@ -128,7 +128,7 @@
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     for (UITouch *thisTouch in touches) {
         
-        NSNumber *thisTouchRef = [NSNumber numberWithInt:(int)thisTouch];
+        NSNumber *thisTouchRef = [NSNumber numberWithInt:(int)(size_t)thisTouch];
         [keyTouches removeObjectForKey:thisTouchRef];
     }
     

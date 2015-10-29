@@ -5,6 +5,10 @@
 //  Created by Chris on 12/02/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
+
+#ifndef COLAudioEngine_h
+#define COLAudioEngine_h
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
@@ -53,3 +57,5 @@
 -(void)iaaRewind;
 
 @end
+
+#endif

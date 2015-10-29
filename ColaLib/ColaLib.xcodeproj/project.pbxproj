@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6C02D56E1B237DC200297F52 /* COLComponentDelay.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C02D56D1B237DC200297F52 /* COLComponentDelay.m */; };
 		6C02D56F1B237DE900297F52 /* COLComponentDelay.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C02D56C1B237DC200297F52 /* COLComponentDelay.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6C0BAEAE1B1BB06A007314CB /* libAudiobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0BAEAD1B1BB06A007314CB /* libAudiobus.a */; };
 		6C0D487D1AC358C2008AD869 /* COLKeyboardComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0D487C1AC358C2008AD869 /* COLKeyboardComponent.m */; };
 		6C0D487E1AC365BC008AD869 /* COLKeyboardComponent.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C0D487B1AC358C2008AD869 /* COLKeyboardComponent.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6C0DD3581A94DEE900217751 /* COLComponentVCO.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C310D401A8D721900A97D82 /* COLComponentVCO.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -21,7 +20,7 @@
 		6C172A3A1ACC213500BE1418 /* COLDiscreteParameter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C172A331ACC202D00BE1418 /* COLDiscreteParameter.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6C172A4D1ACC4C3900BE1418 /* COLDiscreteParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C172A4B1ACC49B700BE1418 /* COLDiscreteParameter.m */; };
 		6C2A5E751A8BF30500ECEAB2 /* ColaLib.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C2A5E741A8BF30500ECEAB2 /* ColaLib.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		6C2A5E981A8BF5BE00ECEAB2 /* COLAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.m */; };
+		6C2A5E981A8BF5BE00ECEAB2 /* COLAudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.mm */; };
 		6C2A5E9C1A8BF7B100ECEAB2 /* COLAudioEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E9B1A8BF7B100ECEAB2 /* COLAudioEnvironment.m */; };
 		6C300BEA1AD3285C00D51544 /* COLComponentMultiples.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C300BE91AD3285C00D51544 /* COLComponentMultiples.m */; };
 		6C300BEB1AD3286300D51544 /* COLComponentMultiples.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C300BE81AD3285C00D51544 /* COLComponentMultiples.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -45,6 +44,7 @@
 		6C7B27C71A8D578F00AFD384 /* COLComponentOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7B27C61A8D578F00AFD384 /* COLComponentOutput.m */; };
 		6C7B27CA1A8D57AF00AFD384 /* COLComponentInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7B27C91A8D57AF00AFD384 /* COLComponentInput.m */; };
 		6C7D47B01BE11A980092BC95 /* COLExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7D47AF1BE11A980092BC95 /* COLExporter.m */; };
+		6C7D48281BE215780092BC95 /* CCOLComponentIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C7D48261BE215770092BC95 /* CCOLComponentIO.cpp */; };
 		6C8C15931ADC51DC0077460A /* COLComponentVCF.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8C15921ADC51DC0077460A /* COLComponentVCF.m */; };
 		6C94939C1A9D352A00B7A37C /* COLComponentLFO.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C1154781A8E3468005CF194 /* COLComponentLFO.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6CB322EE1A9BC1110052AE50 /* COLContinuousParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB322ED1A9BC1110052AE50 /* COLContinuousParameter.m */; };
@@ -111,20 +111,6 @@
 /* Begin PBXFileReference section */
 		6C02D56C1B237DC200297F52 /* COLComponentDelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentDelay.h; sourceTree = "<group>"; };
 		6C02D56D1B237DC200297F52 /* COLComponentDelay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentDelay.m; sourceTree = "<group>"; };
-		6C0BAEAD1B1BB06A007314CB /* libAudiobus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAudiobus.a; sourceTree = "<group>"; };
-		6C0BAEAF1B1BB071007314CB /* ABAudiobusController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABAudiobusController.h; sourceTree = "<group>"; };
-		6C0BAEB01B1BB071007314CB /* ABAudioUnitFader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABAudioUnitFader.h; sourceTree = "<group>"; };
-		6C0BAEB11B1BB071007314CB /* ABButtonTrigger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABButtonTrigger.h; sourceTree = "<group>"; };
-		6C0BAEB21B1BB071007314CB /* ABCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABCommon.h; sourceTree = "<group>"; };
-		6C0BAEB31B1BB071007314CB /* ABFilterPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABFilterPort.h; sourceTree = "<group>"; };
-		6C0BAEB41B1BB071007314CB /* ABLocalPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABLocalPort.h; sourceTree = "<group>"; };
-		6C0BAEB51B1BB071007314CB /* ABMultiStreamBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABMultiStreamBuffer.h; sourceTree = "<group>"; };
-		6C0BAEB61B1BB071007314CB /* ABPeer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABPeer.h; sourceTree = "<group>"; };
-		6C0BAEB71B1BB071007314CB /* ABPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABPort.h; sourceTree = "<group>"; };
-		6C0BAEB81B1BB071007314CB /* ABReceiverPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABReceiverPort.h; sourceTree = "<group>"; };
-		6C0BAEB91B1BB071007314CB /* ABSenderPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABSenderPort.h; sourceTree = "<group>"; };
-		6C0BAEBA1B1BB071007314CB /* ABTrigger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABTrigger.h; sourceTree = "<group>"; };
-		6C0BAEBB1B1BB071007314CB /* Audiobus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Audiobus.h; sourceTree = "<group>"; };
 		6C0D487B1AC358C2008AD869 /* COLKeyboardComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLKeyboardComponent.h; sourceTree = "<group>"; };
 		6C0D487C1AC358C2008AD869 /* COLKeyboardComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLKeyboardComponent.m; sourceTree = "<group>"; };
 		6C1154731A8E306D005CF194 /* COLComponentIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentIO.h; sourceTree = "<group>"; };
@@ -137,7 +123,7 @@
 		6C172A4B1ACC49B700BE1418 /* COLDiscreteParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLDiscreteParameter.m; sourceTree = "<group>"; };
 		6C2A5E711A8BF30500ECEAB2 /* libColaLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libColaLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2A5E741A8BF30500ECEAB2 /* ColaLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColaLib.h; sourceTree = "<group>"; };
-		6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLAudioEngine.m; sourceTree = "<group>"; };
+		6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = COLAudioEngine.mm; sourceTree = "<group>"; };
 		6C2A5E9B1A8BF7B100ECEAB2 /* COLAudioEnvironment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLAudioEnvironment.m; sourceTree = "<group>"; };
 		6C300BE81AD3285C00D51544 /* COLComponentMultiples.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentMultiples.h; sourceTree = "<group>"; };
 		6C300BE91AD3285C00D51544 /* COLComponentMultiples.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentMultiples.m; sourceTree = "<group>"; };
@@ -168,6 +154,22 @@
 		6C7B27CD1A8D581100AFD384 /* COLDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = COLDefines.h; sourceTree = "<group>"; };
 		6C7D47AE1BE11A980092BC95 /* COLExporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLExporter.h; sourceTree = "<group>"; };
 		6C7D47AF1BE11A980092BC95 /* COLExporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLExporter.m; sourceTree = "<group>"; };
+		6C7D48261BE215770092BC95 /* CCOLComponentIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentIO.cpp; path = CCOL/CCOLComponentIO.cpp; sourceTree = "<group>"; };
+		6C7D48271BE215780092BC95 /* CCOLComponentIO.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentIO.hpp; path = CCOL/CCOLComponentIO.hpp; sourceTree = "<group>"; };
+		6C7D489A1BE2287F0092BC95 /* Audiobus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Audiobus.h; sourceTree = "<group>"; };
+		6C7D489B1BE2287F0092BC95 /* ABTrigger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABTrigger.h; sourceTree = "<group>"; };
+		6C7D489C1BE2287F0092BC95 /* ABSenderPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABSenderPort.h; sourceTree = "<group>"; };
+		6C7D489D1BE2287F0092BC95 /* ABReceiverPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABReceiverPort.h; sourceTree = "<group>"; };
+		6C7D489E1BE2287F0092BC95 /* ABPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABPort.h; sourceTree = "<group>"; };
+		6C7D489F1BE2287F0092BC95 /* ABPeer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABPeer.h; sourceTree = "<group>"; };
+		6C7D48A01BE2287F0092BC95 /* ABMultiStreamBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABMultiStreamBuffer.h; sourceTree = "<group>"; };
+		6C7D48A11BE2287F0092BC95 /* ABLocalPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABLocalPort.h; sourceTree = "<group>"; };
+		6C7D48A21BE2287F0092BC95 /* ABFilterPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABFilterPort.h; sourceTree = "<group>"; };
+		6C7D48A31BE2287F0092BC95 /* ABCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABCommon.h; sourceTree = "<group>"; };
+		6C7D48A41BE2287F0092BC95 /* ABButtonTrigger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABButtonTrigger.h; sourceTree = "<group>"; };
+		6C7D48A51BE2287F0092BC95 /* ABAudioUnitFader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABAudioUnitFader.h; sourceTree = "<group>"; };
+		6C7D48A61BE2287F0092BC95 /* ABAudiobusController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABAudiobusController.h; sourceTree = "<group>"; };
+		6C7D48A71BE228EB0092BC95 /* libAudiobus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAudiobus.a; sourceTree = "<group>"; };
 		6C8C15911ADC51DC0077460A /* COLComponentVCF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentVCF.h; sourceTree = "<group>"; };
 		6C8C15921ADC51DC0077460A /* COLComponentVCF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentVCF.m; sourceTree = "<group>"; };
 		6CB322EC1A9BC1110052AE50 /* COLContinuousParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLContinuousParameter.h; sourceTree = "<group>"; };
@@ -190,34 +192,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C0BAEAE1B1BB06A007314CB /* libAudiobus.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6C0BAEAC1B1BB048007314CB /* Audiobus */ = {
-			isa = PBXGroup;
-			children = (
-				6C0BAEAD1B1BB06A007314CB /* libAudiobus.a */,
-				6C0BAEAF1B1BB071007314CB /* ABAudiobusController.h */,
-				6C0BAEB01B1BB071007314CB /* ABAudioUnitFader.h */,
-				6C0BAEB11B1BB071007314CB /* ABButtonTrigger.h */,
-				6C0BAEB21B1BB071007314CB /* ABCommon.h */,
-				6C0BAEB31B1BB071007314CB /* ABFilterPort.h */,
-				6C0BAEB41B1BB071007314CB /* ABLocalPort.h */,
-				6C0BAEB51B1BB071007314CB /* ABMultiStreamBuffer.h */,
-				6C0BAEB61B1BB071007314CB /* ABPeer.h */,
-				6C0BAEB71B1BB071007314CB /* ABPort.h */,
-				6C0BAEB81B1BB071007314CB /* ABReceiverPort.h */,
-				6C0BAEB91B1BB071007314CB /* ABSenderPort.h */,
-				6C0BAEBA1B1BB071007314CB /* ABTrigger.h */,
-				6C0BAEBB1B1BB071007314CB /* Audiobus.h */,
-			);
-			name = Audiobus;
-			sourceTree = "<group>";
-		};
 		6C11547B1A8E346E005CF194 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -261,7 +241,6 @@
 			children = (
 				6C2A5E731A8BF30500ECEAB2 /* ColaLib */,
 				6C2A5E721A8BF30500ECEAB2 /* Products */,
-				6C0BAEAC1B1BB048007314CB /* Audiobus */,
 			);
 			sourceTree = "<group>";
 		};
@@ -276,6 +255,7 @@
 		6C2A5E731A8BF30500ECEAB2 /* ColaLib */ = {
 			isa = PBXGroup;
 			children = (
+				6C7D48991BE228740092BC95 /* Audiobus */,
 				6C2A5E741A8BF30500ECEAB2 /* ColaLib.h */,
 				6C7B27CD1A8D581100AFD384 /* COLDefines.h */,
 				6C7B27CB1A8D57BD00AFD384 /* COLAudioEnvironment.h */,
@@ -283,7 +263,9 @@
 				6C7D47AE1BE11A980092BC95 /* COLExporter.h */,
 				6C7D47AF1BE11A980092BC95 /* COLExporter.m */,
 				6C7B27CC1A8D57EF00AFD384 /* COLAudioEngine.h */,
-				6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.m */,
+				6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.mm */,
+				6C7D48261BE215770092BC95 /* CCOLComponentIO.cpp */,
+				6C7D48271BE215780092BC95 /* CCOLComponentIO.hpp */,
 				6C3AA0861A94039500DAAC09 /* COLAudioContext.h */,
 				6C3AA0871A94039500DAAC09 /* COLAudioContext.m */,
 				6C7B27C21A8D560100AFD384 /* COLComponent.h */,
@@ -307,6 +289,27 @@
 				6C11547B1A8E346E005CF194 /* Components */,
 			);
 			path = ColaLib;
+			sourceTree = "<group>";
+		};
+		6C7D48991BE228740092BC95 /* Audiobus */ = {
+			isa = PBXGroup;
+			children = (
+				6C7D48A71BE228EB0092BC95 /* libAudiobus.a */,
+				6C7D489A1BE2287F0092BC95 /* Audiobus.h */,
+				6C7D489B1BE2287F0092BC95 /* ABTrigger.h */,
+				6C7D489C1BE2287F0092BC95 /* ABSenderPort.h */,
+				6C7D489D1BE2287F0092BC95 /* ABReceiverPort.h */,
+				6C7D489E1BE2287F0092BC95 /* ABPort.h */,
+				6C7D489F1BE2287F0092BC95 /* ABPeer.h */,
+				6C7D48A01BE2287F0092BC95 /* ABMultiStreamBuffer.h */,
+				6C7D48A11BE2287F0092BC95 /* ABLocalPort.h */,
+				6C7D48A21BE2287F0092BC95 /* ABFilterPort.h */,
+				6C7D48A31BE2287F0092BC95 /* ABCommon.h */,
+				6C7D48A41BE2287F0092BC95 /* ABButtonTrigger.h */,
+				6C7D48A51BE2287F0092BC95 /* ABAudioUnitFader.h */,
+				6C7D48A61BE2287F0092BC95 /* ABAudiobusController.h */,
+			);
+			name = Audiobus;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -335,7 +338,7 @@
 		6C2A5E691A8BF30500ECEAB2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Chris Rivers";
 				TargetAttributes = {
 					6C2A5E701A8BF30500ECEAB2 = {
@@ -367,8 +370,9 @@
 			files = (
 				6C300BEA1AD3285C00D51544 /* COLComponentMultiples.m in Sources */,
 				6CB322EE1A9BC1110052AE50 /* COLContinuousParameter.m in Sources */,
+				6C7D48281BE215780092BC95 /* CCOLComponentIO.cpp in Sources */,
 				6C3AA0881A94039500DAAC09 /* COLAudioContext.m in Sources */,
-				6C2A5E981A8BF5BE00ECEAB2 /* COLAudioEngine.m in Sources */,
+				6C2A5E981A8BF5BE00ECEAB2 /* COLAudioEngine.mm in Sources */,
 				6C172A4D1ACC4C3900BE1418 /* COLDiscreteParameter.m in Sources */,
 				6C300BEE1AD336EF00D51544 /* COLComponentMixer2.m in Sources */,
 				6CBB7D031AEEF0B9006DD7A1 /* COLComponentSequencer.m in Sources */,
@@ -418,6 +422,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -478,10 +483,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(inherited)",
 				);
+				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "-ObjC";
+				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -492,10 +499,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(inherited)",
 				);
+				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "-ObjC";
+				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

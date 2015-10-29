@@ -5,8 +5,8 @@
 //  Created by Chris on 09/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-@import UIKit;
-@import Foundation;
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 @interface ModuleDescription : NSObject
 
