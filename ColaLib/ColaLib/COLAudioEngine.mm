@@ -15,6 +15,8 @@
 #import "Audiobus.h"
 
 #import "CCOLComponentIO.hpp"
+#import "CCOLComponentVCO.hpp"
+#import "CCOLAudioContext.hpp"
 
 // Extern wavetables used by components
 AudioSignalType sinWaveTable[WAVETABLE_SIZE];
@@ -27,6 +29,11 @@ HostCallbackInfo *callbackInfo;
 
 @interface COLAudioEngine() {
     Float64 sampleRate;
+    CCOLComponentInput ccMasterL;
+    CCOLComponentInput ccMasterR;
+    
+    CCOLComponentVCO ccVCO;
+    CCOLAudioContext ccContext;
 }
 
 @property (nonatomic) BOOL isForeground;
@@ -63,6 +70,13 @@ HostCallbackInfo *callbackInfo;
         // Init the master inputs
         self.masterInputL = [[COLAudioContext globalContext] masterInputAtIndex:0];
         self.masterInputR = [[COLAudioContext globalContext] masterInputAtIndex:1];
+        
+        ccMasterL.init(nullptr, kIOTypeAudio, (char*)[@"Master L" UTF8String]);
+        
+        ccVCO.init(&ccContext);
+        
+        CCOLComponentOutput *vcoOut = ccVCO.getOutputForIndex(0);
+        vcoOut->connect(&ccMasterL);
         
         self.attenuation = 1.0;
     }
@@ -218,13 +232,19 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 
         outA = (AudioSignalType*)ioData->mBuffers[0].mData;
         outB = (AudioSignalType*)ioData->mBuffers[1].mData;
-    
+
+        // Cherry Cola stuff
+        SignalType* outC = audioEngine->ccMasterL.getBuffer(inNumberFrames);
+        audioEngine->ccMasterL.engineDidRender();
+        
         // Fill up the output buffer
         for (int i = 0; i < inNumberFrames; i ++) {
 
             outA[i] = leftBuffer[i] * audioEngine.attenuation;
             outB[i] = rightBuffer[i] * audioEngine.attenuation;
 
+            outA[i] = outC[i];
+            
             if (audioEngine.isMuting && audioEngine.attenuation > 0.0) {
                 Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
                 Float32 newAttenuation = MAX(audioEngine.attenuation -= attenuationDelta, 0.0);
@@ -238,6 +258,8 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         
         [audioEngine.masterInputL engineDidRender];
         [audioEngine.masterInputR engineDidRender];
+        
+
     }
     return noErr;
 }
