@@ -17,6 +17,7 @@ class CCOLComponentVCO : public CCOLComponent {
     
     double                  phase;
     CCOLComponentOutput     mainOutput;
+    SignalType              previousResult;
     
 public:
     void            initializeIO() override;

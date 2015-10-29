@@ -10,8 +10,8 @@
 #define CCOLComponentIO_hpp
 
 #include <stdio.h>
+#include "CCOLDefines.h"
 
-typedef float SignalType;
 enum kIOType {
     kIOTypeAudio,
     kIOTypeControl,

@@ -29,11 +29,10 @@ HostCallbackInfo *callbackInfo;
 
 @interface COLAudioEngine() {
     Float64 sampleRate;
-    CCOLComponentInput ccMasterL;
-    CCOLComponentInput ccMasterR;
     
     CCOLComponentVCO ccVCO;
-    CCOLAudioContext ccContext;
+    CCOLComponentInput *masterInL;
+    CCOLComponentInput *masterInR;
 }
 
 @property (nonatomic) BOOL isForeground;
@@ -71,13 +70,13 @@ HostCallbackInfo *callbackInfo;
         self.masterInputL = [[COLAudioContext globalContext] masterInputAtIndex:0];
         self.masterInputR = [[COLAudioContext globalContext] masterInputAtIndex:1];
         
-        ccMasterL.init(nullptr, kIOTypeAudio, (char*)[@"Master L" UTF8String]);
+        masterInL = CCOLAudioContext::globalContext()->masterInput(0);
+        masterInR = CCOLAudioContext::globalContext()->masterInput(1);
         
-        ccVCO.init(&ccContext);
+        ccVCO.init(CCOLAudioContext::globalContext());
         
-        CCOLComponentOutput *vcoOut = ccVCO.getOutputForIndex(0);
-        vcoOut->connect(&ccMasterL);
-        
+        ccVCO.getOutputForIndex(0)->connect(masterInL);
+
         self.attenuation = 1.0;
     }
     
@@ -234,16 +233,14 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         outB = (AudioSignalType*)ioData->mBuffers[1].mData;
 
         // Cherry Cola stuff
-        SignalType* outC = audioEngine->ccMasterL.getBuffer(inNumberFrames);
-        audioEngine->ccMasterL.engineDidRender();
+        leftBuffer =    audioEngine->masterInL->getBuffer(inNumberFrames);
+        rightBuffer =   audioEngine->masterInR->getBuffer(inNumberFrames);
         
         // Fill up the output buffer
         for (int i = 0; i < inNumberFrames; i ++) {
 
             outA[i] = leftBuffer[i] * audioEngine.attenuation;
             outB[i] = rightBuffer[i] * audioEngine.attenuation;
-
-            outA[i] = outC[i];
             
             if (audioEngine.isMuting && audioEngine.attenuation > 0.0) {
                 Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
@@ -259,7 +256,8 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         [audioEngine.masterInputL engineDidRender];
         [audioEngine.masterInputR engineDidRender];
         
-
+        audioEngine->masterInL->engineDidRender();
+        audioEngine->masterInR->engineDidRender();
     }
     return noErr;
 }

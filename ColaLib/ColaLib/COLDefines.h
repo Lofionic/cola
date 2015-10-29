@@ -39,7 +39,6 @@
 #import <Foundation/Foundation.h>
 typedef Float32 AudioSignalType;
 
-
 // Wavetables
 #define WAVETABLE_SIZE      8196
 #define ANALOG_HARMONICS    50
