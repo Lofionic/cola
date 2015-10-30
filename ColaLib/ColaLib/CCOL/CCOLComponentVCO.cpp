@@ -6,11 +6,13 @@
 //  Copyright © 2015 Chris Rivers. All rights reserved.
 //
 #include <math.h>
+
 #include "CCOLComponentVCO.hpp"
+#include "CCOLDefines.h"
 
 void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
     
-    SignalType *mainOutBuffer = mainOutput.prepareBufferOfSize(numFrames);
+    SignalType *mainOutBuffer = mainOutput->prepareBufferOfSize(numFrames);
     
     double sampleRate = 44000.00;
 
@@ -23,20 +25,20 @@ void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
         SignalType sampleUpper = 0;
         if (waveformIndex == 0) {
             // Sinwave
-            sampleLower = sinWaveTable[(int)floor(sampleIndexFloat)];
-            sampleUpper = sinWaveTable[(int)ceil(sampleIndexFloat)];
+            sampleLower = ccSinWaveTable[(int)floor(sampleIndexFloat)];
+            sampleUpper = ccSinWaveTable[(int)ceil(sampleIndexFloat)];
         } else if (waveformIndex == 1) {
             // Triwave
-            sampleLower = triWaveTable[(int)floor(sampleIndexFloat)];
-            sampleUpper = triWaveTable[(int)ceil(sampleIndexFloat)];
+            sampleLower = ccTriWaveTable[(int)floor(sampleIndexFloat)];
+            sampleUpper = ccTriWaveTable[(int)ceil(sampleIndexFloat)];
         } else if (waveformIndex == 2) {
             // Sawtooth
-            sampleLower = sawWaveTable[(int)floor(sampleIndexFloat)];
-            sampleUpper = sawWaveTable[(int)ceil(sampleIndexFloat)];
+            sampleLower = ccSawWaveTable[(int)floor(sampleIndexFloat)];
+            sampleUpper = ccSawWaveTable[(int)ceil(sampleIndexFloat)];
         } else if (waveformIndex == 3) {
             // Square (pulse)
-            sampleLower = squareWaveTable[(int)floor(sampleIndexFloat)];
-            sampleUpper = squareWaveTable[(int)ceil(sampleIndexFloat)];
+            sampleLower = ccSquareWaveTable[(int)floor(sampleIndexFloat)];
+            sampleUpper = ccSquareWaveTable[(int)ceil(sampleIndexFloat)];
         }
         
         float remainder = fmodf(sampleIndexFloat, 1);
@@ -69,10 +71,10 @@ void CCOLComponentVCO::initializeIO() {
     std::vector<CCOLComponentInput*> theInputs = { };
     setInputs(theInputs);
     
-    mainOutput.init(this, kIOTypeAudio, (char*)"Output");
+    mainOutput = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"MainOut");
     
     vector<CCOLComponentOutput*> theOutputs = {
-        &mainOutput
+        mainOutput
     };
     
     setOutputs(theOutputs);

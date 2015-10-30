@@ -15,11 +15,15 @@
 
 class CCOLComponentVCO : public CCOLComponent {
     
-    double                  phase;
-    CCOLComponentOutput     mainOutput;
-    SignalType              previousResult;
+    double                  phase = 0;
+    CCOLComponentOutput*    mainOutput;
+    SignalType              previousResult = 0;
     
 public:
+    CCOLComponentVCO(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
+
+    }
+    
     void            initializeIO() override;
     void            renderOutputs(unsigned int numFrames) override;
     const char*     getDefaultName() override;

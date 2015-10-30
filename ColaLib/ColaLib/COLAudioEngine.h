@@ -38,8 +38,6 @@
 @property (readonly, weak) COLComponentInput *masterInputL;
 @property (readonly, weak) COLComponentInput *masterInputR;
 
-@property (readonly, strong) ABAudiobusController *audiobusController;
-
 @property (readonly) BOOL isMuting;
 @property (readonly) Float32 attenuation;
 

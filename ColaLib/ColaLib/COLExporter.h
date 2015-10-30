@@ -5,9 +5,8 @@
 //  Created by Chris on 28/10/2015.
 //  Copyright © 2015 Chris Rivers. All rights reserved.
 //
-
 #import <Foundation/Foundation.h>
-#import "ColaLib.h"
+#import "COLAudioEnvironment.h"
 
 #define COL_COMPONENTS_KEY                          @"components"
 #define COL_COMPONENT_IDENTIFIER_KEY                @"componentIdentifier"

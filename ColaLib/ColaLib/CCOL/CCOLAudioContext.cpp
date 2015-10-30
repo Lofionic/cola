@@ -11,11 +11,8 @@
 CCOLAudioContext::CCOLAudioContext() {
     // Constructor
     
-    CCOLComponentInput masterL;
-    masterL.init(NULL, kIOTypeAudio, (char*)"Master L");
-    
-    CCOLComponentInput masterR;
-    masterR.init(NULL, kIOTypeAudio, (char*)"Master R");
+    CCOLComponentInput *masterL = new CCOLComponentInput(NULL, kIOTypeAudio, (char*)"Master L");
+    CCOLComponentInput *masterR = new CCOLComponentInput(NULL, kIOTypeAudio, (char*)"Master R");
     
     masterInputs = {
         masterL, masterR

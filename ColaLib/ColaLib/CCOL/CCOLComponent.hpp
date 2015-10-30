@@ -20,12 +20,22 @@ class CCOLComponentParameter;
 class CCOLComponent {
     
 public:
-    void            init(CCOLAudioContext* context);
-    bool            hasRendered();
-    virtual void    renderOutputs(unsigned int numFrames);
-    void            engineDidRender();
+    CCOLComponent(CCOLAudioContext* contextIn) {
+        context =       contextIn;
+        identifier =    (char*)"ident";
+        rendered =      false;
+        inputs =        { };
+        outputs =       { };
+    }
+    
     void            disconnectAll();
     void            parameterDidChange(CCOLComponentParameter* parameter);
+   
+    bool            hasRendered();
+    void            engineDidRender();
+
+    virtual void    initializeIO() { }
+    virtual void    renderOutputs(unsigned int numFrames);
     virtual void    assignUniqueName();
     
     unsigned long int           getNumberOfOutputs() { return outputs.size(); }
@@ -59,7 +69,6 @@ private:
     CCOLAudioContext*   context;
     char*               identifier;
     bool                rendered;
-    virtual void        initializeIO() { }
     
     vector<CCOLComponentInput*>          inputs;
     vector<CCOLComponentOutput*>         outputs;

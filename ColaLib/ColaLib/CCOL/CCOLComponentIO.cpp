@@ -14,11 +14,11 @@
 static SignalType*     emptyBuffer;
 static unsigned int    emptyBufferSize;
 
-void CCOLComponentIO::init(CCOLComponent *inComponent, kIOType inType, char* inName) {
-    component   = inComponent;
-    ioType      = inType;
-    name        = inName;
-    
+CCOLComponentIO::CCOLComponentIO(CCOLComponent *componentIn, kIOType ioTypeIn, char* nameIn) {
+    component = componentIn;
+    ioType = ioTypeIn;
+    name = nameIn;
+
     connectedTo = nullptr;
 }
 
@@ -57,6 +57,8 @@ CCOLComponentIO* CCOLComponentIO::getConnected() {
 }
 
 #pragma mark CCOLComponentInput
+
+// Request the buffer for this output
 SignalType* CCOLComponentInput::getBuffer(unsigned int numFrames) {
     if (isConnected()) {
         SignalType *buffer = ((CCOLComponentOutput*)connectedTo)->getBuffer(numFrames);
@@ -71,6 +73,7 @@ SignalType* CCOLComponentInput::getBuffer(unsigned int numFrames) {
     }
 }
 
+// Return an empty buffer, used when the input is not connected to an output
 SignalType* CCOLComponentInput::getEmptyBuffer(unsigned int numFrames) {
     if (numFrames != emptyBufferSize) {
         free(emptyBuffer);
@@ -82,12 +85,14 @@ SignalType* CCOLComponentInput::getEmptyBuffer(unsigned int numFrames) {
     return emptyBuffer;
 }
 
+// Notify the connected output that the engine has rendered
 void CCOLComponentInput::engineDidRender() {
     if (isConnected()) {
         getConnected()->engineDidRender();
     }
 }
 
+// Disconnect from the output
 bool CCOLComponentInput::disconnect() {
     if (isConnected()) {
         setConnected(nullptr);
@@ -120,11 +125,6 @@ kIOType CCOLComponentInput::getIOType() {
 }
 
 #pragma mark CCOLComponentOutput
-void CCOLComponentOutput::init(CCOLComponent *inComponent, kIOType inType, char* inName) {
-    linkedInput = nullptr;
-    CCOLComponentIO::init(inComponent, inType, inName);
-}
-
 SignalType* CCOLComponentOutput::getBuffer(unsigned int numFrames) {
     // If the component hasn't rendered, now's the time to do it.
     if (!component->hasRendered()) {
@@ -137,7 +137,9 @@ SignalType* CCOLComponentOutput::getBuffer(unsigned int numFrames) {
 SignalType* CCOLComponentOutput::prepareBufferOfSize(unsigned int numFrames) {
     // Create or resize the buffer
     if (numFrames != bufferSize) {
-        free(buffer);
+        if (bufferSize != 0) {
+            free(buffer);
+        }
         bufferSize = numFrames;
         buffer = (SignalType*)malloc(bufferSize * sizeof(SignalType*));
         memset(buffer, 0, bufferSize * sizeof(SignalType*));

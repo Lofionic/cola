@@ -136,7 +136,7 @@
             // read mono
             stereo = NO;
             AudioBuffer buffer = bufferList->mBuffers[0];
-            AudioSignalType *data = buffer.mData;
+            AudioSignalType *data = (AudioSignalType*)buffer.mData;
             for (int i = 0; i < framesToRead; i++) {
                 samplesL[nextSample] = (AudioSignalType)data[i];
                 nextSample ++;
@@ -146,8 +146,8 @@
             stereo = YES;
             AudioBuffer bufferLeft = bufferList->mBuffers[0];
             AudioBuffer bufferRight = bufferList->mBuffers[1];
-            AudioSignalType *dataLeft = bufferLeft.mData;
-            AudioSignalType *dataRight = bufferRight.mData;
+            AudioSignalType *dataLeft = (AudioSignalType*)bufferLeft.mData;
+            AudioSignalType *dataRight = (AudioSignalType*)bufferRight.mData;
             for (int i = 0; i < framesToRead; i++) {
                 //printf("%.4f\n", data[i]);
                 samplesL[nextSample] = (AudioSignalType)dataLeft[i];

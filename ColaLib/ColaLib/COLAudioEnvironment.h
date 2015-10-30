@@ -5,14 +5,16 @@
 //  Created by Chris on 12/02/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-#import "COLComponent.h"
+
+#import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
+#import "CCOLTypes.h"
 
 @protocol COLAudioEnvironmentInfoDelegate <NSObject>
 -(NSDictionary*)interAppInfoDictionary;
 @end
 
 @class COLAudioEngine;
-@class COLComponent;
 @protocol COLAudioEngineDelegate <NSObject>
 @optional
 -(NSDictionary*)interAppInfoDictionaryForAudioEngine:(COLAudioEngine*)audioEngine;
@@ -41,9 +43,12 @@
 
 -(void)exportEnvironment;
 
-// Factory methods
--(COLComponent*)createComponentOfType:(NSString *)componentType;
--(BOOL)removeComponent:(COLComponent*)component;
+// Component Management
+-(CCOLComponentAddress)createCComponentOfType:(char*)componentType;
+-(BOOL)connectOutput:(CCOLOutputAddress)outputAddress toInput:(CCOLInputAddress)inputAddress;
+
+-(CCOLInputAddress)getMasterInputAtIndex:(UInt32)index;
+-(CCOLOutputAddress)getOutputNamed:(char*)outputName onComponent:(CCOLComponentAddress)componentAddress;
 
 @property (readonly) NSMutableArray *components;
 

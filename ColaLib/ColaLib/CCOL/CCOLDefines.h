@@ -9,17 +9,17 @@
 #ifndef CCOLDefines_h
 #define CCOLDefines_h
 
-typedef float SignalType;
+#import "CCOLTypes.h"
 
 #define CV_FREQUENCY_RANGE 8372 // C9
 
 #define WAVETABLE_SIZE      8196
 #define ANALOG_HARMONICS    50
 
-extern SignalType sinWaveTable[WAVETABLE_SIZE];
-extern SignalType triWaveTable[WAVETABLE_SIZE];
-extern SignalType sawWaveTable[WAVETABLE_SIZE];
-extern SignalType rampWaveTable[WAVETABLE_SIZE];
-extern SignalType squareWaveTable[WAVETABLE_SIZE];
+extern SignalType ccSinWaveTable[WAVETABLE_SIZE];
+extern SignalType ccTriWaveTable[WAVETABLE_SIZE];
+extern SignalType ccSawWaveTable[WAVETABLE_SIZE];
+extern SignalType ccRampWaveTable[WAVETABLE_SIZE];
+extern SignalType ccSquareWaveTable[WAVETABLE_SIZE];
 
 #endif /* CCOLDefines_h */

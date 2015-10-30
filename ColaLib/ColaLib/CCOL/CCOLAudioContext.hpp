@@ -19,7 +19,7 @@ class CCOLAudioContext {
  
 private:
     CCOLAudioContext();
-    vector<CCOLComponentInput> masterInputs;
+    vector<CCOLComponentInput*> masterInputs;
     
 public:
 
@@ -30,8 +30,8 @@ public:
         return &INSTANCE;
     }
     
-    CCOLComponentInput *masterInput(unsigned int index) {
-        return &masterInputs.at(index);
+    CCOLComponentInput *getMasterInput(unsigned int index) {
+        return masterInputs.at(index);
     }
 };
 

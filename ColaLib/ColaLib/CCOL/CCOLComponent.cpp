@@ -9,11 +9,6 @@
 #include "CCOLComponent.hpp"
 #include <string>
 
-void CCOLComponent::init(CCOLAudioContext* contextIn) {
-    context = contextIn;
-    initializeIO();
-}
-
 void CCOLComponent::assignUniqueName() {
     unsigned int    componentCount = 0;
     const char*     name;
@@ -53,6 +48,18 @@ void CCOLComponent::disconnectAll() {
     for (auto &i : inputs) {
         ((CCOLComponentInput*)i)->engineDidRender();
     }
+}
+
+CCOLComponentOutput *CCOLComponent::getOutputNamed(char *name) {
+    CCOLComponentOutput *result = NULL;
+    
+    for (auto &i : outputs) {
+        if (((CCOLComponentOutput*)i)->getName() == std::string(name)) {
+            result = i;
+        }
+    }
+    
+    return result;
 }
 
 const char* CCOLComponent::getDefaultName() {

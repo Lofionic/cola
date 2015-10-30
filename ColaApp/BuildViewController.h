@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import "ComponentShelfView.h"
-#import <ColaLib/ColaLib.h>
 #import <UIKit/UIKit.h>
 
 @class BuildView;

@@ -10,6 +10,7 @@
 #define CCOLComponentIO_hpp
 
 #include <stdio.h>
+#include <string.h>
 #include "CCOLDefines.h"
 
 enum kIOType {
@@ -26,17 +27,11 @@ class CCOLComponent;
 
 class CCOLComponentIO {
 
-    
-private:
-    char*               name;
-    
-protected:
-    CCOLComponent*      component;
-    kIOType             ioType;
-    CCOLComponentIO*    connectedTo;
-
 public:
-    virtual void        init(CCOLComponent *component, kIOType ioType, char* name);
+    CCOLComponentIO(CCOLComponent *component, kIOType ioType, char* name);
+    
+    const char*         getName() { return name; }
+    
     virtual void        engineDidRender();
     virtual bool        disconnect();
     
@@ -48,6 +43,15 @@ public:
 
     void                setConnected(CCOLComponentIO* connectTo);
     CCOLComponentIO*    getConnected();
+    
+protected:
+    CCOLComponent*      component;
+    kIOType             ioType;
+    CCOLComponentIO*    connectedTo;
+   
+    
+private:
+    char*               name;
 };
 
 
@@ -55,6 +59,8 @@ public:
 class CCOLComponentInput : public CCOLComponentIO {
     
 public:
+    CCOLComponentInput(CCOLComponent *component, kIOType ioType, char* name):CCOLComponentIO(component, ioType, name) { }
+    
     SignalType*     getBuffer(unsigned int numFrames);
     bool            makeDynamicConnection(CCOLComponentOutput *outputIn);
     bool            isDynamic() override;
@@ -69,18 +75,24 @@ private:
 class CCOLComponentOutput : public CCOLComponentIO {
 
 public:
-    void            init(CCOLComponent *component, kIOType ioType, char* name) override;
+    CCOLComponentOutput(CCOLComponent *component, kIOType ioType, char* name):CCOLComponentIO(component, ioType, name) {
+        linkedInput = nullptr;
+        buffer = nullptr;
+        bufferSize = 0;
+    }
+
     SignalType*     getBuffer(unsigned int numFrames);
     SignalType*     prepareBufferOfSize(unsigned int numFrames);
     bool            connect(CCOLComponentInput* inputIn);
-    bool            disconnect() override;
+    
     void            engineDidRender() override;
     
 private:
     SignalType*             buffer;
     unsigned int            bufferSize;
     CCOLComponentInput*     linkedInput = nullptr;
-
+    
+    bool                    disconnect() override; // Should be called on inputs only
 };
 
 #endif /* CCOLComponentIO_hpp */

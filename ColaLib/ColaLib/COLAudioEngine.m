@@ -14,10 +14,6 @@
 #import "COLTransportController.h"
 #import "Audiobus.h"
 
-#import "CCOLComponentIO.hpp"
-#import "CCOLComponentVCO.hpp"
-#import "CCOLAudioContext.hpp"
-
 // Extern wavetables used by components
 AudioSignalType sinWaveTable[WAVETABLE_SIZE];
 AudioSignalType triWaveTable[WAVETABLE_SIZE];
@@ -29,10 +25,6 @@ HostCallbackInfo *callbackInfo;
 
 @interface COLAudioEngine() {
     Float64 sampleRate;
-    
-    CCOLComponentVCO ccVCO;
-    CCOLComponentInput *masterInL;
-    CCOLComponentInput *masterInR;
 }
 
 @property (nonatomic) BOOL isForeground;
@@ -69,13 +61,6 @@ HostCallbackInfo *callbackInfo;
         // Init the master inputs
         self.masterInputL = [[COLAudioContext globalContext] masterInputAtIndex:0];
         self.masterInputR = [[COLAudioContext globalContext] masterInputAtIndex:1];
-        
-        masterInL = CCOLAudioContext::globalContext()->masterInput(0);
-        masterInR = CCOLAudioContext::globalContext()->masterInput(1);
-        
-        ccVCO.init(CCOLAudioContext::globalContext());
-        
-        ccVCO.getOutputForIndex(0)->connect(masterInL);
 
         self.attenuation = 1.0;
     }
@@ -231,11 +216,11 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 
         outA = (AudioSignalType*)ioData->mBuffers[0].mData;
         outB = (AudioSignalType*)ioData->mBuffers[1].mData;
-
-        // Cherry Cola stuff
-        leftBuffer =    audioEngine->masterInL->getBuffer(inNumberFrames);
-        rightBuffer =   audioEngine->masterInR->getBuffer(inNumberFrames);
-        
+//
+//        // Cherry Cola stuff
+//        leftBuffer =    audioEngine->masterInL->getBuffer(inNumberFrames);
+//        rightBuffer =   audioEngine->masterInR->getBuffer(inNumberFrames);
+//        
         // Fill up the output buffer
         for (int i = 0; i < inNumberFrames; i ++) {
 
@@ -255,9 +240,9 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         
         [audioEngine.masterInputL engineDidRender];
         [audioEngine.masterInputR engineDidRender];
-        
-        audioEngine->masterInL->engineDidRender();
-        audioEngine->masterInR->engineDidRender();
+//        
+//        audioEngine->masterInL->engineDidRender();
+//        audioEngine->masterInR->engineDidRender();
     }
     return noErr;
 }
@@ -490,7 +475,6 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 }
 
 #pragma mark Inter app audio transport 
-
 // Send transport state to remote host
 -(void)sendStateToRemoteHost:(AudioUnitRemoteControlEvent)state {
     // Send a remote control message back to host

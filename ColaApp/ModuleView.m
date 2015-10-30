@@ -32,7 +32,8 @@
 
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame identifier:(NSString*)identifier {
     
-    COLComponent *component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:moduleDescription.type];
+    //COLComponent *component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:moduleDescription.type];
+    COLComponent *component = nil;
     if (!component) {
         return nil;
     }
@@ -209,7 +210,7 @@
 }
 
 -(void)trash {
-    [[COLAudioEnvironment sharedEnvironment] removeComponent:self.component];
+    //[[COLAudioEnvironment sharedEnvironment] removeComponent:self.component];
     [self removeFromSuperview];
 }
 

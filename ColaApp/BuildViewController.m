@@ -18,6 +18,9 @@
 #import "BuildViewScrollView.h"
 #import "IAAView.h"
 
+#import <ColaLib/CCOLTypes.h>
+#import <ColaLib/COLAudioEnvironment.h>
+
 static BuildView *buildView = nil;
 
 @interface BuildViewController()
@@ -216,11 +219,21 @@ static BuildView *buildView = nil;
     self.preset = [[PresetController sharedController] recallPresetAtIndex:0];
     [self.buildView buildFromDictionary:[self.preset dictionary]];
     
-    // Register for updates form the transport controller
+    // Register for updates from the transport controller
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedOfTransportUpdate:) name:kCOLEventTransportStateUpdated object:nil];
 
     // We need to know when a dynamic input has disconnected its linked outputs
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dynamicInputDidForceDisconnect:) name:kCOLEventDynamicInputDidForceDisconnect object:nil];
+
+    // Set up test
+    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+    CCOLComponentAddress vco = [cae createCComponentOfType:(char*)kCCOLComponentTypeVCO];
+    CCOLOutputAddress vcoMainOut = [cae getOutputNamed:(char*)"MainOut" onComponent:vco];
+    CCOLInputAddress mainL = [cae getMasterInputAtIndex:0];
+    
+    [cae connectOutput:vcoMainOut toInput:mainL];
+    
+    NSLog(@"MEH");
 }
 
 
@@ -236,7 +249,6 @@ static BuildView *buildView = nil;
     [[[COLAudioEnvironment sharedEnvironment] transportController] stopAndReset];
     [[COLAudioEnvironment sharedEnvironment] mute];
 }
-
 
 -(void)appWillEnterForeground {
     if ([[COLAudioEnvironment sharedEnvironment] isInterAppAudioConnected]) {

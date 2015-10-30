@@ -772,6 +772,7 @@
 				6C7D485E1BE224210092BC95 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
