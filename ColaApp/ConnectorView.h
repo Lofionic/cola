@@ -5,8 +5,8 @@
 //  Created by Chris on 22/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-#import <ColaLib/ColaLib.h>
 #import <UIKit/UIKit.h>
+#import <ColaLib/CCOLTypes.h>
 
 @class ConnectorView;
 
@@ -22,10 +22,10 @@
 @interface ConnectorView : UIView
 
 @property (nonatomic, weak) id<ConnectorViewDelegate>   delegate;
-@property (readonly, weak) COLComponentIO*              componentIO;
+@property (readonly) CCOLConnectorAddress               componentIO;
 
 @property (nonatomic, weak) BuildViewCable *cable;
 
--(instancetype)initWithComponentIO:(COLComponentIO*)componentIO;
+-(instancetype)initWithComponentIO:(CCOLConnectorAddress)componentIO;
 
 @end

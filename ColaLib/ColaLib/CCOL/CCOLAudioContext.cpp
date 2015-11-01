@@ -7,6 +7,7 @@
 //
 
 #include "CCOLAudioContext.hpp"
+#include "CCOLComponentIO.hpp"
 
 CCOLAudioContext::CCOLAudioContext() {
     // Constructor

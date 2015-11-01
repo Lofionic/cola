@@ -5,7 +5,7 @@
 //  Created by Chris on 23/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-#import <ColaLib/ColaLib.h>
+#import <ColaLib/CCOLTypes.h>
 #import <UIKit/UIKit.h>
 
 @class ModuleView;
@@ -24,7 +24,7 @@
 @interface ModuleView : UIView
 
 @property (nonatomic, weak) id<ModuleViewDelegate>  delegate;
-@property (readonly, weak) COLComponent             *component;
+@property (readonly) CCOLComponentAddress           component;
 @property (readonly, strong) ModuleDescription      *moduleDescription;
 @property (nonatomic, strong) NSString              *identifier;
 @property (nonatomic, strong) NSArray               *connectorViews;

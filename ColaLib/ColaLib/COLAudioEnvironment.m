@@ -7,11 +7,11 @@
 //
 
 #import "COLAudioEnvironment.h"
-
 #import "CCOLAudioEngine.hpp"
+#import "CCOLComponentParameter.hpp"
 
 @interface COLAudioEnvironment() {
-    CCOLAudioEngine ccAudioEngine;
+    CCOLAudioEngine *ccAudioEngine;
 }
 
 @property (nonatomic, strong) COLAudioEngine*   audioEngine;
@@ -56,7 +56,8 @@
 //        self.transportController = [[COLTransportController alloc] init];
         
         // Cherry Cola
-        ccAudioEngine.init();
+        ccAudioEngine = new CCOLAudioEngine();
+        ccAudioEngine->init();
     }
     return self;
 }
@@ -64,7 +65,7 @@
 -(void)start {
 //    [self.audioEngine initializeAUGraph];
     
-    ccAudioEngine.initializeAUGraph();
+    ccAudioEngine->initializeAUGraph();
 }
 
 -(void)mute {
@@ -76,19 +77,56 @@
 
 #pragma mark Component Factory
 -(CCOLComponentAddress)createCComponentOfType:(char*)componentType {
-    return ccAudioEngine.createComponent(componentType);
+    return ccAudioEngine->createComponent(componentType);
 }
 
 -(CCOLOutputAddress)getOutputNamed:(char*)outputName onComponent:(CCOLComponentAddress)componentAddress {
-    return ccAudioEngine.getOutput(componentAddress, outputName);
+    return ccAudioEngine->getOutput(componentAddress, outputName);
+}
+
+-(CCOLParameterAddress)getParameterNamed:(char*)parameterName onComponent:(CCOLComponentAddress)componentAddress {
+    return ccAudioEngine->getParameter(componentAddress, parameterName);
+}
+
+-(double)getContinuousParameterValue:(CCOLParameterAddress)parameterAddress {
+    CCOLContinuousParameter *parameter = (CCOLContinuousParameter*)parameterAddress;
+    return parameter->getNormalizedValue();
+}
+
+-(void)setContinuousParameter:(CCOLParameterAddress)parameterAddress value:(double)value {
+    CCOLContinuousParameter *parameter = (CCOLContinuousParameter*)parameterAddress;
+    parameter->setNormalizedValue(value);
+}
+
+-(CCOLDiscreteParameterIndex)getDiscreteParameterSelectedIndex:(CCOLParameterAddress)parameterAddress {
+    CCOLDiscreteParameter *parameter = (CCOLDiscreteParameter*)parameterAddress;
+    return parameter->getSelectedIndex();
+}
+
+-(void)setDiscreteParameterSelectedIndex:(CCOLParameterAddress)parameterAddress index:(CCOLDiscreteParameterIndex)index {
+    CCOLDiscreteParameter *parameter = (CCOLDiscreteParameter*)parameterAddress;
+    parameter->setSelectedIndex(index);
+}
+
+-(CCOLDiscreteParameterIndex)getDiscreteParameterMaxIndex:(CCOLParameterAddress)parameterAddress {
+    CCOLDiscreteParameter *parameter = (CCOLDiscreteParameter*)parameterAddress;
+    return parameter->getMaxIndex();
 }
 
 -(BOOL)connectOutput:(CCOLOutputAddress)outputAddress toInput:(CCOLInputAddress)inputAddress {
-    return ccAudioEngine.connect(outputAddress, inputAddress);
+    return ccAudioEngine->connect(outputAddress, inputAddress);
+}
+
+-(BOOL)disconnectInput:(CCOLInputAddress)inputAddress {
+    return ccAudioEngine->disconnect(inputAddress);
 }
 
 -(CCOLInputAddress)getMasterInputAtIndex:(UInt32)index {
-    return ccAudioEngine.getMasterInput(index);
+    return ccAudioEngine->getMasterInput(index);
+}
+
+-(kIOType)getConnectorType:(CCOLConnectorAddress)connectorAddress {
+    return ccAudioEngine->getIOType(connectorAddress);
 }
 
 #pragma mark AudioEngine delegates

@@ -11,12 +11,28 @@
 
 #include <stdio.h>
 #include "CCOLComponent.hpp"
-#include "CCOLComponentIO.hpp"
+#include "CCOLTypes.h"
 
+class CCOLComponentInput;
+class CCOLComponentOutput;
+class CCOLDiscreteParameter;
+class CCOLContinuousParameter;
 class CCOLComponentVCO : public CCOLComponent {
     
     double                  phase = 0;
+    
+    CCOLComponentInput*     keyboardIn;
+    CCOLComponentInput*     fmodIn;
+    
     CCOLComponentOutput*    mainOutput;
+    
+    CCOLDiscreteParameter*      range;
+    CCOLDiscreteParameter*      waveform;
+    CCOLContinuousParameter*    tune;
+    CCOLContinuousParameter*    fmAmt;
+    
+    CCOLDiscreteParameterIndex  waveformIndex;
+    
     SignalType              previousResult = 0;
     
 public:

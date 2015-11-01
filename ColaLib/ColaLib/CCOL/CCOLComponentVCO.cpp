@@ -9,18 +9,18 @@
 
 #include "CCOLComponentVCO.hpp"
 #include "CCOLDefines.h"
+#include "CCOLComponentIO.hpp"
+#include "CCOLComponentParameter.hpp"
 
 void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
     
     SignalType *mainOutBuffer = mainOutput->prepareBufferOfSize(numFrames);
     
-    double sampleRate = 44000.00;
+    double sampleRate = 44100.00;
 
     for (int i = 0; i < numFrames; i++) {
         float sampleIndexFloat = (phase / (M_PI * 2)) * (WAVETABLE_SIZE - 1);
-        
-        short unsigned int waveformIndex = 1;
-        
+
         SignalType sampleLower = 0;
         SignalType sampleUpper = 0;
         if (waveformIndex == 0) {
@@ -43,13 +43,13 @@ void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
         
         float remainder = fmodf(sampleIndexFloat, 1);
         SignalType result = sampleLower + (sampleUpper - sampleLower) * remainder;
+       
+        float delta = ((float)i / numFrames);
+        float freqIn = 0.02;
+        unsigned int rangeIn = 2;
+        float tuneIn = tune->getOutputAtDelta(delta);
         
-        // Increment phase
-        float freq = 0.5;
-        unsigned int range = 2;
-        float tune = 0.05;
-        
-        phase += (M_PI * freq * CV_FREQUENCY_RANGE * pow(2, range) * tune) / sampleRate;
+        phase += (M_PI * freqIn * CV_FREQUENCY_RANGE * pow(2, rangeIn) * tuneIn) / sampleRate;
         
         if (phase > 2.0 * M_PI) {
             phase -= (2.0 * M_PI);
@@ -57,6 +57,10 @@ void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
         
         if (result > 0 != (previousResult < 0) || result == 0) {
             //TODO: Change waveform on zero crossover
+            if (waveformIndex != waveform->getSelectedIndex()) {
+                waveformIndex = waveform->getSelectedIndex();
+                phase = 0;
+            }
         }
         
         mainOutBuffer[i] = previousResult = result;
@@ -68,16 +72,44 @@ void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
 
 void CCOLComponentVCO::initializeIO() {
     
-    std::vector<CCOLComponentInput*> theInputs = { };
+    keyboardIn = new CCOLComponentInput(this, kIOType1VOct, (char*)"Keyboard In");
+    fmodIn = new CCOLComponentInput(this, kIOTypeControl, (char*)"FM In");
+    std::vector<CCOLComponentInput*> theInputs = {
+        keyboardIn,
+        fmodIn
+    };
     setInputs(theInputs);
     
-    mainOutput = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"MainOut");
-    
+    mainOutput = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"Out");
     vector<CCOLComponentOutput*> theOutputs = {
         mainOutput
     };
-    
     setOutputs(theOutputs);
+    
+    range =     new CCOLDiscreteParameter(this, (char*)"Range", 4);
+    waveform =  new CCOLDiscreteParameter(this, (char*)"Waveform", 4);
+    tune =      new CCOLContinuousParameter(this, (char*)"Tune");
+    tune->setParameterFunction([] (double valueIn) -> double {
+        float output = (valueIn * 2.0) - 1.0;
+        return (powf(powf(2, (1.0 / 12.0)), output * 7));
+    });
+    fmAmt =     new CCOLContinuousParameter(this, (char*)"FM Amt");
+    vector<CCOLComponentParameter*> theParams = {
+        range,
+        waveform,
+        tune,
+        fmAmt
+    };
+    setParameters(theParams);
+    
+    // Set defaults
+    range->setSelectedIndex(0);
+    waveform->setSelectedIndex(0);
+    tune->setNormalizedValue(0.5);
+    fmAmt->setNormalizedValue(0.5);
+    
+    printf("%.3f", tune->getOutputAtDelta(1));
+    printf("\n");
 }
 
 const char* CCOLComponentVCO::getDefaultName() {

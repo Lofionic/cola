@@ -7,7 +7,6 @@
 //
 #import "IAAView.h"
 #import "defines.h"
-#import <ColaLib/ColaLib.h>
 
 @interface IAAView()
 
@@ -71,31 +70,31 @@
 }
 
 -(void)updateContents {
-    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-    [self.hostImageView setImage:[audioEngine iaaHostImage]];
-    
-    [self.playButton setSelected:audioEngine.isHostPlaying];
-    [self.recordButton setSelected:audioEngine.isHostRecording];
+//    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
+//    [self.hostImageView setImage:[audioEngine iaaHostImage]];
+//    
+//    [self.playButton setSelected:audioEngine.isHostPlaying];
+//    [self.recordButton setSelected:audioEngine.isHostRecording];
 }
 
 -(void)hostImageTapped:(UIGestureRecognizer*)uigr {
-    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-    [audioEngine iaaGotoHost];
+//    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
+//    [audioEngine iaaGotoHost];
 }
 
 -(void)rewindTapped {
-    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-    [audioEngine iaaRewind];
+//    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
+//    [audioEngine iaaRewind];
 }
 
 -(void)playTapped {
-    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-    [audioEngine iaaTogglePlay];
+//    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
+//    [audioEngine iaaTogglePlay];
 }
 
 -(void)recordTapped {
-    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-    [audioEngine iaaToggleRecord];
+//    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
+//    [audioEngine iaaToggleRecord];
 }
 
 @end

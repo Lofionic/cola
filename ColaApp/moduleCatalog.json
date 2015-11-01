@@ -4,7 +4,7 @@
             "id" : "VCOA",
             "name" : "VCO A",
             "width" : 2,
-            "type" : "COLComponentVCO",
+            "type" : "CCOLComponentTypeVCO",
             "view" : 
             {
                 "asset" : "vco_a",
@@ -31,14 +31,14 @@
                 "controls" : [
                     {
                         "asset" : "large_white",
-                        "type" : "continuous",
+                        "type" : "discrete",
                         "parameter" : "Range",
                         "x" : 50,
                         "y" : 70
                     },
                     {
                         "asset" : "large_white",
-                        "type" : "continuous",
+                        "type" : "discrete",
                         "parameter" : "Waveform",
                         "x" : 130,
                         "y" : 170

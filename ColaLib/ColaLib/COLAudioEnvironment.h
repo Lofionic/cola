@@ -46,9 +46,19 @@
 // Component Management
 -(CCOLComponentAddress)createCComponentOfType:(char*)componentType;
 -(BOOL)connectOutput:(CCOLOutputAddress)outputAddress toInput:(CCOLInputAddress)inputAddress;
+-(BOOL)disconnectInput:(CCOLInputAddress)inputAddress;
 
 -(CCOLInputAddress)getMasterInputAtIndex:(UInt32)index;
 -(CCOLOutputAddress)getOutputNamed:(char*)outputName onComponent:(CCOLComponentAddress)componentAddress;
+-(CCOLParameterAddress)getParameterNamed:(char*)parameterName onComponent:(CCOLComponentAddress)componentAddress;
+-(kIOType)getConnectorType:(CCOLConnectorAddress)connectorAddress;
+
+// Get set parameters
+-(double)getContinuousParameterValue:(CCOLParameterAddress)parameterAddress;
+-(void)setContinuousParameter:(CCOLParameterAddress)parameterAddress value:(double)value;
+-(CCOLDiscreteParameterIndex)getDiscreteParameterSelectedIndex:(CCOLParameterAddress)parameterAddress;
+-(void)setDiscreteParameterSelectedIndex:(CCOLParameterAddress)parameterAddress index:(CCOLDiscreteParameterIndex)index;
+-(CCOLDiscreteParameterIndex)getDiscreteParameterMaxIndex:(CCOLParameterAddress)parameterAddress;
 
 @property (readonly) NSMutableArray *components;
 

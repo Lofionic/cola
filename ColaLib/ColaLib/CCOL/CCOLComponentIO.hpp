@@ -9,17 +9,7 @@
 #ifndef CCOLComponentIO_hpp
 #define CCOLComponentIO_hpp
 
-#include <stdio.h>
-#include <string.h>
 #include "CCOLDefines.h"
-
-enum kIOType {
-    kIOTypeAudio,
-    kIOTypeControl,
-    kIOType1VOct,
-    kcIOTypeGate,
-    kIOTypeDynamic
-};
 
 class CCOLComponentInput;
 class CCOLComponentOutput;
@@ -84,7 +74,7 @@ public:
     SignalType*     getBuffer(unsigned int numFrames);
     SignalType*     prepareBufferOfSize(unsigned int numFrames);
     bool            connect(CCOLComponentInput* inputIn);
-    
+    kIOType         getIOType() override;
     void            engineDidRender() override;
     
 private:

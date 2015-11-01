@@ -10,10 +10,11 @@
 
 #import "defines.h"
 #import "ModuleDescription.h"
+#import <ColaLib/COLAudioEnvironment.h>
 
 @interface RotaryEncoder ()
 
-@property (nonatomic, weak) COLContinuousParameter   *parameter;
+@property (nonatomic) CCOLParameterAddress          parameter;
 @property (nonatomic, strong) CALayer               *needleLayer;
 
 @end
@@ -24,7 +25,7 @@
     double      trackingValue;
 }
 
--(instancetype)initWithContinuousParameter:(COLContinuousParameter*)parameter Description:(ControlDescription*)controlDescription {
+-(instancetype)initWithContinuousParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)controlDescription {
     
     if (self = [super init]) {
         self.parameter = parameter;
@@ -55,7 +56,7 @@
 }
 
 -(void)updateFromParameter {
-    [self setValue:[self.parameter getNormalizedValue]];
+    [self setValue:[[COLAudioEnvironment sharedEnvironment] getContinuousParameterValue:self.parameter]];
 }
 
 
@@ -88,8 +89,7 @@
         
         [self setNeedsDisplay];
         
-        [self.parameter setNormalizedValue:self.value];
-        
+        [[COLAudioEnvironment sharedEnvironment] setContinuousParameter:self.parameter value:self.value];
     }
 }
 

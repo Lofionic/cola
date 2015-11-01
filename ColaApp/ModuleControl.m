@@ -13,14 +13,18 @@
 @implementation ModuleControl
 
 // Factory method for creating a control of the correct type
-+(ModuleControl*)controlForParameter:(COLParameter*)parameter Description:(ControlDescription*)description {
-    
++(ModuleControl*)controlForParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)description ControlType:(ControlType)type
+{
     ModuleControl *result = nil;
     
-    if ([parameter isKindOfClass:[COLContinuousParameter class]]) {
-        result = [[RotaryEncoder alloc] initWithContinuousParameter:(COLContinuousParameter*)parameter Description:description];
-    } else if ([parameter isKindOfClass:[COLDiscreteParameter class]]) {
-        result = [[RotarySwitch alloc] initWithDiscreteParameter:(COLDiscreteParameter*)parameter Description:description];
+    switch (type) {
+        case Continuous:
+            result = [[RotaryEncoder alloc] initWithContinuousParameter:parameter Description:description];
+            break;
+        case Discrete:
+            result = [[RotarySwitch alloc] initWithDiscreteParameter:parameter Description:description];
+        default:
+            break;
     }
  
     return result;

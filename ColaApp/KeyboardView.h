@@ -6,12 +6,12 @@
 //  Copyright (c) 2014 ccr. All rights reserved.
 //
 
-#import <ColaLib/ColaLib.h>
+#import <ColaLib/CCOLTypes.h>
 #import <UIKit/UIKit.h>
 
 @interface KeyboardView : UIView
 
-@property (nonatomic, weak) COLKeyboardComponent *kbComponent;
+@property (nonatomic) CCOLComponentAddress kbComponent;
 @property NSInteger keyboardShift;
 
 @end

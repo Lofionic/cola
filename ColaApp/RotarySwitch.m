@@ -9,10 +9,13 @@
 
 #import "defines.h"
 #import "ModuleDescription.h"
+#import <ColaLib/COLAudioEnvironment.h>
+#import <ColaLib/CCOLTypes.h>
+
 
 @interface RotarySwitch ()
 
-@property (nonatomic, weak) COLDiscreteParameter   *parameter;
+@property (nonatomic) CCOLParameterAddress   parameter;
 @property (nonatomic, strong) CALayer               *needleLayer;
 
 @end
@@ -24,7 +27,7 @@
     double      needleOffset;
 }
 
--(instancetype)initWithDiscreteParameter:(COLDiscreteParameter*)parameter Description:(ControlDescription*)controlDescription {
+-(instancetype)initWithDiscreteParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)controlDescription {
     if (self = [super init]) {
         self.parameter = parameter;
         self.selectedIndex = 0;
@@ -54,13 +57,14 @@
 }
 
 -(void)updateFromParameter {
-    [self setSelectedIndex:floor([self.parameter selectedIndex])];
+    [self setSelectedIndex:floor([[COLAudioEnvironment sharedEnvironment] getDiscreteParameterSelectedIndex:self.parameter])];
     [self updateNeedleAnimated:NO];
 }
 
 
 -(void)updateNeedleAnimated:(BOOL)animated {
-    double offset = (M_PI / 2.0) + (((self.parameter.maxIndex - 1) / 12.0) * M_PI);
+    CCOLDiscreteParameterIndex maxIndex = [[COLAudioEnvironment sharedEnvironment] getDiscreteParameterMaxIndex:self.parameter];
+    double offset = (M_PI / 2.0) + (((maxIndex - 1) / 12.0) * M_PI);
     double theta = ((M_PI * 2.0) * (self.selectedIndex / 12.0));
     
     BOOL disableActions = [CATransaction disableActions];
@@ -76,7 +80,8 @@
 }
 
 -(void)setSelectedIndex:(NSUInteger)value {
-    if (value < self.parameter.maxIndex) {
+    CCOLDiscreteParameterIndex maxIndex = [[COLAudioEnvironment sharedEnvironment] getDiscreteParameterMaxIndex:self.parameter];
+    if (value < maxIndex) {
         _selectedIndex = value;
     }
 }
@@ -101,7 +106,7 @@
         }
         if (self.selectedIndex != trackingValue + delta) {
             self.selectedIndex = trackingValue + delta;
-            [self.parameter setSelectedIndex:self.selectedIndex];
+            [[COLAudioEnvironment sharedEnvironment] setDiscreteParameterSelectedIndex:self.parameter index:(CCOLDiscreteParameterIndex)self.selectedIndex];
             [self updateNeedleAnimated:YES];
         }
     }

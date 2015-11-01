@@ -5,8 +5,8 @@
 //  Created by Chris on 05/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
-#import "BuildView.h"
 #import "defines.h"
+#import "BuildView.h"
 #import "ModuleView.h"
 #import "BuildViewGridLayer.h"
 #import "BuildViewHighlightLayer.h"
@@ -18,8 +18,7 @@
 #import "ModuleControl.h"
 #import "BuildViewScrollView.h"
 
-#import <ColaLib/ColaLib.h>
-
+#import <ColaLib/COLAudioEnvironment.h>
 
 @interface BuildView () {
     bool cellOccupied[256][256];
@@ -361,7 +360,11 @@ static NSArray *cableColours;
         
         ConnectorView *outConnector;
         ConnectorView *inConnector;
-        if ([hitConnector.componentIO isKindOfClass:[COLComponentOutput class]]) {
+        
+        COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+        kIOType hitConnectorType = [cae getConnectorType:hitConnector.componentIO];
+        
+        if (hitConnectorType & kIOTypeOutput) {
             outConnector = hitConnector;
             inConnector = connectorView;
         } else {
@@ -402,38 +405,37 @@ static NSArray *cableColours;
 }
 
 -(BOOL)connectorView:(ConnectorView*)connectorView1 connectWith:(ConnectorView*)connectorView2 {
-    COLComponentIO *componentIO1 = connectorView1.componentIO;
-    COLComponentIO *componentIO2 = connectorView2.componentIO;
+    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+    CCOLConnectorAddress componentIO1 = connectorView1.componentIO;
+    CCOLConnectorAddress componentIO2 = connectorView2.componentIO;
     
-    if ([componentIO1 isKindOfClass:[COLComponentOutput class]] && [componentIO2 isKindOfClass:[COLComponentInput class]]) {
-        COLComponentOutput *output = (COLComponentOutput*)componentIO1;
-        COLComponentInput *input = (COLComponentInput*)componentIO2;
-        return [output connectTo:input];
+    kIOType ioType1 = [cae getConnectorType:componentIO1];
+    kIOType ioType2 = [cae getConnectorType:componentIO2];
+    
+    if ((ioType1 & kIOTypeOutput) && (ioType2 & kIOTypeInput)) {
+        return [cae connectOutput:componentIO1 toInput:componentIO2];
     }
     
     return NO;
 }
 
 -(void)disconnectConnectorView:(ConnectorView*)connectorView {
-    COLComponentIO *componentIO = connectorView.componentIO;
-    if (componentIO) {
-        [componentIO disconnect];
-    }
+    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+    [cae disconnectInput:connectorView.componentIO];
 }
 
 -(void)forceDisconnect:(NSDictionary *)userInfo {
     // The engine has forced a disconnect
-    NSArray *disconnectedOutputs = [userInfo objectForKey:@"disconnectedOutputs"];
-    for (COLComponentOutput *thisOutput in disconnectedOutputs) {
-        for (BuildViewCable *thisCable in [self.cables copy]) {
-            if (thisCable.connector1.componentIO == thisOutput ||
-                thisCable.connector2.componentIO == thisOutput) {
-                [self disconnectConnectorView:thisCable.connector1];
-                [self.cables removeObject:thisCable];
-            }
-        }
-    }
-    
+//    NSArray *disconnectedOutputs = [userInfo objectForKey:@"disconnectedOutputs"];
+//    for (COLComponentOutput *thisOutput in disconnectedOutputs) {
+//        for (BuildViewCable *thisCable in [self.cables copy]) {
+//            if (thisCable.connector1.componentIO == thisOutput ||
+//                thisCable.connector2.componentIO == thisOutput) {
+//                [self disconnectConnectorView:thisCable.connector1];
+//                [self.cables removeObject:thisCable];
+//            }
+//        }
+//    }
 }
 
 +(NSArray*)cableColours {
@@ -604,61 +606,61 @@ static NSArray *cableColours;
     
     NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithCapacity:100]; // TODO: set capacity
     
-    // Save modules
-    NSMutableDictionary *modules = [[NSMutableDictionary alloc] initWithCapacity:[self.moduleViews count]];
-    for (NSString *moduleKey in [self.moduleViews allKeys]) {
-
-        ModuleView *moduleView = [self.moduleViews objectForKey:moduleKey];
-        COLComponent *component = [moduleView component];
-        
-        NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] initWithCapacity:[component numberOfParameters]];
-        
-        for (NSUInteger i = 0; i < [component numberOfParameters]; i++) {
-            COLParameter *parameter = [component parameterForIndex:i];
-            
-            NSNumber *value;
-            if ([parameter isKindOfClass:[COLDiscreteParameter class]]) {
-                COLDiscreteParameter *discreteParameter = (COLDiscreteParameter*)parameter;
-                value = [NSNumber numberWithFloat:[discreteParameter selectedIndex]];
-            } else if ([parameter isKindOfClass:[COLContinuousParameter class]]) {
-                COLContinuousParameter *continuousParameter = (COLContinuousParameter*)parameter;
-                value = [NSNumber numberWithFloat:[continuousParameter getNormalizedValue]];
-            }
-            
-            [parameterDictionary setValue:value forKey:parameter.name];
-        }
-        
-        NSDictionary *moduleDictionary = @{
-                                           @"id"        :   moduleView.moduleDescription.identifier,
-                                           @"params"    :   parameterDictionary,
-                                           @"center"    :   [NSValue valueWithCGPoint:moduleView.center]
-                                           };
-
-        [modules setObject:moduleDictionary forKey:moduleKey];
-    }
-    [result setObject:[NSDictionary dictionaryWithDictionary:modules] forKey:@"modules"];
+//    // Save modules
+//    NSMutableDictionary *modules = [[NSMutableDictionary alloc] initWithCapacity:[self.moduleViews count]];
+//    for (NSString *moduleKey in [self.moduleViews allKeys]) {
+//
+//        ModuleView *moduleView = [self.moduleViews objectForKey:moduleKey];
+//        COLComponent *component = [moduleView component];
+//        
+//        NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] initWithCapacity:[component numberOfParameters]];
+//        
+//        for (NSUInteger i = 0; i < [component numberOfParameters]; i++) {
+//            COLParameter *parameter = [component parameterForIndex:i];
+//            
+//            NSNumber *value;
+//            if ([parameter isKindOfClass:[COLDiscreteParameter class]]) {
+//                COLDiscreteParameter *discreteParameter = (COLDiscreteParameter*)parameter;
+//                value = [NSNumber numberWithFloat:[discreteParameter selectedIndex]];
+//            } else if ([parameter isKindOfClass:[COLContinuousParameter class]]) {
+//                COLContinuousParameter *continuousParameter = (COLContinuousParameter*)parameter;
+//                value = [NSNumber numberWithFloat:[continuousParameter getNormalizedValue]];
+//            }
+//            
+//            [parameterDictionary setValue:value forKey:parameter.name];
+//        }
+//        
+//        NSDictionary *moduleDictionary = @{
+//                                           @"id"        :   moduleView.moduleDescription.identifier,
+//                                           @"params"    :   parameterDictionary,
+//                                           @"center"    :   [NSValue valueWithCGPoint:moduleView.center]
+//                                           };
+//
+//        [modules setObject:moduleDictionary forKey:moduleKey];
+//    }
+//    [result setObject:[NSDictionary dictionaryWithDictionary:modules] forKey:@"modules"];
+//    
+//    // Save connections
+//    NSMutableArray *cables = [[NSMutableArray alloc] initWithCapacity:[self.cables count]];
+//    for (BuildViewCable *thisCable in self.cables) {
+//        
+//        ModuleView *outputModule = (ModuleView*)[thisCable.connector1 superview];
+//        NSString *outputConnection = thisCable.connector1.componentIO.name;
+//        ModuleView *inputModule = (ModuleView*)[thisCable.connector2 superview];
+//        NSString *inputConnection = thisCable.connector2.componentIO.name;
+//        
+//        NSDictionary *cableDictionary = @{
+//                                          @"outputModule"       : outputModule.identifier,
+//                                          @"outputConnection"   : outputConnection,
+//                                          @"inputModule"        : inputModule.identifier,
+//                                          @"inputConnection"    : inputConnection,
+//                                          @"colour"             : thisCable.colour
+//                                          };
+//        
+//        [cables addObject:cableDictionary];
+//    }
+//    [result setObject:cables forKey:@"cables"];
     
-    // Save connections
-    NSMutableArray *cables = [[NSMutableArray alloc] initWithCapacity:[self.cables count]];
-    for (BuildViewCable *thisCable in self.cables) {
-        
-        ModuleView *outputModule = (ModuleView*)[thisCable.connector1 superview];
-        NSString *outputConnection = thisCable.connector1.componentIO.name;
-        ModuleView *inputModule = (ModuleView*)[thisCable.connector2 superview];
-        NSString *inputConnection = thisCable.connector2.componentIO.name;
-        
-        NSDictionary *cableDictionary = @{
-                                          @"outputModule"       : outputModule.identifier,
-                                          @"outputConnection"   : outputConnection,
-                                          @"inputModule"        : inputModule.identifier,
-                                          @"inputConnection"    : inputConnection,
-                                          @"colour"             : thisCable.colour
-                                          };
-        
-        [cables addObject:cableDictionary];
-    }
-    [result setObject:cables forKey:@"cables"];
-        
     return [NSDictionary dictionaryWithDictionary:result];
 }
 
@@ -749,7 +751,7 @@ static NSArray *cableColours;
         }
     }
     
-    [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
+    //[[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
     
     [self.scrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 }

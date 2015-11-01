@@ -10,14 +10,15 @@
 #define CCOLAudioEngine_hpp
 
 #include "CCOLDefines.h"
-#include <stdio.h>
+
 #include <vector>
 #include <AudioToolbox/AudioToolbox.h>
-#include "CCOLComponentIO.hpp"
-#include "CCOLDefines.h"
 
 using namespace std;
 
+class CCOLComponent;
+class CCOLComponentInput;
+class CCOLComponentOutput;
 class CCOLAudioEngine {
 
 private:
@@ -48,9 +49,12 @@ public:
     // Component Management
     CCOLComponentAddress createComponent(char* componentType);
     CCOLOutputAddress getOutput(CCOLComponentAddress componentAddress, char* outputName);
+    CCOLParameterAddress getParameter(CCOLComponentAddress componentAddress, char* parameterName);
     bool connect(CCOLOutputAddress outputAddress, CCOLInputAddress inputAddress);
+    bool disconnect(CCOLInputAddress inputAddress);
     
     CCOLInputAddress getMasterInput(unsigned int index);
+    kIOType getIOType(CCOLConnectorAddress connector);
     
     float getAttentuation() {
         return attenuation;

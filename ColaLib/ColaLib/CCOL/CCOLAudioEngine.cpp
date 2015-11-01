@@ -8,9 +8,11 @@
 
 #include "CCOLAudioEngine.hpp"
 #include "CCOLAudioContext.hpp"
+#include "CCOLComponents.h"
+#include "CCOLComponentIO.hpp"
+
 #include <math.h>
 #include <string>
-#include "CCOLComponents.h"
 
 // Extern wavetables used by components
 SignalType ccSinWaveTable[WAVETABLE_SIZE];
@@ -173,13 +175,18 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
         newComponent->initializeIO();
         return (CCOLComponentAddress)newComponent;
     } else {
-        return -1;
+        return 0;
     }
 }
 
 CCOLOutputAddress CCOLAudioEngine::getOutput(CCOLComponentAddress componentAddress, char* outputName) {
     CCOLComponent *component = (CCOLComponent*)componentAddress;
     return (CCOLOutputAddress)component->getOutputNamed(outputName);
+}
+
+CCOLOutputAddress CCOLAudioEngine::getParameter(CCOLComponentAddress componentAddress, char* parameterName) {
+    CCOLComponent *component = (CCOLComponent*)componentAddress;
+    return (CCOLOutputAddress)component->getParameterNamed(parameterName);
 }
 
 bool CCOLAudioEngine::connect(CCOLOutputAddress outputAddress, CCOLInputAddress inputAddress) {
@@ -189,9 +196,19 @@ bool CCOLAudioEngine::connect(CCOLOutputAddress outputAddress, CCOLInputAddress 
     return (theOutput->connect(theInput));
 }
 
+bool CCOLAudioEngine::disconnect(CCOLInputAddress inputAddress) {
+    CCOLComponentInput* theInput = (CCOLComponentInput*)inputAddress;
+    return (theInput->disconnect());
+}
+
 CCOLInputAddress CCOLAudioEngine::getMasterInput(unsigned int index) {
     CCOLAudioContext* context = CCOLAudioContext::globalContext();
     return (CCOLInputAddress)context->getMasterInput(0);
+}
+
+kIOType CCOLAudioEngine::getIOType(CCOLComponentAddress connectorAddress) {
+    CCOLComponentIO *connector = (CCOLComponentIO*)connectorAddress;
+    return connector->getIOType();
 }
 
 //TODO: Refactor wavetables into their own class

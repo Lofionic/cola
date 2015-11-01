@@ -9,14 +9,14 @@
 #ifndef CCOLComponent_hpp
 #define CCOLComponent_hpp
 
-#include <stdio.h>
 #include <vector>
-#include "CCOLComponentIO.hpp"
-#include "CCOLAudioContext.hpp"
 
 using namespace std;
 
 class CCOLComponentParameter;
+class CCOLComponentInput;
+class CCOLComponentOutput;
+class CCOLAudioContext;
 class CCOLComponent {
     
 public:
@@ -29,7 +29,7 @@ public:
     }
     
     void            disconnectAll();
-    void            parameterDidChange(CCOLComponentParameter* parameter);
+    virtual void    parameterDidChange(CCOLComponentParameter* parameter) { };
    
     bool            hasRendered();
     void            engineDidRender();
@@ -60,7 +60,7 @@ protected:
     }
     
     void setParameters(vector<CCOLComponentParameter*> parametersIn) {
-        //parameters = parametersIn;
+        parameters = parametersIn;
     }
     
     virtual const char* getDefaultName();
@@ -72,7 +72,7 @@ private:
     
     vector<CCOLComponentInput*>          inputs;
     vector<CCOLComponentOutput*>         outputs;
-    //vector<CCOLComponentParameter>      parameters;
+    vector<CCOLComponentParameter*>      parameters;
 };
 
 #endif /* CCOLComponent_hpp */

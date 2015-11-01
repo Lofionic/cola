@@ -11,10 +11,10 @@
 
 #include <stdio.h>
 #include <vector>
-#include "CCOLComponentIO.hpp"
 
 using namespace std;
 
+class CCOLComponentInput;
 class CCOLAudioContext {
  
 private:

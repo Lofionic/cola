@@ -173,7 +173,7 @@
         [releasedKeys minusSet:keysDown];
         for (NSNumber *n in releasedKeys) {
             int midiNote = keyValues[[n integerValue]] + 24 + ((int)self.keyboardShift * 12);
-            [self.kbComponent noteOff:midiNote];
+            //[self.kbComponent noteOff:midiNote];
         }
         [self setNeedsDisplay];
         
@@ -183,7 +183,7 @@
         
         for (NSNumber *n in newKeys) {
             int midiNote = keyValues[[n integerValue]] + 24 + ((int)self.keyboardShift * 12);
-            [self.kbComponent noteOn:midiNote];
+            //[self.kbComponent noteOn:midiNote];
         }
     }
     

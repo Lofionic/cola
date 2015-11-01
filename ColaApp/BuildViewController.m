@@ -83,7 +83,7 @@ static BuildView *buildView = nil;
     
     self.keyboardView = [[KeyboardView alloc] init];
     [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.keyboardView setKbComponent:[[COLAudioEnvironment sharedEnvironment] keyboardComponent]];
+    //[self.keyboardView setKbComponent:[[COLAudioEnvironment sharedEnvironment] keyboardComponent]];
     [self.view addSubview:self.keyboardView];
     
     self.iaaView = [[IAAView alloc] init];
@@ -219,21 +219,19 @@ static BuildView *buildView = nil;
     self.preset = [[PresetController sharedController] recallPresetAtIndex:0];
     [self.buildView buildFromDictionary:[self.preset dictionary]];
     
-    // Register for updates from the transport controller
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedOfTransportUpdate:) name:kCOLEventTransportStateUpdated object:nil];
-
-    // We need to know when a dynamic input has disconnected its linked outputs
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dynamicInputDidForceDisconnect:) name:kCOLEventDynamicInputDidForceDisconnect object:nil];
+//    // Register for updates from the transport controller
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedOfTransportUpdate:) name:kCOLEventTransportStateUpdated object:nil];
+//
+//    // We need to know when a dynamic input has disconnected its linked outputs
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dynamicInputDidForceDisconnect:) name:kCOLEventDynamicInputDidForceDisconnect object:nil];
 
     // Set up test
-    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
-    CCOLComponentAddress vco = [cae createCComponentOfType:(char*)kCCOLComponentTypeVCO];
-    CCOLOutputAddress vcoMainOut = [cae getOutputNamed:(char*)"MainOut" onComponent:vco];
-    CCOLInputAddress mainL = [cae getMasterInputAtIndex:0];
-    
-    [cae connectOutput:vcoMainOut toInput:mainL];
-    
-    NSLog(@"MEH");
+//    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+//    CCOLComponentAddress vco = [cae createCComponentOfType:(char*)kCCOLComponentTypeVCO];
+//    CCOLOutputAddress vcoMainOut = [cae getOutputNamed:(char*)"MainOut" onComponent:vco];
+//    CCOLInputAddress mainL = [cae getMasterInputAtIndex:0];
+//    
+//    [cae connectOutput:vcoMainOut toInput:mainL];
 }
 
 
@@ -245,8 +243,8 @@ static BuildView *buildView = nil;
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    [[[COLAudioEnvironment sharedEnvironment] transportController] stop];
-    [[[COLAudioEnvironment sharedEnvironment] transportController] stopAndReset];
+//    [[[COLAudioEnvironment sharedEnvironment] transportController] stop];
+//    [[[COLAudioEnvironment sharedEnvironment] transportController] stopAndReset];
     [[COLAudioEnvironment sharedEnvironment] mute];
 }
 
@@ -283,7 +281,7 @@ static BuildView *buildView = nil;
         [self setBuildMode:NO animated:YES];
     }
     
-    [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
+    //[[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
     
     [self savePresetCompletion:^(BOOL success) {
         FilesViewController *filesViewController = [[FilesViewController alloc] initWithBuildViewController:self];
@@ -376,27 +374,27 @@ static BuildView *buildView = nil;
 #pragma mark Transport
 
 -(void)playStopTapped {
-    COLTransportController *transport = [[COLAudioEnvironment sharedEnvironment] transportController];
-    if (transport.isPlaying) {
-        [transport stopAndReset];
-    } else {
-        [transport start];
-    }
+//    COLTransportController *transport = [[COLAudioEnvironment sharedEnvironment] transportController];
+//    if (transport.isPlaying) {
+//        [transport stopAndReset];
+//    } else {
+//        [transport start];
+//    }
 }
 
 -(void)notifiedOfTransportUpdate:(NSNotification*)note {
     
-    __weak BuildViewController *weakSelf = self;
-    
-    dispatch_async(dispatch_get_main_queue(), ^ {
-        [weakSelf.iaaView updateContents];
-        
-        if ([[[COLAudioEnvironment sharedEnvironment] transportController] isPlaying]) {
-            [weakSelf.playStopBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_STOP_ICON]];
-        } else {
-            [weakSelf.playStopBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PLAY_ICON]];
-        }
-    });
+//    __weak BuildViewController *weakSelf = self;
+//    
+//    dispatch_async(dispatch_get_main_queue(), ^ {
+//        [weakSelf.iaaView updateContents];
+//        
+//        if ([[[COLAudioEnvironment sharedEnvironment] transportController] isPlaying]) {
+//            [weakSelf.playStopBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_STOP_ICON]];
+//        } else {
+//            [weakSelf.playStopBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PLAY_ICON]];
+//        }
+//    });
 }
 
 -(void)dynamicInputDidForceDisconnect:(NSNotification*)note {

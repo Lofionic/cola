@@ -5,6 +5,9 @@
 //  Created by Chris on 23/03/2015.
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
+#import "ModuleView.h"
+#import <ColaLib/COLAudioEnvironment.h>
+
 #import "BuildViewController.h"
 
 #import "defines.h"
@@ -22,7 +25,7 @@
 
 @interface ModuleView ()
 
-@property (nonatomic, weak) COLComponent        *component;
+@property (nonatomic) CCOLComponentAddress      component;
 @property (nonatomic, strong) NSString          *asset;
 @property (nonatomic, strong) ModuleDescription *moduleDescription;
 
@@ -32,9 +35,9 @@
 
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame identifier:(NSString*)identifier {
     
-    //COLComponent *component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:moduleDescription.type];
-    COLComponent *component = nil;
-    if (!component) {
+    CCOLComponentAddress component = [[COLAudioEnvironment sharedEnvironment] createCComponentOfType:(char*)[moduleDescription.type UTF8String]];
+
+    if (component == 0) {
         return nil;
     }
     
@@ -95,24 +98,26 @@
 
 -(void)addConnectors:(NSArray*)connectors {
     
+    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+    
     NSMutableArray *connectorViews = [[NSMutableArray alloc] initWithCapacity:[connectors count]];
     
     for (ConnectorDescription *thisConnector in connectors) {
-        COLComponentIO *componentIO = nil;
+        CCOLConnectorAddress componentIO = 0;
         if ([thisConnector.type isEqualToString:@"output"]) {
-            componentIO = [self.component outputNamed:thisConnector.connectionName];
+            componentIO = [cae getOutputNamed:(char*)[thisConnector.connectionName UTF8String] onComponent:self.component];
         } else if ([thisConnector.type isEqualToString:@"input"]) {
-            componentIO = [self.component inputNamed:thisConnector.connectionName];
+            //componentIO = [self.component inputNamed:thisConnector.connectionName];
         }
         
-        if (componentIO) {
+        if (componentIO > 0) {
             ConnectorView *connectorView = [[ConnectorView alloc] initWithComponentIO:componentIO];
             [connectorView setCenter:thisConnector.location];
             [connectorView setDelegate:[BuildViewController buildView]];
             [self addSubview:connectorView];
             [connectorViews addObject:connectorView];
         } else {
-            NSLog(@"Error!");
+            NSLog(@"ModuleView: Unable to find connector named %@", thisConnector.connectionName);
         }
     }
     
@@ -122,24 +127,34 @@
 -(ConnectorView*)connectorForName:(NSString*)name {
     __block ConnectorView *result = nil;
     
-    [self.connectorViews enumerateObjectsUsingBlock:^(ConnectorView *obj, NSUInteger index, BOOL *stop) {
-        if ([obj.componentIO.name isEqualToString:name]) {
-            result = obj;
-            *stop = YES;
-        }
-    }];
+//    [self.connectorViews enumerateObjectsUsingBlock:^(ConnectorView *obj, NSUInteger index, BOOL *stop) {
+//        if ([obj.componentIO.name isEqualToString:name]) {
+//            result = obj;
+//            *stop = YES;
+//        }
+//    }];
     
     return result;
 }
 
 -(void)addControls:(NSArray*)controls {
-  
+    
+    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+    
     NSMutableArray *controlViews = [[NSMutableArray alloc] initWithCapacity:[controls count]];
     
     for (ControlDescription *thisControl in controls) {
-        // Find the parameter
-        COLParameter *parameter = [self.component parameterNamed:thisControl.parameterName];
-        ModuleControl *controlView = [ModuleControl controlForParameter:parameter Description:thisControl];
+        CCOLParameterAddress parameter = 0;
+        parameter = [cae getParameterNamed:(char*)[thisControl.parameterName UTF8String] onComponent:self.component];
+        
+        ControlType type;
+        if ([thisControl.type isEqualToString:@"discrete"]) {
+            type = Discrete;
+        } else if ([thisControl.type isEqualToString:@"continuous"]) {
+            type = Continuous;
+        }
+        
+        ModuleControl *controlView = [ModuleControl controlForParameter:parameter Description:thisControl ControlType:type];
         if (controlView) {
             [controlView setCenter:thisControl.location];
             [self addSubview:controlView];
@@ -152,29 +167,26 @@
 
 -(void)setParametersFromDictionary:(NSDictionary*)parametersDictionary {
     
-    for (NSString *thisParameter in [parametersDictionary allKeys]) {
-        [self.controlViews enumerateObjectsUsingBlock:^(ModuleControl *obj, NSUInteger index, BOOL *stop) {
-            if ([obj isKindOfClass:[RotaryEncoder class]]) {
-                RotaryEncoder *rotaryEncoder = (RotaryEncoder*)obj;
-                if ([rotaryEncoder.parameter.name isEqualToString:thisParameter]) {
-                    [rotaryEncoder.parameter setNormalizedValue:[[parametersDictionary objectForKey:thisParameter] floatValue]];
-                    [rotaryEncoder updateFromParameter];
-                }
-            }
-            
-            if ([obj isKindOfClass:[RotarySwitch class]]) {
-                RotarySwitch *rotarySwitch = (RotarySwitch*)obj;
-                if ([rotarySwitch.parameter.name isEqualToString:thisParameter]) {
-                    [rotarySwitch.parameter setSelectedIndex:[[parametersDictionary objectForKey:thisParameter] integerValue]];
-                    [rotarySwitch updateFromParameter];
-                }
-            }
-            
-        }];
-        
-        
-    }
-    
+//    for (NSString *thisParameter in [parametersDictionary allKeys]) {
+//        [self.controlViews enumerateObjectsUsingBlock:^(ModuleControl *obj, NSUInteger index, BOOL *stop) {
+//            if ([obj isKindOfClass:[RotaryEncoder class]]) {
+//                RotaryEncoder *rotaryEncoder = (RotaryEncoder*)obj;
+//                if ([rotaryEncoder.parameter.name isEqualToString:thisParameter]) {
+//                    [rotaryEncoder.parameter setNormalizedValue:[[parametersDictionary objectForKey:thisParameter] floatValue]];
+//                    [rotaryEncoder updateFromParameter];
+//                }
+//            }
+//            
+//            if ([obj isKindOfClass:[RotarySwitch class]]) {
+//                RotarySwitch *rotarySwitch = (RotarySwitch*)obj;
+//                if ([rotarySwitch.parameter.name isEqualToString:thisParameter]) {
+//                    [rotarySwitch.parameter setSelectedIndex:[[parametersDictionary objectForKey:thisParameter] integerValue]];
+//                    [rotarySwitch updateFromParameter];
+//                }
+//            }
+//            
+//        }];
+//    }
 }
 
 -(void)handleLongPress:(UIGestureRecognizer*)uigr {
@@ -204,7 +216,6 @@
         
         CGRect insetRect = CGRectInset(self.bounds, 1 , 1);
     
-        
         CGContextStrokeRect(ctx, insetRect);
     }
 }

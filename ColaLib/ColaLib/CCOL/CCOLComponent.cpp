@@ -7,6 +7,11 @@
 //
 
 #include "CCOLComponent.hpp"
+
+#include "CCOLAudioContext.hpp"
+#include "CCOLComponentIO.hpp"
+#include "CCOLComponentParameter.hpp"
+
 #include <string>
 
 void CCOLComponent::assignUniqueName() {
@@ -37,7 +42,9 @@ void CCOLComponent::engineDidRender() {
         ((CCOLComponentInput*)i)->engineDidRender();
     }
     
-    //TODO: Send engine did render to parameters.
+    for (auto &p : parameters) {
+        ((CCOLComponentParameter*)p)->engineDidRender();
+    }
 }
 
 void CCOLComponent::disconnectAll() {
@@ -53,9 +60,21 @@ void CCOLComponent::disconnectAll() {
 CCOLComponentOutput *CCOLComponent::getOutputNamed(char *name) {
     CCOLComponentOutput *result = NULL;
     
-    for (auto &i : outputs) {
-        if (((CCOLComponentOutput*)i)->getName() == std::string(name)) {
-            result = i;
+    for (auto &o : outputs) {
+        if (std::string(((CCOLComponentOutput*)o)->getName()) == std::string(name)) {
+            result = o;
+        }
+    }
+    
+    return result;
+}
+
+CCOLComponentParameter* CCOLComponent::getParameterNamed(char *name) {
+    CCOLComponentParameter *result = NULL;
+    
+    for (auto &p : parameters) {
+        if (std::string(((CCOLComponentParameter*)p)->getName()) == std::string(name)) {
+            result = p;
         }
     }
     

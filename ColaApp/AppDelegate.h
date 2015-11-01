@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import <UIKit/UIKit.h>
-#import <ColaLib/ColaLib.h>
+#import <ColaLib/COLAudioEnvironment.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, COLAudioEnvironmentInfoDelegate>
 
