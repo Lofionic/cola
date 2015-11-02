@@ -12,11 +12,9 @@
 #import <ColaLib/COLAudioEnvironment.h>
 #import <ColaLib/CCOLTypes.h>
 
-
 @interface RotarySwitch ()
 
-@property (nonatomic) CCOLParameterAddress   parameter;
-@property (nonatomic, strong) CALayer               *needleLayer;
+@property (nonatomic, strong) CALayer *needleLayer;
 
 @end
 
@@ -28,8 +26,7 @@
 }
 
 -(instancetype)initWithDiscreteParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)controlDescription {
-    if (self = [super init]) {
-        self.parameter = parameter;
+    if (self = [super initWithParameter:parameter Description:controlDescription]) {
         self.selectedIndex = 0;
         
         if (controlDescription.asset) {
@@ -110,6 +107,15 @@
             [self updateNeedleAnimated:YES];
         }
     }
+}
+
+-(NSObject *)getDictionaryObject {
+    return [NSNumber numberWithInteger:self.selectedIndex];
+}
+
+-(void)setFromDictionaryObject:(NSObject *)object {
+    self.selectedIndex = (NSUInteger)object;
+    [self setNeedsDisplay];
 }
 
 @end

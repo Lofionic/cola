@@ -13,7 +13,7 @@
 @interface ModuleDescription ()
 
 @property (nonatomic, strong) NSString *identifier;
-@property (nonatomic, strong) NSString *type;
+@property (nonatomic, strong) NSString *component;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *asset;
 
@@ -40,7 +40,7 @@
         }
         
         if ([dictionary objectForKey:@"type"]) {
-            self.type = [dictionary objectForKey:@"type"];
+            self.component = [dictionary objectForKey:@"type"];
         }
         
         if ([dictionary valueForKey:@"width"]) {

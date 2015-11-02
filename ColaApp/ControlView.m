@@ -6,16 +6,22 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 
-#import "ModuleControl.h"
+#import "ControlView.h"
 #import "RotarySwitch.h"
 #import "RotaryEncoder.h"
 
-@implementation ModuleControl
+@interface ControlView()
+
+@property (nonatomic) CCOLParameterAddress parameter;
+
+@end
+
+@implementation ControlView
 
 // Factory method for creating a control of the correct type
-+(ModuleControl*)controlForParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)description ControlType:(ControlType)type
++(ControlView*)controlForParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)description ControlType:(ControlType)type
 {
-    ModuleControl *result = nil;
+    ControlView *result = nil;
     
     switch (type) {
         case Continuous:
@@ -30,9 +36,25 @@
     return result;
 }
 
+- (instancetype)initWithParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)description {
+    if (self = [super init]) {
+        self.parameter = parameter;
+    }
+    return self;
+}
+
 
 -(void)updateFromParameter {
     // Override to handle updating control value from parameter
+}
+
+-(NSObject*)getDictionaryObject {
+    // Override to return an NSObject for the current setting
+    return nil;
+}
+
+-(void)setFromDictionaryObject:(NSObject *)object{
+    // Set value from NSObject
 }
 
 @end

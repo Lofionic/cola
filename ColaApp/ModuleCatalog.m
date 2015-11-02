@@ -54,11 +54,11 @@
     return [self moduleDescriptions];
 }
 
--(ModuleDescription*)moduleOfType:(NSString*)type {
+-(ModuleDescription*)moduleOfClass:(NSString*)colClass {
     __block ModuleDescription *result = nil;
     
     [self.moduleDescriptions enumerateObjectsUsingBlock:^(ModuleDescription* thisModule, NSUInteger index, BOOL* stop) {
-        if ([thisModule.type isEqualToString:type]) {
+        if ([thisModule.component isEqualToString:colClass]) {
             result = thisModule;
             *stop = YES;
         }

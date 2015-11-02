@@ -16,7 +16,7 @@
 		6C1201091AAE44D200C6ACB6 /* ModuleDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1201081AAE44D200C6ACB6 /* ModuleDescription.m */; };
 		6C12010B1AAE49A100C6ACB6 /* moduleCatalog.json in Resources */ = {isa = PBXBuildFile; fileRef = 6C12010A1AAE49A100C6ACB6 /* moduleCatalog.json */; };
 		6C172A311ACC1EDD00BE1418 /* RotarySwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C172A301ACC1EDD00BE1418 /* RotarySwitch.m */; };
-		6C172A421ACC256100BE1418 /* ModuleControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C172A411ACC256100BE1418 /* ModuleControl.m */; };
+		6C172A421ACC256100BE1418 /* ControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C172A411ACC256100BE1418 /* ControlView.m */; };
 		6C1CF0DD1AC202F50004A2FA /* BuildViewGridLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1CF0DC1AC202F50004A2FA /* BuildViewGridLayer.m */; };
 		6C1CF0E01AC206BD0004A2FA /* BuildViewHighlightLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1CF0DF1AC206BD0004A2FA /* BuildViewHighlightLayer.m */; };
 		6C1CF0E31AC20A020004A2FA /* BuildViewCableLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1CF0E21AC20A020004A2FA /* BuildViewCableLayer.m */; };
@@ -71,8 +71,8 @@
 		6C12010A1AAE49A100C6ACB6 /* moduleCatalog.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = moduleCatalog.json; sourceTree = "<group>"; };
 		6C172A2F1ACC1EDD00BE1418 /* RotarySwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotarySwitch.h; sourceTree = "<group>"; };
 		6C172A301ACC1EDD00BE1418 /* RotarySwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotarySwitch.m; sourceTree = "<group>"; };
-		6C172A401ACC256100BE1418 /* ModuleControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleControl.h; sourceTree = "<group>"; };
-		6C172A411ACC256100BE1418 /* ModuleControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleControl.m; sourceTree = "<group>"; };
+		6C172A401ACC256100BE1418 /* ControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlView.h; sourceTree = "<group>"; };
+		6C172A411ACC256100BE1418 /* ControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControlView.m; sourceTree = "<group>"; };
 		6C1CF0DB1AC202F50004A2FA /* BuildViewGridLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewGridLayer.h; sourceTree = "<group>"; };
 		6C1CF0DC1AC202F50004A2FA /* BuildViewGridLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildViewGridLayer.m; sourceTree = "<group>"; };
 		6C1CF0DE1AC206BD0004A2FA /* BuildViewHighlightLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewHighlightLayer.h; sourceTree = "<group>"; };
@@ -168,8 +168,8 @@
 		6C172A431ACC256B00BE1418 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
-				6C172A401ACC256100BE1418 /* ModuleControl.h */,
-				6C172A411ACC256100BE1418 /* ModuleControl.m */,
+				6C172A401ACC256100BE1418 /* ControlView.h */,
+				6C172A411ACC256100BE1418 /* ControlView.m */,
 				6C8DD28F1AC0AB1200320628 /* RotaryEncoder.h */,
 				6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */,
 				6C172A2F1ACC1EDD00BE1418 /* RotarySwitch.h */,
@@ -421,7 +421,7 @@
 				6CDA9F141AA9017E00D64EB0 /* BuildView.mm in Sources */,
 				6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */,
 				6CCA30B31AE10B5500CAF1AF /* FilesViewControllerCell.m in Sources */,
-				6C172A421ACC256100BE1418 /* ModuleControl.m in Sources */,
+				6C172A421ACC256100BE1418 /* ControlView.m in Sources */,
 				6C64D6FE1AD9394800012108 /* MasterModuleView.m in Sources */,
 				6C1CF0E01AC206BD0004A2FA /* BuildViewHighlightLayer.m in Sources */,
 				6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */,

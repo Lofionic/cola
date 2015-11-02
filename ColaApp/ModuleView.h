@@ -37,4 +37,6 @@
 
 -(ConnectorView*)connectorForName:(NSString*)name;
 
+-(NSDictionary*)getDictionary;
+
 @end

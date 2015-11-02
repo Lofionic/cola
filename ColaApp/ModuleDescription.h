@@ -11,7 +11,7 @@
 @interface ModuleDescription : NSObject
 
 @property (readonly, strong) NSString   *identifier;
-@property (readonly, strong) NSString   *type;
+@property (readonly, strong) NSString   *component;
 @property (readonly, strong) NSString   *name;
 @property (readonly, strong) NSString   *asset;
 

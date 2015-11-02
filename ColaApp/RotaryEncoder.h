@@ -7,12 +7,11 @@
 //
 #import <ColaLib/CColTypes.h>
 #import <UIKit/UIKit.h>
-#import "ModuleControl.h"
+#import "ControlView.h"
 
 @class ControlDescription;
-@interface RotaryEncoder : ModuleControl
+@interface RotaryEncoder : ControlView
 
-@property (readonly) CCOLParameterAddress parameter;
 @property (nonatomic) double value;
 
 -(instancetype)initWithContinuousParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)controlDescription;

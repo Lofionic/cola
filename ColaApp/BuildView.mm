@@ -15,7 +15,7 @@
 #import "ModuleDescription.h"
 #import "MasterModuleView.h"
 #import "ModuleCatalog.h"
-#import "ModuleControl.h"
+#import "ControlView.h"
 #import "BuildViewScrollView.h"
 
 #import <ColaLib/COLAudioEnvironment.h>
@@ -604,48 +604,21 @@ static NSArray *cableColours;
 -(NSDictionary*)getPresetDictionary {
     // Create a dictionary of all the data needed to reassemble the patch
     
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithCapacity:100]; // TODO: set capacity
-    
-//    // Save modules
-//    NSMutableDictionary *modules = [[NSMutableDictionary alloc] initWithCapacity:[self.moduleViews count]];
-//    for (NSString *moduleKey in [self.moduleViews allKeys]) {
-//
-//        ModuleView *moduleView = [self.moduleViews objectForKey:moduleKey];
-//        COLComponent *component = [moduleView component];
-//        
-//        NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] initWithCapacity:[component numberOfParameters]];
-//        
-//        for (NSUInteger i = 0; i < [component numberOfParameters]; i++) {
-//            COLParameter *parameter = [component parameterForIndex:i];
-//            
-//            NSNumber *value;
-//            if ([parameter isKindOfClass:[COLDiscreteParameter class]]) {
-//                COLDiscreteParameter *discreteParameter = (COLDiscreteParameter*)parameter;
-//                value = [NSNumber numberWithFloat:[discreteParameter selectedIndex]];
-//            } else if ([parameter isKindOfClass:[COLContinuousParameter class]]) {
-//                COLContinuousParameter *continuousParameter = (COLContinuousParameter*)parameter;
-//                value = [NSNumber numberWithFloat:[continuousParameter getNormalizedValue]];
-//            }
-//            
-//            [parameterDictionary setValue:value forKey:parameter.name];
-//        }
-//        
-//        NSDictionary *moduleDictionary = @{
-//                                           @"id"        :   moduleView.moduleDescription.identifier,
-//                                           @"params"    :   parameterDictionary,
-//                                           @"center"    :   [NSValue valueWithCGPoint:moduleView.center]
-//                                           };
-//
-//        [modules setObject:moduleDictionary forKey:moduleKey];
-//    }
-//    [result setObject:[NSDictionary dictionaryWithDictionary:modules] forKey:@"modules"];
-//    
-//    // Save connections
+   
+    // Save modules
+    NSMutableArray *modules = [[NSMutableArray alloc] initWithCapacity:[self.moduleViews count]];
+
+    for (NSString *thisKey in [self.moduleViews allKeys]) {
+        ModuleView *thisModuleView = [self.moduleViews objectForKey:thisKey];
+        [modules addObject:[thisModuleView getDictionary]];
+    }
+
+    // Save connections
 //    NSMutableArray *cables = [[NSMutableArray alloc] initWithCapacity:[self.cables count]];
 //    for (BuildViewCable *thisCable in self.cables) {
-//        
+    
 //        ModuleView *outputModule = (ModuleView*)[thisCable.connector1 superview];
-//        NSString *outputConnection = thisCable.connector1.componentIO.name;
+//        NSString *outputConnection = thisCable.connector1.name;
 //        ModuleView *inputModule = (ModuleView*)[thisCable.connector2 superview];
 //        NSString *inputConnection = thisCable.connector2.componentIO.name;
 //        
@@ -659,9 +632,10 @@ static NSArray *cableColours;
 //        
 //        [cables addObject:cableDictionary];
 //    }
-//    [result setObject:cables forKey:@"cables"];
     
-    return [NSDictionary dictionaryWithDictionary:result];
+    return @{
+             PRESET_KEY_MODULES : modules
+             };
 }
 
 -(BOOL)buildFromDictionary:(NSDictionary*)dictionary {
@@ -676,8 +650,11 @@ static NSArray *cableColours;
     
     for (NSString *moduleIdentifier in [modulesDictionaries allKeys]) {
         NSDictionary *moduleDictionary = [modulesDictionaries objectForKey:moduleIdentifier];
+        
+        
+        
         CGPoint moduleCenter = [[moduleDictionary objectForKey:@"center"] CGPointValue];
-        ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[moduleDictionary objectForKey:@"id"]];
+        ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[moduleDictionary objectForKey:PRESET_KEY_MODULE_TYPE]];
         if (moduleDescription) {
             ModuleView *moduleView;
             if ((moduleView = [self addViewForModule:moduleDescription atPoint:moduleCenter identifier:moduleIdentifier])) {

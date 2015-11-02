@@ -14,9 +14,10 @@
 #import "ModuleView.h"
 #import "ModuleDescription.h"
 #import "ConnectorView.h"
-#import "ModuleControl.h"
+#import "ControlView.h"
 #import "NSString+Random.h"
 #import "BuildView.h"
+#import "ModuleCatalog.h"
 
 #import "RotaryEncoder.h"
 #import "RotarySwitch.h"
@@ -35,7 +36,7 @@
 
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame identifier:(NSString*)identifier {
     
-    CCOLComponentAddress component = [[COLAudioEnvironment sharedEnvironment] createCComponentOfType:(char*)[moduleDescription.type UTF8String]];
+    CCOLComponentAddress component = [[COLAudioEnvironment sharedEnvironment] createCComponentOfType:(char*)[moduleDescription.component UTF8String]];
 
     if (component == 0) {
         return nil;
@@ -155,7 +156,7 @@
             type = Continuous;
         }
         
-        ModuleControl *controlView = [ModuleControl controlForParameter:parameter Description:thisControl ControlType:type];
+        ControlView *controlView = [ControlView controlForParameter:parameter Description:thisControl ControlType:type];
         if (controlView) {
             [controlView setCenter:thisControl.location];
             [self addSubview:controlView];
@@ -171,7 +172,7 @@
     COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
     
     for (NSString *thisParameter in [parametersDictionary allKeys]) {
-        [self.controlViews enumerateObjectsUsingBlock:^(ModuleControl *obj, NSUInteger index, BOOL *stop) {
+        [self.controlViews enumerateObjectsUsingBlock:^(ControlView *obj, NSUInteger index, BOOL *stop) {
             if ([obj isKindOfClass:[RotaryEncoder class]]) {
                 RotaryEncoder *rotaryEncoder = (RotaryEncoder*)obj;
                 NSString *thisEncoderParameterName = [cae getParameterName:rotaryEncoder.parameter];
@@ -228,5 +229,70 @@
     //[[COLAudioEnvironment sharedEnvironment] removeComponent:self.component];
     [self removeFromSuperview];
 }
+
+// Return a dictionary for adding to preset
+-(NSDictionary*)getDictionary {
+    
+    NSMutableDictionary *controls = [[NSMutableDictionary alloc] initWithCapacity:[self.controlViews count]];
+    for (ControlView *thisControl in self.controlViews) {
+        NSString *controlName = [[COLAudioEnvironment sharedEnvironment] getParameterName:thisControl.parameter];
+        [controls setObject:thisControl.getDictionaryObject forKey:controlName];
+    }
+    
+    return @{
+             PRESET_KEY_MODULE_TYPE         : self.moduleDescription.identifier,
+             PRESET_KEY_MODULE_IDENTIFIER   : self.identifier,
+             PRESET_KEY_MODULE_CENTER       : [NSValue valueWithCGPoint:self.center],
+             PRESET_KEY_MODULE_CONTROLS     : [NSDictionary dictionaryWithDictionary:controls],
+             };
+}
+
+// Initialize a module from a preset dictionary
+-(instancetype)initWithDictionary:(NSDictionary*)dictionary {
+    
+    ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[dictionary objectForKey:PRESET_KEY_MODULE_TYPE]];
+    
+    if (moduleDescription) {
+        if (self = [self initWithModuleDescription:moduleDescription]) {
+            [self setCenter:[[dictionary objectForKey:PRESET_KEY_MODULE_CENTER] CGPointValue]];
+            
+            // Set parameters from dictionary
+            NSDictionary *controlsDictionary = [dictionary objectForKey:PRESET_KEY_MODULE_CONTROLS];
+            if (controlsDictionary) {
+                for (ControlView *thisControl in self.controlViews) {
+                    NSString *controlName = [[COLAudioEnvironment sharedEnvironment] getParameterName:thisControl.parameter];
+                    [thisControl setFromDictionaryObject:[controlsDictionary objectForKey:controlName]];
+                }
+            }
+        }
+    }
+    return self;
+}
+
+//    
+//    COLComponent *component = [moduleView component];
+//    
+//    NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] initWithCapacity:[component numberOfParameters]];
+//    
+//    for (NSUInteger i = 0; i < [component numberOfParameters]; i++) {
+//        COLParameter *parameter = [component parameterForIndex:i];
+//        
+//        NSNumber *value;
+//        if ([parameter isKindOfClass:[COLDiscreteParameter class]]) {
+//            COLDiscreteParameter *discreteParameter = (COLDiscreteParameter*)parameter;
+//            value = [NSNumber numberWithFloat:[discreteParameter selectedIndex]];
+//        } else if ([parameter isKindOfClass:[COLContinuousParameter class]]) {
+//            COLContinuousParameter *continuousParameter = (COLContinuousParameter*)parameter;
+//            value = [NSNumber numberWithFloat:[continuousParameter getNormalizedValue]];
+//        }
+//        
+//        [parameterDictionary setValue:value forKey:parameter.name];
+//    }
+//    
+//    NSDictionary *moduleDictionary = @{
+//                                       @"id"        :   moduleView.moduleDescription.identifier,
+//                                       @"params"    :   parameterDictionary,
+//                                       @"center"    :   [NSValue valueWithCGPoint:moduleView.center]
+//                                       };
 
 @end

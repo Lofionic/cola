@@ -14,7 +14,6 @@
 
 @interface RotaryEncoder ()
 
-@property (nonatomic) CCOLParameterAddress          parameter;
 @property (nonatomic, strong) CALayer               *needleLayer;
 
 @end
@@ -27,8 +26,7 @@
 
 -(instancetype)initWithContinuousParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)controlDescription {
     
-    if (self = [super init]) {
-        self.parameter = parameter;
+    if (self = [super initWithParameter:parameter Description:controlDescription]) {
         self.value = 0;
         
         if (controlDescription.asset) {
@@ -102,6 +100,15 @@
 -(void)setValue:(double)value {
     _value = value;
     [self updateNeedleAnimated:NO];
+}
+
+-(NSObject *)getDictionaryObject {
+    return [NSNumber numberWithDouble:self.value];
+}
+
+-(void)setFromDictionaryObject:(NSObject *)object {
+    self.value = [((NSNumber*)object) doubleValue];
+    [self setNeedsDisplay];
 }
 
 @end

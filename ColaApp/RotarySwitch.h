@@ -6,12 +6,11 @@
 //  Copyright (c) 2015 Chris Rivers. All rights reserved.
 //
 #import <UIKit/UIKit.h>
-#import "ModuleControl.h"
+#import "ControlView.h"
 
 @class ControlDescription;
-@interface RotarySwitch : ModuleControl
+@interface RotarySwitch : ControlView
 
-@property (readonly) CCOLParameterAddress parameter;
 @property (nonatomic) NSUInteger selectedIndex;
 
 -(instancetype)initWithDiscreteParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)controlDescription;

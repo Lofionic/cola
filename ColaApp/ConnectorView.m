@@ -11,7 +11,7 @@
 
 @interface ConnectorView ()
 
-@property (nonatomic) CCOLConnectorAddress componentIO;
+@property (nonatomic) CCOLConnectorAddress connector;
 
 @end
 
@@ -20,7 +20,7 @@
 -(instancetype)initWithComponentIO:(CCOLConnectorAddress)componentIO {
     
     if (self = [super init]) {
-        self.componentIO = componentIO;
+        self.connector = componentIO;
         self.frame = CGRectMake(0, 0, 44, 44);
         NSString *connectorAssetName = @"connector_blue";
         
