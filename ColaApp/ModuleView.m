@@ -105,9 +105,9 @@
     for (ConnectorDescription *thisConnector in connectors) {
         CCOLConnectorAddress componentIO = 0;
         if ([thisConnector.type isEqualToString:@"output"]) {
-            componentIO = [cae getOutputNamed:(char*)[thisConnector.connectionName UTF8String] onComponent:self.component];
+            componentIO = [cae getOutputNamed:thisConnector.connectionName onComponent:self.component];
         } else if ([thisConnector.type isEqualToString:@"input"]) {
-            //componentIO = [self.component inputNamed:thisConnector.connectionName];
+            componentIO = [cae getInputNamed:thisConnector.connectionName onComponent:self.component];
         }
         
         if (componentIO > 0) {
@@ -127,12 +127,13 @@
 -(ConnectorView*)connectorForName:(NSString*)name {
     __block ConnectorView *result = nil;
     
-//    [self.connectorViews enumerateObjectsUsingBlock:^(ConnectorView *obj, NSUInteger index, BOOL *stop) {
-//        if ([obj.componentIO.name isEqualToString:name]) {
-//            result = obj;
-//            *stop = YES;
-//        }
-//    }];
+    [self.connectorViews enumerateObjectsUsingBlock:^(ConnectorView *obj, NSUInteger index, BOOL *stop) {
+        NSString *connectorName = [[COLAudioEnvironment sharedEnvironment] getConnectorName:obj.connector];
+        if ([connectorName isEqualToString:name]) {
+            result = obj;
+            *stop = YES;
+        }
+    }];
     
     return result;
 }
@@ -145,7 +146,7 @@
     
     for (ControlDescription *thisControl in controls) {
         CCOLParameterAddress parameter = 0;
-        parameter = [cae getParameterNamed:(char*)[thisControl.parameterName UTF8String] onComponent:self.component];
+        parameter = [cae getParameterNamed:thisControl.parameterName onComponent:self.component];
         
         ControlType type;
         if ([thisControl.type isEqualToString:@"discrete"]) {
@@ -167,26 +168,29 @@
 
 -(void)setParametersFromDictionary:(NSDictionary*)parametersDictionary {
     
-//    for (NSString *thisParameter in [parametersDictionary allKeys]) {
-//        [self.controlViews enumerateObjectsUsingBlock:^(ModuleControl *obj, NSUInteger index, BOOL *stop) {
-//            if ([obj isKindOfClass:[RotaryEncoder class]]) {
-//                RotaryEncoder *rotaryEncoder = (RotaryEncoder*)obj;
-//                if ([rotaryEncoder.parameter.name isEqualToString:thisParameter]) {
-//                    [rotaryEncoder.parameter setNormalizedValue:[[parametersDictionary objectForKey:thisParameter] floatValue]];
-//                    [rotaryEncoder updateFromParameter];
-//                }
-//            }
-//            
-//            if ([obj isKindOfClass:[RotarySwitch class]]) {
-//                RotarySwitch *rotarySwitch = (RotarySwitch*)obj;
-//                if ([rotarySwitch.parameter.name isEqualToString:thisParameter]) {
-//                    [rotarySwitch.parameter setSelectedIndex:[[parametersDictionary objectForKey:thisParameter] integerValue]];
-//                    [rotarySwitch updateFromParameter];
-//                }
-//            }
-//            
-//        }];
-//    }
+    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+    
+    for (NSString *thisParameter in [parametersDictionary allKeys]) {
+        [self.controlViews enumerateObjectsUsingBlock:^(ModuleControl *obj, NSUInteger index, BOOL *stop) {
+            if ([obj isKindOfClass:[RotaryEncoder class]]) {
+                RotaryEncoder *rotaryEncoder = (RotaryEncoder*)obj;
+                NSString *thisEncoderParameterName = [cae getParameterName:rotaryEncoder.parameter];
+                if ([thisEncoderParameterName isEqualToString:thisParameter]) {
+                    [cae setContinuousParameter:rotaryEncoder.parameter value:[[parametersDictionary objectForKey:thisParameter] floatValue]];
+                    [rotaryEncoder updateFromParameter];
+                }
+            }
+            
+            if ([obj isKindOfClass:[RotarySwitch class]]) {
+                RotaryEncoder *rotaryEncoder = (RotaryEncoder*)obj;
+                NSString *thisEncoderParameterName = [cae getParameterName:rotaryEncoder.parameter];
+                if ([thisEncoderParameterName isEqualToString:thisParameter]) {
+                    [cae setDiscreteParameterSelectedIndex:rotaryEncoder.parameter index:(CCOLDiscreteParameterIndex)[[parametersDictionary objectForKey:thisParameter] integerValue]];
+                    [rotaryEncoder updateFromParameter];
+                }
+            }
+        }];
+    }
 }
 
 -(void)handleLongPress:(UIGestureRecognizer*)uigr {

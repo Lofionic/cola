@@ -9,6 +9,7 @@
 #import "COLAudioEnvironment.h"
 #import "CCOLAudioEngine.hpp"
 #import "CCOLComponentParameter.hpp"
+#import "CCOLComponentIO.hpp"
 
 @interface COLAudioEnvironment() {
     CCOLAudioEngine *ccAudioEngine;
@@ -75,17 +76,27 @@
     //[self.audioEngine unmute];
 }
 
-#pragma mark Component Factory
+// Component Management
 -(CCOLComponentAddress)createCComponentOfType:(char*)componentType {
     return ccAudioEngine->createComponent(componentType);
 }
 
--(CCOLOutputAddress)getOutputNamed:(char*)outputName onComponent:(CCOLComponentAddress)componentAddress {
-    return ccAudioEngine->getOutput(componentAddress, outputName);
+// IO
+-(CCOLOutputAddress)getOutputNamed:(NSString*)outputName onComponent:(CCOLComponentAddress)componentAddress {
+    return ccAudioEngine->getOutput(componentAddress, (char*)[outputName UTF8String]);
 }
 
--(CCOLParameterAddress)getParameterNamed:(char*)parameterName onComponent:(CCOLComponentAddress)componentAddress {
-    return ccAudioEngine->getParameter(componentAddress, parameterName);
+-(CCOLInputAddress)getInputNamed:(NSString*)inputName onComponent:(CCOLComponentAddress)componentAddress {
+    return ccAudioEngine->getInput(componentAddress, (char*)[inputName UTF8String]);
+}
+
+-(NSString*)getConnectorName:(CCOLConnectorAddress)connectorAddress {
+    CCOLComponentConnector* connector = (CCOLComponentConnector*)connectorAddress;
+    return [NSString stringWithUTF8String:connector->getName()];
+}
+
+-(CCOLParameterAddress)getParameterNamed:(NSString*)parameterName onComponent:(CCOLComponentAddress)componentAddress {
+    return ccAudioEngine->getParameter(componentAddress, (char*)[parameterName UTF8String]);
 }
 
 -(double)getContinuousParameterValue:(CCOLParameterAddress)parameterAddress {
@@ -111,6 +122,11 @@
 -(CCOLDiscreteParameterIndex)getDiscreteParameterMaxIndex:(CCOLParameterAddress)parameterAddress {
     CCOLDiscreteParameter *parameter = (CCOLDiscreteParameter*)parameterAddress;
     return parameter->getMaxIndex();
+}
+
+-(NSString*)getParameterName:(CCOLParameterAddress)parameterAddress {
+    CCOLComponentParameter *parameter = (CCOLComponentParameter*)parameterAddress;
+    return [NSString stringWithUTF8String:parameter->getName()];
 }
 
 -(BOOL)connectOutput:(CCOLOutputAddress)outputAddress toInput:(CCOLInputAddress)inputAddress {

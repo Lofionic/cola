@@ -25,26 +25,16 @@
         NSString *connectorAssetName = @"connector_blue";
         
         kIOType ioType = [[COLAudioEnvironment sharedEnvironment] getConnectorType:componentIO];
-        if (ioType == kIOTypeControl || ioType == kIOType1VOct || ioType == kIOTypeGate) {
+        if (ioType & kIOTypeControl || ioType & kIOType1VOct || ioType & kIOTypeGate) {
             connectorAssetName = @"connector_yellow";
         } else {
-            connectorAssetName = @"connector_blue";
+            if (ioType & kIOTypeOutput) {
+                connectorAssetName = @"connector_blue";
+            } else {
+                connectorAssetName = @"connector_green";
+            }
         }
 
-//        NSString *connectorAssetName;
-//        int ioType = (int)[[COLAudioEnvironment sharedEnvironment] getConnectorType:componentIO];
-//        if (ioType == kIOTypeAudio) {
-//            if ([componentIO isKindOfClass:[COLComponentOutput class]]) {
-//                
-//            } else if ([componentIO isKindOfClass:[COLComponentInput class]]) {
-//                connectorAssetName = @"connector_green";
-//            }
-//        } else if (componentIO.type == kComponentIOTypeControl || componentIO.type == kComponentIOType1VOct || componentIO.type == kComponentIOTypeGate) {
-//            connectorAssetName = @"connector_yellow";
-//        } else {
-//            connectorAssetName = @"connector_blue";
-//        }
-        
         connectorAssetName = [ASSETS_PATH_CONNECTORS stringByAppendingString:connectorAssetName];
         UIImage *connectorImage = [UIImage imageNamed:connectorAssetName];
         
@@ -77,7 +67,6 @@
             [self.delegate connectorView:self didEndDrag:panGesture];
         }
     }
-    
 }
 
 @end

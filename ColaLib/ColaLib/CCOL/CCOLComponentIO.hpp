@@ -15,10 +15,10 @@ class CCOLComponentInput;
 class CCOLComponentOutput;
 class CCOLComponent;
 
-class CCOLComponentIO {
+class CCOLComponentConnector {
 
 public:
-    CCOLComponentIO(CCOLComponent *component, kIOType ioType, char* name);
+    CCOLComponentConnector(CCOLComponent *component, kIOType ioType, char* name);
     
     const char*         getName() { return name; }
     
@@ -31,13 +31,13 @@ public:
     virtual kIOType     getIOType();
     CCOLComponent*      getComponent();
 
-    void                setConnected(CCOLComponentIO* connectTo);
-    CCOLComponentIO*    getConnected();
+    void                        setConnected(CCOLComponentConnector* connectTo);
+    CCOLComponentConnector*    getConnected();
     
 protected:
-    CCOLComponent*      component;
-    kIOType             ioType;
-    CCOLComponentIO*    connectedTo;
+    CCOLComponent*              component;
+    kIOType                     ioType;
+    CCOLComponentConnector*    connectedTo;
    
     
 private:
@@ -46,10 +46,10 @@ private:
 
 
 
-class CCOLComponentInput : public CCOLComponentIO {
+class CCOLComponentInput : public CCOLComponentConnector {
     
 public:
-    CCOLComponentInput(CCOLComponent *component, kIOType ioType, char* name):CCOLComponentIO(component, ioType, name) { }
+    CCOLComponentInput(CCOLComponent *component, kIOType ioType, char* name):CCOLComponentConnector(component, ioType, name) { }
     
     SignalType*     getBuffer(unsigned int numFrames);
     bool            makeDynamicConnection(CCOLComponentOutput *outputIn);
@@ -62,20 +62,23 @@ private:
     SignalType*     getEmptyBuffer(unsigned int numFrames);
 };
 
-class CCOLComponentOutput : public CCOLComponentIO {
+class CCOLComponentOutput : public CCOLComponentConnector {
 
 public:
-    CCOLComponentOutput(CCOLComponent *component, kIOType ioType, char* name):CCOLComponentIO(component, ioType, name) {
+    CCOLComponentOutput(CCOLComponent *component, kIOType ioType, char* name):CCOLComponentConnector(component, ioType, name) {
         linkedInput = nullptr;
         buffer = nullptr;
         bufferSize = 0;
     }
 
-    SignalType*     getBuffer(unsigned int numFrames);
-    SignalType*     prepareBufferOfSize(unsigned int numFrames);
-    bool            connect(CCOLComponentInput* inputIn);
-    kIOType         getIOType() override;
-    void            engineDidRender() override;
+    SignalType*             getBuffer(unsigned int numFrames);
+    SignalType*             prepareBufferOfSize(unsigned int numFrames);
+    bool                    connect(CCOLComponentInput* inputIn);
+    kIOType                 getIOType() override;
+    void                    engineDidRender() override;
+    CCOLComponentInput*     getLinkedInput() {
+        return linkedInput;
+    }
     
 private:
     SignalType*             buffer;

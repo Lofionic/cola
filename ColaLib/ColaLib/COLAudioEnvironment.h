@@ -47,13 +47,16 @@
 -(CCOLComponentAddress)createCComponentOfType:(char*)componentType;
 -(BOOL)connectOutput:(CCOLOutputAddress)outputAddress toInput:(CCOLInputAddress)inputAddress;
 -(BOOL)disconnectInput:(CCOLInputAddress)inputAddress;
+-(NSString*)getConnectorName:(CCOLConnectorAddress)connectorAddress;
 
 -(CCOLInputAddress)getMasterInputAtIndex:(UInt32)index;
--(CCOLOutputAddress)getOutputNamed:(char*)outputName onComponent:(CCOLComponentAddress)componentAddress;
--(CCOLParameterAddress)getParameterNamed:(char*)parameterName onComponent:(CCOLComponentAddress)componentAddress;
+-(CCOLOutputAddress)getOutputNamed:(NSString*)outputName onComponent:(CCOLComponentAddress)componentAddress;
+-(CCOLInputAddress)getInputNamed:(NSString*)outputName onComponent:(CCOLComponentAddress)componentAddress;
+-(CCOLParameterAddress)getParameterNamed:(NSString*)parameterName onComponent:(CCOLComponentAddress)componentAddress;
 -(kIOType)getConnectorType:(CCOLConnectorAddress)connectorAddress;
 
 // Get set parameters
+-(NSString*)getParameterName:(CCOLParameterAddress)parameterAddress;
 -(double)getContinuousParameterValue:(CCOLParameterAddress)parameterAddress;
 -(void)setContinuousParameter:(CCOLParameterAddress)parameterAddress value:(double)value;
 -(CCOLDiscreteParameterIndex)getDiscreteParameterSelectedIndex:(CCOLParameterAddress)parameterAddress;

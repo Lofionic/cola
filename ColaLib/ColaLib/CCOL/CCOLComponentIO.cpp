@@ -5,7 +5,7 @@
 //  Created by Chris on 29/10/2015.
 //  Copyright © 2015 Chris Rivers. All rights reserved.
 //
-
+#include <CoreFoundation/CoreFoundation.h>
 #include "CCOLComponentIO.hpp"
 #include "CCOLComponent.hpp"
 
@@ -14,7 +14,7 @@
 static SignalType*     emptyBuffer;
 static unsigned int    emptyBufferSize;
 
-CCOLComponentIO::CCOLComponentIO(CCOLComponent *componentIn, kIOType ioTypeIn, char* nameIn) {
+CCOLComponentConnector::CCOLComponentConnector(CCOLComponent *componentIn, kIOType ioTypeIn, char* nameIn) {
     component = componentIn;
     ioType = ioTypeIn;
     name = nameIn;
@@ -22,37 +22,37 @@ CCOLComponentIO::CCOLComponentIO(CCOLComponent *componentIn, kIOType ioTypeIn, c
     connectedTo = nullptr;
 }
 
-void CCOLComponentIO::engineDidRender() {
+void CCOLComponentConnector::engineDidRender() {
     if (connectedTo != nullptr) {
         connectedTo->engineDidRender();
     }
 }
 
-bool CCOLComponentIO::isConnected() {
+bool CCOLComponentConnector::isConnected() {
     return connectedTo != nullptr;
 }
 
-bool CCOLComponentIO::disconnect() {
+bool CCOLComponentConnector::disconnect() {
     return false;
 }
 
-bool CCOLComponentIO::isDynamic() {
+bool CCOLComponentConnector::isDynamic() {
     return false;
 }
 
-kIOType CCOLComponentIO::getIOType() {
+kIOType CCOLComponentConnector::getIOType() {
     return ioType;
 }
 
-CCOLComponent* CCOLComponentIO::getComponent() {
+CCOLComponent* CCOLComponentConnector::getComponent() {
     return component;
 }
 
-void CCOLComponentIO::setConnected(CCOLComponentIO *connectedIn) {
+void CCOLComponentConnector::setConnected(CCOLComponentConnector *connectedIn) {
     connectedTo = connectedIn;
 }
 
-CCOLComponentIO* CCOLComponentIO::getConnected() {
+CCOLComponentConnector* CCOLComponentConnector::getConnected() {
     return connectedTo;
 }
 
@@ -104,8 +104,31 @@ bool CCOLComponentInput::disconnect() {
 
 bool CCOLComponentInput::makeDynamicConnection(CCOLComponentOutput *outputIn) {
     if (isDynamic()) {
-        if (ioType == outputIn->getIOType()) {
-//TODO: Handle dynamic connections
+        kIOType connectionIOType = (kIOType)(outputIn->getIOType() & ~(1 << 1));
+        if (ioType & connectionIOType) {
+            // Check the linked outputs are of the direct type
+            unsigned long int numOutputs = component->getNumberOfOutputs();
+            CFNotificationCenterRef center = CFNotificationCenterGetLocalCenter();
+            for (int i = 0; i < numOutputs; ++i) {
+                CCOLComponentOutput *thisOutput = component->getOutputForIndex(i);
+                if (thisOutput->isDynamic() &&
+                    thisOutput->isConnected() &&
+                    thisOutput->getLinkedInput() == this &&
+                    !(ioType & thisOutput->getIOType()) &&
+                    !thisOutput->getConnected()->isDynamic()) {
+                    
+                    // Force dynamic disconnect and post a notification
+                    thisOutput->getConnected()->disconnect();
+                    CFDictionaryKeyCallBacks keyCallbacks = {0, NULL, NULL, CFCopyDescription, CFEqual, NULL};
+                    CFDictionaryValueCallBacks valueCallbacks  = {0, NULL, NULL, CFCopyDescription, CFEqual};
+                    CFMutableDictionaryRef dictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 2,
+                                                                                  &keyCallbacks, &valueCallbacks);
+                    CFDictionaryAddValue(dictionary, CFSTR("input"), this);
+                    CFDictionaryAddValue(dictionary, CFSTR("output"), thisOutput);
+
+                    CFNotificationCenterPostNotification(center, CFSTR("DynamicDisconnectNotification"), NULL, dictionary, false);
+                }
+            }
         }
     }
     

@@ -69,6 +69,19 @@ CCOLComponentOutput *CCOLComponent::getOutputNamed(char *name) {
     return result;
 }
 
+CCOLComponentInput *CCOLComponent::getInputNamed(char *name) {
+    CCOLComponentInput *result = NULL;
+    
+    for (auto &i : inputs) {
+        if (std::string(((CCOLComponentInput*)i)->getName()) == std::string(name)) {
+            result = i;
+        }
+    }
+    
+    return result;
+}
+
+
 CCOLComponentParameter* CCOLComponent::getParameterNamed(char *name) {
     CCOLComponentParameter *result = NULL;
     

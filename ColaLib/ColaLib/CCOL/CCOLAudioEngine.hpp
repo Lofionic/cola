@@ -49,6 +49,7 @@ public:
     // Component Management
     CCOLComponentAddress createComponent(char* componentType);
     CCOLOutputAddress getOutput(CCOLComponentAddress componentAddress, char* outputName);
+    CCOLInputAddress getInput(CCOLComponentAddress componentAddress, char* inputName);
     CCOLParameterAddress getParameter(CCOLComponentAddress componentAddress, char* parameterName);
     bool connect(CCOLOutputAddress outputAddress, CCOLInputAddress inputAddress);
     bool disconnect(CCOLInputAddress inputAddress);

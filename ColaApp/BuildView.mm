@@ -362,7 +362,7 @@ static NSArray *cableColours;
         ConnectorView *inConnector;
         
         COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
-        kIOType hitConnectorType = [cae getConnectorType:hitConnector.componentIO];
+        kIOType hitConnectorType = [cae getConnectorType:hitConnector.connector];
         
         if (hitConnectorType & kIOTypeOutput) {
             outConnector = hitConnector;
@@ -406,8 +406,8 @@ static NSArray *cableColours;
 
 -(BOOL)connectorView:(ConnectorView*)connectorView1 connectWith:(ConnectorView*)connectorView2 {
     COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
-    CCOLConnectorAddress componentIO1 = connectorView1.componentIO;
-    CCOLConnectorAddress componentIO2 = connectorView2.componentIO;
+    CCOLConnectorAddress componentIO1 = connectorView1.connector;
+    CCOLConnectorAddress componentIO2 = connectorView2.connector;
     
     kIOType ioType1 = [cae getConnectorType:componentIO1];
     kIOType ioType2 = [cae getConnectorType:componentIO2];
@@ -421,7 +421,7 @@ static NSArray *cableColours;
 
 -(void)disconnectConnectorView:(ConnectorView*)connectorView {
     COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
-    [cae disconnectInput:connectorView.componentIO];
+    [cae disconnectInput:connectorView.connector];
 }
 
 -(void)forceDisconnect:(NSDictionary *)userInfo {

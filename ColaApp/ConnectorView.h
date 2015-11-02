@@ -22,7 +22,7 @@
 @interface ConnectorView : UIView
 
 @property (nonatomic, weak) id<ConnectorViewDelegate>   delegate;
-@property (readonly) CCOLConnectorAddress               componentIO;
+@property (readonly) CCOLConnectorAddress               connector;
 
 @property (nonatomic, weak) BuildViewCable *cable;
 

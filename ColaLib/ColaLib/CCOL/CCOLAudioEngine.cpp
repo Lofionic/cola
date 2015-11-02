@@ -184,6 +184,11 @@ CCOLOutputAddress CCOLAudioEngine::getOutput(CCOLComponentAddress componentAddre
     return (CCOLOutputAddress)component->getOutputNamed(outputName);
 }
 
+CCOLInputAddress CCOLAudioEngine::getInput(CCOLComponentAddress componentAddress, char* inputName) {
+    CCOLComponent *component = (CCOLComponent*)componentAddress;
+    return (CCOLInputAddress)component->getInputNamed(inputName);
+}
+
 CCOLOutputAddress CCOLAudioEngine::getParameter(CCOLComponentAddress componentAddress, char* parameterName) {
     CCOLComponent *component = (CCOLComponent*)componentAddress;
     return (CCOLOutputAddress)component->getParameterNamed(parameterName);
@@ -207,7 +212,7 @@ CCOLInputAddress CCOLAudioEngine::getMasterInput(unsigned int index) {
 }
 
 kIOType CCOLAudioEngine::getIOType(CCOLComponentAddress connectorAddress) {
-    CCOLComponentIO *connector = (CCOLComponentIO*)connectorAddress;
+    CCOLComponentConnector *connector = (CCOLComponentConnector*)connectorAddress;
     return connector->getIOType();
 }
 
