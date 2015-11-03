@@ -26,10 +26,10 @@ class CCOLComponentVCO : public CCOLComponent {
     
     CCOLComponentOutput*    mainOutput;
     
-    CCOLDiscreteParameter*      range;
-    CCOLDiscreteParameter*      waveform;
-    CCOLContinuousParameter*    tune;
-    CCOLContinuousParameter*    fmAmt;
+    CCOLComponentParameter* range;
+    CCOLComponentParameter* waveform;
+    CCOLComponentParameter* tune;
+    CCOLComponentParameter* fmAmt;
     
     CCOLDiscreteParameterIndex  waveformIndex;
     

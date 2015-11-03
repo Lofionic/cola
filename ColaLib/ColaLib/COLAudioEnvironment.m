@@ -102,29 +102,14 @@
     return ccAudioEngine->getParameter(componentAddress, (char*)[parameterName UTF8String]);
 }
 
--(double)getContinuousParameterValue:(CCOLParameterAddress)parameterAddress {
-    CCOLContinuousParameter *parameter = (CCOLContinuousParameter*)parameterAddress;
+-(double)getParameterValue:(CCOLParameterAddress)parameterAddress {
+    CCOLComponentParameter *parameter = (CCOLComponentParameter*)parameterAddress;
     return parameter->getNormalizedValue();
 }
 
--(void)setContinuousParameter:(CCOLParameterAddress)parameterAddress value:(double)value {
-    CCOLContinuousParameter *parameter = (CCOLContinuousParameter*)parameterAddress;
+-(void)setParameter:(CCOLParameterAddress)parameterAddress value:(double)value {
+    CCOLComponentParameter *parameter = (CCOLComponentParameter*)parameterAddress;
     parameter->setNormalizedValue(value);
-}
-
--(CCOLDiscreteParameterIndex)getDiscreteParameterSelectedIndex:(CCOLParameterAddress)parameterAddress {
-    CCOLDiscreteParameter *parameter = (CCOLDiscreteParameter*)parameterAddress;
-    return parameter->getSelectedIndex();
-}
-
--(void)setDiscreteParameterSelectedIndex:(CCOLParameterAddress)parameterAddress index:(CCOLDiscreteParameterIndex)index {
-    CCOLDiscreteParameter *parameter = (CCOLDiscreteParameter*)parameterAddress;
-    parameter->setSelectedIndex(index);
-}
-
--(CCOLDiscreteParameterIndex)getDiscreteParameterMaxIndex:(CCOLParameterAddress)parameterAddress {
-    CCOLDiscreteParameter *parameter = (CCOLDiscreteParameter*)parameterAddress;
-    return parameter->getMaxIndex();
 }
 
 -(NSString*)getParameterName:(CCOLParameterAddress)parameterAddress {

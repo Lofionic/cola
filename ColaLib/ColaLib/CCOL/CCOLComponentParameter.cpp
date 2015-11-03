@@ -9,31 +9,31 @@
 #include "CCOLComponents.h"
 #include "CCOLComponentParameter.hpp"
 
-void CCOLContinuousParameter::setNormalizedValue(double newValue) {
-    if (newValue >= 0 && newValue <= 1) {
-        pendingValue = newValue;
+void CCOLComponentParameter::setNormalizedValue(double valueIn) {
+    if (valueIn >= 0 && valueIn <= 1) {
+        pendingValue = valueIn;
         component->parameterDidChange(this);
     }
 }
 
-double CCOLContinuousParameter::getNormalizedValue() {
+double CCOLComponentParameter::getNormalizedValue() {
     return pendingValue;
 }
 
-void CCOLContinuousParameter::engineDidRender() {
+void CCOLComponentParameter::engineDidRender() {
     preValue = postValue;
     postValue = pendingValue;
 }
 
-double CCOLContinuousParameter::getOutputAtDelta(float delta) {
+double CCOLComponentParameter::getOutputAtDelta(float delta) {
     float f = ((postValue - preValue) * delta) + preValue;
     
-    if (f == cacheIn) {
-        return cacheOut;
+    if (f == cachedInput) {
+        return cachedOutput;
     } else {
-        cacheIn = f;
+        cachedInput = f;
         f = function(f);
-        cacheOut = f;
+        cachedOutput = f;
         return f;
     }
 }

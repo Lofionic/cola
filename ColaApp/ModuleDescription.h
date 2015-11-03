@@ -38,10 +38,11 @@
 
 @interface ControlDescription : NSObject
 
-@property (readonly, strong) NSString   *type;
-@property (readonly, strong) NSString   *parameterName;
-@property (readonly, strong) NSString   *asset;
-@property (readonly) CGPoint            location;
+@property (readonly, strong) NSString       *type;
+@property (readonly, strong) NSString       *parameterName;
+@property (readonly, strong) NSString       *asset;
+@property (readonly) CGPoint                location;
+@property (readonly, strong) NSDictionary   *userInfo;
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary;
 

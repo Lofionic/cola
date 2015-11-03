@@ -149,14 +149,7 @@
         CCOLParameterAddress parameter = 0;
         parameter = [cae getParameterNamed:thisControl.parameterName onComponent:self.component];
         
-        ControlType type;
-        if ([thisControl.type isEqualToString:@"discrete"]) {
-            type = Discrete;
-        } else if ([thisControl.type isEqualToString:@"continuous"]) {
-            type = Continuous;
-        }
-        
-        ControlView *controlView = [ControlView controlForParameter:parameter Description:thisControl ControlType:type];
+        ControlView *controlView = [ControlView controlForParameter:parameter Description:thisControl];
         if (controlView) {
             [controlView setCenter:thisControl.location];
             [self addSubview:controlView];

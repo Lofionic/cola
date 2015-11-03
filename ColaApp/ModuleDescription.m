@@ -118,10 +118,11 @@
 
 @interface ControlDescription ()
 
-@property (nonatomic, strong) NSString   *type;
-@property (nonatomic, strong) NSString   *parameterName;
-@property (nonatomic, strong) NSString   *asset;
-@property (nonatomic) CGPoint            location;
+@property (nonatomic, strong) NSString      *type;
+@property (nonatomic, strong) NSString      *parameterName;
+@property (nonatomic, strong) NSString      *asset;
+@property (nonatomic) CGPoint               location;
+@property (nonatomic, strong) NSDictionary  *userInfo;
 
 @end
 
@@ -146,6 +147,9 @@
             self.location = CGPointMake([[dictionary valueForKey:@"x"] integerValue], [[dictionary valueForKey:@"y"] integerValue]);
         }
         
+        if ([dictionary valueForKey:@"userinfo"]) {
+            self.userInfo = [dictionary objectForKey:@"userinfo"];
+        }
     }
     return self;
 }

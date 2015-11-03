@@ -18,6 +18,7 @@ void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
     
     double sampleRate = 44100.00;
 
+    unsigned int rangeIn = floor(range->getNormalizedValue() * 4);
     for (int i = 0; i < numFrames; i++) {
         float sampleIndexFloat = (phase / (M_PI * 2)) * (WAVETABLE_SIZE - 1);
 
@@ -46,7 +47,7 @@ void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
        
         float delta = ((float)i / numFrames);
         float freqIn = 0.02;
-        unsigned int rangeIn = 2;
+        
         float tuneIn = tune->getOutputAtDelta(delta);
         
         phase += (M_PI * freqIn * CV_FREQUENCY_RANGE * pow(2, rangeIn) * tuneIn) / sampleRate;
@@ -57,8 +58,8 @@ void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
         
         if (result > 0 != (previousResult < 0) || result == 0) {
             //TODO: Change waveform on zero crossover
-            if (waveformIndex != waveform->getSelectedIndex()) {
-                waveformIndex = waveform->getSelectedIndex();
+            if (waveformIndex != waveform->getNormalizedValue()*4) {
+                waveformIndex = waveform->getNormalizedValue()*4;
                 phase = 0;
             }
         }
@@ -86,14 +87,15 @@ void CCOLComponentVCO::initializeIO() {
     };
     setOutputs(theOutputs);
     
-    range =     new CCOLDiscreteParameter(this, (char*)"Range", 4);
-    waveform =  new CCOLDiscreteParameter(this, (char*)"Waveform", 4);
-    tune =      new CCOLContinuousParameter(this, (char*)"Tune");
+    range =     new CCOLComponentParameter(this, (char*)"Range");
+    waveform =  new CCOLComponentParameter(this, (char*)"Waveform");
+    tune =      new CCOLComponentParameter(this, (char*)"Tune");
     tune->setParameterFunction([] (double valueIn) -> double {
         float output = (valueIn * 2.0) - 1.0;
         return (powf(powf(2, (1.0 / 12.0)), output * 7));
     });
-    fmAmt =     new CCOLContinuousParameter(this, (char*)"FM Amt");
+    fmAmt =     new CCOLComponentParameter(this, (char*)"FM Amt");
+    
     vector<CCOLComponentParameter*> theParams = {
         range,
         waveform,
@@ -103,8 +105,8 @@ void CCOLComponentVCO::initializeIO() {
     setParameters(theParams);
     
     // Set defaults
-    range->setSelectedIndex(0);
-    waveform->setSelectedIndex(0);
+    range->setNormalizedValue(0);
+    waveform->setNormalizedValue(0);
     tune->setNormalizedValue(0.5);
     fmAmt->setNormalizedValue(0.5);
 }

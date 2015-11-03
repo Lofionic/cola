@@ -14,7 +14,9 @@
 
 @interface RotarySwitch ()
 
-@property (nonatomic, strong) CALayer *needleLayer;
+@property (nonatomic, strong) CALayer   *needleLayer;
+@property (nonatomic) NSUInteger        maxIndex;
+@property (nonatomic) NSUInteger        selectedIndex;
 
 @end
 
@@ -25,43 +27,44 @@
     double      needleOffset;
 }
 
--(instancetype)initWithDiscreteParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)controlDescription {
-    if (self = [super initWithParameter:parameter Description:controlDescription]) {
+-(instancetype)initWithParameter:(CCOLParameterAddress)parameter Description:(ControlDescription *)description {
+    if (self = [super initWithParameter:parameter Description:description]) {
+        self.maxIndex = [[description.userInfo objectForKey:@"maxindex"] integerValue];
         self.selectedIndex = 0;
         
-        if (controlDescription.asset) {
-            NSString *encoderAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:[@"encoder_" stringByAppendingString:controlDescription.asset]];
-            UIImage *encoderImage = [UIImage imageNamed:encoderAsset];
-            if (encoderImage) {
-                [self.layer setContents:(id)encoderImage.CGImage];
-            }
-            
-            NSString *needleAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:[@"encoder_needle_" stringByAppendingString:controlDescription.asset]];
-            UIImage *needleImage = [UIImage imageNamed:needleAsset];
-            if (needleImage) {
-                self.needleLayer = [CALayer layer];
-                [self.needleLayer setContents:(id)needleImage.CGImage];
-                [self.layer addSublayer:self.needleLayer];
-            }
-            
-            [self setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
-            [self.needleLayer setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
+        NSString *encoderAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:@"encoder_large_white"];
+        UIImage *encoderImage = [UIImage imageNamed:encoderAsset];
+        if (encoderImage) {
+            [self.layer setContents:(id)encoderImage.CGImage];
         }
+        
+        NSString *needleAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:@"encoder_needle_large_white"];
+        UIImage *needleImage = [UIImage imageNamed:needleAsset];
+        if (needleImage) {
+            self.needleLayer = [CALayer layer];
+            [self.needleLayer setContents:(id)needleImage.CGImage];
+            [self.layer addSublayer:self.needleLayer];
+        }
+        
+        [self setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
+        [self.needleLayer setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
         
         [self updateFromParameter];
     }
     return  self;
 }
 
+
+
 -(void)updateFromParameter {
-    [self setSelectedIndex:floor([[COLAudioEnvironment sharedEnvironment] getDiscreteParameterSelectedIndex:self.parameter])];
+    [self setSelectedIndex:floor([[COLAudioEnvironment sharedEnvironment] getParameterValue:self.parameter] * self.maxIndex)];
     [self updateNeedleAnimated:NO];
 }
 
 
 -(void)updateNeedleAnimated:(BOOL)animated {
-    CCOLDiscreteParameterIndex maxIndex = [[COLAudioEnvironment sharedEnvironment] getDiscreteParameterMaxIndex:self.parameter];
-    double offset = (M_PI / 2.0) + (((maxIndex - 1) / 12.0) * M_PI);
+
+    double offset = (M_PI / 2.0) + (((self.maxIndex - 1) / 12.0) * M_PI);
     double theta = ((M_PI * 2.0) * (self.selectedIndex / 12.0));
     
     BOOL disableActions = [CATransaction disableActions];
@@ -77,8 +80,7 @@
 }
 
 -(void)setSelectedIndex:(NSUInteger)value {
-    CCOLDiscreteParameterIndex maxIndex = [[COLAudioEnvironment sharedEnvironment] getDiscreteParameterMaxIndex:self.parameter];
-    if (value < maxIndex) {
+    if (value < self.maxIndex) {
         _selectedIndex = value;
     }
 }
@@ -103,7 +105,7 @@
         }
         if (self.selectedIndex != trackingValue + delta) {
             self.selectedIndex = trackingValue + delta;
-            [[COLAudioEnvironment sharedEnvironment] setDiscreteParameterSelectedIndex:self.parameter index:(CCOLDiscreteParameterIndex)self.selectedIndex];
+            [[COLAudioEnvironment sharedEnvironment] setParameter:self.parameter value:self.selectedIndex / (float)self.maxIndex];
             [self updateNeedleAnimated:YES];
         }
     }
@@ -119,7 +121,7 @@
     self.selectedIndex = value;
     [self updateNeedleAnimated:NO];
     
-    [[COLAudioEnvironment sharedEnvironment] setDiscreteParameterSelectedIndex:self.parameter index:(CCOLDiscreteParameterIndex)self.selectedIndex];
+    [[COLAudioEnvironment sharedEnvironment] setParameter:self.parameter value:self.selectedIndex / (float)self.maxIndex];
 }
 
 @end

@@ -24,29 +24,26 @@
     double      trackingValue;
 }
 
--(instancetype)initWithContinuousParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)controlDescription {
-    
+-(instancetype)initWithParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)controlDescription {
     if (self = [super initWithParameter:parameter Description:controlDescription]) {
         self.value = 0;
         
-        if (controlDescription.asset) {
-            NSString *encoderAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:[@"encoder_" stringByAppendingString:controlDescription.asset]];
-            UIImage *encoderImage = [UIImage imageNamed:encoderAsset];
-            if (encoderImage) {
-                [self.layer setContents:(id)encoderImage.CGImage];
-            }
-
-            NSString *needleAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:[@"encoder_needle_" stringByAppendingString:controlDescription.asset]];
-            UIImage *needleImage = [UIImage imageNamed:needleAsset];
-            if (needleImage) {
-                self.needleLayer = [CALayer layer];
-                [self.needleLayer setContents:(id)needleImage.CGImage];
-                [self.layer addSublayer:self.needleLayer];
-            }
-            
-            [self setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
-            [self.needleLayer setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
+        NSString *encoderAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:@"encoder_large_white"];
+        UIImage *encoderImage = [UIImage imageNamed:encoderAsset];
+        if (encoderImage) {
+            [self.layer setContents:(id)encoderImage.CGImage];
         }
+
+        NSString *needleAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:@"encoder_needle_large_white"];
+        UIImage *needleImage = [UIImage imageNamed:needleAsset];
+        if (needleImage) {
+            self.needleLayer = [CALayer layer];
+            [self.needleLayer setContents:(id)needleImage.CGImage];
+            [self.layer addSublayer:self.needleLayer];
+        }
+        
+        [self setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
+        [self.needleLayer setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
         
         [self updateFromParameter];
     }
@@ -54,7 +51,7 @@
 }
 
 -(void)updateFromParameter {
-    [self setValue:[[COLAudioEnvironment sharedEnvironment] getContinuousParameterValue:self.parameter]];
+    [self setValue:[[COLAudioEnvironment sharedEnvironment] getParameterValue:self.parameter]];
 }
 
 
@@ -87,7 +84,7 @@
         
         [self setNeedsDisplay];
         
-        [[COLAudioEnvironment sharedEnvironment] setContinuousParameter:self.parameter value:self.value];
+        [[COLAudioEnvironment sharedEnvironment] setParameter:self.parameter value:self.value];
     }
 }
 
@@ -110,7 +107,7 @@
     self.value = [((NSNumber*)object) doubleValue];
     [self setNeedsDisplay];
     
-    [[COLAudioEnvironment sharedEnvironment] setContinuousParameter:self.parameter value:self.value];
+    [[COLAudioEnvironment sharedEnvironment] setParameter:self.parameter value:self.value];
 }
 
 @end

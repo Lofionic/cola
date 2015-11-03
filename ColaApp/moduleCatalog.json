@@ -30,29 +30,31 @@
                 ],
                 "controls" : [
                     {
-                        "asset" : "large_white",
-                        "type" : "discrete",
+                        "type" : "rotary_switch",
                         "parameter" : "Range",
                         "x" : 50,
-                        "y" : 70
+                        "y" : 70,
+                        "userinfo" : {
+                              "maxindex" : 4
+                              }
                     },
                     {
-                        "asset" : "large_white",
-                        "type" : "discrete",
+                        "type" : "rotary_switch",
                         "parameter" : "Waveform",
                         "x" : 130,
-                        "y" : 170
+                        "y" : 170,
+                        "userinfo" : {
+                              "maxindex" : 4
+                              }
                     },
                     {
-                        "asset" : "large_white",
-                        "type" : "continuous",
+                        "type" : "rotary_encoder",
                         "parameter" : "Tune",
                         "x" : 130,
                         "y" : 70
                     },
                     {
-                        "asset" : "large_white",
-                        "type" : "continuous",
+                        "type" : "rotary_encoder",
                         "parameter" : "FM Amt",
                         "x" : 50,
                         "y" : 170

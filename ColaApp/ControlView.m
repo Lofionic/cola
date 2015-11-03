@@ -19,18 +19,15 @@
 @implementation ControlView
 
 // Factory method for creating a control of the correct type
-+(ControlView*)controlForParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)description ControlType:(ControlType)type
++(ControlView*)controlForParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)description
 {
     ControlView *result = nil;
     
-    switch (type) {
-        case Continuous:
-            result = [[RotaryEncoder alloc] initWithContinuousParameter:parameter Description:description];
-            break;
-        case Discrete:
-            result = [[RotarySwitch alloc] initWithDiscreteParameter:parameter Description:description];
-        default:
-            break;
+    if ([description.type isEqualToString:@"rotary_encoder"]) {
+        result = [[RotaryEncoder alloc] initWithParameter:parameter Description:description];
+
+    } else if ([description.type isEqualToString:@"rotary_switch"]) {
+        result = [[RotarySwitch alloc] initWithParameter:parameter Description:description];
     }
  
     return result;

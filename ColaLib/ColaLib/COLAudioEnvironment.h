@@ -58,11 +58,8 @@
 
 // Get set parameters
 -(NSString*)getParameterName:(CCOLParameterAddress)parameterAddress;
--(double)getContinuousParameterValue:(CCOLParameterAddress)parameterAddress;
--(void)setContinuousParameter:(CCOLParameterAddress)parameterAddress value:(double)value;
--(CCOLDiscreteParameterIndex)getDiscreteParameterSelectedIndex:(CCOLParameterAddress)parameterAddress;
--(void)setDiscreteParameterSelectedIndex:(CCOLParameterAddress)parameterAddress index:(CCOLDiscreteParameterIndex)index;
--(CCOLDiscreteParameterIndex)getDiscreteParameterMaxIndex:(CCOLParameterAddress)parameterAddress;
+-(double)getParameterValue:(CCOLParameterAddress)parameterAddress;
+-(void)setParameter:(CCOLParameterAddress)parameterAddress value:(double)value;
 
 @property (readonly) NSMutableArray *components;
 

@@ -9,10 +9,7 @@
 #import "ControlView.h"
 
 @class ControlDescription;
+
 @interface RotarySwitch : ControlView
-
-@property (nonatomic) NSUInteger selectedIndex;
-
--(instancetype)initWithDiscreteParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)controlDescription;
 
 @end

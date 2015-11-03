@@ -9,16 +9,11 @@
 #import <ColaLib/CCOLTypes.h>
 #import "ModuleDescription.h"
 
-typedef enum ControlType {
-    Continuous,
-    Discrete
-} ControlType;
-
 @interface ControlView : UIControl
 
 @property (readonly) CCOLParameterAddress parameter;
 
-+(ControlView*)controlForParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)description ControlType:(ControlType)type;
++(ControlView*)controlForParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)description;
 -(instancetype)initWithParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)description;
 
 -(void)updateFromParameter;

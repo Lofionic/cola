@@ -14,6 +14,4 @@
 
 @property (nonatomic) double value;
 
--(instancetype)initWithContinuousParameter:(CCOLParameterAddress)parameter Description:(ControlDescription*)controlDescription;
-
 @end

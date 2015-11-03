@@ -13,82 +13,40 @@
 #include "CCOLComponent.hpp"
 
 class CCOLComponentParameter {
+
+typedef double (*parameterFunction)(double valueIn);
     
 public:
     CCOLComponentParameter(CCOLComponent *componentIn, char* nameIn) {
         component = componentIn;
         name = nameIn;
+        
+        preValue = postValue = pendingValue = 0;
     }
+    
     char*   getName() {
         return name;
     }
 
-    virtual void engineDidRender() { };
-
-protected:
-    CCOLComponent   *component;
-private:
-    char*           name;
-
-};
-
-typedef double (*parameterFunction)(double valueIn);
-class CCOLContinuousParameter : public CCOLComponentParameter {
-    
-public:
-    CCOLContinuousParameter(CCOLComponent *componentIn, char* nameIn) : CCOLComponentParameter(componentIn, nameIn) {
-        setParameterFunction([] (double valueIn) -> double {
-            return valueIn;
-        });
-        
-        preValue        = 0;
-        postValue       = 0;
-        pendingValue    = 0;
-    }
+    void    engineDidRender();
     void    setNormalizedValue(double newValue);
     double  getNormalizedValue();
-    double  getOutputAtDelta(float delta);
     void    setParameterFunction(parameterFunction functionIn) {
         function = functionIn;
     }
-    void    engineDidRender() override;
+    double  getOutputAtDelta(float delta);
+    
+protected:
+    CCOLComponent   *component;
     
 private:
-    double  normalizedValue;
-    double  preValue;
-    double  postValue;
-    double  pendingValue;
-    double  cacheIn;
-    double  cacheOut;
+    char*               name;
+    double              value;
+    parameterFunction   function;
     
-    parameterFunction function;
-};
+    double preValue, postValue, pendingValue;
+    double cachedInput, cachedOutput;
 
-class CCOLDiscreteParameter : public CCOLComponentParameter {
-    
-public:
-    CCOLDiscreteParameter(CCOLComponent *component, char* name, CCOLDiscreteParameterIndex maxIndexIn):CCOLComponentParameter(component, name) {
-        maxIndex = maxIndexIn;
-    }
-    
-    CCOLDiscreteParameterIndex getMaxIndex() {
-        return maxIndex;
-    }
-    
-    CCOLDiscreteParameterIndex getSelectedIndex() {
-        return selectedIndex;
-    }
-    
-    void setSelectedIndex(CCOLDiscreteParameterIndex indexIn) {
-        selectedIndex = indexIn;
-        component->parameterDidChange(this);
-    }
-    
-private:
-    CCOLDiscreteParameterIndex  maxIndex;
-    CCOLDiscreteParameterIndex  selectedIndex;
-    
-    
 };
 
 #endif /* CCOLParameter_hpp */
