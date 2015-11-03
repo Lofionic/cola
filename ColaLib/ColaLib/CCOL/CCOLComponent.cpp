@@ -11,20 +11,30 @@
 #include "CCOLAudioContext.hpp"
 #include "CCOLComponentIO.hpp"
 #include "CCOLComponentParameter.hpp"
-
+#include <stdlib.h>
 #include <string>
 
-void CCOLComponent::assignUniqueName() {
-    unsigned int    componentCount = 0;
-    const char*     name;
+void gen_random(char *s, const int len) {
+    static const char alphanum[] =
+    "0123456789"
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "abcdefghijklmnopqrstuvwxyz";
     
-    bool uniqueName = false;
-    while (!uniqueName) {
-        componentCount++;
-        string thisName = getDefaultName() + to_string(componentCount);
-        name = thisName.c_str();
-        uniqueName = true;
+    int j = 0;
+    for (int i = 0; i < len; ++i) {
+        if (i > 0 && i % 5 == 0) {
+            s[j++] = '-';
+        }
+        s[j++] = alphanum[rand() % (sizeof(alphanum) - 1)];
     }
+    
+    s[j] = 0;
+}
+
+CCOLComponent::CCOLComponent(CCOLAudioContext* contextIn) {
+    context = contextIn;
+    componentIdentifier = new char[12];
+    gen_random(componentIdentifier, 10);
 }
 
 void CCOLComponent::renderOutputs(unsigned int numFrames) {
@@ -94,6 +104,28 @@ CCOLComponentParameter* CCOLComponent::getParameterNamed(char *name) {
     return result;
 }
 
+// Dealloc all members ready for release
+void CCOLComponent::dealloc() {
+    
+    // Free inputs
+    for (auto &i : inputs) {
+        free (i);
+    }
+    
+    // Free outputs
+    for (auto &o : outputs) {
+        free (o);
+    }
+    
+    // Free parameters
+    for (auto &p : parameters) {
+        free (p);
+    }
+    
+    free (componentIdentifier);
+}
+
+// Returns the default name for this component
 const char* CCOLComponent::getDefaultName() {
     return "Component";
 }

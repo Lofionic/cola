@@ -36,7 +36,7 @@
 
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame identifier:(NSString*)identifier {
     
-    CCOLComponentAddress component = [[COLAudioEnvironment sharedEnvironment] createCComponentOfType:(char*)[moduleDescription.component UTF8String]];
+    CCOLComponentAddress component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:(char*)[moduleDescription.component UTF8String]];
 
     if (component == 0) {
         return nil;
@@ -167,33 +167,6 @@
     self.controlViews = [NSArray arrayWithArray:controlViews];
 }
 
--(void)setParametersFromDictionary:(NSDictionary*)parametersDictionary {
-    
-    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
-    
-    for (NSString *thisParameter in [parametersDictionary allKeys]) {
-        [self.controlViews enumerateObjectsUsingBlock:^(ControlView *obj, NSUInteger index, BOOL *stop) {
-            if ([obj isKindOfClass:[RotaryEncoder class]]) {
-                RotaryEncoder *rotaryEncoder = (RotaryEncoder*)obj;
-                NSString *thisEncoderParameterName = [cae getParameterName:rotaryEncoder.parameter];
-                if ([thisEncoderParameterName isEqualToString:thisParameter]) {
-                    [cae setContinuousParameter:rotaryEncoder.parameter value:[[parametersDictionary objectForKey:thisParameter] floatValue]];
-                    [rotaryEncoder updateFromParameter];
-                }
-            }
-            
-            if ([obj isKindOfClass:[RotarySwitch class]]) {
-                RotaryEncoder *rotaryEncoder = (RotaryEncoder*)obj;
-                NSString *thisEncoderParameterName = [cae getParameterName:rotaryEncoder.parameter];
-                if ([thisEncoderParameterName isEqualToString:thisParameter]) {
-                    [cae setDiscreteParameterSelectedIndex:rotaryEncoder.parameter index:(CCOLDiscreteParameterIndex)[[parametersDictionary objectForKey:thisParameter] integerValue]];
-                    [rotaryEncoder updateFromParameter];
-                }
-            }
-        }];
-    }
-}
-
 -(void)handleLongPress:(UIGestureRecognizer*)uigr {
     UILongPressGestureRecognizer *longPressGesture = (UILongPressGestureRecognizer*)uigr;
     
@@ -226,7 +199,7 @@
 }
 
 -(void)trash {
-    //[[COLAudioEnvironment sharedEnvironment] removeComponent:self.component];
+    [[COLAudioEnvironment sharedEnvironment] removeComponent:self.component];
     [self removeFromSuperview];
 }
 
@@ -247,27 +220,37 @@
              };
 }
 
-// Initialize a module from a preset dictionary
--(instancetype)initWithDictionary:(NSDictionary*)dictionary {
+-(void)setParametersFromDictionary:(NSDictionary*)dictionary {
     
-    ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[dictionary objectForKey:PRESET_KEY_MODULE_TYPE]];
-    
-    if (moduleDescription) {
-        if (self = [self initWithModuleDescription:moduleDescription]) {
-            [self setCenter:[[dictionary objectForKey:PRESET_KEY_MODULE_CENTER] CGPointValue]];
-            
-            // Set parameters from dictionary
-            NSDictionary *controlsDictionary = [dictionary objectForKey:PRESET_KEY_MODULE_CONTROLS];
-            if (controlsDictionary) {
-                for (ControlView *thisControl in self.controlViews) {
-                    NSString *controlName = [[COLAudioEnvironment sharedEnvironment] getParameterName:thisControl.parameter];
-                    [thisControl setFromDictionaryObject:[controlsDictionary objectForKey:controlName]];
-                }
-            }
-        }
+    for (ControlView *thisControl in self.controlViews) {
+        NSString *controlName = [[COLAudioEnvironment sharedEnvironment] getParameterName:thisControl.parameter];
+        NSObject *controlValue = [dictionary objectForKey:controlName];
+        [thisControl setFromDictionaryObject:controlValue];
     }
-    return self;
+    
 }
+
+// Initialize a module from a preset dictionary
+//-(instancetype)initWithDictionary:(NSDictionary*)dictionary {
+//    
+//    ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[dictionary objectForKey:PRESET_KEY_MODULE_TYPE]];
+//    
+//    if (moduleDescription) {
+//        if (self = [self initWithModuleDescription:moduleDescription]) {
+//            [self setCenter:[[dictionary objectForKey:PRESET_KEY_MODULE_CENTER] CGPointValue]];
+//            [self setIdentifier:[dictionary objectForKey:PRESET_KEY_MODULE_IDENTIFIER]];
+//            // Set parameters from dictionary
+//            NSDictionary *controlsDictionary = [dictionary objectForKey:PRESET_KEY_MODULE_CONTROLS];
+//            if (controlsDictionary) {
+//                for (ControlView *thisControl in self.controlViews) {
+//                    NSString *controlName = [[COLAudioEnvironment sharedEnvironment] getParameterName:thisControl.parameter];
+//                    [thisControl setFromDictionaryObject:[controlsDictionary objectForKey:controlName]];
+//                }
+//            }
+//        }
+//    }
+//    return self;
+//}
 
 //    
 //    COLComponent *component = [moduleView component];

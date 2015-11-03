@@ -7,7 +7,6 @@
 //
 
 #include "CCOLAudioEngine.hpp"
-#include "CCOLAudioContext.hpp"
 #include "CCOLComponents.h"
 #include "CCOLComponentIO.hpp"
 
@@ -39,26 +38,23 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     //[transportController renderOutputs:inNumberFrames];
     
     // Pull the buffer chain
-    CCOLComponentInput *masterL = audioEngine->getMasterL();
-    CCOLComponentInput *masterR = audioEngine->getMasterR();
+    CCOLComponentInput *masterL = (CCOLComponentInput*)audioEngine->getMasterInput(0);
+    CCOLComponentInput *masterR = (CCOLComponentInput*)audioEngine->getMasterInput(1);
     
     leftBuffer      = masterL->getBuffer(inNumberFrames);
-    rightBuffer     = masterR->getBuffer(inNumberFrames);
-
+                                         
     // Split left channel into across both channels, if right is not connected
-    if (!masterR->isConnected()) {
+    if (masterR->isConnected()) {
+        rightBuffer     = masterR->getBuffer(inNumberFrames);
+    } else {
         rightBuffer = leftBuffer;
     }
     
     outA = (SignalType*)ioData->mBuffers[0].mData;
     outB = (SignalType*)ioData->mBuffers[1].mData;
-    //
-    //        // Cherry Cola stuff
-    //        leftBuffer =    audioEngine->masterInL->getBuffer(inNumberFrames);
-    //        rightBuffer =   audioEngine->masterInR->getBuffer(inNumberFrames);
-    //
+
     // Fill up the output buffer
-    float attenuation = audioEngine->getAttentuation();
+    float attenuation = 0.5;
     for (int i = 0; i < inNumberFrames; i ++) {
         
         outA[i] = leftBuffer[i] * attenuation;
@@ -87,14 +83,6 @@ static void checkError(OSStatus error, const char *operation) {
     char errorString[20];
     
     fprintf(stderr, "Error: %s (%s)\n", operation, errorString); exit(1);
-}
-
-void CCOLAudioEngine::init() {
-    
-    masterL = CCOLAudioContext::globalContext()->getMasterInput(0);
-    masterR = CCOLAudioContext::globalContext()->getMasterInput(1);
- 
-    buildWaveTables();
 }
 
 void CCOLAudioEngine::initializeAUGraph() {
@@ -148,52 +136,58 @@ void CCOLAudioEngine::initializeAUGraph() {
     
     // Initialize Inter-App Audio
     //TODO: Initialize inter-app audio
-
-    // Testing
-//    CCOLComponentVCO *vco = new CCOLComponentVCO();
-//    vco->initializeIO();
-//    
-//    CCOLComponentOutput *vcoOut = vco->getOutputForIndex(0);
-//    vcoOut->connect(masterL);
-//    
-//    masterL->disconnect();
-//    
-//    vcoOut->connect(masterL);
 }
 
 #pragma mark Component Management
+// Add a component to the engine
 CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
     
     CCOLComponent *newComponent = nullptr;
-    CCOLAudioContext *context = CCOLAudioContext::globalContext();
     
     if (std::string(componentType) == kCCOLComponentTypeVCO) {
-        newComponent = new CCOLComponentVCO(context);
+        newComponent = new CCOLComponentVCO(audioContext);
     }
     
     if (newComponent != nullptr) {
         newComponent->initializeIO();
+        
+        printf("Created new component : %s.\n", newComponent->getIdentifier());
         return (CCOLComponentAddress)newComponent;
     } else {
         return 0;
     }
 }
 
+// Remove a component from the engine
+void CCOLAudioEngine::removeComponent(CCOLComponentAddress componentAddress) {
+    
+    CCOLComponent *component = (CCOLComponent*)componentAddress;
+    component->disconnectAll();
+    component->dealloc();
+    
+    free(component);
+    
+}
+
+// Get a component's output
 CCOLOutputAddress CCOLAudioEngine::getOutput(CCOLComponentAddress componentAddress, char* outputName) {
     CCOLComponent *component = (CCOLComponent*)componentAddress;
     return (CCOLOutputAddress)component->getOutputNamed(outputName);
 }
 
+// Get a component's input
 CCOLInputAddress CCOLAudioEngine::getInput(CCOLComponentAddress componentAddress, char* inputName) {
     CCOLComponent *component = (CCOLComponent*)componentAddress;
     return (CCOLInputAddress)component->getInputNamed(inputName);
 }
 
+// Get a component's parameter
 CCOLOutputAddress CCOLAudioEngine::getParameter(CCOLComponentAddress componentAddress, char* parameterName) {
     CCOLComponent *component = (CCOLComponent*)componentAddress;
     return (CCOLOutputAddress)component->getParameterNamed(parameterName);
 }
 
+// Connect an output to an input, return true if successful
 bool CCOLAudioEngine::connect(CCOLOutputAddress outputAddress, CCOLInputAddress inputAddress) {
     CCOLComponentOutput* theOutput = (CCOLComponentOutput*)outputAddress;
     CCOLComponentInput* theInput = (CCOLComponentInput*)inputAddress;
@@ -201,21 +195,24 @@ bool CCOLAudioEngine::connect(CCOLOutputAddress outputAddress, CCOLInputAddress 
     return (theOutput->connect(theInput));
 }
 
+// Disconnect an input from its output, return true if successful
 bool CCOLAudioEngine::disconnect(CCOLInputAddress inputAddress) {
     CCOLComponentInput* theInput = (CCOLComponentInput*)inputAddress;
     return (theInput->disconnect());
 }
 
+// Returns the global context master input at specified index
 CCOLInputAddress CCOLAudioEngine::getMasterInput(unsigned int index) {
-    CCOLAudioContext* context = CCOLAudioContext::globalContext();
-    return (CCOLInputAddress)context->getMasterInput(0);
+    return (CCOLInputAddress)audioContext->getInterfaceComponent()->getInputForIndex(index);
 }
 
-kIOType CCOLAudioEngine::getIOType(CCOLComponentAddress connectorAddress) {
+// Return ioType of a connecter
+kIOType CCOLAudioEngine::getIOType(CCOLConnectorAddress connectorAddress) {
     CCOLComponentConnector *connector = (CCOLComponentConnector*)connectorAddress;
     return connector->getIOType();
 }
 
+// Geerate the wavetables
 //TODO: Refactor wavetables into their own class
 void CCOLAudioEngine::buildWaveTables() {
     // Sin wavetable

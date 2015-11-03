@@ -11,6 +11,7 @@
 
 #include <vector>
 
+
 using namespace std;
 
 class CCOLComponentParameter;
@@ -20,13 +21,7 @@ class CCOLAudioContext;
 class CCOLComponent {
     
 public:
-    CCOLComponent(CCOLAudioContext* contextIn) {
-        context =       contextIn;
-        identifier =    (char*)"ident";
-        rendered =      false;
-        inputs =        { };
-        outputs =       { };
-    }
+    CCOLComponent(CCOLAudioContext* contextIn);
     
     void            disconnectAll();
     virtual void    parameterDidChange(CCOLComponentParameter* parameter) { };
@@ -36,19 +31,44 @@ public:
 
     virtual void    initializeIO() { }
     virtual void    renderOutputs(unsigned int numFrames);
-    virtual void    assignUniqueName();
     
     unsigned long int           getNumberOfOutputs() { return outputs.size(); }
-    CCOLComponentOutput*        getOutputForIndex(long unsigned int index) { return outputs.at(index); }
+    CCOLComponentOutput*        getOutputForIndex(long unsigned int index) {
+        if (index < outputs.size()) {
+        return outputs.at(index);
+        } else {
+            return NULL;
+        }
+    };
     CCOLComponentOutput*        getOutputNamed(char* name);
     
     unsigned long int           getNumberOfInputs() { return inputs.size(); }
-    CCOLComponentInput*         getInputForIndex(short unsigned int index) { return inputs.at(index); };
+    virtual CCOLComponentInput* getInputForIndex(short unsigned int index) {
+        if (index < inputs.size()) {
+            return inputs.at(index);
+        } else {
+            return NULL;
+        }};
     CCOLComponentInput*         getInputNamed(char* name);
     
-    unsigned long int           getNumberOfParameters() { return 0; }
-    CCOLComponentParameter*     getParameterForIndex(short unsigned int index);
+    unsigned long int           getNumberOfParameters() { return parameters.size(); }
+    CCOLComponentParameter*     getParameterForIndex(short unsigned int index) {
+        if (index < parameters.size()) {
+            return parameters.at(index);
+        } else {
+            return NULL;
+        }
+    };
     CCOLComponentParameter*     getParameterNamed(char* name);
+    CCOLAudioContext*           getContext() {
+        return context;
+    }
+    
+    char* getIdentifier() {
+        return componentIdentifier;
+    }
+
+    virtual void dealloc();
     
 protected:
     void setInputs(vector<CCOLComponentInput*> inputsIn) {
@@ -67,12 +87,15 @@ protected:
     
 private:
     CCOLAudioContext*   context;
-    char*               identifier;
-    bool                rendered;
+    const char*         identifier;
+    char*               componentIdentifier;
+    bool                rendered = false;
     
     vector<CCOLComponentInput*>          inputs;
     vector<CCOLComponentOutput*>         outputs;
     vector<CCOLComponentParameter*>      parameters;
 };
+
+
 
 #endif /* CCOLComponent_hpp */

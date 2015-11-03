@@ -107,9 +107,6 @@ void CCOLComponentVCO::initializeIO() {
     waveform->setSelectedIndex(0);
     tune->setNormalizedValue(0.5);
     fmAmt->setNormalizedValue(0.5);
-    
-    printf("%.3f", tune->getOutputAtDelta(1));
-    printf("\n");
 }
 
 const char* CCOLComponentVCO::getDefaultName() {

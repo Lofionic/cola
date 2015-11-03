@@ -10,23 +10,21 @@
 #define CCOLAudioEngine_hpp
 
 #include "CCOLDefines.h"
-
+#include "CCOLAudioContext.hpp"
 #include <vector>
 #include <AudioToolbox/AudioToolbox.h>
 
 using namespace std;
 
 class CCOLComponent;
-class CCOLComponentInput;
-class CCOLComponentOutput;
+class CCOLAudioContext;
 class CCOLAudioEngine {
 
 private:
     AUGraph                 mGraph;
     AudioUnit               mRemoteIO;
     
-    CCOLComponentInput      *masterL;
-    CCOLComponentInput      *masterR;
+    CCOLAudioContext*       audioContext;
     double                  sampleRate;
     float                   attenuation = 0.5;
     
@@ -35,27 +33,28 @@ private:
     void buildWaveTables();
 
 public:
-    void init();
+    CCOLAudioEngine() {
+        audioContext = new CCOLAudioContext(2);
+        buildWaveTables();
+    }
+
     void initializeAUGraph();
-    
-    CCOLComponentInput *getMasterL() {
-        return masterL;
-    }
-    
-    CCOLComponentInput *getMasterR() {
-        return masterR;
-    }
     
     // Component Management
     CCOLComponentAddress createComponent(char* componentType);
+    void removeComponent(CCOLComponentAddress component);
+    
+    // Connections
     CCOLOutputAddress getOutput(CCOLComponentAddress componentAddress, char* outputName);
     CCOLInputAddress getInput(CCOLComponentAddress componentAddress, char* inputName);
-    CCOLParameterAddress getParameter(CCOLComponentAddress componentAddress, char* parameterName);
     bool connect(CCOLOutputAddress outputAddress, CCOLInputAddress inputAddress);
     bool disconnect(CCOLInputAddress inputAddress);
-    
-    CCOLInputAddress getMasterInput(unsigned int index);
     kIOType getIOType(CCOLConnectorAddress connector);
+    
+    // Parameters
+    CCOLParameterAddress getParameter(CCOLComponentAddress componentAddress, char* parameterName);
+
+    CCOLInputAddress getMasterInput(unsigned int index);
     
     float getAttentuation() {
         return attenuation;

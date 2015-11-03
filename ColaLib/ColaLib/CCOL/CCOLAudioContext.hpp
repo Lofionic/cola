@@ -11,28 +11,26 @@
 
 #include <stdio.h>
 #include <vector>
+#include "CCOLInterface.hpp"
 
 using namespace std;
 
 class CCOLComponentInput;
 class CCOLAudioContext {
  
-private:
-    CCOLAudioContext();
-    vector<CCOLComponentInput*> masterInputs;
-    
 public:
-
-    static CCOLAudioContext* globalContext() {
-
-        static CCOLAudioContext INSTANCE;
-
-        return &INSTANCE;
+    CCOLAudioContext(unsigned int interfaceInputCount) {
+        interfaceComponent = new CCOLInterfaceComponent(this);
+        interfaceComponent->initializeIO(2);
     }
     
-    CCOLComponentInput *getMasterInput(unsigned int index) {
-        return masterInputs.at(index);
+    CCOLInterfaceComponent *getInterfaceComponent() {
+        return interfaceComponent;
     }
+    
+private:
+    CCOLInterfaceComponent *interfaceComponent;
+    
 };
 
 #endif /* CCOLAudioContext_hpp */

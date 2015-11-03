@@ -548,7 +548,6 @@ static NSArray *cableColours;
 
     // Trash the module
     [moduleView trash];
-    
 }
 
 
@@ -610,7 +609,7 @@ static NSArray *cableColours;
 
     for (NSString *thisKey in [self.moduleViews allKeys]) {
         ModuleView *thisModuleView = [self.moduleViews objectForKey:thisKey];
-        [modules addObject:[thisModuleView getDictionary]];
+        [modules addObject:[thisModuleView getDictionary]]; 
     }
 
     // Save connections
@@ -644,30 +643,18 @@ static NSArray *cableColours;
     
     BOOL success = YES;
     
-    NSDictionary *modulesDictionaries = [dictionary objectForKey:@"modules"];
     
-    NSLog(@"Restoring %lu modules", (unsigned long)[[modulesDictionaries allKeys] count]);
+    NSArray *modules = [dictionary objectForKey:PRESET_KEY_MODULES];
+    NSLog(@"Restoring %lu modules", (unsigned long)[modules count]);
     
-    for (NSString *moduleIdentifier in [modulesDictionaries allKeys]) {
-        NSDictionary *moduleDictionary = [modulesDictionaries objectForKey:moduleIdentifier];
-        
-        
-        
-        CGPoint moduleCenter = [[moduleDictionary objectForKey:@"center"] CGPointValue];
-        ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[moduleDictionary objectForKey:PRESET_KEY_MODULE_TYPE]];
-        if (moduleDescription) {
-            ModuleView *moduleView;
-            if ((moduleView = [self addViewForModule:moduleDescription atPoint:moduleCenter identifier:moduleIdentifier])) {
-                // Set parameters
-                [moduleView setParametersFromDictionary:[moduleDictionary objectForKey:@"params"]];
-            } else {
-                success = NO;
-            }
-        } else {
-            success = NO;
-        }
+    for (NSDictionary *thisModule in modules) {
+        CGPoint center = [[thisModule objectForKey:PRESET_KEY_MODULE_CENTER] CGPointValue];
+        ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[thisModule objectForKey:PRESET_KEY_MODULE_TYPE]];
+        NSString *identifier = [thisModule objectForKey:PRESET_KEY_MODULE_IDENTIFIER];
+        NSDictionary *controlsDictionary = [thisModule objectForKey:PRESET_KEY_MODULE_CONTROLS];
+        [[self addViewForModule:moduleDescription atPoint:center identifier:identifier] setParametersFromDictionary:controlsDictionary];
     }
-    
+
     NSArray *cablesArray = [dictionary objectForKey:@"cables"];
     
     for (NSDictionary *thisCable in cablesArray) {

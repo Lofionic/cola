@@ -44,7 +44,8 @@
 -(void)exportEnvironment;
 
 // Component Management
--(CCOLComponentAddress)createCComponentOfType:(char*)componentType;
+-(CCOLComponentAddress)createComponentOfType:(char*)componentType;
+-(void)removeComponent:(CCOLComponentAddress)componentAddress;
 -(BOOL)connectOutput:(CCOLOutputAddress)outputAddress toInput:(CCOLInputAddress)inputAddress;
 -(BOOL)disconnectInput:(CCOLInputAddress)inputAddress;
 -(NSString*)getConnectorName:(CCOLConnectorAddress)connectorAddress;

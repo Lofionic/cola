@@ -114,8 +114,12 @@
 }
 
 -(void)setFromDictionaryObject:(NSObject *)object {
-    self.selectedIndex = (NSUInteger)object;
-    [self setNeedsDisplay];
+    NSNumber *number = (NSNumber*)object;
+    NSUInteger value = [number integerValue];
+    self.selectedIndex = value;
+    [self updateNeedleAnimated:NO];
+    
+    [[COLAudioEnvironment sharedEnvironment] setDiscreteParameterSelectedIndex:self.parameter index:(CCOLDiscreteParameterIndex)self.selectedIndex];
 }
 
 @end

@@ -32,7 +32,7 @@
 
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame identifier:(NSString*)identifier;
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription;
--(void)setParametersFromDictionary:(NSDictionary*)parametersDictionary;
+-(void)setParametersFromDictionary:(NSDictionary*)dictionary; 
 -(void)trash;
 
 -(ConnectorView*)connectorForName:(NSString*)name;

@@ -109,6 +109,8 @@
 -(void)setFromDictionaryObject:(NSObject *)object {
     self.value = [((NSNumber*)object) doubleValue];
     [self setNeedsDisplay];
+    
+    [[COLAudioEnvironment sharedEnvironment] setContinuousParameter:self.parameter value:self.value];
 }
 
 @end

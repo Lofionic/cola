@@ -14,7 +14,7 @@
 static SignalType*     emptyBuffer;
 static unsigned int    emptyBufferSize;
 
-CCOLComponentConnector::CCOLComponentConnector(CCOLComponent *componentIn, kIOType ioTypeIn, char* nameIn) {
+CCOLComponentConnector::CCOLComponentConnector(CCOLComponent *componentIn, kIOType ioTypeIn, const char *nameIn) {
     component = componentIn;
     ioType = ioTypeIn;
     name = nameIn;
@@ -22,6 +22,7 @@ CCOLComponentConnector::CCOLComponentConnector(CCOLComponent *componentIn, kIOTy
     connectedTo = nullptr;
 }
 
+// Called when the engine has finished rendering the buffer
 void CCOLComponentConnector::engineDidRender() {
     if (connectedTo != nullptr) {
         connectedTo->engineDidRender();
@@ -96,12 +97,15 @@ void CCOLComponentInput::engineDidRender() {
 bool CCOLComponentInput::disconnect() {
     if (isConnected()) {
         setConnected(nullptr);
+        printf("%s|%s disconnected.\n", getComponent()->getIdentifier(), getName());
         return true;
     } else {
+        printf("%s|%s cannot disconnect.\n", getComponent()->getIdentifier(), getName());
         return false;
     }
 }
 
+// Make a dynamic connection from dynamic input to output
 bool CCOLComponentInput::makeDynamicConnection(CCOLComponentOutput *outputIn) {
     if (isDynamic()) {
         kIOType connectionIOType = (kIOType)(outputIn->getIOType() & ~(1 << 1));
@@ -139,6 +143,7 @@ bool CCOLComponentInput::isDynamic() {
     return ioType == kIOTypeDynamic;
 }
 
+// Return a bitmask of ioType
 kIOType CCOLComponentInput::getIOType() {
     if ((ioType & kIOTypeDynamic) > 0 && isConnected()) {
         // Dynamic type
@@ -150,8 +155,8 @@ kIOType CCOLComponentInput::getIOType() {
     }
 }
 
-
 #pragma mark CCOLComponentOutput
+// Get the buffer of this output
 SignalType* CCOLComponentOutput::getBuffer(unsigned int numFrames) {
     // If the component hasn't rendered, now's the time to do it.
     if (!component->hasRendered()) {
@@ -161,6 +166,7 @@ SignalType* CCOLComponentOutput::getBuffer(unsigned int numFrames) {
     return buffer;
 }
 
+// Prepare the output's buffer for writing
 SignalType* CCOLComponentOutput::prepareBufferOfSize(unsigned int numFrames) {
     // Create or resize the buffer
     if (numFrames != bufferSize) {
@@ -175,14 +181,19 @@ SignalType* CCOLComponentOutput::prepareBufferOfSize(unsigned int numFrames) {
     return buffer;
 }
 
+// Called when the engine has finished rendering the buffer
 void CCOLComponentOutput::engineDidRender() {
     if (component->hasRendered()) {
         component->engineDidRender();
     }
 }
 
+// Connect this output to an input
 bool CCOLComponentOutput::connect(CCOLComponentInput *inputIn) {
 //TODO: Validate connection context
+    if (getComponent()->getContext() != inputIn->getComponent()->getContext()) {
+        printf("Connection failed: Input and Output components must exist in the same context.\n");
+    }
     
     if (inputIn->isDynamic()) {
         // Connect to dynamic input
@@ -194,21 +205,21 @@ bool CCOLComponentOutput::connect(CCOLComponentInput *inputIn) {
             // This is a dynamic output
             if (linkedInput != nullptr) {
                 if (!(linkedInput->getIOType() & connectionType) || !(inputIn->getIOType() & connectionType)) {
-                    printf("Dynamic connection failed : dynamic output's linked input does not match input type\n");
+                    printf("Dynamic connection failed : dynamic output's linked input does not match input type.\n");
                     return false;
                 }
             } else {
-                printf("Dynamic connection failed : Attempted to connect dynamic output with no linked input");
+                printf("Dynamic connection failed : Attempted to connect dynamic output with no linked input.\n");
                 return false;
             }
         } else {
             if (!(inputIn->getIOType() & connectionType)) {
-                printf("Connection failed : Output and input types must match");
+                printf("Connection failed : Output and input types must match.\n");
                 return false;
             }
             
             if (inputIn->getComponent() == component) {
-                printf("Connection failed : Component cannot connect to self");
+                printf("Connection failed : Component cannot connect to self.\n");
                 return false;
             }
         }
@@ -226,6 +237,7 @@ bool CCOLComponentOutput::connect(CCOLComponentInput *inputIn) {
     connectedTo = inputIn;
     inputIn->setConnected(this);
     
+    printf("Connected : %s|%s -> %s|%s.\n", getComponent()->getIdentifier(), getName(), inputIn->getComponent()->getIdentifier(), inputIn->getName());
     return true;
 }
 
@@ -233,12 +245,15 @@ kIOType CCOLComponentOutput::getIOType() {
     return (kIOType)(ioType | kIOTypeOutput);
 }
 
+// Disconnect from input
 bool CCOLComponentOutput::disconnect() {
     if (isConnected()) {
         getConnected()->disconnect();
         setConnected(nullptr);
+        printf("%s|%s disconnected.\n", getComponent()->getIdentifier(), getName());
         return true;
     } else {
+        printf("%s|%s cannot disconnect.\n", getComponent()->getIdentifier(), getName());
         return false;
     }
 }

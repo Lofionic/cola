@@ -18,7 +18,7 @@ class CCOLComponent;
 class CCOLComponentConnector {
 
 public:
-    CCOLComponentConnector(CCOLComponent *component, kIOType ioType, char* name);
+    CCOLComponentConnector(CCOLComponent *component, kIOType ioType, const char* name);
     
     const char*         getName() { return name; }
     
@@ -41,7 +41,7 @@ protected:
    
     
 private:
-    char*               name;
+    const char*         name;
 };
 
 
@@ -49,7 +49,7 @@ private:
 class CCOLComponentInput : public CCOLComponentConnector {
     
 public:
-    CCOLComponentInput(CCOLComponent *component, kIOType ioType, char* name):CCOLComponentConnector(component, ioType, name) { }
+    CCOLComponentInput(CCOLComponent *component, kIOType ioType, const char* name):CCOLComponentConnector(component, ioType, name) { }
     
     SignalType*     getBuffer(unsigned int numFrames);
     bool            makeDynamicConnection(CCOLComponentOutput *outputIn);
@@ -65,7 +65,7 @@ private:
 class CCOLComponentOutput : public CCOLComponentConnector {
 
 public:
-    CCOLComponentOutput(CCOLComponent *component, kIOType ioType, char* name):CCOLComponentConnector(component, ioType, name) {
+    CCOLComponentOutput(CCOLComponent *component, kIOType ioType, const char* name):CCOLComponentConnector(component, ioType, name) {
         linkedInput = nullptr;
         buffer = nullptr;
         bufferSize = 0;

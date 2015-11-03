@@ -58,7 +58,6 @@
         
         // Cherry Cola
         ccAudioEngine = new CCOLAudioEngine();
-        ccAudioEngine->init();
     }
     return self;
 }
@@ -77,8 +76,12 @@
 }
 
 // Component Management
--(CCOLComponentAddress)createCComponentOfType:(char*)componentType {
+-(CCOLComponentAddress)createComponentOfType:(char*)componentType {
     return ccAudioEngine->createComponent(componentType);
+}
+
+-(void)removeComponent:(CCOLComponentAddress)componentAddress {
+    ccAudioEngine->removeComponent(componentAddress);
 }
 
 // IO

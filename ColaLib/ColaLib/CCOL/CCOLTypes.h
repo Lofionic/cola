@@ -18,6 +18,7 @@ typedef unsigned long long  CCOLParameterAddress;
 
 #define kCCOLComponentTypeVCO "CCOLComponentTypeVCO"
 
+// Interapp audio keys
 #define kDictionaryKeyComponentName         @"kDictionaryKeyComponentName"
 #define kDictionaryKeyComponentType         @"kDictionaryKeyComponentType"
 #define kDictionaryKeyComponentSubtype      @"kDictionaryKeyComponentSubtype"
