@@ -14,13 +14,12 @@
 -(NSDictionary*)interAppInfoDictionary;
 @end
 
-@class COLAudioEngine;
 @protocol COLAudioEngineDelegate <NSObject>
 @optional
--(NSDictionary*)interAppInfoDictionaryForAudioEngine:(COLAudioEngine*)audioEngine;
--(void)audioEngineInterAppAudioConnected:(COLAudioEngine*)audioEngine;
--(void)audioEngineInterAppAudioDisconnected:(COLAudioEngine*)audioEngine;
--(void)audioEngineHostStateDidChange:(COLAudioEngine*)audioEngine;
+//-(NSDictionary*)interAppInfoDictionaryForAudioEngine:(CCOLAudioEngine*)audioEngine;
+//-(void)audioEngineInterAppAudioConnected:(CCOLAudioEngine*)audioEngine;
+//-(void)audioEngineInterAppAudioDisconnected:(CCOLAudioEngine*)audioEngine;
+//-(void)audioEngineHostStateDidChange:(CCOLAudioEngine*)audioEngine;
 @end
 
 @class COLKeyboardComponent;
@@ -28,10 +27,8 @@
 @interface COLAudioEnvironment : NSObject <COLAudioEngineDelegate>
 
 @property (nonatomic, weak) id      infoDelegate;
-@property (readonly) COLAudioEngine *audioEngine;
 @property (readonly) Float64        sampleRate;
 
-@property (readonly, strong) COLKeyboardComponent       *keyboardComponent;
 @property (readonly, strong) COLTransportController     *transportController;
 
 +(instancetype)sharedEnvironment;
@@ -40,6 +37,7 @@
 
 -(void)mute;
 -(void)unmute;
+-(BOOL)isMute;
 
 -(void)exportEnvironment;
 
@@ -47,7 +45,7 @@
 -(CCOLComponentAddress)createComponentOfType:(char*)componentType;
 -(void)removeComponent:(CCOLComponentAddress)componentAddress;
 -(BOOL)connectOutput:(CCOLOutputAddress)outputAddress toInput:(CCOLInputAddress)inputAddress;
--(BOOL)disconnectInput:(CCOLInputAddress)inputAddress;
+-(BOOL)disconnect:(CCOLConnectorAddress)connectorAddress;
 -(NSString*)getConnectorName:(CCOLConnectorAddress)connectorAddress;
 
 -(CCOLInputAddress)getMasterInputAtIndex:(UInt32)index;
@@ -60,6 +58,12 @@
 -(NSString*)getParameterName:(CCOLParameterAddress)parameterAddress;
 -(double)getParameterValue:(CCOLParameterAddress)parameterAddress;
 -(void)setParameter:(CCOLParameterAddress)parameterAddress value:(double)value;
+
+// MIDI
+-(CCOLComponentAddress)getMIDIComponent;
+-(void)noteOn:(NoteIndex)noteIndex;
+-(void)noteOff:(NoteIndex)noteIndex;
+-(void)allNotesOff;
 
 @property (readonly) NSMutableArray *components;
 

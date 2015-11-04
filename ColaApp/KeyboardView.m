@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 ccr. All rights reserved.
 //
 #import "KeyboardView.h"
+#import <ColaLib/COLAudioEnvironment.h>
 
 @implementation KeyboardView {
     int octaves;
@@ -167,13 +168,14 @@
 
     if (![keysDown isEqualToSet:prevKeysDown]) {
         // Something's changed
+        COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
         
         // Determine released keys
         NSMutableSet *releasedKeys = [NSMutableSet setWithSet:prevKeysDown];
         [releasedKeys minusSet:keysDown];
         for (NSNumber *n in releasedKeys) {
             int midiNote = keyValues[[n integerValue]] + 24 + ((int)self.keyboardShift * 12);
-            //[self.kbComponent noteOff:midiNote];
+            [cae noteOff:midiNote];
         }
         [self setNeedsDisplay];
         
@@ -183,7 +185,7 @@
         
         for (NSNumber *n in newKeys) {
             int midiNote = keyValues[[n integerValue]] + 24 + ((int)self.keyboardShift * 12);
-            //[self.kbComponent noteOn:midiNote];
+            [cae noteOn:midiNote];
         }
     }
     

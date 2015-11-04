@@ -18,6 +18,7 @@ using namespace std;
 
 class CCOLComponent;
 class CCOLAudioContext;
+class CCOLKeyboardComponent;
 class CCOLAudioEngine {
 
 private:
@@ -26,19 +27,18 @@ private:
     
     CCOLAudioContext*       audioContext;
     double                  sampleRate;
-    float                   attenuation = 0.5;
+    
+    float                   attenuation;
+    bool                    mute;
     
     vector<CCOLComponent*>  components;
     
     void buildWaveTables();
 
 public:
-    CCOLAudioEngine() {
-        audioContext = new CCOLAudioContext(2);
-        buildWaveTables();
-    }
+    CCOLAudioEngine();
 
-    void initializeAUGraph();
+    void initializeAUGraph(double sampleRateIn);
     
     // Component Management
     CCOLComponentAddress createComponent(char* componentType);
@@ -53,11 +53,34 @@ public:
     
     // Parameters
     CCOLParameterAddress getParameter(CCOLComponentAddress componentAddress, char* parameterName);
-
     CCOLInputAddress getMasterInput(unsigned int index);
     
-    float getAttentuation() {
+    size_t getComponentCount() {
+        return components.size();
+    }
+    
+    CCOLComponent* getComponent(size_t index) {
+        return components.at(index);
+    }
+    
+    double getSampleRate() {
+        return sampleRate;
+    }
+    
+    float getAttenuation() {
         return attenuation;
+    }
+    
+    void setAttenuation(float value) {
+        attenuation = value;
+    }
+    
+    bool isMute() {
+        return mute;
+    }
+    
+    void setMute(bool value) {
+        mute = value;
     }
 };
 

@@ -21,7 +21,8 @@ public:
         component = componentIn;
         name = nameIn;
         
-        preValue = postValue = pendingValue = 0;
+        preValue = postValue = pendingValue =  0;
+        cachedInput = cachedOutput = 0;
     }
     
     char*   getName() {
@@ -41,7 +42,6 @@ protected:
     
 private:
     char*               name;
-    double              value;
     parameterFunction   function;
     
     double preValue, postValue, pendingValue;

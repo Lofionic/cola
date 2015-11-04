@@ -87,26 +87,26 @@
 
 // Maintain sync with IAA transport
 -(void)interappAudioTransportStateDidChange {
-    COLAudioEngine *engine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-    if (engine.isHostPlaying && !self.isPlaying) {
-        [self syncWithIAA];
-        self.isPlaying = YES;
-        [self postUpdateNotification];
-    } else if (!engine.isHostPlaying && self.isPlaying) {
-        self.isPlaying = NO;
-        [self postUpdateNotification];
-    }
+//    COLAudioEngine *engine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
+//    if (engine.isHostPlaying && !self.isPlaying) {
+//        [self syncWithIAA];
+//        self.isPlaying = YES;
+//        [self postUpdateNotification];
+//    } else if (!engine.isHostPlaying && self.isPlaying) {
+//        self.isPlaying = NO;
+//        [self postUpdateNotification];
+//    }
 }
 
 -(void)syncWithIAA {
-    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-    if (audioEngine.iaaConnected) {
-        Float64 iaaTempo = audioEngine.iaaTempo;
-        if (iaaTempo > 0) {
-            tempo = iaaTempo;
-            currentBeat = audioEngine.iaaCurrentBeat;
-        }
-    }
+//    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
+//    if (audioEngine.iaaConnected) {
+//        Float64 iaaTempo = audioEngine.iaaTempo;
+//        if (iaaTempo > 0) {
+//            tempo = iaaTempo;
+//            currentBeat = audioEngine.iaaCurrentBeat;
+//        }
+//    }
 }
 
 @end

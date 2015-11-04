@@ -37,6 +37,7 @@
 		6C7D48BB1BE27CB00092BC95 /* CCOLComponentVCO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C7D48BA1BE27CB00092BC95 /* CCOLComponentVCO.cpp */; };
 		6C8C15931ADC51DC0077460A /* COLComponentVCF.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8C15921ADC51DC0077460A /* COLComponentVCF.m */; };
 		6CB1276C1BE8E26A005FBDAD /* CCOLInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CB1276A1BE8E26A005FBDAD /* CCOLInterface.cpp */; };
+		6CB1276F1BE91FBB005FBDAD /* CCOLMIDIComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CB1276D1BE91FBB005FBDAD /* CCOLMIDIComponent.cpp */; };
 		6CB322EE1A9BC1110052AE50 /* COLContinuousParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB322ED1A9BC1110052AE50 /* COLContinuousParameter.m */; };
 		6CB62D0D1AF96E560049F760 /* COLComponentNoiseGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB62D0C1AF96E560049F760 /* COLComponentNoiseGenerator.m */; };
 		6CBB7CFF1AEED877006DD7A1 /* COLComponentRingModulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB7CFE1AEED877006DD7A1 /* COLComponentRingModulator.m */; };
@@ -137,6 +138,8 @@
 		6CB127681BE8BDAE005FBDAD /* CCOLUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCOLUtility.h; path = CCOL/CCOLUtility.h; sourceTree = "<group>"; };
 		6CB1276A1BE8E26A005FBDAD /* CCOLInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLInterface.cpp; path = CCOL/CCOLInterface.cpp; sourceTree = "<group>"; };
 		6CB1276B1BE8E26A005FBDAD /* CCOLInterface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLInterface.hpp; path = CCOL/CCOLInterface.hpp; sourceTree = "<group>"; };
+		6CB1276D1BE91FBB005FBDAD /* CCOLMIDIComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLMIDIComponent.cpp; path = CCOL/CCOLMIDIComponent.cpp; sourceTree = "<group>"; };
+		6CB1276E1BE91FBB005FBDAD /* CCOLMIDIComponent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLMIDIComponent.hpp; path = CCOL/CCOLMIDIComponent.hpp; sourceTree = "<group>"; };
 		6CB322EC1A9BC1110052AE50 /* COLContinuousParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLContinuousParameter.h; sourceTree = "<group>"; };
 		6CB322ED1A9BC1110052AE50 /* COLContinuousParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLContinuousParameter.m; sourceTree = "<group>"; };
 		6CB322F51A9BE5350052AE50 /* COLComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponents.h; sourceTree = "<group>"; };
@@ -301,8 +304,10 @@
 				6C7D48B91BE27CB00092BC95 /* CCOLComponentVCO.hpp */,
 				6C7D48BA1BE27CB00092BC95 /* CCOLComponentVCO.cpp */,
 				6C24288B1BE38C72003AB2FF /* CCOLComponents.h */,
-				6CB1276A1BE8E26A005FBDAD /* CCOLInterface.cpp */,
 				6CB1276B1BE8E26A005FBDAD /* CCOLInterface.hpp */,
+				6CB1276A1BE8E26A005FBDAD /* CCOLInterface.cpp */,
+				6CB1276E1BE91FBB005FBDAD /* CCOLMIDIComponent.hpp */,
+				6CB1276D1BE91FBB005FBDAD /* CCOLMIDIComponent.cpp */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -390,6 +395,7 @@
 				6C65A4E61A9117CF000D9192 /* COLComponentWavePlayer.m in Sources */,
 				6C2428891BE37D0F003AB2FF /* CCOLAudioEngine.cpp in Sources */,
 				6C7B27C71A8D578F00AFD384 /* COLComponentOutput.m in Sources */,
+				6CB1276F1BE91FBB005FBDAD /* CCOLMIDIComponent.cpp in Sources */,
 				6CB1276C1BE8E26A005FBDAD /* CCOLInterface.cpp in Sources */,
 				6C7D47B01BE11A980092BC95 /* COLExporter.m in Sources */,
 				6C11547A1A8E3468005CF194 /* COLComponentLFO.m in Sources */,

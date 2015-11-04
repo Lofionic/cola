@@ -41,7 +41,7 @@
     
     if (self = [super initWithCollectionViewLayout:flowLayout]) {
         self.buildViewController = buildViewController;
-        self.cellSize = CGSizeMake(200, 200);
+        self.cellSize = CGSizeMake(200, 300);
     }
     return self;
 }

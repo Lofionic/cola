@@ -27,7 +27,7 @@ public:
     virtual void    parameterDidChange(CCOLComponentParameter* parameter) { };
    
     bool            hasRendered();
-    void            engineDidRender();
+    void            engineDidRender(unsigned int numFrames);
 
     virtual void    initializeIO() { }
     virtual void    renderOutputs(unsigned int numFrames);
@@ -82,20 +82,15 @@ protected:
     void setParameters(vector<CCOLComponentParameter*> parametersIn) {
         parameters = parametersIn;
     }
-    
-    virtual const char* getDefaultName();
-    
+
 private:
     CCOLAudioContext*   context;
-    const char*         identifier;
     char*               componentIdentifier;
-    bool                rendered = false;
+    bool                rendered;
     
     vector<CCOLComponentInput*>          inputs;
     vector<CCOLComponentOutput*>         outputs;
     vector<CCOLComponentParameter*>      parameters;
 };
-
-
 
 #endif /* CCOLComponent_hpp */

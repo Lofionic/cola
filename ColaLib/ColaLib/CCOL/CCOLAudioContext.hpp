@@ -16,20 +16,29 @@
 using namespace std;
 
 class CCOLComponentInput;
+class CCOLAudioEngine;
 class CCOLAudioContext {
  
 public:
-    CCOLAudioContext(unsigned int interfaceInputCount) {
+    CCOLAudioContext(CCOLAudioEngine *audioEngineIn, unsigned int interfaceInputCount) {
+        
+        audioEngine = audioEngineIn;
+        
         interfaceComponent = new CCOLInterfaceComponent(this);
-        interfaceComponent->initializeIO(2);
+        interfaceComponent->initializeIO(interfaceInputCount);
     }
     
     CCOLInterfaceComponent *getInterfaceComponent() {
         return interfaceComponent;
     }
     
+    CCOLAudioEngine *getEngine() {
+        return audioEngine;
+    }
+    
 private:
     CCOLInterfaceComponent *interfaceComponent;
+    CCOLAudioEngine *audioEngine;
     
 };
 

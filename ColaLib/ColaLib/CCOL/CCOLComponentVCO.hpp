@@ -19,7 +19,7 @@ class CCOLDiscreteParameter;
 class CCOLContinuousParameter;
 class CCOLComponentVCO : public CCOLComponent {
     
-    double                  phase = 0;
+    double                  phase;
     
     CCOLComponentInput*     keyboardIn;
     CCOLComponentInput*     fmodIn;
@@ -33,16 +33,18 @@ class CCOLComponentVCO : public CCOLComponent {
     
     CCOLDiscreteParameterIndex  waveformIndex;
     
-    SignalType              previousResult = 0;
+    SignalType              previousResult;
+    
+    float remainder, delta, tuneIn, freqIn, lfoValue;
     
 public:
     CCOLComponentVCO(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
-
+        phase = 0;
+        previousResult = 0;
     }
     
     void            initializeIO() override;
     void            renderOutputs(unsigned int numFrames) override;
-    const char*     getDefaultName() override;
 };
 
 #endif /* CCOLComponentVCO_hpp */

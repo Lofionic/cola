@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string>
 
+// Generated a random string of characters
 void gen_random(char *s, const int len) {
     static const char alphanum[] =
     "0123456789"
@@ -35,6 +36,12 @@ CCOLComponent::CCOLComponent(CCOLAudioContext* contextIn) {
     context = contextIn;
     componentIdentifier = new char[12];
     gen_random(componentIdentifier, 10);
+    
+    rendered = false;
+    
+    inputs =        vector<CCOLComponentInput*> { };
+    outputs =       vector<CCOLComponentOutput*> { };
+    parameters =    vector<CCOLComponentParameter*> { };
 }
 
 void CCOLComponent::renderOutputs(unsigned int numFrames) {
@@ -45,11 +52,12 @@ bool CCOLComponent::hasRendered() {
     return rendered;
 }
 
-void CCOLComponent::engineDidRender() {
+// Called once the engine has rendered an entire buffer
+void CCOLComponent::engineDidRender(unsigned int numFrames) {
     rendered = false;
     
     for (auto &i : inputs) {
-        ((CCOLComponentInput*)i)->engineDidRender();
+        ((CCOLComponentInput*)i)->engineDidRender(numFrames);
     }
     
     for (auto &p : parameters) {
@@ -58,32 +66,33 @@ void CCOLComponent::engineDidRender() {
 }
 
 void CCOLComponent::disconnectAll() {
-    for (auto &o : outputs) {
-        ((CCOLComponentOutput*)o)->engineDidRender();
+    for (CCOLComponentOutput* &o : outputs) {
+        if (o->isConnected()) {
+            o->getConnected()->disconnect();
+        }
     }
     
-    for (auto &i : inputs) {
-        ((CCOLComponentInput*)i)->engineDidRender();
+    for (CCOLComponentInput* &i : inputs) {
+        if (i->isConnected()) {
+            i->disconnect();
+        }
     }
 }
 
 CCOLComponentOutput *CCOLComponent::getOutputNamed(char *name) {
     CCOLComponentOutput *result = NULL;
-    
-    for (auto &o : outputs) {
-        if (std::string(((CCOLComponentOutput*)o)->getName()) == std::string(name)) {
+    for (CCOLComponentOutput* &o : outputs) {
+        if (std::string(o->getName()) == std::string(name)) {
             result = o;
         }
     }
-    
     return result;
 }
 
 CCOLComponentInput *CCOLComponent::getInputNamed(char *name) {
     CCOLComponentInput *result = NULL;
-    
-    for (auto &i : inputs) {
-        if (std::string(((CCOLComponentInput*)i)->getName()) == std::string(name)) {
+    for (CCOLComponentInput* &i : inputs) {
+        if (std::string(i->getName()) == std::string(name)) {
             result = i;
         }
     }
@@ -91,16 +100,13 @@ CCOLComponentInput *CCOLComponent::getInputNamed(char *name) {
     return result;
 }
 
-
 CCOLComponentParameter* CCOLComponent::getParameterNamed(char *name) {
     CCOLComponentParameter *result = NULL;
-    
-    for (auto &p : parameters) {
-        if (std::string(((CCOLComponentParameter*)p)->getName()) == std::string(name)) {
+    for (CCOLComponentParameter* &p : parameters) {
+        if (std::string(p->getName()) == std::string(name)) {
             result = p;
         }
     }
-    
     return result;
 }
 
@@ -124,10 +130,3 @@ void CCOLComponent::dealloc() {
     
     free (componentIdentifier);
 }
-
-// Returns the default name for this component
-const char* CCOLComponent::getDefaultName() {
-    return "Component";
-}
-
-

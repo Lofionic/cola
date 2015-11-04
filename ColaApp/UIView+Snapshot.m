@@ -12,19 +12,26 @@
 
 -(UIImage*)snapshot {
     
-    CGSize imageSize = self.frame.size;
+    BOOL prevClipsToBounds = self.clipsToBounds;
+    [self setClipsToBounds:NO];
+    
+    CGSize imageSize = self.bounds.size;
+    if ([self respondsToSelector:@selector(contentSize)]) {
+        imageSize = [(id)self contentSize];
+    }
     UIGraphicsBeginImageContextWithOptions(imageSize, NO, [[UIScreen mainScreen] scale]);
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGContextSaveGState(context);
     CGContextSetFillColorWithColor(context, [[UIColor blackColor] CGColor]);
-    //CGContextFillRect(context, CGRectMake(0, 0, imageSize.width, imageSize.height));
+    
     [self.layer renderInContext:context];
     CGContextRestoreGState(context);
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    
     UIGraphicsEndImageContext();
+    
+    [self setClipsToBounds:prevClipsToBounds];
     
     return image;
 }

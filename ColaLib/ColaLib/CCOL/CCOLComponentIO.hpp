@@ -22,7 +22,7 @@ public:
     
     const char*         getName() { return name; }
     
-    virtual void        engineDidRender();
+    virtual void        engineDidRender(unsigned int numFrames);
     virtual bool        disconnect();
     
     bool                isConnected();
@@ -39,12 +39,9 @@ protected:
     kIOType                     ioType;
     CCOLComponentConnector*    connectedTo;
    
-    
 private:
     const char*         name;
 };
-
-
 
 class CCOLComponentInput : public CCOLComponentConnector {
     
@@ -55,7 +52,7 @@ public:
     bool            makeDynamicConnection(CCOLComponentOutput *outputIn);
     bool            isDynamic() override;
     kIOType         getIOType() override;
-    void            engineDidRender() override;
+    void            engineDidRender(unsigned int numFrames) override;
     bool            disconnect() override;
     
 private:
@@ -75,7 +72,7 @@ public:
     SignalType*             prepareBufferOfSize(unsigned int numFrames);
     bool                    connect(CCOLComponentInput* inputIn);
     kIOType                 getIOType() override;
-    void                    engineDidRender() override;
+    void                    engineDidRender(unsigned int numFrames) override;
     CCOLComponentInput*     getLinkedInput() {
         return linkedInput;
     }
@@ -84,7 +81,6 @@ private:
     SignalType*             buffer;
     unsigned int            bufferSize;
     CCOLComponentInput*     linkedInput = nullptr;
-    
     bool                    disconnect() override; // Should be called on inputs only
 };
 

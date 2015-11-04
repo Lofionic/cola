@@ -11,44 +11,72 @@
 #include "CCOLDefines.h"
 #include "CCOLComponentIO.hpp"
 #include "CCOLComponentParameter.hpp"
+#include "CCOLAudioContext.hpp"
+#include "CCOLAudioEngine.hpp"
 
 void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
     
     SignalType *mainOutBuffer = mainOutput->prepareBufferOfSize(numFrames);
     
-    double sampleRate = 44100.00;
+    SignalType *keyboardInBuffer    = keyboardIn->getBuffer(numFrames);
+    SignalType *fmInBuffer          = fmodIn->getBuffer(numFrames);
+    
+    double sampleRate = getContext()->getEngine()->getSampleRate();
 
     unsigned int rangeIn = floor(range->getNormalizedValue() * 4);
+    
+    bool keyboardConnected = keyboardIn->isConnected();
+    bool fmInConnected = fmodIn->isConnected();
+    
+    remainder = delta = tuneIn = freqIn = lfoValue = 0;
+    
     for (int i = 0; i < numFrames; i++) {
         float sampleIndexFloat = (phase / (M_PI * 2)) * (WAVETABLE_SIZE - 1);
 
         SignalType sampleLower = 0;
         SignalType sampleUpper = 0;
-        if (waveformIndex == 0) {
-            // Sinwave
-            sampleLower = ccSinWaveTable[(int)floor(sampleIndexFloat)];
-            sampleUpper = ccSinWaveTable[(int)ceil(sampleIndexFloat)];
-        } else if (waveformIndex == 1) {
-            // Triwave
-            sampleLower = ccTriWaveTable[(int)floor(sampleIndexFloat)];
-            sampleUpper = ccTriWaveTable[(int)ceil(sampleIndexFloat)];
-        } else if (waveformIndex == 2) {
-            // Sawtooth
-            sampleLower = ccSawWaveTable[(int)floor(sampleIndexFloat)];
-            sampleUpper = ccSawWaveTable[(int)ceil(sampleIndexFloat)];
-        } else if (waveformIndex == 3) {
-            // Square (pulse)
-            sampleLower = ccSquareWaveTable[(int)floor(sampleIndexFloat)];
-            sampleUpper = ccSquareWaveTable[(int)ceil(sampleIndexFloat)];
+        
+        if (keyboardConnected) {
+            if (waveformIndex == 0) {
+                // Sinwave
+                sampleLower = ccSinWaveTable[(int)floor(sampleIndexFloat)];
+                sampleUpper = ccSinWaveTable[(int)ceil(sampleIndexFloat)];
+            } else if (waveformIndex == 1) {
+                // Triwave
+                sampleLower = ccTriWaveTable[(int)floor(sampleIndexFloat)];
+                sampleUpper = ccTriWaveTable[(int)ceil(sampleIndexFloat)];
+            } else if (waveformIndex == 2) {
+                // Sawtooth
+                sampleLower = ccSawWaveTable[(int)floor(sampleIndexFloat)];
+                sampleUpper = ccSawWaveTable[(int)ceil(sampleIndexFloat)];
+            } else if (waveformIndex == 3) {
+                // Square (pulse)
+                sampleLower = ccSquareWaveTable[(int)floor(sampleIndexFloat)];
+                sampleUpper = ccSquareWaveTable[(int)ceil(sampleIndexFloat)];
+            }
         }
         
-        float remainder = fmodf(sampleIndexFloat, 1);
+        remainder = fmodf(sampleIndexFloat, 1);
         SignalType result = sampleLower + (sampleUpper - sampleLower) * remainder;
        
-        float delta = ((float)i / numFrames);
-        float freqIn = 0.02;
+        // Increment phase
+        delta = ((float)i / numFrames);
         
-        float tuneIn = tune->getOutputAtDelta(delta);
+        // Get the setting of the tune control
+        tuneIn = tune->getOutputAtDelta(delta);
+        
+        // Get the frequency form the keyboard in
+        if (keyboardConnected) {
+            freqIn = keyboardInBuffer[i];
+        } else {
+            freqIn = 0;
+        }
+        // Modulate the frequency according to FM in
+        if (fmInConnected) {
+            delta = i / (float)numFrames;
+            lfoValue = powf(0.5, (-fmInBuffer[i] * fmAmt->getOutputAtDelta(delta)));
+            freqIn *= lfoValue;
+        }
         
         phase += (M_PI * freqIn * CV_FREQUENCY_RANGE * pow(2, rangeIn) * tuneIn) / sampleRate;
         
@@ -73,7 +101,7 @@ void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
 
 void CCOLComponentVCO::initializeIO() {
     
-    keyboardIn = new CCOLComponentInput(this, kIOType1VOct, (char*)"Keyboard In");
+    keyboardIn = new CCOLComponentInput(this, kIOType1VOct, (char*)"Key In");
     fmodIn = new CCOLComponentInput(this, kIOTypeControl, (char*)"FM In");
     std::vector<CCOLComponentInput*> theInputs = {
         keyboardIn,
@@ -90,11 +118,13 @@ void CCOLComponentVCO::initializeIO() {
     range =     new CCOLComponentParameter(this, (char*)"Range");
     waveform =  new CCOLComponentParameter(this, (char*)"Waveform");
     tune =      new CCOLComponentParameter(this, (char*)"Tune");
+    fmAmt =     new CCOLComponentParameter(this, (char*)"FM");
+    
     tune->setParameterFunction([] (double valueIn) -> double {
+        // A function that adjusts tune control to ±7 semitone multiplier
         float output = (valueIn * 2.0) - 1.0;
         return (powf(powf(2, (1.0 / 12.0)), output * 7));
     });
-    fmAmt =     new CCOLComponentParameter(this, (char*)"FM Amt");
     
     vector<CCOLComponentParameter*> theParams = {
         range,
@@ -105,12 +135,8 @@ void CCOLComponentVCO::initializeIO() {
     setParameters(theParams);
     
     // Set defaults
-    range->setNormalizedValue(0);
+    range->setNormalizedValue(1 / 4.0);
     waveform->setNormalizedValue(0);
     tune->setNormalizedValue(0.5);
     fmAmt->setNormalizedValue(0.5);
-}
-
-const char* CCOLComponentVCO::getDefaultName() {
-    return "VCO";
 }

@@ -20,6 +20,10 @@ SignalType ccSawWaveTable[WAVETABLE_SIZE];
 SignalType ccRampWaveTable[WAVETABLE_SIZE];
 SignalType ccSquareWaveTable[WAVETABLE_SIZE];
 
+const float CCOL_AUDIO_ENGINE_MUTE_RATE = 0.02;
+
+using namespace std;
+
 #pragma mark render
 static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
 {
@@ -54,39 +58,75 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     outB = (SignalType*)ioData->mBuffers[1].mData;
 
     // Fill up the output buffer
-    float attenuation = 0.5;
+    float attenuation = audioEngine->getAttenuation();
     for (int i = 0; i < inNumberFrames; i ++) {
         
         outA[i] = leftBuffer[i] * attenuation;
         outB[i] = rightBuffer[i] * attenuation;
         
         //TODO: handle ramped muting
-//        if (audioEngine.isMuting && .attenuation > 0.0) {
-//            Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
-//            Float32 newAttenuation = MAX(audioEngine.attenuation -= attenuationDelta, 0.0);
-//            [audioEngine setAttenuation:newAttenuation];
-//        } else if (!audioEngine.isMuting && audioEngine.attenuation < 1.0) {
-//            Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
-//            Float32 newAttenuation = MIN(audioEngine.attenuation += attenuationDelta, 1.0);
-//            [audioEngine setAttenuation:newAttenuation];
-//        }
+        bool mute = audioEngine->isMute();
+        if (mute && attenuation > 0.0) {
+            float attenuationDelta = (1.0 / (audioEngine->getSampleRate() * CCOL_AUDIO_ENGINE_MUTE_RATE));
+            attenuation = MAX(attenuation - attenuationDelta, 0.0);
+            audioEngine->setAttenuation(attenuation);
+        } else if (!mute && audioEngine->getAttenuation() < 1.0) {
+            float attenuationDelta = (1.0 / (audioEngine->getSampleRate() * CCOL_AUDIO_ENGINE_MUTE_RATE));
+            attenuation = MIN(attenuation + attenuationDelta, 1.0);
+            audioEngine->setAttenuation(attenuation);
+        }
     }
-
-    masterL->engineDidRender();
-    masterR->engineDidRender();
+    // Render the orphans (disconnected components)
+    size_t componentCount = audioEngine->getComponentCount();
+    for (int i = 0; i < componentCount; i++) {
+        CCOLComponent *thisComponent = audioEngine->getComponent(i);
+        if (!thisComponent->hasRendered()) {
+            thisComponent->renderOutputs(inNumberFrames);
+            thisComponent->engineDidRender(inNumberFrames);
+        }
+    }
+    
+    masterL->engineDidRender(inNumberFrames);
+    masterR->engineDidRender(inNumberFrames);
     
     return noErr;
 }
 
-static void checkError(OSStatus error, const char *operation) {
+static void checkError(OSStatus error, const char *operation)
+{
     if (error == noErr) return;
-    char errorString[20];
     
-    fprintf(stderr, "Error: %s (%s)\n", operation, errorString); exit(1);
+    char errorString[20];
+    // see if it appears to be a 4-char-code
+    *(UInt32 *)(errorString + 1) = CFSwapInt32HostToBig(error);
+    if (isprint(errorString[1]) && isprint(errorString[2]) && isprint(errorString[3]) && isprint(errorString[4])) {
+        errorString[0] = errorString[5] = '\'';
+        errorString[6] = '\0';
+    } else
+        // no, format it as an integer
+        sprintf(errorString, "%d", (int)error);
+    
+    fprintf(stderr, "CCOLAudioEngine: Error: %s (%s)\n", operation, errorString);
+    
+    exit(1);
 }
 
-void CCOLAudioEngine::initializeAUGraph() {
-    printf("Creating AUGraph\n");
+CCOLAudioEngine::CCOLAudioEngine() {
+
+    sampleRate = 0;
+    attenuation = 1.0;
+    mute = false;
+    
+    audioContext = new CCOLAudioContext(this, 2);
+
+    buildWaveTables();
+}
+
+void CCOLAudioEngine::initializeAUGraph(double sampleRateIn) {
+    
+    sampleRate = sampleRateIn;
+    
+    printf("CCOLAudioEngine: Creating AUGraph\n");
     checkError(NewAUGraph(&mGraph), "Cannot create new AUGraph");
     
     // Create remote IO node on graph
@@ -102,7 +142,7 @@ void CCOLAudioEngine::initializeAUGraph() {
     checkError(AUGraphAddNode(mGraph, &outputNodeDescription, &remoteIONode), "Cannot create RemoteIO node");
     
     // Open the graph - AudioUnits are opened but not initialized
-    printf("Opening AUGraph");
+    printf("CCOLAudioEngine: Opening AUGraph");
     checkError(AUGraphOpen(mGraph), "Cannot open AUGraph");
     
     // Get a link to the RemoteIO AU
@@ -144,14 +184,20 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
     
     CCOLComponent *newComponent = nullptr;
     
-    if (std::string(componentType) == kCCOLComponentTypeVCO) {
+    if (string(componentType) == kCCOLComponentTypeVCO) {
         newComponent = new CCOLComponentVCO(audioContext);
+    } else if (string(componentType) == KCCOLComponentTypeMIDI) {
+        newComponent = new CCOLMIDIComponent(audioContext);
     }
     
     if (newComponent != nullptr) {
         newComponent->initializeIO();
+       
+        // Store this component in the components vector
+        components.push_back(newComponent);
+
+        printf("CCOLAudioEngine: Created new component : %s.\n", newComponent->getIdentifier());
         
-        printf("Created new component : %s.\n", newComponent->getIdentifier());
         return (CCOLComponentAddress)newComponent;
     } else {
         return 0;
@@ -160,13 +206,18 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
 
 // Remove a component from the engine
 void CCOLAudioEngine::removeComponent(CCOLComponentAddress componentAddress) {
-    
     CCOLComponent *component = (CCOLComponent*)componentAddress;
+    
+    // Remove from components vector
+    auto it = std::find(components.begin(), components.end(), component);
+    if (it != components.end()) {
+        components.erase(it);
+    }
+    
+    // Destroy the component
     component->disconnectAll();
     component->dealloc();
-    
     free(component);
-    
 }
 
 // Get a component's output
@@ -196,9 +247,19 @@ bool CCOLAudioEngine::connect(CCOLOutputAddress outputAddress, CCOLInputAddress 
 }
 
 // Disconnect an input from its output, return true if successful
-bool CCOLAudioEngine::disconnect(CCOLInputAddress inputAddress) {
-    CCOLComponentInput* theInput = (CCOLComponentInput*)inputAddress;
-    return (theInput->disconnect());
+bool CCOLAudioEngine::disconnect(CCOLConnectorAddress connectorAddress) {
+    CCOLComponentConnector *connector = (CCOLComponentConnector*)connectorAddress;
+    if (connector->getIOType() & kIOTypeInput) {
+        // Connector is input
+        connector->disconnect();
+        return true;
+    } else {
+        if (connector->isConnected()) {
+            connector->getConnected()->disconnect();
+            return true;
+        }
+    }
+    return false;
 }
 
 // Returns the global context master input at specified index

@@ -11,7 +11,7 @@
                 "connectors" : [
                 {
                     "type" : "input",
-                    "connection" : "Keyboard In",
+                    "connection" : "Key In",
                     "x" : 45,
                     "y" : 270
                 },
@@ -55,7 +55,7 @@
                     },
                     {
                         "type" : "rotary_encoder",
-                        "parameter" : "FM Amt",
+                        "parameter" : "FM",
                         "x" : 50,
                         "y" : 170
                     }

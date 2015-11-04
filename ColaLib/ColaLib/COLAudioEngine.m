@@ -321,7 +321,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     // Get the inter app info dictionary from the delegate
     NSDictionary *infoDictionary = nil;
     if ([self.delegate respondsToSelector:@selector(interAppInfoDictionaryForAudioEngine:)]) {
-        infoDictionary = [self.delegate interAppInfoDictionaryForAudioEngine:self];
+        // infoDictionary = [self.delegate interAppInfoDictionaryForAudioEngine:self];
     }
     
     if (infoDictionary) {

@@ -16,7 +16,8 @@ typedef unsigned long long  CCOLOutputAddress;
 typedef unsigned long long  CCOLConnectorAddress;
 typedef unsigned long long  CCOLParameterAddress;
 
-#define kCCOLComponentTypeVCO "CCOLComponentTypeVCO"
+#define kCCOLComponentTypeVCO           "CCOLComponentTypeVCO"
+#define KCCOLComponentTypeMIDI          "CCOLMIDIComponent"
 
 // Interapp audio keys
 #define kDictionaryKeyComponentName         @"kDictionaryKeyComponentName"
@@ -35,5 +36,7 @@ typedef enum kIOType {
 } kIOType;
 
 typedef unsigned int CCOLDiscreteParameterIndex;
+
+typedef unsigned int NoteIndex;
 
 #endif /* CCOLTypes_h */

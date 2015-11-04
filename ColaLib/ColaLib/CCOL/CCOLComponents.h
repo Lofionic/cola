@@ -10,5 +10,6 @@
 #define CCOLComponents_h
 
 #import "CCOLComponentVCO.hpp"
+#import "CCOLMIDIComponent.hpp"
 
 #endif /* CCOLComponents_h */

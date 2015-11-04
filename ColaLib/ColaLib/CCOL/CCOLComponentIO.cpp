@@ -23,9 +23,9 @@ CCOLComponentConnector::CCOLComponentConnector(CCOLComponent *componentIn, kIOTy
 }
 
 // Called when the engine has finished rendering the buffer
-void CCOLComponentConnector::engineDidRender() {
+void CCOLComponentConnector::engineDidRender(unsigned int numFrames) {
     if (connectedTo != nullptr) {
-        connectedTo->engineDidRender();
+        connectedTo->engineDidRender(numFrames);
     }
 }
 
@@ -87,15 +87,16 @@ SignalType* CCOLComponentInput::getEmptyBuffer(unsigned int numFrames) {
 }
 
 // Notify the connected output that the engine has rendered
-void CCOLComponentInput::engineDidRender() {
+void CCOLComponentInput::engineDidRender(unsigned int numFrames) {
     if (isConnected()) {
-        getConnected()->engineDidRender();
+        getConnected()->engineDidRender(numFrames);
     }
 }
 
 // Disconnect from the output
 bool CCOLComponentInput::disconnect() {
     if (isConnected()) {
+        getConnected()->disconnect();
         setConnected(nullptr);
         printf("%s|%s disconnected.\n", getComponent()->getIdentifier(), getName());
         return true;
@@ -182,9 +183,9 @@ SignalType* CCOLComponentOutput::prepareBufferOfSize(unsigned int numFrames) {
 }
 
 // Called when the engine has finished rendering the buffer
-void CCOLComponentOutput::engineDidRender() {
+void CCOLComponentOutput::engineDidRender(unsigned int numFrames){
     if (component->hasRendered()) {
-        component->engineDidRender();
+        component->engineDidRender(numFrames);
     }
 }
 
@@ -241,15 +242,10 @@ bool CCOLComponentOutput::connect(CCOLComponentInput *inputIn) {
     return true;
 }
 
-kIOType CCOLComponentOutput::getIOType() {
-    return (kIOType)(ioType | kIOTypeOutput);
-}
-
-// Disconnect from input
 bool CCOLComponentOutput::disconnect() {
     if (isConnected()) {
-        getConnected()->disconnect();
         setConnected(nullptr);
+        memset(buffer, 0, bufferSize * sizeof(SignalType*)); // Empty the buffer
         printf("%s|%s disconnected.\n", getComponent()->getIdentifier(), getName());
         return true;
     } else {
@@ -258,4 +254,7 @@ bool CCOLComponentOutput::disconnect() {
     }
 }
 
+kIOType CCOLComponentOutput::getIOType() {
+    return (kIOType)(ioType | kIOTypeOutput);
+}
 

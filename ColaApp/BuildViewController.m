@@ -70,7 +70,6 @@ static BuildView *buildView = nil;
     [self.view addSubview:self.buildViewScrollView];
     
     self.buildView = [[BuildView alloc] initWithScrollView:self.buildViewScrollView];
-    [self.buildView setClipsToBounds:NO];
     [self.buildView setBuildViewController:self];
     [self.buildViewScrollView addSubview:self.buildView];
     [self.buildViewScrollView setDelegate:self.buildView];
@@ -464,6 +463,7 @@ static BuildView *buildView = nil;
                                                                            (blockingView.bounds.size.height / 2.0) - 64.0,
                                                                            blockingView.bounds.size.width,
                                                                            64)];
+    
     [blockingViewLabel setTextAlignment:NSTextAlignmentCenter];
     [blockingViewLabel setTextColor:[UIColor whiteColor]];
     [blockingViewLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20]];
@@ -478,9 +478,14 @@ static BuildView *buildView = nil;
     [blockingView addSubview:progressView];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
+        NSLog(@"BuildViewController: Creating thumbnail...");
         UIImage *thumbnail = [self.buildViewScrollView snapshot];
+        NSLog(@"BuildViewController: Thumbnail created.");
+        NSLog(@"BuildViewController: Creating preset dicionary...");
         NSDictionary *dictionary = [self.buildView getPresetDictionary];
+        NSLog(@"BuildViewController: Preset dicionary created.");
         
+        NSLog(@"BuildViewController: Sending to preset controller...");
         [[PresetController sharedController] updatePresetAtIndex:[[PresetController sharedController] selectedPresetIndex]
                                                   withDictionary:dictionary
                                                             name:nil
@@ -488,6 +493,7 @@ static BuildView *buildView = nil;
                                                         progress:^ (float progress){
                                                             [progressView setProgress:progress animated:YES];;
                                                         }];
+        
         dispatch_async(dispatch_get_main_queue(), ^ {
             if (completion) {
                 completion(YES);

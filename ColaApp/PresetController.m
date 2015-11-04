@@ -41,7 +41,7 @@
 
 -(Preset*)recallPresetAtIndex:(NSUInteger)index {
     if (index < [self.presets count]) {
-        NSLog(@"Recalling preset %lu", (long)index);
+        NSLog(@"PresetController: Recalling preset %lu", (long)index);
         self.selectedPresetIndex = index;
         return [self.presets objectAtIndex:index];
     } else {
@@ -54,9 +54,9 @@
     if ([userDefaults objectForKey:kPresetsKey]) {
         NSData *presetData = [userDefaults objectForKey:kPresetsKey];
         self.presets = [NSKeyedUnarchiver unarchiveObjectWithData:presetData];
-        NSLog(@"Recalled %lu preset(s)", (unsigned long)[self.presets count]);
+        NSLog(@"PresetController: Recalled %lu preset(s)", (unsigned long)[self.presets count]);
     } else {
-        NSLog(@"Initializing factory presets");
+        NSLog(@"PresetController: Initializing factory presets");
         [self initFactoryPresets];
     }
 }
@@ -67,12 +67,21 @@
 }
 
 -(void)syncPresets {
+    NSLog(@"PresetController: Syncing presets...");
+    
+    NSLog(@"PresetController: Archiving preset data...");
     NSData *presetData = [NSKeyedArchiver archivedDataWithRootObject:self.presets];
     
+    NSLog(@"PresetController: %lu bytes.", (unsigned long)[presetData length]);
+    
+    NSLog(@"PresetController: Writing to UserDefaults...");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:presetData forKey:kPresetsKey];
     
+    NSLog(@"PresetController: Synchronizing...");
     [userDefaults synchronize];
+    
+    NSLog(@"PresetController: Presets synced.");
 }
 
 -(Preset*)getEmptyPreset {
@@ -101,7 +110,7 @@
 
 -(void)savePresetWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail {
     NSMutableArray *mutablePresets = [[NSMutableArray alloc] initWithArray:self.presets];
-    Preset *newPreset = [[Preset alloc] initWithDictionary:dictionary name:name thumbnail:thumbnail];
+    Preset *newPreset = [[Preset alloc] initWithDictionary:dictionary name:name thumbnail:nil];
     [mutablePresets addObject:newPreset];
     self.presets = [NSArray arrayWithArray:mutablePresets];
     
@@ -109,7 +118,7 @@
 }
 
 -(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress {
-    NSLog(@"Updating preset %lu", (long)index);
+    NSLog(@"PresetController: Updating preset %lu", (long)index);
     
     if (progress) {
         dispatch_async(dispatch_get_main_queue(), ^ {
@@ -142,7 +151,7 @@
 }
 
 -(void)removePresetAtIndex:(NSUInteger)index {
-    NSLog(@"Removing preset %lu", (long)index);
+    NSLog(@"PresetController: Removing preset %lu", (long)index);
 
     NSMutableArray *mutablePresets = [[NSMutableArray alloc] initWithArray:self.presets];
     [mutablePresets removeObjectAtIndex:index];

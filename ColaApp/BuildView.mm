@@ -72,15 +72,12 @@ static NSArray *cableColours;
         self.headerHeight = 64;
         
         CGSize buildViewSize = CGSizeMake(
-                                      kBuildViewWidth,
+                                      kBuildViewWidth + (kBuildViewPadding * 2.0),
                                       (self.rows * self.cellSize.height) + self.headerHeight
                                       );
         
         [self setFrame:CGRectMake(kBuildViewPadding, 0, kBuildViewWidth, buildViewSize.height)];
         [self.scrollView setContentSize:buildViewSize];
-
-        [self.scrollView setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
-        self.scrollView.delaysContentTouches = NO;
         
         [self addLayers];
         
@@ -98,9 +95,6 @@ static NSArray *cableColours;
         [self bringSubviewToFront:self.cableView];
         
         self.cableBehaviour = BuildViewCableBehaviourDrag;
-        
-        [self setClipsToBounds:NO];
-        [self.cableView setClipsToBounds:NO];
     }
     return self;
 }
@@ -421,7 +415,7 @@ static NSArray *cableColours;
 
 -(void)disconnectConnectorView:(ConnectorView*)connectorView {
     COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
-    [cae disconnectInput:connectorView.connector];
+    [cae disconnect:connectorView.connector];
 }
 
 -(void)forceDisconnect:(NSDictionary *)userInfo {
@@ -613,27 +607,28 @@ static NSArray *cableColours;
     }
 
     // Save connections
-//    NSMutableArray *cables = [[NSMutableArray alloc] initWithCapacity:[self.cables count]];
-//    for (BuildViewCable *thisCable in self.cables) {
+    NSMutableArray *cables = [[NSMutableArray alloc] initWithCapacity:[self.cables count]];
+    for (BuildViewCable *thisCable in self.cables) {
     
-//        ModuleView *outputModule = (ModuleView*)[thisCable.connector1 superview];
-//        NSString *outputConnection = thisCable.connector1.name;
-//        ModuleView *inputModule = (ModuleView*)[thisCable.connector2 superview];
-//        NSString *inputConnection = thisCable.connector2.componentIO.name;
-//        
-//        NSDictionary *cableDictionary = @{
-//                                          @"outputModule"       : outputModule.identifier,
-//                                          @"outputConnection"   : outputConnection,
-//                                          @"inputModule"        : inputModule.identifier,
-//                                          @"inputConnection"    : inputConnection,
-//                                          @"colour"             : thisCable.colour
-//                                          };
-//        
-//        [cables addObject:cableDictionary];
-//    }
+        ModuleView *outputModule = (ModuleView*)[thisCable.connector1 superview];
+        NSString *outputConnection = [[COLAudioEnvironment sharedEnvironment] getConnectorName:thisCable.connector1.connector];
+        ModuleView *inputModule = (ModuleView*)[thisCable.connector2 superview];
+        NSString *inputConnection = [[COLAudioEnvironment sharedEnvironment] getConnectorName:thisCable.connector2.connector];
+        
+        NSDictionary *cableDictionary = @{
+                                          @"outputModule"       : outputModule.identifier,
+                                          @"outputConnection"   : outputConnection,
+                                          @"inputModule"        : inputModule.identifier,
+                                          @"inputConnection"    : inputConnection,
+                                          @"colour"             : thisCable.colour
+                                          };
+        
+        [cables addObject:cableDictionary];
+    }
     
     return @{
-             PRESET_KEY_MODULES : modules
+             PRESET_KEY_MODULES : modules,
+             PRESET_KEY_CABLES  : cables
              };
 }
 
@@ -655,7 +650,7 @@ static NSArray *cableColours;
         [[self addViewForModule:moduleDescription atPoint:center identifier:identifier] setParametersFromDictionary:controlsDictionary];
     }
 
-    NSArray *cablesArray = [dictionary objectForKey:@"cables"];
+    NSArray *cablesArray = [dictionary objectForKey:PRESET_KEY_CABLES];
     
     for (NSDictionary *thisCable in cablesArray) {
         ModuleView *outModule = [self moduleWithIdentifier:[thisCable objectForKey:@"outputModule"]];
@@ -715,7 +710,7 @@ static NSArray *cableColours;
         }
     }
     
-    //[[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
+    [[COLAudioEnvironment sharedEnvironment] allNotesOff];
     
     [self.scrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 }

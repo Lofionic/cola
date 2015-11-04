@@ -23,12 +23,14 @@
 
 -(instancetype)init {
     if (self = [super init]) {
-        self.enableAutoscroll = NO;
-        self.clipsToBounds = NO;
-        
+        [self setEnableAutoscroll:NO];
+
         UIImage *backgroundImage = [[UIImage imageNamed:@"buildview_background"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, kBuildViewPadding, 0, kBuildViewPadding) resizingMode:UIImageResizingModeTile];
         self.backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
         [self addSubview:self.backgroundImageView];
+        
+        [self setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
+        [self setDelaysContentTouches:NO];
     }
     return self;
 }

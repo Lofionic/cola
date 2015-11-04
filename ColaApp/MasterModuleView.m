@@ -34,19 +34,20 @@
     [mainInLConnectorView setCenter:CGPointMake(640.0, 40.0)];
     [mainInLConnectorView setDelegate:buildView];
     [self addSubview:mainInLConnectorView];
+
+    CCOLInputAddress mainInR = [cae getMasterInputAtIndex:1];
+    ConnectorView *mainInRConnectorView = [[ConnectorView alloc] initWithComponentIO:mainInR];
+    [mainInRConnectorView setCenter:CGPointMake(690.0, 40.0)];
+    [mainInRConnectorView setDelegate:buildView];
+    [self addSubview:mainInRConnectorView];
+
+    CCOLComponentAddress keyboardComponent = [cae getMIDIComponent];
+    CCOLOutputAddress keyboardOut = [cae getOutputNamed:@"Keyboard Out" onComponent:keyboardComponent];
+    ConnectorView *keyboardOutView = [[ConnectorView alloc] initWithComponentIO:keyboardOut];
+    [keyboardOutView setCenter:CGPointMake(32.0, 40.0)];
+    [keyboardOutView setDelegate:buildView];
+    [self addSubview:keyboardOutView];
 //
-//    COLComponentIO *mainInR = [[COLAudioContext globalContext] masterInputAtIndex:1];
-//    ConnectorView *mainInRConnectorView = [[ConnectorView alloc] initWithComponentIO:mainInR];
-//    [mainInRConnectorView setCenter:CGPointMake(690.0, 40.0)];
-//    [mainInRConnectorView setDelegate:buildView];
-//    [self addSubview:mainInRConnectorView];
-//    
-//    COLComponentIO *keyboardOut = [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] outputForIndex:0];
-//    ConnectorView *keyboardOutView = [[ConnectorView alloc] initWithComponentIO:keyboardOut];
-//    [keyboardOutView setCenter:CGPointMake(32.0, 40.0)];
-//    [keyboardOutView setDelegate:buildView];
-//    [self addSubview:keyboardOutView];
-//    
 //    COLComponentIO *keyboardGate = [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] outputForIndex:1];
 //    ConnectorView *keyboardGateView = [[ConnectorView alloc] initWithComponentIO:keyboardGate];
 //    [keyboardGateView setCenter:CGPointMake(80.0, 40.0)];
@@ -54,6 +55,12 @@
 //    [self addSubview:keyboardGateView];
 //    
 //    self.connectorViews = @[mainInLConnectorView, mainInRConnectorView, keyboardOutView, keyboardGateView];
+    
+    self.connectorViews = @[
+                            mainInLConnectorView,
+                            mainInRConnectorView,
+                            keyboardOutView
+                            ];
 }
 
 @end
