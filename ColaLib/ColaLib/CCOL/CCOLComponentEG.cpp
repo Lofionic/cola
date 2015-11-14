@@ -23,6 +23,11 @@ void CCOLComponentEG::initializeIO() {
     sustainParameter = new CCOLComponentParameter(this, (char*)"Sustain");
     releaseParameter = new CCOLComponentParameter(this, (char*)"Release");
     setParameters(std::vector<CCOLComponentParameter*> {attackParameter, decayParameter, sustainParameter, releaseParameter});
+
+    attackParameter->setNormalizedValue(0);
+    decayParameter->setNormalizedValue(0);
+    sustainParameter->setNormalizedValue(1);
+    releaseParameter->setNormalizedValue(0);
 }
 
 void CCOLComponentEG::renderOutputs(unsigned int numFrames) {

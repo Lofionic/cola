@@ -188,6 +188,8 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
         newComponent = new CCOLComponentVCO(audioContext);
     } else if (string(componentType) == kCCOLComponentTypeEG) {
         newComponent = new CCOLComponentEG(audioContext);
+    } else if (string(componentType) == kCCOLComponentTypeLFO) {
+        newComponent = new CCOLComponentLFO(audioContext);
     } else if (string(componentType) == KCCOLComponentTypeMIDI) {
         newComponent = new CCOLMIDIComponent(audioContext);
     }
@@ -292,7 +294,7 @@ void CCOLAudioEngine::buildWaveTables() {
         for (int j = 1; j <= ANALOG_HARMONICS; j++) {
             result -= (sin(tablePhase * j) / j) / 2.0;
         }
-        ccSawWaveTable[i] = (SignalType)result;
+        ccRampWaveTable[i] = (SignalType)result;
     }
     
     // Ramp wavetable
@@ -302,7 +304,7 @@ void CCOLAudioEngine::buildWaveTables() {
         for (int j = 1; j <= ANALOG_HARMONICS; j++) {
             result += (sin(tablePhase * j) / j) / 2.0;
         }
-        ccRampWaveTable[i] = (SignalType)result;
+        ccSawWaveTable[i] = (SignalType)result;
     }
     
     // Tri wavetable

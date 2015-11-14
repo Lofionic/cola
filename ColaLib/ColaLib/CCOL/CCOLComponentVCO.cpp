@@ -84,8 +84,8 @@ void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
         
         if (result > 0 != (previousResult < 0) || result == 0) {
             //TODO: Change waveform on zero crossover
-            if (waveformIndex != waveform->getNormalizedValue()*4) {
-                waveformIndex = waveform->getNormalizedValue()*4;
+            if (waveformIndex != waveform->getNormalizedValue()* 4) {
+                waveformIndex = waveform->getNormalizedValue()* 4;
                 phase = 0;
             }
         }

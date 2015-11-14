@@ -10,5 +10,26 @@
 #define CCOLComponentLFO_hpp
 
 #include <stdio.h>
+#include "CCOLComponent.hpp"
+#include "CCOLTypes.h"
+
+class CCOLComponentLFO : public CCOLComponent {
+
+    double phase;
+    
+    CCOLComponentOutput *mainOut;
+    CCOLComponentInput  *freqIn;
+    
+    CCOLComponentParameter *rate;
+    CCOLComponentParameter *waveform;
+    
+public:
+    CCOLComponentLFO(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
+        phase = 0;
+    }
+    
+    void            initializeIO() override;
+    void            renderOutputs(unsigned int numFrames) override;
+};
 
 #endif /* CCOLComponentLFO_hpp */

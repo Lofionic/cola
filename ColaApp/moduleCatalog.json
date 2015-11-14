@@ -66,7 +66,7 @@
             "id" : "LFOA",
             "name" : "LFO A",
             "width" : 1,
-            "type" : "COLComponentLFO",
+            "type" : "CCOLComponentTypeLFO",
             "view" : {
                 "asset" : "lfo_a",
                 "connectors" : [
@@ -79,18 +79,19 @@
                     ],
                     "controls" : [
                     {
-                        "type" : "continuous",
+                        "type" : "rotary_encoder",
                         "parameter" : "Rate",
-                        "asset" : "large_white",
                         "x" : 45,
                         "y" : 70
                     },
                     {
-                        "type" : "continuous",
+                        "type" : "rotary_switch",
                         "parameter" : "Wave",
-                        "asset" : "large_white",
                         "x" : 45,
-                        "y" : 170
+                        "y" : 170,
+                        "userinfo" : {
+                            "maxindex" : 5
+                        }
                     }
                 ]
             }     
