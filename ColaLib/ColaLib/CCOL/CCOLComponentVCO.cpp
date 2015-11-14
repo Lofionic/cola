@@ -9,8 +9,6 @@
 
 #include "CCOLComponentVCO.hpp"
 #include "CCOLDefines.h"
-#include "CCOLComponentIO.hpp"
-#include "CCOLComponentParameter.hpp"
 #include "CCOLAudioContext.hpp"
 #include "CCOLAudioEngine.hpp"
 

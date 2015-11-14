@@ -21,8 +21,12 @@ public:
         component = componentIn;
         name = nameIn;
         
-        preValue = postValue = pendingValue =  0;
+        preValue = postValue = pendingValue = 0;
         cachedInput = cachedOutput = 0;
+        
+        function = [] (double valueIn) -> double {
+            return valueIn;
+        };
     }
     
     char*   getName() {

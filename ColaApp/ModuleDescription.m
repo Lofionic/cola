@@ -9,6 +9,7 @@
 #import "ModuleDescription.h"
 #import "ModuleView.h"
 #import "UIView+Snapshot.h"
+#import "UIImage+Resize.h"
 
 @interface ModuleDescription ()
 
@@ -76,7 +77,7 @@
         
         // Create the thumbnail
         ModuleView *thumbnailView = [[ModuleView alloc] initWithModuleDescription:self];
-        self.thumbnail = [thumbnailView snapshot];
+        self.thumbnail = [[thumbnailView snapshot] resizeTo:CGSizeMake(100, 100)];
         [thumbnailView trash];
     }
     

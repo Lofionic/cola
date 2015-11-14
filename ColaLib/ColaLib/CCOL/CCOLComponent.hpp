@@ -10,7 +10,8 @@
 #define CCOLComponent_hpp
 
 #include <vector>
-
+#include "CCOLComponentIO.hpp"
+#include "CCOLComponentParameter.hpp"
 
 using namespace std;
 

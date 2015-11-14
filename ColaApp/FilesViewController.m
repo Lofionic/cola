@@ -17,7 +17,7 @@
 
 @property CGSize cellSize;
 
-@property (nonatomic) NSMutableArray *selectedCellSet;
+//@property (nonatomic) NSMutableArray *selectedCellSet;
 @property (nonatomic, strong) UIBarButtonItem *editBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *addBarButtonItem;
 
@@ -78,20 +78,23 @@
 
 -(void)addTapped {
     
-    [[PresetController sharedController] addNewPreset];
+    NSUInteger newIndex = [[PresetController sharedController] addNewPreset];
 
-    NSArray *newIndexPath = @[[NSIndexPath indexPathForRow:[[PresetController sharedController] presetCount] - 1 inSection:0]];
+    NSArray *newIndexPath = @[[NSIndexPath indexPathForRow:newIndex inSection:0]];
     
     [self.collectionView performBatchUpdates:^ {
         [self.collectionView insertItemsAtIndexPaths:newIndexPath];
-    } completion:nil];
+    } completion:^ (BOOL finished) {
+        if (finished) {
+            [self loadPresetAtIndex:newIndex];
+        }
+    }];
 }
 
 -(void)editTapped {
     if (self.editing) {
         [self setEditing:NO animated:YES];
     } else {
-        self.selectedCellSet = [[NSMutableArray alloc] initWithCapacity:[[PresetController sharedController] presetCount]];
         [self.trashBarButtonItem setEnabled:NO];
         [self.exportBarButtonItem setEnabled:NO];
         [self.duplicateBarButtonItem setEnabled:NO];
@@ -100,19 +103,14 @@
 }
 
 -(void)trashTapped {
-    NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
-    for (NSIndexPath *indexPath in self.selectedCellSet) {
-        [indexSet addIndex:indexPath.row];
-    }
-    
-    [[PresetController sharedController] removePresetsAtIndexes:indexSet];
-    [self.collectionView deleteItemsAtIndexPaths:self.selectedCellSet];
+    [[PresetController sharedController] removeFilesAtIndexes:[self.collectionView indexPathsForSelectedItems]];
+    [self.collectionView deleteItemsAtIndexPaths:[self.collectionView indexPathsForSelectedItems]];
     
     [self.trashBarButtonItem setEnabled:NO];
     [self.exportBarButtonItem setEnabled:NO];
     [self.duplicateBarButtonItem setEnabled:NO];
     
-    [self.selectedCellSet removeAllObjects];
+    [self setEditing:NO animated:YES];
 }
 
 -(void)setEditing:(BOOL)editing animated:(BOOL)animated {
@@ -121,20 +119,25 @@
     if (editing) {
         [self.editBarButtonItem setTitle:@"Done"];
         [self.navigationItem setLeftBarButtonItems:self.editBarButtonItems animated:YES];
-        [self.selectedCellSet removeAllObjects];
-        
         for (FilesViewControllerCell *thisCell in [self.collectionView visibleCells]) {
             [thisCell startJiggling];
-            [thisCell setHighlighted:NO];
+            [thisCell setSelected:NO];
         }        
     } else {
         [self.editBarButtonItem setTitle:@"Select"];
         [self.navigationItem setLeftBarButtonItems:@[self.addBarButtonItem] animated:YES];
-        
+        [self deselectAll];
         for (FilesViewControllerCell *thisCell in [self.collectionView visibleCells]) {
             [thisCell stopJiggling];
             [thisCell setSelected:NO];
         }
+    }
+}
+
+-(void)deselectAll {
+    
+    for (NSIndexPath *thisIndexPath in [self.collectionView indexPathsForSelectedItems]) {
+        [self.collectionView deselectItemAtIndexPath:thisIndexPath animated:NO];
     }
 }
 
@@ -160,6 +163,7 @@
     Preset *preset = [[PresetController sharedController] presetAtIndex:indexPath.row];
     [cell setPreset:preset];
     [cell setHighlighted:NO];
+    [cell setSelected:NO];
     
     if (self.editing) {
         [cell startJiggling];
@@ -173,11 +177,11 @@
 }
 
 -(void)updateEditBarButtons {
-    if ([self.selectedCellSet count] == 0) {
+    if ([[self.collectionView indexPathsForSelectedItems] count] == 0) {
         [self.trashBarButtonItem setEnabled:NO];
         [self.duplicateBarButtonItem setEnabled:NO];
         [self.exportBarButtonItem setEnabled:NO];
-    } else if ([self.selectedCellSet count] == 1) {
+    } else if ([[self.collectionView indexPathsForSelectedItems] count] == 1) {
         [self.trashBarButtonItem setEnabled:YES];
         [self.duplicateBarButtonItem setEnabled:YES];
         [self.exportBarButtonItem setEnabled:YES];
@@ -189,40 +193,33 @@
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.editing) {
-    FilesViewControllerCell *cell = (FilesViewControllerCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
-    [self.selectedCellSet addObject:indexPath];
-    [cell setSelected:YES];
-    [self updateEditBarButtons];
-    } else {
+    if (!self.editing) {
         [self loadPresetAtIndex:indexPath.row];
+    } else {
+        [self updateEditBarButtons];
     }
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    FilesViewControllerCell *cell = (FilesViewControllerCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
-    [self.selectedCellSet removeObject:indexPath];
-    [cell setSelected:NO];
-    [self updateEditBarButtons];
+    if (self.editing) {
+        [self updateEditBarButtons];
+    }
 }
 
 -(void)loadPresetAtIndex:(NSUInteger)index {
     
-    if (index == [[PresetController sharedController] selectedPresetIndex]) {
+    Preset *selectedPreset = [[PresetController sharedController] recallPresetAtIndex:index];
+    [self.collectionView reloadData];
+    
+    UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
+    [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
+    [self.navigationController.view addSubview:blockingView];
+    
+    [self.buildViewController recallPreset:selectedPreset completion:^(BOOL success) {
+        [blockingView removeFromSuperview];
         [self.navigationController popViewControllerAnimated:YES];
-    } else {
-        Preset *selectedPreset = [[PresetController sharedController] recallPresetAtIndex:index];
-        [self.collectionView reloadData];
-        
-        UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
-        [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
-        [self.navigationController.view addSubview:blockingView];
-        
-        [self.buildViewController recallPreset:selectedPreset completion:^(BOOL success) {
-            [blockingView removeFromSuperview];
-            [self.navigationController popViewControllerAnimated:YES];
-        }];
-    }
+    }];
+
 }
 
 @end

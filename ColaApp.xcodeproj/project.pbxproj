@@ -38,6 +38,7 @@
 		6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2941AC0C9CC00320628 /* ModuleView.m */; };
 		6CB828381AC2F58000610DD4 /* ImageAssets in Resources */ = {isa = PBXBuildFile; fileRef = 6CB828371AC2F58000610DD4 /* ImageAssets */; };
 		6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */; };
+		6CB8FAAB1BEE671B00DCAB2E /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB8FAAA1BEE671B00DCAB2E /* UIImage+Resize.m */; };
 		6CCA30B31AE10B5500CAF1AF /* FilesViewControllerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCA30B21AE10B5500CAF1AF /* FilesViewControllerCell.m */; };
 		6CDA9F141AA9017E00D64EB0 /* BuildView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6CDA9F131AA9017E00D64EB0 /* BuildView.mm */; };
 		6CEF81151ACC779000FB1943 /* Icons in Resources */ = {isa = PBXBuildFile; fileRef = 6CEF81141ACC779000FB1943 /* Icons */; };
@@ -113,6 +114,8 @@
 		6CB828371AC2F58000610DD4 /* ImageAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ImageAssets; sourceTree = "<group>"; };
 		6CB8283C1AC3077800610DD4 /* UIColor+Shades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Shades.h"; sourceTree = "<group>"; };
 		6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Shades.m"; sourceTree = "<group>"; };
+		6CB8FAA91BEE671B00DCAB2E /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
+		6CB8FAAA1BEE671B00DCAB2E /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		6CBA6DC31AE04AA000E28195 /* FilesViewControllerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilesViewControllerCell.h; sourceTree = "<group>"; };
 		6CCA30B21AE10B5500CAF1AF /* FilesViewControllerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesViewControllerCell.m; sourceTree = "<group>"; };
 		6CDA9F121AA9017E00D64EB0 /* BuildView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildView.h; sourceTree = "<group>"; };
@@ -223,7 +226,6 @@
 				6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */,
 				6C6DB53E1AD6C5480001343E /* ModuleCatalog */,
 				6C8DD2961AC0DA2400320628 /* BuildView */,
-				6C0D487F1AC3662E008AD869 /* KeyboardView */,
 				6C0B16AE1ADBD5D40058BA18 /* FilesView */,
 				6C2A5E2E1A8BF2CC00ECEAB2 /* LaunchScreen.xib */,
 				6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */,
@@ -283,6 +285,7 @@
 		6C8DD2961AC0DA2400320628 /* BuildView */ = {
 			isa = PBXGroup;
 			children = (
+				6C0D487F1AC3662E008AD869 /* KeyboardView */,
 				6C0F86CF1AA7B2220092FB18 /* BuildViewController.h */,
 				6C0F86D01AA7B2220092FB18 /* BuildViewController.m */,
 				6C0BAEBD1B1BBA94007314CB /* IAAView.m */,
@@ -295,6 +298,8 @@
 				6C300BE51AD3182E00D51544 /* NSString+Random.m */,
 				6C21D8681ADD2AC000CCFDD4 /* UIView+Snapshot.h */,
 				6C21D8691ADD2AC000CCFDD4 /* UIView+Snapshot.m */,
+				6CB8FAA91BEE671B00DCAB2E /* UIImage+Resize.h */,
+				6CB8FAAA1BEE671B00DCAB2E /* UIImage+Resize.m */,
 				6C1962411AC2408900E6A416 /* Layers */,
 				6CB5DA9A1AC582DF005D80FD /* ModuleView */,
 				6C0F86D91AA7BF070092FB18 /* ComponentShelf */,
@@ -418,6 +423,7 @@
 				6C0B16B21ADBD5F70058BA18 /* FilesViewController.m in Sources */,
 				6C1201091AAE44D200C6ACB6 /* ModuleDescription.m in Sources */,
 				6C300BE61AD3182E00D51544 /* NSString+Random.m in Sources */,
+				6CB8FAAB1BEE671B00DCAB2E /* UIImage+Resize.m in Sources */,
 				6CDA9F141AA9017E00D64EB0 /* BuildView.mm in Sources */,
 				6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */,
 				6CCA30B31AE10B5500CAF1AF /* FilesViewControllerCell.m in Sources */,

@@ -41,12 +41,18 @@
     [mainInRConnectorView setDelegate:buildView];
     [self addSubview:mainInRConnectorView];
 
-    CCOLComponentAddress keyboardComponent = [cae getMIDIComponent];
-    CCOLOutputAddress keyboardOut = [cae getOutputNamed:@"Keyboard Out" onComponent:keyboardComponent];
+    CCOLComponentAddress midiComponent = [cae getMIDIComponent];
+    CCOLOutputAddress keyboardOut = [cae getOutputNamed:@"Keyboard Out" onComponent:midiComponent];
     ConnectorView *keyboardOutView = [[ConnectorView alloc] initWithComponentIO:keyboardOut];
     [keyboardOutView setCenter:CGPointMake(32.0, 40.0)];
     [keyboardOutView setDelegate:buildView];
     [self addSubview:keyboardOutView];
+    
+    CCOLOutputAddress gateOut = [cae getOutputNamed:@"Gate Out" onComponent:midiComponent];
+    ConnectorView *gateOutView = [[ConnectorView alloc] initWithComponentIO:gateOut];
+    [gateOutView setCenter:CGPointMake(82, 40)];
+    [gateOutView setDelegate:buildView];
+    [self addSubview:gateOutView];
 //
 //    COLComponentIO *keyboardGate = [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] outputForIndex:1];
 //    ConnectorView *keyboardGateView = [[ConnectorView alloc] initWithComponentIO:keyboardGate];
@@ -59,7 +65,8 @@
     self.connectorViews = @[
                             mainInLConnectorView,
                             mainInRConnectorView,
-                            keyboardOutView
+                            keyboardOutView,
+                            gateOutView
                             ];
 }
 

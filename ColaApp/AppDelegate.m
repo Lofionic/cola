@@ -11,6 +11,7 @@
 #import "ModuleDescription.h"
 #import "ModuleCatalog.h"
 #import "PresetController.h"
+#import "FilesViewController.h"
 
 @interface AppDelegate ()
 
@@ -46,8 +47,11 @@ CGFloat kKeyboardHeight;
     [self.window makeKeyAndVisible];
     
     BuildViewController *buildViewController = [[BuildViewController alloc] init];
-    
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:buildViewController];
+    
+//    FilesViewController *fvc = [[FilesViewController alloc] initWithBuildViewController:nil];
+//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:fvc];
+    
     [navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     [navigationController.navigationBar setTintColor:[UIColor whiteColor]];
 
@@ -58,7 +62,6 @@ CGFloat kKeyboardHeight;
 
 - (void)initLayoutMetrics {
     // Setup metrics
-    kBuildViewWidth =       720;
     kBuildViewPadding =     24;
     kBuildViewColumnWidth = 90;
     kBuildViewRowHeight =   320;
@@ -66,10 +69,16 @@ CGFloat kKeyboardHeight;
     kKeyboardHeight =       150;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        kBuildViewWidth =           320;
-        kBuildViewPadding =         0;
-        kBuildViewColumnWidth =     64;
+        kBuildViewPadding =         12;
+        kBuildViewColumnWidth =     72;
+        kBuildViewRowHeight =       256;
     }
+    
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+    CGFloat screenWidth = MIN(screenSize.width, screenSize.height);
+    
+    NSInteger widthInModules = floor((screenWidth - (kBuildViewPadding * 2)) / kBuildViewColumnWidth);
+    kBuildViewWidth = (widthInModules * kBuildViewColumnWidth);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

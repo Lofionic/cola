@@ -15,6 +15,7 @@
 #import "FilesViewController.h"
 #import "PresetController.h"
 #import "UIView+Snapshot.h"
+#import "UIImage+Resize.h"
 #import "BuildViewScrollView.h"
 #import "IAAView.h"
 
@@ -29,6 +30,7 @@ static BuildView *buildView = nil;
 @property (nonatomic, strong) BuildView             *buildView;
 
 @property (nonatomic, strong) ComponentShelfView    *componentShelf;
+@property (nonatomic, strong) UIView                *keyboardContainerView;
 @property (nonatomic, strong) KeyboardView          *keyboardView;
 
 @property (nonatomic, strong) IAAView               *iaaView;
@@ -80,10 +82,16 @@ static BuildView *buildView = nil;
     [self.componentShelf setDelegate:self];
     [self.view addSubview:self.componentShelf];
     
+    UIImage *keyboard_bg = [[UIImage imageNamed:@"keyboard_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(48, 24, 0, 24) resizingMode:UIImageResizingModeTile];
+    self.keyboardContainerView = [[UIImageView alloc] initWithImage:keyboard_bg];
+    [self.keyboardContainerView setBackgroundColor:[UIColor darkGrayColor]];
+    [self.keyboardContainerView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.keyboardContainerView setUserInteractionEnabled:YES];
+    [self.view addSubview:self.keyboardContainerView];
+    
     self.keyboardView = [[KeyboardView alloc] init];
     [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    //[self.keyboardView setKbComponent:[[COLAudioEnvironment sharedEnvironment] keyboardComponent]];
-    [self.view addSubview:self.keyboardView];
+    [self.keyboardContainerView addSubview:self.keyboardView];
     
     self.iaaView = [[IAAView alloc] init];
     [self.iaaView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -91,12 +99,13 @@ static BuildView *buildView = nil;
     [self.view addSubview:self.iaaView];
 
     NSDictionary *viewsDictionary = @{
-                                      @"buildView"      :   self.buildViewScrollView,
-                                      @"componentShelf" :   self.componentShelf,
-                                      @"keyboardView"   :   self.keyboardView,
-                                      @"iaaView"        :   self.iaaView,
-                                      @"topGuide"       :   self.topLayoutGuide,
-                                      @"bottomGuide"    :   self.bottomLayoutGuide
+                                      @"buildView"              :   self.buildViewScrollView,
+                                      @"componentShelf"         :   self.componentShelf,
+                                      @"keyboardContainerView"  :   self.keyboardContainerView,
+                                      @"keyboardView"           :   self.keyboardView,
+                                      @"iaaView"                :   self.iaaView,
+                                      @"topGuide"               :   self.topLayoutGuide,
+                                      @"bottomGuide"            :   self.bottomLayoutGuide
                                       };
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[componentShelf]|"
@@ -104,7 +113,7 @@ static BuildView *buildView = nil;
                                                                       metrics:nil
                                                                         views:viewsDictionary]];
 
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[keyboardView]|"
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[keyboardContainerView]|"
                                                                       options:0
                                                                       metrics:nil
                                                                         views:viewsDictionary]];
@@ -145,18 +154,22 @@ static BuildView *buildView = nil;
     self.iaaPositionConstraint = [NSLayoutConstraint constraintWithItem:self.iaaView
                                                               attribute:NSLayoutAttributeBottom
                                                               relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.keyboardView
+                                                                 toItem:self.keyboardContainerView
                                                               attribute:NSLayoutAttributeTop
                                                              multiplier:1
                                                                constant:0];
     
-    self.keyboardPositionConstraint = [NSLayoutConstraint constraintWithItem:self.keyboardView
+    self.keyboardPositionConstraint = [NSLayoutConstraint constraintWithItem:self.keyboardContainerView
                                                                    attribute:NSLayoutAttributeBottom
                                                                    relatedBy:NSLayoutRelationEqual
                                                                       toItem:self.bottomLayoutGuide
                                                                    attribute:NSLayoutAttributeCenterY
                                                                   multiplier:1
                                                                     constant:0];
+    
+    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-80-[keyboardView]-24-|" options:0 metrics:nil views:viewsDictionary]];
+    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-24-[keyboardView]|" options:0 metrics:nil views:viewsDictionary]];
+    
     
     [self.view addConstraint:self.iaaPositionConstraint];
     [self.view addConstraint:self.keyboardPositionConstraint];
@@ -479,20 +492,22 @@ static BuildView *buildView = nil;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
         NSLog(@"BuildViewController: Creating thumbnail...");
-        UIImage *thumbnail = [self.buildViewScrollView snapshot];
+        
+        CGFloat aspect = self.buildViewScrollView.contentSize.height / self.buildViewScrollView.contentSize.width;
+        CGFloat thumbnailHeight = 300;
+        UIImage *thumbnail = [[self.buildViewScrollView snapshot] resizeTo:CGSizeMake((int)(thumbnailHeight / aspect), thumbnailHeight)];
         NSLog(@"BuildViewController: Thumbnail created.");
         NSLog(@"BuildViewController: Creating preset dicionary...");
         NSDictionary *dictionary = [self.buildView getPresetDictionary];
         NSLog(@"BuildViewController: Preset dicionary created.");
         
         NSLog(@"BuildViewController: Sending to preset controller...");
-        [[PresetController sharedController] updatePresetAtIndex:[[PresetController sharedController] selectedPresetIndex]
-                                                  withDictionary:dictionary
-                                                            name:nil
-                                                       thumbnail:thumbnail
-                                                        progress:^ (float progress){
-                                                            [progressView setProgress:progress animated:YES];;
-                                                        }];
+        [[PresetController sharedController] updateSelectedPresetWithDictionary:dictionary
+                                                                           name:self.preset.name
+                                                                      thumbnail:thumbnail
+                                                                       progress:^ (float progress){
+                                                                           [progressView setProgress:progress animated:YES];;
+                                                                       }];
         
         dispatch_async(dispatch_get_main_queue(), ^ {
             if (completion) {

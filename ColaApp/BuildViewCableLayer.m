@@ -20,38 +20,33 @@
 
 @implementation BuildViewCableLayer
 
--(instancetype)init {
-    if (self = [super init]) {
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
         self.contentsScale = [[UIScreen mainScreen] scale];
+
+//        self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(setNeedsDisplay)];
+//        [self.displayLink setFrameInterval:4];
+//        [self setNeedsDisplayOnBoundsChange:YES];
+//        
+//        self.motionManager = [[CMMotionManager alloc] init];
+//        [self.motionManager setDeviceMotionUpdateInterval:1/15.0];
+//        if ([self.motionManager isDeviceMotionAvailable]) {
+//            // to avoid using more CPU than necessary we use `CMAttitudeReferenceFrameXArbitraryZVertical`
+//            [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryZVertical];
+//        }
     }
     return self;
 }
 
-//- (instancetype)init
-//{
-//    self = [super init];
-//    if (self)
-//    {
-////        self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(setNeedsDisplay)];
-////        [self.displayLink setFrameInterval:4];
-////        [self setNeedsDisplayOnBoundsChange:YES];
-//        
-////        self.motionManager = [[CMMotionManager alloc] init];
-////        [self.motionManager setDeviceMotionUpdateInterval:1/15.0];
-////        if ([self.motionManager isDeviceMotionAvailable]) {
-////            // to avoid using more CPU than necessary we use `CMAttitudeReferenceFrameXArbitraryZVertical`
-////            [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryZVertical];
-////        }
-//    }
-//    return self;
-//}
-
 -(void)drawInContext:(CGContextRef)ctx {
 
-//    if (!self.displayLinkRunning) {
-//        [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-//        self.displayLinkRunning = YES;
-//    }
+    if (self.displayLink && !self.displayLinkRunning) {
+        [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+        self.displayLinkRunning = YES;
+    }
     
     for (BuildViewCable *cable in self.buildView.cables) {
         CGContextSaveGState(ctx);

@@ -20,14 +20,12 @@ typedef void (^ProgressBlock)(float progress);
 -(NSUInteger)presetCount;
 
 -(Preset*)recallPresetAtIndex:(NSUInteger)index;
--(void)addNewPreset;
--(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress;
--(void)removePresetAtIndex:(NSUInteger)index;
--(void)removePresetsAtIndexes:(NSIndexSet *)indexes;
+-(NSUInteger)addNewPreset;
+-(void)updateSelectedPresetWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress;
+
+-(void)removeFilesAtIndexes:(NSArray *)indexes;
 
 -(Preset*)presetAtIndex:(NSUInteger)index;
-
-@property (nonatomic, readonly) NSInteger selectedPresetIndex;
 
 @end
 

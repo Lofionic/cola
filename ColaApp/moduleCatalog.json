@@ -99,51 +99,47 @@
             "id" : "EGA",
             "name" : "EG A",
             "width" : 1,
-            "type" : "COLComponentEnvelope",
+            "type" : "CCOLComponentTypeEG",
             "view" : {
                 "asset" : "eg_a",
                 "connectors" : [
                     {
                         "type" : "input",
-                        "connection" : "Gate",
-                        "x" : 24,
-                        "y" : 280
+                        "connection" : "Gate In",
+                        "x" : 20,
+                        "y" : 270
                     },
                     {
                         "type" : "output",
-                        "connection" : "Out",
-                        "x" : 72,
-                        "y" : 280
+                        "connection" : "Output",
+                        "x" : 70,
+                        "y" : 270
                     }
                 ],
                 "controls" : [
                      {
-                        "type" : "continuous",
+                        "type" : "rotary_encoder",
                         "parameter" : "Attack",
-                        "asset" : "small_white",
-                        "x" : 32,
-                        "y" : 56
+                        "x" : 30,
+                        "y" : 52
                     },               
                     {
-                        "type" : "continuous",
+                        "type" : "rotary_encoder",
                         "parameter" : "Decay",
-                        "asset" : "small_white",
-                        "x" : 32,
+                        "x" : 30,
                         "y" : 104
                     }, 
                     {
-                        "type" : "continuous",
+                        "type" : "rotary_encoder",
                         "parameter" : "Sustain",
-                        "asset" : "small_white",
-                        "x" : 32,
-                        "y" : 152
+                        "x" : 30,
+                        "y" : 158
                     }, 
                     {
-                        "type" : "continuous",
+                        "type" : "rotary_encoder",
                         "parameter" : "Release",
-                        "asset" : "small_white",
-                        "x" : 32,
-                        "y" : 200
+                        "x" : 30,
+                        "y" : 210
                     }
                 ]
             }

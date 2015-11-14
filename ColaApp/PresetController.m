@@ -10,11 +10,14 @@
 #define kNoPreset   -1
 
 #import "PresetController.h"
+#import "NSString+Random.h"
+
+#define DEFAULT_PRESET_NAME @"New Preset"
 
 @interface PresetController ()
 
-@property (nonatomic) NSInteger         selectedPresetIndex;
-@property (nonatomic, strong) NSArray   *presets;
+@property (nonatomic) NSString*         selectedPresetFilename;
+@property (nonatomic, strong) NSArray*  files;
 
 @end
 
@@ -34,149 +37,265 @@
 
 -(instancetype)init {
     if (self = [super init]) {
-        self.selectedPresetIndex = kNoPreset;
+        self.selectedPresetFilename = @"";
     }
     return self;
 }
 
+-(void)loadPresets {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSString *presetsPath = [self presetsPath];
+    
+    if (![fm fileExistsAtPath:presetsPath]) {
+        NSLog(@"PresetController: Presets directory not found. Creating %@...", presetsPath);
+        NSError *error;
+        [fm createDirectoryAtPath:presetsPath withIntermediateDirectories:YES attributes:nil error:&error];
+        if (error) {
+            NSLog(@"PresetController: Error creating presets directory : %@", error.debugDescription);
+            self.files = @[];
+            return;
+        } else {
+            NSLog(@"PresetController: Created presets directory.");
+        }
+    }
+    
+    NSError *error;
+    NSArray *presetsContents = [fm contentsOfDirectoryAtPath:presetsPath error:&error];
+    
+    if (error) {
+        NSLog(@"PresetController: Error listing presets : %@", error.debugDescription);
+        self.files = @[];
+        return;
+    }
+    
+    NSMutableArray *presetsFound = [[NSMutableArray alloc] initWithCapacity:presetsContents.count];
+    for (NSString *thisFileName in presetsContents) {
+        if ([thisFileName hasSuffix:@".col"]) {
+            [presetsFound addObject:thisFileName];
+        }
+    }
+    
+
+    
+    NSLog(@"PresetController: Found %lu files.", (unsigned long)presetsFound.count);
+    
+    self.files = [NSArray arrayWithArray:presetsFound];
+    [self sortFiles];
+}
+
+-(void)sortFiles {
+    // Sort files by date modified
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    NSMutableArray *fileInfos = [[NSMutableArray alloc] initWithCapacity:self.files.count];
+    for (NSString *thisFile in self.files) {
+        NSError* error;
+        NSDictionary *properties = [fm attributesOfItemAtPath:[self fullPathForFilename:thisFile] error:&error];
+        if (error) {
+            NSLog(@"PresetController: Error reading properties of file %@. %@", thisFile, error.debugDescription);
+        } else {
+            NSDate *modDate = [properties objectForKey:NSFileModificationDate];
+            [fileInfos addObject:@{
+                                   @"file" : thisFile,
+                                   @"date" : modDate
+                                   }];
+        }
+    }
+    
+    NSArray* sortedFileInfos = [fileInfos sortedArrayUsingComparator:
+                            ^(id path1, id path2)
+                            {
+                                // compare
+                                NSComparisonResult comp = [[path1 objectForKey:@"date"] compare:
+                                                           [path2 objectForKey:@"date"]];
+                                // invert ordering
+                                if (comp == NSOrderedDescending) {
+                                    comp = NSOrderedAscending;
+                                }
+                                else if(comp == NSOrderedAscending){
+                                    comp = NSOrderedDescending;
+                                }
+                                return comp;
+                            }];
+    
+    NSMutableArray *sortedFiles = [[NSMutableArray alloc] initWithCapacity:sortedFileInfos.count];
+    
+    for (NSDictionary *thisDictionary in sortedFileInfos) {
+        [sortedFiles addObject:[thisDictionary objectForKey:@"file"]];
+    }
+    
+    self.files = [NSArray arrayWithArray:sortedFiles];
+}
+
 -(Preset*)recallPresetAtIndex:(NSUInteger)index {
-    if (index < [self.presets count]) {
-        NSLog(@"PresetController: Recalling preset %lu", (long)index);
-        self.selectedPresetIndex = index;
-        return [self.presets objectAtIndex:index];
-    } else {
+    if (self.files.count == 0) {
+        // No files yet - create an empty one
+        NSLog(@"PresetController: No files yet. Creating blank.");
+        [self addNewPreset];
+    }
+    
+    NSLog(@"PresetController: Recalling preset %lu.", (unsigned long)index);
+    self.selectedPresetFilename = [self.files objectAtIndex:index];
+    return [self loadPresetFromFilename:self.selectedPresetFilename];
+}
+
+
+-(Preset*)presetAtIndex:(NSUInteger)index {
+    return [self loadPresetFromFilename:[self.files objectAtIndex:index]];
+}
+
+-(Preset*)loadPresetFromFilename:(NSString*)filename {
+    
+    NSLog(@"PresetController: Opening file %@.", filename);
+    NSString *path = [self fullPathForFilename:filename];
+    
+    NSError *error;
+    NSData *presetData = [NSData dataWithContentsOfFile:path options:0 error:&error];
+    
+    if (error) {
+        NSLog(@"PresetController: Error reading preset %@. %@", path, error.debugDescription);
         return nil;
     }
+    
+    Preset *preset = [NSKeyedUnarchiver unarchiveObjectWithData:presetData];
+    return preset;
 }
 
--(void)loadPresets {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if ([userDefaults objectForKey:kPresetsKey]) {
-        NSData *presetData = [userDefaults objectForKey:kPresetsKey];
-        self.presets = [NSKeyedUnarchiver unarchiveObjectWithData:presetData];
-        NSLog(@"PresetController: Recalled %lu preset(s)", (unsigned long)[self.presets count]);
-    } else {
-        NSLog(@"PresetController: Initializing factory presets");
-        [self initFactoryPresets];
-    }
-}
 
--(void)initFactoryPresets {
-    self.presets = @[[self getEmptyPreset]];
-    [self syncPresets];
-}
-
--(void)syncPresets {
-    NSLog(@"PresetController: Syncing presets...");
+-(NSUInteger)addNewPreset {
+    NSLog(@"PresetController: Creating empty preset.");
+    Preset *newPreset = [self getEmptyPreset];
     
-    NSLog(@"PresetController: Archiving preset data...");
-    NSData *presetData = [NSKeyedArchiver archivedDataWithRootObject:self.presets];
+    NSString *filename;
+    do {
+        filename = [[NSString randomAlphanumericStringWithLength:12] stringByAppendingPathExtension:@"col"];
+    } while ([self doesFileExist:filename]);
     
-    NSLog(@"PresetController: %lu bytes.", (unsigned long)[presetData length]);
+    [self savePreset:newPreset withFilename:filename thumbnail:nil overwrite:NO progress:nil];
     
-    NSLog(@"PresetController: Writing to UserDefaults...");
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:presetData forKey:kPresetsKey];
+    NSMutableArray *mutablePresets = [NSMutableArray arrayWithArray:self.files];
+    [mutablePresets insertObject:filename atIndex:0];
+    self.files = [NSArray arrayWithArray:mutablePresets];
     
-    NSLog(@"PresetController: Synchronizing...");
-    [userDefaults synchronize];
-    
-    NSLog(@"PresetController: Presets synced.");
+    return [self.files indexOfObject:filename];
 }
 
 -(Preset*)getEmptyPreset {
     return [[Preset alloc] initWithDictionary:@{@"modules" : @{}, @"cables"  : @{}}
-                                         name:@"Empty Preset"
+                                         name:DEFAULT_PRESET_NAME
                                     thumbnail:nil];
 }
 
-- (NSURL *)applicationDocumentsDirectory {
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
-                                                   inDomains:NSUserDomainMask] lastObject];
+-(void)updateSelectedPresetWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress {
+    Preset *preset = [[Preset alloc] initWithDictionary:dictionary name:name thumbnail:thumbnail];
+    [self savePreset:preset withFilename:self.selectedPresetFilename thumbnail:thumbnail overwrite:YES progress:progress];
+    [self loadPresets];
 }
 
--(Preset*)presetAtIndex:(NSUInteger)index {
-    return [self.presets objectAtIndex:index];
-}
-
--(void)addNewPreset {
-    NSMutableArray *mutablePresets = [[NSMutableArray alloc] initWithArray:self.presets];
-    Preset *newPreset = [self getEmptyPreset];
-    [mutablePresets addObject:newPreset];
-    self.presets = [NSArray arrayWithArray:mutablePresets];
-    
-    [self syncPresets];
-}
-
--(void)savePresetWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail {
-    NSMutableArray *mutablePresets = [[NSMutableArray alloc] initWithArray:self.presets];
-    Preset *newPreset = [[Preset alloc] initWithDictionary:dictionary name:name thumbnail:nil];
-    [mutablePresets addObject:newPreset];
-    self.presets = [NSArray arrayWithArray:mutablePresets];
-    
-    [self syncPresets];
-}
-
--(void)updatePresetAtIndex:(NSUInteger)index withDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress {
-    NSLog(@"PresetController: Updating preset %lu", (long)index);
-    
+-(BOOL)savePreset:(Preset*)preset withFilename:(NSString*)filename thumbnail:(UIImage*)thumbnail overwrite:(BOOL)overwrite progress:(ProgressBlock)progress {
+    NSLog(@"PresetController: Writing %@.", filename);
+   
     if (progress) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-            progress(0.33);
-        });
-    }
-
-    Preset *preset = [self.presets objectAtIndex:index];
-    
-    if (progress) {
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            progress(0.66);
+            progress(1/5.0);
         });
     }
     
-    [preset updateWithDictionary:dictionary name:name thumbnail:thumbnail];
+    NSString *path = [self fullPathForFilename:filename];
+    
+    // Check if file exists
+    NSFileManager *fm = [NSFileManager defaultManager];
+    if ([fm fileExistsAtPath:filename]) {
+        if (overwrite) {
+            // Overwrite - remove the file and continue
+            NSError *error;
+            [fm removeItemAtPath:path error:&error];
+            if (error) {
+                NSLog(@"PresetController: Write failed - cannot overwrite existing file.");
+                return false;
+            }
+        } else {
+            // Fail
+            NSLog(@"PresetController: Write failed - file already exists.");
+            return false;
+        }
+    }
+    
     if (progress) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-            progress(1.0);
+            progress(2/5.0);
         });
     }
     
-    [self syncPresets];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:preset];
     
     if (progress) {
         dispatch_async(dispatch_get_main_queue(), ^ {
-            progress(1.0);
+            progress(3/5.0);
         });
     }
+    
+    NSError *error;
+    [data writeToFile:path options:0 error:&error];
+    
+    if (progress) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            progress(4/5.0);
+        });
+    }
+    
+    if (error) {
+        NSLog(@"PresetController: Error writing file. %@", error.debugDescription);
+        return false;
+    }
+    
+    NSLog(@"PresetController: Done.");
+    
+    if (progress) {
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            progress(5/5.0);
+        });
+    }
+    
+    return true;
 }
 
--(void)removePresetAtIndex:(NSUInteger)index {
-    NSLog(@"PresetController: Removing preset %lu", (long)index);
-
-    NSMutableArray *mutablePresets = [[NSMutableArray alloc] initWithArray:self.presets];
-    [mutablePresets removeObjectAtIndex:index];
-    self.presets = [NSArray arrayWithArray:mutablePresets];
-    
-    [self syncPresets];
-    
-    if (self.selectedPresetIndex == index) {
-        self.selectedPresetIndex = kNoPreset;
-    }
-}
-
--(void)removePresetsAtIndexes:(NSIndexSet *)indexes {
-    NSMutableArray *mutablePresets = [[NSMutableArray alloc] initWithArray:self.presets];
-    [mutablePresets removeObjectsAtIndexes:indexes];
-    self.presets = [NSArray arrayWithArray:mutablePresets];
-    [self syncPresets];
-    
-    if ([indexes containsIndex:self.selectedPresetIndex]) {
-        self.selectedPresetIndex = kNoPreset;
-    }
+-(void)removeFilesAtIndexes:(NSArray *)indexPaths {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSMutableArray *filesMutable = [NSMutableArray arrayWithArray:self.files];
+    for (NSIndexPath *thisIndexPath in indexPaths) {
+        NSString *filename = [self.files objectAtIndex:thisIndexPath.row];
+        NSLog(@"PresetController: Removing %@...", filename);
+        NSError *error;
+        [fm removeItemAtPath:[self fullPathForFilename:filename] error:&error];
+        if (error) {
+            NSLog(@"PresetController: Error removing file %@. %@", filename, error.debugDescription);
+        } else {
+            [filesMutable removeObject:filename];
+            NSLog(@"PresetController: Done.");
+        }
+    };
+    self.files = filesMutable;
 }
 
 -(NSUInteger)presetCount {
-    return [self.presets count];
+    return [self.files count];
+}
+
+- (NSString*)presetsPath {
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *presetsPath = [documentsPath stringByAppendingPathComponent:@"presets"];
+    
+    return presetsPath;
+}
+
+-(NSString*)fullPathForFilename:(NSString*)filename {
+    return [[self presetsPath] stringByAppendingPathComponent:filename];
+}
+
+-(BOOL)doesFileExist:(NSString*)filename {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    return [fm fileExistsAtPath:[self fullPathForFilename:filename]];
 }
 
 @end
@@ -184,6 +303,7 @@
 @interface Preset ()
 
 @property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *filename;
 @property (nonatomic, strong) NSDictionary *dictionary;
 @property (nonatomic, strong) UIImage *thumbnail;
 @property (nonatomic, strong) NSDate *saveDate;

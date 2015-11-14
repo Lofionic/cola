@@ -30,10 +30,10 @@ void CCOLMIDIComponent::noteOn(NoteIndex note) {
             // Glissando - only open gate on first note
             if (noteOns.size() == 0) {
                 openGate();
-            } else {
-                // Not glissando
-                openGate();
             }
+        } else {
+            // Not glissando
+            openGate();
         }
         noteOns.push_back(note);
         setFrequency();
