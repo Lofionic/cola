@@ -12,6 +12,7 @@
 #import "CCOLComponentVCO.hpp"
 #import "CCOLComponentEG.hpp"
 #import "CCOLComponentLFO.hpp"
+#import "CCOLComponentVCA.hpp"
 #import "CCOLMIDIComponent.hpp"
 
 #endif /* CCOLComponents_h */

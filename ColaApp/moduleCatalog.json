@@ -149,43 +149,42 @@
             "id" : "VCAA",
             "name" : "VCA A",
             "width" : 1,
-            "type" : "COLComponentVCA",
+            "type" : "CCOLComponentTypeVCA",
             "view" : {
                 "asset" : "vca_a",
                 "connectors" : [
                     {
                         "type" : "input",
                         "connection" : "In",
-                        "x" : 24,
-                        "y" : 280
+                        "x" : 20,
+                        "y" : 270
                     },
                     {
                         "type" : "output",
                         "connection" : "Out",
-                        "x" : 72,
-                        "y" : 280
+                        "x" : 70,
+                        "y" : 270
                     },
                     {
                         "type" : "input",
                         "connection" : "CV In",
-                        "x" : 24,
-                        "y" : 192
+                        "x" : 45,
+                        "y" : 200
                     }
                 ],
                 "controls" : [
                      {
-                        "type" : "continuous",
+                        "type" : "rotary_encoder",
                         "parameter" : "Level",
-                        "asset" : "large_white",
-                        "x" : 48,
-                        "y" : 80
+                        "x" : 45,
+                        "y" : 70
                     },               
                     {
-                        "type" : "continuous",
+                        "type" : "rotary_encoder",
                         "parameter" : "CV Amt",
                         "asset" : "small_white",
-                        "x" : 64,
-                        "y" : 168
+                        "x" : 45,
+                        "y" : 150
                     }
                 ]
             }

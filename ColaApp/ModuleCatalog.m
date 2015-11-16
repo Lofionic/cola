@@ -40,7 +40,10 @@
             
             [modules enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
                 NSDictionary *moduleDictionary = (NSDictionary*)obj;
-                [moduleDescriptions addObject:[[ModuleDescription alloc] initWithDictionary:moduleDictionary]];
+                ModuleDescription *thisModuleDescription = [[ModuleDescription alloc] initWithDictionary:moduleDictionary];
+                if (thisModuleDescription) {
+                    [moduleDescriptions addObject:thisModuleDescription];
+                }
             }];
             self.moduleDescriptions = [NSArray arrayWithArray:moduleDescriptions];
             NSLog(@"Module Catalog loaded : %lu module decsriptions", (unsigned long)[self.moduleDescriptions count]);

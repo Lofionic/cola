@@ -31,6 +31,8 @@
         
         [self setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
         [self setDelaysContentTouches:NO];
+        
+        [self setClipsToBounds:NO];
     }
     return self;
 }

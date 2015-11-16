@@ -77,6 +77,11 @@
         
         // Create the thumbnail
         ModuleView *thumbnailView = [[ModuleView alloc] initWithModuleDescription:self];
+        
+        if (!thumbnailView) {
+            return nil;
+        } 
+        
         self.thumbnail = [[thumbnailView snapshot] resizeTo:CGSizeMake(100, 100)];
         [thumbnailView trash];
     }
