@@ -50,8 +50,10 @@
             [self.layer addSublayer:self.needleLayer];
         }
         
-        [self setFrame:CGRectMake(0, 0, 45, 45)];
-        [self.needleLayer setFrame:CGRectMake(0, 0, 45, 45)];
+        CGFloat size = encoderImage.size.width;
+
+        [self setFrame:CGRectMake(0, 0, size, size)];
+        [self.needleLayer setFrame:self.bounds];
         
         [self updateFromParameter];
     }

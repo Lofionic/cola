@@ -47,6 +47,6 @@ extern CGFloat kKeyboardHeight;
 #define PRESET_KEY_CABLE_OUTPUT         @"CABLE_OUTPUT"
 
 // Userinfos
-#define CONTROL_USERINFO_ASSET_KEY @"asset"
+#define CONTROL_USERINFO_ASSET_KEY      @"asset"
 
 
