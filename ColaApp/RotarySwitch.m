@@ -32,13 +32,13 @@
         self.maxIndex = [[description.userInfo objectForKey:@"maxindex"] integerValue];
         self.selectedIndex = 0;
         
-        NSString *encoderAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:@"encoder_large_white"];
+        NSString *encoderAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:@"encoder"];
         UIImage *encoderImage = [UIImage imageNamed:encoderAsset];
         if (encoderImage) {
             [self.layer setContents:(id)encoderImage.CGImage];
         }
         
-        NSString *needleAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:@"encoder_needle_large_white"];
+        NSString *needleAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:@"encoder_needle"];
         UIImage *needleImage = [UIImage imageNamed:needleAsset];
         if (needleImage) {
             self.needleLayer = [CALayer layer];
@@ -46,8 +46,8 @@
             [self.layer addSublayer:self.needleLayer];
         }
         
-        [self setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
-        [self.needleLayer setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
+        [self setFrame:CGRectMake(0, 0, 50, 50)];
+        [self.needleLayer setFrame:CGRectMake(0, 0, 50, 50)];
         
         [self updateFromParameter];
     }

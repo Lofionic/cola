@@ -21,18 +21,12 @@
     
     if (self = [super init]) {
         self.connector = componentIO;
-        self.frame = CGRectMake(0, 0, 44, 44);
+        self.frame = CGRectMake(0, 0, 40, 40);
         NSString *connectorAssetName = @"connector_blue";
         
         kIOType ioType = [[COLAudioEnvironment sharedEnvironment] getConnectorType:componentIO];
         if (ioType & kIOTypeControl || ioType & kIOType1VOct || ioType & kIOTypeGate) {
             connectorAssetName = @"connector_yellow";
-        } else {
-            if (ioType & kIOTypeOutput) {
-                connectorAssetName = @"connector_blue";
-            } else {
-                connectorAssetName = @"connector_green";
-            }
         }
 
         connectorAssetName = [ASSETS_PATH_CONNECTORS stringByAppendingString:connectorAssetName];
