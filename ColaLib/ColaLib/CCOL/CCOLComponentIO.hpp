@@ -50,7 +50,6 @@ public:
     
     SignalType*     getBuffer(unsigned int numFrames);
     bool            makeDynamicConnection(CCOLComponentOutput *outputIn);
-    bool            isDynamic() override;
     kIOType         getIOType() override;
     void            engineDidRender(unsigned int numFrames) override;
     bool            disconnect() override;

@@ -22,4 +22,6 @@ extern SignalType ccSawWaveTable[WAVETABLE_SIZE];
 extern SignalType ccRampWaveTable[WAVETABLE_SIZE];
 extern SignalType ccSquareWaveTable[WAVETABLE_SIZE];
 
+#define CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT "CFNoteEngineDidForceDisconnect"
+
 #endif /* CCOLDefines_h */

@@ -192,6 +192,8 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
         newComponent = new CCOLComponentLFO(audioContext);
     } else if (string(componentType) == kCCOLComponentTypeVCA) {
         newComponent = new CCOLComponentVCA(audioContext);
+    } else if (string(componentType) == kCCOLComponentTypeMultiples) {
+        newComponent = new CCOLComponentMultiples(audioContext);
     } else if (string(componentType) == KCCOLComponentTypeMIDI) {
         newComponent = new CCOLMIDIComponent(audioContext);
     }

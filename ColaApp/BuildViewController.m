@@ -234,8 +234,8 @@ static BuildView *buildView = nil;
 //    // Register for updates from the transport controller
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedOfTransportUpdate:) name:kCOLEventTransportStateUpdated object:nil];
 //
-//    // We need to know when a dynamic input has disconnected its linked outputs
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dynamicInputDidForceDisconnect:) name:kCOLEventDynamicInputDidForceDisconnect object:nil];
+    // We need to know when the engine has forced a disconnect
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(engineDidForceDisconnect:) name:kCCOLEventEngineDidForceDisconnect object:nil];
 
     // Set up test
 //    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
@@ -292,6 +292,8 @@ static BuildView *buildView = nil;
     if (self.buildMode) {
         [self setBuildMode:NO animated:YES];
     }
+    
+    [[COLAudioEnvironment sharedEnvironment] allNotesOff];
     
     //[[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
     
@@ -409,9 +411,8 @@ static BuildView *buildView = nil;
 //    });
 }
 
--(void)dynamicInputDidForceDisconnect:(NSNotification*)note {
+-(void)engineDidForceDisconnect:(NSNotification*)note {
     [self.buildView forceDisconnect:note.userInfo];
-    
 }
 
 #pragma mark ComponentShelf

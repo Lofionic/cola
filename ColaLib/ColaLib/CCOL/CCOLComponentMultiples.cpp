@@ -17,16 +17,20 @@ void CCOLComponentMultiples::initializeIO() {
     vector<CCOLComponentOutput*> theOutputs;
     for (int i = 0; i < 4; i++) {
         char* outputNameA = new char[6];
-        sprintf(outputNameA, "Out A%i", i);
+        sprintf(outputNameA, "Out A%i", i + 1);
         CCOLComponentOutput *newOutputA = new CCOLComponentOutput(this, kIOTypeDynamic, outputNameA);
         newOutputA->setLinkedInput(inputA);
         
+        theOutputs.push_back(newOutputA);
+    }
+    
+    for (int i = 0; i < 4; i++) {
+        
         char* outputNameB = new char[6];
-        sprintf(outputNameB, "Out B%i", i);
+        sprintf(outputNameB, "Out B%i", i + 1);
         CCOLComponentOutput *newOutputB = new CCOLComponentOutput(this, kIOTypeDynamic, outputNameB);
         newOutputB->setLinkedInput(inputB);
         
-        theOutputs.push_back(newOutputA);
         theOutputs.push_back(newOutputB);
     }
     

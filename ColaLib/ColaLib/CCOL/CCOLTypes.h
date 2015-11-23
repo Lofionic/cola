@@ -20,6 +20,7 @@ typedef unsigned long long  CCOLParameterAddress;
 #define kCCOLComponentTypeEG            "CCOLComponentTypeEG"
 #define kCCOLComponentTypeLFO           "CCOLComponentTypeLFO"
 #define kCCOLComponentTypeVCA           "CCOLComponentTypeVCA"
+#define kCCOLComponentTypeMultiples     "CCOLComponentTypeMultiples"
 #define KCCOLComponentTypeMIDI          "CCOLMIDIComponent"
 
 // Interapp audio keys
@@ -27,6 +28,9 @@ typedef unsigned long long  CCOLParameterAddress;
 #define kDictionaryKeyComponentType         @"kDictionaryKeyComponentType"
 #define kDictionaryKeyComponentSubtype      @"kDictionaryKeyComponentSubtype"
 #define kDictionaryKeyComponentMaufacturer  @"kDictionaryKeyComponentManufacturer"
+
+// Engine events
+#define kCCOLEventEngineDidForceDisconnect  @"NSNoteEngineDidForceDisconnect"
 
 typedef enum kIOType {
     kIOTypeInput    = 1,

@@ -37,10 +37,6 @@ bool CCOLComponentConnector::disconnect() {
     return false;
 }
 
-bool CCOLComponentConnector::isDynamic() {
-    return false;
-}
-
 kIOType CCOLComponentConnector::getIOType() {
     return ioType;
 }
@@ -55,6 +51,10 @@ void CCOLComponentConnector::setConnected(CCOLComponentConnector *connectedIn) {
 
 CCOLComponentConnector* CCOLComponentConnector::getConnected() {
     return connectedTo;
+}
+
+bool CCOLComponentConnector::isDynamic() {
+    return (ioType & kIOTypeDynamic) > 0;
 }
 
 #pragma mark CCOLComponentInput
@@ -109,39 +109,34 @@ bool CCOLComponentInput::disconnect() {
 // Make a dynamic connection from dynamic input to output
 bool CCOLComponentInput::makeDynamicConnection(CCOLComponentOutput *outputIn) {
     if (isDynamic()) {
-        kIOType connectionIOType = (kIOType)(outputIn->getIOType() & ~(1 << 1));
-        if (ioType & connectionIOType) {
-            // Check the linked outputs are of the direct type
-            unsigned long int numOutputs = component->getNumberOfOutputs();
-            CFNotificationCenterRef center = CFNotificationCenterGetLocalCenter();
-            for (int i = 0; i < numOutputs; ++i) {
-                CCOLComponentOutput *thisOutput = component->getOutputForIndex(i);
-                if (thisOutput->isDynamic() &&
-                    thisOutput->isConnected() &&
-                    thisOutput->getLinkedInput() == this &&
-                    !(ioType & thisOutput->getIOType()) &&
-                    !thisOutput->getConnected()->isDynamic()) {
-                    
-                    // Force dynamic disconnect and post a notification
-                    thisOutput->getConnected()->disconnect();
-                    CFDictionaryKeyCallBacks keyCallbacks = {0, NULL, NULL, CFCopyDescription, CFEqual, NULL};
-                    CFDictionaryValueCallBacks valueCallbacks  = {0, NULL, NULL, CFCopyDescription, CFEqual};
-                    CFMutableDictionaryRef dictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 2,
-                                                                                  &keyCallbacks, &valueCallbacks);
-                    CFDictionaryAddValue(dictionary, CFSTR("input"), this);
-                    CFDictionaryAddValue(dictionary, CFSTR("output"), thisOutput);
+        kIOType dynamicType = (kIOType)(outputIn->getIOType() & ~(1 << 1));
+        
+        // Check the linked outputs are of the direct type
+        unsigned long int numOutputs = component->getNumberOfOutputs();
+        CFNotificationCenterRef center = CFNotificationCenterGetLocalCenter();
+        for (int i = 0; i < numOutputs; ++i) {
+            CCOLComponentOutput *thisOutput = component->getOutputForIndex(i);
+            if (thisOutput->isDynamic() &&
+                thisOutput->isConnected() &&
+                thisOutput->getLinkedInput() == this &&
+                !(dynamicType & thisOutput->getIOType())) {
+                
+                // Force dynamic disconnect and post a notification
+                thisOutput->getConnected()->disconnect();
+                CFDictionaryKeyCallBacks keyCallbacks = {0, NULL, NULL, CFCopyDescription, CFEqual, NULL};
+                CFDictionaryValueCallBacks valueCallbacks  = {0, NULL, NULL, CFCopyDescription, CFEqual};
+                CFMutableDictionaryRef dictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 2,
+                                                                              &keyCallbacks, &valueCallbacks);
+                CFDictionaryAddValue(dictionary, CFSTR("input"), this);
+                CFDictionaryAddValue(dictionary, CFSTR("output"), (CCOLConnectorAddress)thisOutput);
 
-                    CFNotificationCenterPostNotification(center, CFSTR("DynamicDisconnectNotification"), NULL, dictionary, false);
-                }
+                CFNotificationCenterPostNotification(center, CFSTR(CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT), NULL, dictionary, false);
+                
+                CFRelease(dictionary);
             }
         }
     }
-    
     return false;
-}
-
-bool CCOLComponentInput::isDynamic() {
-    return ioType == kIOTypeDynamic;
 }
 
 // Return a bitmask of ioType
@@ -200,12 +195,11 @@ bool CCOLComponentOutput::connect(CCOLComponentInput *inputIn) {
         // Connect to dynamic input
         inputIn->makeDynamicConnection(this);
     } else {
-        kIOType connectionType = (kIOType)(getIOType() & ~(1 << 1)); // remove kIOTypeOutput from bitmask
-        if (isDynamic()) {
-            
+       if (isDynamic()) {
             // This is a dynamic output
             if (linkedInput != nullptr) {
-                if (!(linkedInput->getIOType() & connectionType) || !(inputIn->getIOType() & connectionType)) {
+                kIOType linkedType = (kIOType)(linkedInput->getIOType() & ~(1 << 2)); // remove kIOTypeOutput from bitmask
+                if (linkedType != inputIn->getIOType()) {
                     printf("Dynamic connection failed : dynamic output's linked input does not match input type.\n");
                     return false;
                 }
@@ -214,6 +208,7 @@ bool CCOLComponentOutput::connect(CCOLComponentInput *inputIn) {
                 return false;
             }
         } else {
+            kIOType connectionType = (kIOType)(getIOType() & ~(1 << 1)); // remove kIOTypeOutput from bitmask
             if (!(inputIn->getIOType() & connectionType)) {
                 printf("Connection failed : Output and input types must match.\n");
                 return false;

@@ -11,6 +11,7 @@
 #import "CCOLComponentParameter.hpp"
 #import "CCOLComponentIO.hpp"
 #import "CCOLMIDIComponent.hpp"
+#import "CCOLDefines.h"
 
 @interface COLAudioEnvironment()
 
@@ -55,8 +56,20 @@
         
         // Prepare keyboard component
         midiComponent = (CCOLMIDIComponent*)ccAudioEngine.createComponent((char*)[@"CCOLMIDIComponent" UTF8String]);
+        
+        // Observer for forced disconnects
+        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, engineNotificationCallback, CFSTR(CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
     }
     return self;
+}
+
+static void engineNotificationCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    // Bounce the notifications from CFNotificationCenter into NSNotificationCenter
+    NSDictionary *nsUserInfo = [((__bridge NSDictionary*)userInfo) copy];
+    if (name == CFSTR(CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT)) {
+        NSDictionary *nsUserInfo = @{@"output" : [NSValue valueWithPointer:CFDictionaryGetValue(userInfo, CFSTR("output"))]};
+        [[NSNotificationCenter defaultCenter] postNotificationName:kCCOLEventEngineDidForceDisconnect object:nil userInfo:nsUserInfo];
+    }
 }
 
 -(void)start {

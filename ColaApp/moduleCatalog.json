@@ -205,69 +205,69 @@
             "id" : "MULT",
             "name" : "Multiples",
             "width" : 1,
-            "type" : "COLComponentMultiples",
+            "type" : "CCOLComponentTypeMultiples",
             "view" : {
                 "asset" : "multiples",
                 "connectors" : [
                     {
                         "type" : "input",
                         "connection" : "In A",
-                        "x" : 24,
-                        "y" : 48
+                        "x" : 25,
+                        "y" : 50
                     },
                     {
                         "type" : "output",
                         "connection" : "Out A1",
-                        "x" : 24,
-                        "y" : 96
+                        "x" : 25,
+                        "y" : 95
                     },
                     {
                         "type" : "output",
                         "connection" : "Out A2",
-                        "x" : 24,
-                        "y" : 144
+                        "x" : 25,
+                        "y" : 135
                     },
                     {
                         "type" : "output",
                         "connection" : "Out A3",
-                        "x" : 72,
-                        "y" : 96
+                        "x" : 65,
+                        "y" : 95
                     },
                     {
                         "type" : "output",
                         "connection" : "Out A4",
-                        "x" : 72,
-                        "y" : 144
+                        "x" : 65,
+                        "y" : 135
                     },
                     {
                         "type" : "input",
                         "connection" : "In B",
-                        "x" : 24,
-                        "y" : 192
+                        "x" : 25,
+                        "y" : 190
                     },
                     {
                         "type" : "output",
                         "connection" : "Out B1",
-                        "x" : 24,
-                        "y" : 240
+                        "x" : 25,
+                        "y" : 235
                     },
                     {
                         "type" : "output",
                         "connection" : "Out B2",
-                        "x" : 24,
-                        "y" : 288
+                        "x" : 25,
+                        "y" : 275
                     },
                     {
                         "type" : "output",
                         "connection" : "Out B3",
-                        "x" : 72,
-                        "y" : 240
+                        "x" : 65,
+                        "y" : 235
                     },
                     {
                         "type" : "output",
                         "connection" : "Out B4",
-                        "x" : 72,
-                        "y" : 288
+                        "x" : 65,
+                        "y" : 275
                     }
                 ]
             }
