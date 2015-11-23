@@ -52,15 +52,15 @@
         CGContextSaveGState(ctx);
         
         CGContextSetFillColorWithColor(ctx, [[UIColor darkGrayColor] CGColor]);
-        CGRect rect1 = CGRectMake(cable.point1.x - 8, cable.point1.y - 8, 16, 16);
+        CGRect rect1 = CGRectMake(cable.point1.x - 8, cable.point1.y - 9, 16, 16);
         CGContextFillEllipseInRect(ctx, rect1);
         
-        CGRect rect2 = CGRectMake(cable.point2.x - 8, cable.point2.y - 8, 16, 16);
+        CGRect rect2 = CGRectMake(cable.point2.x - 8, cable.point2.y - 9, 16, 16);
         CGContextFillEllipseInRect(ctx, rect2);
         
         CGContextSetFillColorWithColor(ctx, [[UIColor lightGrayColor] CGColor]);
-        CGContextFillEllipseInRect(ctx, CGRectOffset(rect1, 0, -2));
-        CGContextFillEllipseInRect(ctx, CGRectOffset(rect2, 0, -2));
+        CGContextFillEllipseInRect(ctx, CGRectOffset(rect1, 0, 0));
+        CGContextFillEllipseInRect(ctx, CGRectOffset(rect2, 0, 0));
     }
     
     for (BuildViewCable *cable in self.buildView.cables) {

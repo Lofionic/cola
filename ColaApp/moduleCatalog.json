@@ -107,13 +107,13 @@
                     {
                         "type" : "input",
                         "connection" : "Gate In",
-                        "x" : 20,
+                        "x" : 25,
                         "y" : 270
                     },
                     {
                         "type" : "output",
                         "connection" : "Output",
-                        "x" : 70,
+                        "x" : 65,
                         "y" : 270
                     }
                 ],
@@ -122,25 +122,37 @@
                         "type" : "rotary_encoder",
                         "parameter" : "Attack",
                         "x" : 30,
-                        "y" : 52
-                    },               
+                          "y" : 60,
+                          "userinfo" : {
+                          "asset" : "small"
+                          }
+                    },
                     {
                         "type" : "rotary_encoder",
                         "parameter" : "Decay",
                         "x" : 30,
-                        "y" : 104
+                          "y" : 110,
+                          "userinfo" : {
+                          "asset" : "small"
+                          }
                     }, 
                     {
                         "type" : "rotary_encoder",
                         "parameter" : "Sustain",
                         "x" : 30,
-                        "y" : 158
+                          "y" : 160,
+                          "userinfo" : {
+                          "asset" : "small"
+                          }
                     }, 
                     {
                         "type" : "rotary_encoder",
                         "parameter" : "Release",
                         "x" : 30,
-                        "y" : 210
+                      "y" : 210,
+                      "userinfo" : {
+                      "asset" : "small"
+                      }
                     }
                 ]
             }
@@ -156,13 +168,13 @@
                     {
                         "type" : "input",
                         "connection" : "In",
-                        "x" : 20,
+                        "x" : 25,
                         "y" : 270
                     },
                     {
                         "type" : "output",
                         "connection" : "Out",
-                        "x" : 70,
+                        "x" : 65,
                         "y" : 270
                     },
                     {

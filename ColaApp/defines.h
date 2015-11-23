@@ -17,7 +17,7 @@ extern CGFloat kKeyboardHeight;
 #define ASSETS_PATH             @"ImageAssets/"
 #define ASSETS_PATH_COMPONENTS  [ASSETS_PATH stringByAppendingString:@"components/"]
 #define ASSETS_PATH_CONNECTORS  [ASSETS_PATH stringByAppendingString:@"connectors/"]
-#define ASSETS_PATH_CONTROLS    [ASSETS_PATH stringByAppendingString:@"encoders/"]
+#define ASSETS_PATH_CONTROLS    [ASSETS_PATH stringByAppendingString:@"controls/"]
 #define TOOLBAR_BUILD_ICON_SELECTED         @"Icons/742-wrench-toolbar-selected"
 #define TOOLBAR_BUILD_ICON                  @"Icons/742-wrench-toolbar"
 #define TOOLBAR_PIANO_ICON_SELECTED         @"Icons/967-piano-toolbar-selected"
@@ -45,4 +45,8 @@ extern CGFloat kKeyboardHeight;
 #define PRESET_KEY_CABLES               @"CABLES"
 #define PRESET_KEY_CABLE_INPUT          @"CABLE_INPUT"
 #define PRESET_KEY_CABLE_OUTPUT         @"CABLE_OUTPUT"
+
+// Userinfos
+#define CONTROL_USERINFO_ASSET_KEY      @"asset"
+
 

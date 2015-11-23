@@ -28,13 +28,21 @@
     if (self = [super initWithParameter:parameter Description:controlDescription]) {
         self.value = 0;
         
-        NSString *encoderAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:@"encoder_large_white"];
+        NSString *encoderAssetName = @"encoder";
+        NSString *needleAssetName = @"encoder_needle";
+        if ([controlDescription.userInfo objectForKey:CONTROL_USERINFO_ASSET_KEY]) {
+            encoderAssetName = [NSString stringWithFormat:@"%@_%@", encoderAssetName, [controlDescription.userInfo objectForKey:CONTROL_USERINFO_ASSET_KEY]];
+            needleAssetName = [NSString stringWithFormat:@"%@_%@", needleAssetName, [controlDescription.userInfo objectForKey:CONTROL_USERINFO_ASSET_KEY]];
+            
+        }
+        
+        NSString *encoderAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:encoderAssetName];
         UIImage *encoderImage = [UIImage imageNamed:encoderAsset];
         if (encoderImage) {
             [self.layer setContents:(id)encoderImage.CGImage];
         }
 
-        NSString *needleAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:@"encoder_needle_large_white"];
+        NSString *needleAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:needleAssetName];
         UIImage *needleImage = [UIImage imageNamed:needleAsset];
         if (needleImage) {
             self.needleLayer = [CALayer layer];
@@ -42,8 +50,10 @@
             [self.layer addSublayer:self.needleLayer];
         }
         
-        [self setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
-        [self.needleLayer setFrame:CGRectMake(0, 0, encoderImage.size.width, encoderImage.size.height)];
+        CGFloat size = encoderImage.size.width;
+
+        [self setFrame:CGRectMake(0, 0, size, size)];
+        [self.needleLayer setFrame:self.bounds];
         
         [self updateFromParameter];
     }
