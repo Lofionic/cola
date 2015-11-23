@@ -65,9 +65,10 @@
 
 static void engineNotificationCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     // Bounce the notifications from CFNotificationCenter into NSNotificationCenter
-    NSDictionary *nsUserInfo = [((__bridge NSDictionary*)userInfo) copy];
     if (name == CFSTR(CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT)) {
-        NSDictionary *nsUserInfo = @{@"output" : [NSValue valueWithPointer:CFDictionaryGetValue(userInfo, CFSTR("output"))]};
+        CCOLOutputAddress outputAddress = (CCOLOutputAddress)CFDictionaryGetValue(userInfo, CFSTR("output"));
+     
+        NSDictionary *nsUserInfo = @{@"output" : [NSNumber numberWithUnsignedLongLong:outputAddress]};
         [[NSNotificationCenter defaultCenter] postNotificationName:kCCOLEventEngineDidForceDisconnect object:nil userInfo:nsUserInfo];
     }
 }

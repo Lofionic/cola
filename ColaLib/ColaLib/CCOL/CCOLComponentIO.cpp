@@ -125,11 +125,11 @@ bool CCOLComponentInput::makeDynamicConnection(CCOLComponentOutput *outputIn) {
                 thisOutput->getConnected()->disconnect();
                 CFDictionaryKeyCallBacks keyCallbacks = {0, NULL, NULL, CFCopyDescription, CFEqual, NULL};
                 CFDictionaryValueCallBacks valueCallbacks  = {0, NULL, NULL, CFCopyDescription, CFEqual};
-                CFMutableDictionaryRef dictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 2,
+                CFMutableDictionaryRef dictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 1,
                                                                               &keyCallbacks, &valueCallbacks);
-                CFDictionaryAddValue(dictionary, CFSTR("input"), this);
-                CFDictionaryAddValue(dictionary, CFSTR("output"), (CCOLConnectorAddress)thisOutput);
-
+                //CFDictionaryAddValue(dictionary, CFSTR("output"), (CCOLOutputAddress)thisOutput);
+                CFDictionarySetValue(dictionary, CFSTR("output"), thisOutput);
+                
                 CFNotificationCenterPostNotification(center, CFSTR(CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT), NULL, dictionary, false);
                 
                 CFRelease(dictionary);

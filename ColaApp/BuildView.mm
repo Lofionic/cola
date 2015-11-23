@@ -419,10 +419,11 @@ static NSArray *cableColours;
 }
 
 -(void)forceDisconnect:(NSDictionary *)userInfo {
-    // The engine has forced a disconnect
-    CCOLOutputAddress disconnectedOutput = (CCOLComponentAddress)[userInfo objectForKey:@"output"];
+    // The engine has forced a disconnect, we need to update the UI to reflect this
+    CCOLOutputAddress disconnectedOutput = (CCOLComponentAddress)[[userInfo objectForKey:@"output"] unsignedLongLongValue];
+
     for (BuildViewCable *thisCable in [self.cables copy]) {
-        if (thisCable.connector1.connector == disconnectedOutput) {
+        if (thisCable.connector1.connector == disconnectedOutput || thisCable.connector2.connector == disconnectedOutput) {
             [self disconnectConnectorView:thisCable.connector1];
             [self.cables removeObject:thisCable];
         }
