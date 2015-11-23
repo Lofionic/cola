@@ -76,6 +76,9 @@ public:
     CCOLComponentInput*     getLinkedInput() {
         return linkedInput;
     }
+    void                    setLinkedInput(CCOLComponentInput *inLinkedInput) {
+        linkedInput = inLinkedInput;
+    }
     
 private:
     SignalType*             buffer;

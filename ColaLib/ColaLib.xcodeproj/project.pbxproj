@@ -47,6 +47,7 @@
 		6CDD55A31BF9151D00F050D8 /* CCOLComponentVCA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CDD55A11BF9151D00F050D8 /* CCOLComponentVCA.cpp */; };
 		6CE5819E1B13A97800CD8B62 /* COLTransportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE5819D1B13A97800CD8B62 /* COLTransportController.m */; };
 		6CF04DF21BF7C74100CDF15F /* CCOLComponentLFO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CF04DF01BF7C74100CDF15F /* CCOLComponentLFO.cpp */; };
+		83078FD01C03AEF500B2080E /* CCOLComponentMultiples.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83078FCE1C03AEF500B2080E /* CCOLComponentMultiples.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -162,6 +163,8 @@
 		6CE5819D1B13A97800CD8B62 /* COLTransportController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLTransportController.m; sourceTree = "<group>"; };
 		6CF04DF01BF7C74100CDF15F /* CCOLComponentLFO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentLFO.cpp; path = CCOL/CCOLComponentLFO.cpp; sourceTree = "<group>"; };
 		6CF04DF11BF7C74100CDF15F /* CCOLComponentLFO.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentLFO.hpp; path = CCOL/CCOLComponentLFO.hpp; sourceTree = "<group>"; };
+		83078FCE1C03AEF500B2080E /* CCOLComponentMultiples.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentMultiples.cpp; path = CCOL/CCOLComponentMultiples.cpp; sourceTree = "<group>"; };
+		83078FCF1C03AEF500B2080E /* CCOLComponentMultiples.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentMultiples.hpp; path = CCOL/CCOLComponentMultiples.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -323,6 +326,8 @@
 				6CB1276A1BE8E26A005FBDAD /* CCOLInterface.cpp */,
 				6CB1276E1BE91FBB005FBDAD /* CCOLMIDIComponent.hpp */,
 				6CB1276D1BE91FBB005FBDAD /* CCOLMIDIComponent.cpp */,
+				83078FCE1C03AEF500B2080E /* CCOLComponentMultiples.cpp */,
+				83078FCF1C03AEF500B2080E /* CCOLComponentMultiples.hpp */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -402,6 +407,7 @@
 				6C5A125B1BE6A9F000B1227D /* CCOLComponentParameter.cpp in Sources */,
 				6CD59F1B1AD47DB300505985 /* COLComponentMultiplesKB.m in Sources */,
 				6CBB7CFF1AEED877006DD7A1 /* COLComponentRingModulator.m in Sources */,
+				83078FD01C03AEF500B2080E /* CCOLComponentMultiples.cpp in Sources */,
 				6C0D487D1AC358C2008AD869 /* COLKeyboardComponent.m in Sources */,
 				6C1154751A8E306D005CF194 /* COLComponentIO.m in Sources */,
 				6C172A381ACC20F100BE1418 /* COLParameter.m in Sources */,
