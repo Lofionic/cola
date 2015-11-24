@@ -27,6 +27,7 @@
 		6C64D7021AD9A4A900012108 /* NSString+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D7011AD9A4A900012108 /* NSString+Random.m */; };
 		6C65A4E11A8F5E42000D9192 /* COLAudioEnvironment.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27CB1A8D57BD00AFD384 /* COLAudioEnvironment.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6C65A4E61A9117CF000D9192 /* COLComponentWavePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C65A4E51A9117CF000D9192 /* COLComponentWavePlayer.m */; };
+		6C6D01811C04A16100FD9961 /* CCOLComponentMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C6D017F1C04A16100FD9961 /* CCOLComponentMixer.cpp */; };
 		6C7458FE1AE835AE00AEC106 /* COLComponentPan.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7458FD1AE835AE00AEC106 /* COLComponentPan.m */; };
 		6C7B27C41A8D560100AFD384 /* COLComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7B27C31A8D560100AFD384 /* COLComponent.m */; };
 		6C7B27C71A8D578F00AFD384 /* COLComponentOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7B27C61A8D578F00AFD384 /* COLComponentOutput.m */; };
@@ -103,6 +104,8 @@
 		6C64D7011AD9A4A900012108 /* NSString+Random.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Random.m"; sourceTree = "<group>"; };
 		6C65A4E41A9117CF000D9192 /* COLComponentWavePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentWavePlayer.h; sourceTree = "<group>"; };
 		6C65A4E51A9117CF000D9192 /* COLComponentWavePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentWavePlayer.m; sourceTree = "<group>"; };
+		6C6D017F1C04A16100FD9961 /* CCOLComponentMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentMixer.cpp; path = CCOL/CCOLComponentMixer.cpp; sourceTree = "<group>"; };
+		6C6D01801C04A16100FD9961 /* CCOLComponentMixer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentMixer.hpp; path = CCOL/CCOLComponentMixer.hpp; sourceTree = "<group>"; };
 		6C7458FC1AE835AE00AEC106 /* COLComponentPan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentPan.h; sourceTree = "<group>"; };
 		6C7458FD1AE835AE00AEC106 /* COLComponentPan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentPan.m; sourceTree = "<group>"; };
 		6C7B27C21A8D560100AFD384 /* COLComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponent.h; sourceTree = "<group>"; };
@@ -328,6 +331,8 @@
 				6CB1276D1BE91FBB005FBDAD /* CCOLMIDIComponent.cpp */,
 				83078FCE1C03AEF500B2080E /* CCOLComponentMultiples.cpp */,
 				83078FCF1C03AEF500B2080E /* CCOLComponentMultiples.hpp */,
+				6C6D017F1C04A16100FD9961 /* CCOLComponentMixer.cpp */,
+				6C6D01801C04A16100FD9961 /* CCOLComponentMixer.hpp */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -388,6 +393,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C6D01811C04A16100FD9961 /* CCOLComponentMixer.cpp in Sources */,
 				6C300BEA1AD3285C00D51544 /* COLComponentMultiples.m in Sources */,
 				6CB322EE1A9BC1110052AE50 /* COLContinuousParameter.m in Sources */,
 				6C7D48AA1BE23B970092BC95 /* CCOLComponent.cpp in Sources */,

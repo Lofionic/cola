@@ -272,119 +272,46 @@
                 ]
             }
         },
-                 
-        {
-            "id" : "MUKB",
-            "name" : "Multiples KB",
-            "width" : 1,
-            "type" : "COLComponentMultiplesKB",
-            "view" : {
-                "asset" : "multiples_kb",
-                "connectors" : [
-                    {
-                        "type" : "input",
-                        "connection" : "In A",
-                        "x" : 24,
-                        "y" : 48
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out A1",
-                        "x" : 24,
-                        "y" : 96
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out A2",
-                        "x" : 24,
-                        "y" : 144
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out A3",
-                        "x" : 72,
-                        "y" : 96
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out A4",
-                        "x" : 72,
-                        "y" : 144
-                    },
-                    {
-                        "type" : "input",
-                        "connection" : "In B",
-                        "x" : 24,
-                        "y" : 192
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out B1",
-                        "x" : 24,
-                        "y" : 240
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out B2",
-                        "x" : 24,
-                        "y" : 288
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out B3",
-                        "x" : 72,
-                        "y" : 240
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out B4",
-                        "x" : 72,
-                        "y" : 288
-                    }
-                ]
-            }
-        },
         {
             "id" : "MIX2",
-            "name" : "Mixer 2",
+            "name" : "Mix II",
             "width" : 1,
-            "type" : "COLComponentMixer2",
+            "type" : "CCOLComponentTypeMixer",
             "view" : {
                 "asset" : "mixer2",
                 "connectors" : [
                     {
                         "type" : "input",
                         "connection" : "In 1",
-                        "x" : 24,
-                        "y" : 280
+                        "x" : 25,
+                        "y" : 270
                     },
                     {
                         "type" : "input",
                         "connection" : "In 2",
-                        "x" : 72,
-                        "y" : 280
+                        "x" : 65,
+                        "y" : 270
                     },
                     {
                         "type" : "output",
                         "connection" : "Out",
-                        "x" : 48,
-                        "y" : 224
-                    },
-                    {
-                        "type" : "input",
-                        "connection" : "CV In",
-                        "x" : 48,
-                        "y" : 160
+                        "x" : 45,
+                        "y" : 225
                     }
                 ],
                 "controls" : [
                      {
-                        "type" : "continuous",
-                        "parameter" : "Pan",
-                        "asset" : "large_white",
-                        "x" : 48,
-                        "y" : 72
-                    }
+                        "type" : "rotary_encoder",
+                        "parameter" : "Level 1",
+                        "x" : 45,
+                        "y" : 70
+                    },
+                      {
+                      "type" : "rotary_encoder",
+                      "parameter" : "Level 2",
+                      "x" : 45,
+                      "y" : 150
+                      }
                 ]
             }
         },
