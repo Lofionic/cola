@@ -11,6 +11,7 @@
 #import "CCOLComponentParameter.hpp"
 #import "CCOLComponentIO.hpp"
 #import "CCOLMIDIComponent.hpp"
+#import "CCOLTransportController.hpp"
 #import "CCOLDefines.h"
 
 @interface COLAudioEnvironment()
@@ -18,13 +19,11 @@
 @property (nonatomic) Float64                   sampleRate;
 @property (nonatomic) BOOL                      isForeground;
 
-@property (nonatomic, strong) COLTransportController    *transportController;
-
 @end
 
 @implementation COLAudioEnvironment {
-    CCOLAudioEngine     ccAudioEngine;
-    CCOLMIDIComponent   *midiComponent;
+    CCOLAudioEngine         ccAudioEngine;
+    CCOLMIDIComponent       *midiComponent;
 }
 
 + (instancetype) sharedEnvironment {
@@ -86,6 +85,19 @@ static void engineNotificationCallback(CFNotificationCenterRef center, void *obs
 
 -(BOOL)isMute {
     return ccAudioEngine.isMute();
+}
+
+
+-(BOOL)isTransportPlaying {
+    return ccAudioEngine.getTransportController()->isPlaying();
+}
+
+-(void)transportPlay {
+    ccAudioEngine.getTransportController()->start();
+}
+
+-(void)transportStop {
+    ccAudioEngine.getTransportController()->stopAndReset();
 }
 
 #pragma mark App State Management

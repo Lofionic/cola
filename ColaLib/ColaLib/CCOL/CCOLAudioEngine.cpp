@@ -9,6 +9,7 @@
 #include "CCOLAudioEngine.hpp"
 #include "CCOLComponents.h"
 #include "CCOLComponentIO.hpp"
+#include "CCOLTransportController.hpp"
 
 #include <math.h>
 #include <string>
@@ -38,6 +39,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     //[audioEngine updateHostBeatAndTempo];
     
     // Fill the beat buffer
+    audioEngine->getTransportController()->renderOutputs(inNumberFrames, audioEngine->getSampleRate());
     //COLTransportController *transportController = [[COLAudioEnvironment sharedEnvironment] transportController];
     //[transportController renderOutputs:inNumberFrames];
     
@@ -120,6 +122,8 @@ CCOLAudioEngine::CCOLAudioEngine() {
     audioContext = new CCOLAudioContext(this, 2);
 
     buildWaveTables();
+    
+    transportController = new CCOLTransportController(this);
 }
 
 void CCOLAudioEngine::initializeAUGraph(double sampleRateIn) {
@@ -285,7 +289,7 @@ kIOType CCOLAudioEngine::getIOType(CCOLConnectorAddress connectorAddress) {
     return connector->getIOType();
 }
 
-// Geerate the wavetables
+// Generate the wavetables
 //TODO: Refactor wavetables into their own class
 void CCOLAudioEngine::buildWaveTables() {
     // Sin wavetable

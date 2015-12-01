@@ -65,6 +65,11 @@
 -(void)noteOff:(NoteIndex)noteIndex;
 -(void)allNotesOff;
 
+// Transport
+-(BOOL)isTransportPlaying;
+-(void)transportPlay;
+-(void)transportStop;
+
 @property (readonly) NSMutableArray *components;
 
 @end
