@@ -22,6 +22,7 @@ typedef unsigned long long  CCOLParameterAddress;
 #define kCCOLComponentTypeVCA           "CCOLComponentTypeVCA"
 #define kCCOLComponentTypeMultiples     "CCOLComponentTypeMultiples"
 #define kCCOLComponentTypeMixer         "CCOLComponentTypeMixer"
+#define kCCOLComponentTypePan           "CCOLComponentTypePan"
 #define KCCOLComponentTypeMIDI          "CCOLMIDIComponent"
 
 // Interapp audio keys

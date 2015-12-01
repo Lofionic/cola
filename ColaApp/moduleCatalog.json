@@ -377,25 +377,25 @@
         "id" : "PAN",
         "name" : "Pan",
         "width" : 1,
-        "type" : "COLComponentPan",
+        "type" : "CCOLComponentTypePan",
         "view" : {
             "asset" : "pan",
             "connectors" : [
                          {
                              "type" : "input",
-                             "connection" : "In",
+                             "connection" : "Input",
                              "x" : 48,
                              "y" : 224
                          },
                          {
                              "type" : "output",
-                             "connection" : "Out 1",
+                             "connection" : "Output 1",
                              "x" : 24,
                              "y" : 280
                          },
                          {
                              "type" : "output",
-                             "connection" : "Out 2",
+                             "connection" : "Output 2",
                              "x" : 72,
                              "y" : 280
                          },
@@ -408,9 +408,8 @@
                          ],
             "controls" : [
                        {
-                       "type" : "continuous",
+                       "type" : "rotary_encoder",
                        "parameter" : "Pan",
-                       "asset" : "large_white",
                        "x" : 48,
                        "y" : 72
                        }

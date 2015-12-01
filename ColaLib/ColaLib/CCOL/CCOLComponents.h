@@ -15,6 +15,7 @@
 #import "CCOLComponentVCA.hpp"
 #import "CCOLComponentMultiples.hpp"
 #import "CCOLComponentMixer.hpp"
+#import "CCOLComponentPan.hpp"
 #import "CCOLMIDIComponent.hpp"
 
 #endif /* CCOLComponents_h */
