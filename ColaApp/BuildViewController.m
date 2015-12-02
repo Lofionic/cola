@@ -388,12 +388,13 @@ static BuildView *buildView = nil;
 #pragma mark Transport
 
 -(void)playStopTapped {
-//    COLTransportController *transport = [[COLAudioEnvironment sharedEnvironment] transportController];
-//    if (transport.isPlaying) {
-//        [transport stopAndReset];
-//    } else {
-//        [transport start];
-//    }
+    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+    
+    if ([cae isTransportPlaying]) {
+        [cae transportStop];
+    } else {
+        [cae transportPlay];
+    }
 }
 
 -(void)notifiedOfTransportUpdate:(NSNotification*)note {

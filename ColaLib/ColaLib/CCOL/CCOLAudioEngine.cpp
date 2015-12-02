@@ -9,6 +9,7 @@
 #include "CCOLAudioEngine.hpp"
 #include "CCOLComponents.h"
 #include "CCOLComponentIO.hpp"
+#include "CCOLTransportController.hpp"
 
 #include <math.h>
 #include <string>
@@ -38,6 +39,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     //[audioEngine updateHostBeatAndTempo];
     
     // Fill the beat buffer
+    audioEngine->getTransportController()->renderOutputs(inNumberFrames, audioEngine->getSampleRate());
     //COLTransportController *transportController = [[COLAudioEnvironment sharedEnvironment] transportController];
     //[transportController renderOutputs:inNumberFrames];
     
@@ -120,6 +122,8 @@ CCOLAudioEngine::CCOLAudioEngine() {
     audioContext = new CCOLAudioContext(this, 2);
 
     buildWaveTables();
+    
+    transportController = new CCOLTransportController(this);
 }
 
 void CCOLAudioEngine::initializeAUGraph(double sampleRateIn) {
@@ -196,6 +200,10 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
         newComponent = new CCOLComponentMultiples(audioContext);
     } else if (string(componentType) == kCCOLComponentTypeMixer) {
         newComponent = new CCOLComponentMixer(audioContext);
+    } else if (string(componentType) == kCCOLComponentTypePan) {
+        newComponent = new CCOLComponentPan(audioContext);
+    } else if (string(componentType) == kCCOLComponentTypeSequencer) {
+        newComponent = new CCOLComponentSequencer(audioContext);
     } else if (string(componentType) == KCCOLComponentTypeMIDI) {
         newComponent = new CCOLMIDIComponent(audioContext);
     } else if (string(componentType) == kCCCOLComponentNoiseGenerator) {
@@ -285,7 +293,7 @@ kIOType CCOLAudioEngine::getIOType(CCOLConnectorAddress connectorAddress) {
     return connector->getIOType();
 }
 
-// Geerate the wavetables
+// Generate the wavetables
 //TODO: Refactor wavetables into their own class
 void CCOLAudioEngine::buildWaveTables() {
     // Sin wavetable

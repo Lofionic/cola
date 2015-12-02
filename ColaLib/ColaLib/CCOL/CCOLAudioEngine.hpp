@@ -11,6 +11,7 @@
 
 #include "CCOLDefines.h"
 #include "CCOLAudioContext.hpp"
+
 #include <vector>
 #include <AudioToolbox/AudioToolbox.h>
 
@@ -19,6 +20,8 @@ using namespace std;
 class CCOLComponent;
 class CCOLAudioContext;
 class CCOLKeyboardComponent;
+class CCOLTransportController;
+
 class CCOLAudioEngine {
 
 private:
@@ -32,6 +35,8 @@ private:
     bool                    mute;
     
     vector<CCOLComponent*>  components;
+    
+    CCOLTransportController*    transportController;
     
     void buildWaveTables();
 
@@ -81,6 +86,11 @@ public:
     
     void setMute(bool value) {
         mute = value;
+    }
+    
+    // Transport
+    CCOLTransportController* getTransportController() {
+        return transportController;
     }
 };
 

@@ -27,6 +27,7 @@
 		6C64D7021AD9A4A900012108 /* NSString+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D7011AD9A4A900012108 /* NSString+Random.m */; };
 		6C65A4E11A8F5E42000D9192 /* COLAudioEnvironment.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C7B27CB1A8D57BD00AFD384 /* COLAudioEnvironment.h */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		6C65A4E61A9117CF000D9192 /* COLComponentWavePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C65A4E51A9117CF000D9192 /* COLComponentWavePlayer.m */; };
+		6C66D2D01C0C87D40085988A /* CCOLComponentPan.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C66D2CE1C0C87D40085988A /* CCOLComponentPan.cpp */; };
 		6C6D01811C04A16100FD9961 /* CCOLComponentMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C6D017F1C04A16100FD9961 /* CCOLComponentMixer.cpp */; };
 		6C7458FE1AE835AE00AEC106 /* COLComponentPan.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7458FD1AE835AE00AEC106 /* COLComponentPan.m */; };
 		6C7B27C41A8D560100AFD384 /* COLComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7B27C31A8D560100AFD384 /* COLComponent.m */; };
@@ -49,6 +50,8 @@
 		6CE5819E1B13A97800CD8B62 /* COLTransportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE5819D1B13A97800CD8B62 /* COLTransportController.m */; };
 		6CF04DF21BF7C74100CDF15F /* CCOLComponentLFO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CF04DF01BF7C74100CDF15F /* CCOLComponentLFO.cpp */; };
 		83078FD01C03AEF500B2080E /* CCOLComponentMultiples.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83078FCE1C03AEF500B2080E /* CCOLComponentMultiples.cpp */; };
+		83D41F401C0E38AC00A22EBA /* CCOLTransportController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83D41F3E1C0E38AC00A22EBA /* CCOLTransportController.cpp */; };
+		83D41F441C0E4F3F00A22EBA /* CCOLComponentSequencer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83D41F421C0E4F3F00A22EBA /* CCOLComponentSequencer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -104,6 +107,8 @@
 		6C64D7011AD9A4A900012108 /* NSString+Random.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Random.m"; sourceTree = "<group>"; };
 		6C65A4E41A9117CF000D9192 /* COLComponentWavePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentWavePlayer.h; sourceTree = "<group>"; };
 		6C65A4E51A9117CF000D9192 /* COLComponentWavePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentWavePlayer.m; sourceTree = "<group>"; };
+		6C66D2CE1C0C87D40085988A /* CCOLComponentPan.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentPan.cpp; path = CCOL/CCOLComponentPan.cpp; sourceTree = "<group>"; };
+		6C66D2CF1C0C87D40085988A /* CCOLComponentPan.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentPan.hpp; path = CCOL/CCOLComponentPan.hpp; sourceTree = "<group>"; };
 		6C6D017F1C04A16100FD9961 /* CCOLComponentMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentMixer.cpp; path = CCOL/CCOLComponentMixer.cpp; sourceTree = "<group>"; };
 		6C6D01801C04A16100FD9961 /* CCOLComponentMixer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentMixer.hpp; path = CCOL/CCOLComponentMixer.hpp; sourceTree = "<group>"; };
 		6C7458FC1AE835AE00AEC106 /* COLComponentPan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentPan.h; sourceTree = "<group>"; };
@@ -168,6 +173,10 @@
 		6CF04DF11BF7C74100CDF15F /* CCOLComponentLFO.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentLFO.hpp; path = CCOL/CCOLComponentLFO.hpp; sourceTree = "<group>"; };
 		83078FCE1C03AEF500B2080E /* CCOLComponentMultiples.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentMultiples.cpp; path = CCOL/CCOLComponentMultiples.cpp; sourceTree = "<group>"; };
 		83078FCF1C03AEF500B2080E /* CCOLComponentMultiples.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentMultiples.hpp; path = CCOL/CCOLComponentMultiples.hpp; sourceTree = "<group>"; };
+		83D41F3E1C0E38AC00A22EBA /* CCOLTransportController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLTransportController.cpp; path = CCOL/CCOLTransportController.cpp; sourceTree = "<group>"; };
+		83D41F3F1C0E38AC00A22EBA /* CCOLTransportController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLTransportController.hpp; path = CCOL/CCOLTransportController.hpp; sourceTree = "<group>"; };
+		83D41F421C0E4F3F00A22EBA /* CCOLComponentSequencer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentSequencer.cpp; path = CCOL/CCOLComponentSequencer.cpp; sourceTree = "<group>"; };
+		83D41F431C0E4F3F00A22EBA /* CCOLComponentSequencer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentSequencer.hpp; path = CCOL/CCOLComponentSequencer.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,27 +256,9 @@
 				6C7B27CC1A8D57EF00AFD384 /* COLAudioEngine.h */,
 				6C2A5E971A8BF5BE00ECEAB2 /* COLAudioEngine.m */,
 				6C7D48AB1BE23BA10092BC95 /* CherryCola */,
-				6C3AA0861A94039500DAAC09 /* COLAudioContext.h */,
-				6C3AA0871A94039500DAAC09 /* COLAudioContext.m */,
-				6C7B27C21A8D560100AFD384 /* COLComponent.h */,
-				6C7B27C31A8D560100AFD384 /* COLComponent.m */,
-				6C1154731A8E306D005CF194 /* COLComponentIO.h */,
-				6C1154741A8E306D005CF194 /* COLComponentIO.m */,
-				6C7B27C51A8D578F00AFD384 /* COLComponentOutput.h */,
-				6C7B27C61A8D578F00AFD384 /* COLComponentOutput.m */,
-				6C7B27C81A8D57AF00AFD384 /* COLComponentInput.h */,
-				6C7B27C91A8D57AF00AFD384 /* COLComponentInput.m */,
-				6C172A361ACC20F100BE1418 /* COLParameter.h */,
-				6C172A371ACC20F100BE1418 /* COLParameter.m */,
-				6CB322EC1A9BC1110052AE50 /* COLContinuousParameter.h */,
-				6CB322ED1A9BC1110052AE50 /* COLContinuousParameter.m */,
-				6C172A331ACC202D00BE1418 /* COLDiscreteParameter.h */,
-				6C172A4B1ACC49B700BE1418 /* COLDiscreteParameter.m */,
 				6C64D7001AD9A4A900012108 /* NSString+Random.h */,
 				6C64D7011AD9A4A900012108 /* NSString+Random.m */,
-				6CE5819C1B13A97800CD8B62 /* COLTransportController.h */,
-				6CE5819D1B13A97800CD8B62 /* COLTransportController.m */,
-				6C11547B1A8E346E005CF194 /* Components */,
+				83D41F411C0E38D500A22EBA /* COL_Old */,
 			);
 			path = ColaLib;
 			sourceTree = "<group>";
@@ -307,6 +298,8 @@
 				6C5A12581BE69DD800B1227D /* CCOLComponentParameter.hpp */,
 				6C5A125A1BE6A9F000B1227D /* CCOLComponentParameter.cpp */,
 				6C7D48AC1BE265080092BC95 /* Components */,
+				83D41F3E1C0E38AC00A22EBA /* CCOLTransportController.cpp */,
+				83D41F3F1C0E38AC00A22EBA /* CCOLTransportController.hpp */,
 			);
 			name = CherryCola;
 			sourceTree = "<group>";
@@ -333,8 +326,38 @@
 				83078FCF1C03AEF500B2080E /* CCOLComponentMultiples.hpp */,
 				6C6D017F1C04A16100FD9961 /* CCOLComponentMixer.cpp */,
 				6C6D01801C04A16100FD9961 /* CCOLComponentMixer.hpp */,
+				6C66D2CE1C0C87D40085988A /* CCOLComponentPan.cpp */,
+				6C66D2CF1C0C87D40085988A /* CCOLComponentPan.hpp */,
+				83D41F421C0E4F3F00A22EBA /* CCOLComponentSequencer.cpp */,
+				83D41F431C0E4F3F00A22EBA /* CCOLComponentSequencer.hpp */,
 			);
 			name = Components;
+			sourceTree = "<group>";
+		};
+		83D41F411C0E38D500A22EBA /* COL_Old */ = {
+			isa = PBXGroup;
+			children = (
+				6C3AA0861A94039500DAAC09 /* COLAudioContext.h */,
+				6C3AA0871A94039500DAAC09 /* COLAudioContext.m */,
+				6C7B27C21A8D560100AFD384 /* COLComponent.h */,
+				6C7B27C31A8D560100AFD384 /* COLComponent.m */,
+				6C1154731A8E306D005CF194 /* COLComponentIO.h */,
+				6C1154741A8E306D005CF194 /* COLComponentIO.m */,
+				6C7B27C51A8D578F00AFD384 /* COLComponentOutput.h */,
+				6C7B27C61A8D578F00AFD384 /* COLComponentOutput.m */,
+				6C7B27C81A8D57AF00AFD384 /* COLComponentInput.h */,
+				6C7B27C91A8D57AF00AFD384 /* COLComponentInput.m */,
+				6C172A361ACC20F100BE1418 /* COLParameter.h */,
+				6C172A371ACC20F100BE1418 /* COLParameter.m */,
+				6CB322EC1A9BC1110052AE50 /* COLContinuousParameter.h */,
+				6CB322ED1A9BC1110052AE50 /* COLContinuousParameter.m */,
+				6C172A331ACC202D00BE1418 /* COLDiscreteParameter.h */,
+				6C172A4B1ACC49B700BE1418 /* COLDiscreteParameter.m */,
+				6CE5819C1B13A97800CD8B62 /* COLTransportController.h */,
+				6CE5819D1B13A97800CD8B62 /* COLTransportController.m */,
+				6C11547B1A8E346E005CF194 /* Components */,
+			);
+			name = COL_Old;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -397,7 +420,10 @@
 				6C300BEA1AD3285C00D51544 /* COLComponentMultiples.m in Sources */,
 				6CB322EE1A9BC1110052AE50 /* COLContinuousParameter.m in Sources */,
 				6C7D48AA1BE23B970092BC95 /* CCOLComponent.cpp in Sources */,
+				6C66D2D01C0C87D40085988A /* CCOLComponentPan.cpp in Sources */,
+				83D41F441C0E4F3F00A22EBA /* CCOLComponentSequencer.cpp in Sources */,
 				6C7D48281BE215780092BC95 /* CCOLComponentIO.cpp in Sources */,
+				83D41F401C0E38AC00A22EBA /* CCOLTransportController.cpp in Sources */,
 				6CF04DF21BF7C74100CDF15F /* CCOLComponentLFO.cpp in Sources */,
 				6C3AA0881A94039500DAAC09 /* COLAudioContext.m in Sources */,
 				6C2A5E981A8BF5BE00ECEAB2 /* COLAudioEngine.m in Sources */,
