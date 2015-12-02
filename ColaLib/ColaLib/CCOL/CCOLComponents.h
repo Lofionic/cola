@@ -18,6 +18,8 @@
 #import "CCOLComponentNoiseGenerator.hpp"
 #import "CCOLComponentPan.hpp"
 #import "CCOLComponentSequencer.hpp"
+#import "CCOLComponentVCF.hpp"
 #import "CCOLMIDIComponent.hpp"
+
 
 #endif /* CCOLComponents_h */

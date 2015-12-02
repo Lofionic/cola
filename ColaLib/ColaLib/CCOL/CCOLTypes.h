@@ -25,7 +25,8 @@ typedef unsigned long long  CCOLParameterAddress;
 #define kCCOLComponentTypePan           "CCOLComponentTypePan"
 #define kCCOLComponentTypeSequencer     "CCOLComponentTypeSequencer"
 #define KCCOLComponentTypeMIDI          "CCOLMIDIComponent"
-#define kCCCOLComponentNoiseGenerator   "CCOLComponentNoiseGenerator"
+#define kCCOLComponentNoiseGenerator    "CCOLComponentNoiseGenerator"
+#define kCCOLComponentTypeVCF           "CCOLComponentTypeVCF"
 
 // Interapp audio keys
 #define kDictionaryKeyComponentName         @"kDictionaryKeyComponentName"

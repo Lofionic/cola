@@ -206,8 +206,10 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
         newComponent = new CCOLComponentSequencer(audioContext);
     } else if (string(componentType) == KCCOLComponentTypeMIDI) {
         newComponent = new CCOLMIDIComponent(audioContext);
-    } else if (string(componentType) == kCCCOLComponentNoiseGenerator) {
+    } else if (string(componentType) == kCCOLComponentNoiseGenerator) {
         newComponent = new CCOLComponentNoiseGenerator(audioContext);
+    } else if (string(componentType) == kCCOLComponentTypeVCF) {
+        newComponent = new CCOLComponentVCF(audioContext);
     }
     
     if (newComponent != nullptr) {

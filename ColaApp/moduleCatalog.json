@@ -315,60 +315,61 @@
                                ]
                  }
                  },
+                 
                  {
                  "id" : "VCFA",
                  "name" : "VCF A",
                  "width" : 2,
-                 "type" : "COLComponentVCF",
+                 "type" : "CCOLComponentTypeVCF",
                  "view" : {
                  "asset" : "vcf_a",
                  "connectors" : [
                                  {
                                  "type" : "input",
-                                 "connection" : "In",
-                                 "x" : 32,
-                                 "y" : 280
+                                 "connection" : "Audio in",
+                                 "x" : 30,
+                                 "y" : 270
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "LP Out",
-                                 "x" : 96,
-                                 "y" : 280
+                                 "x" : 120,
+                                 "y" : 270
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "HP Out",
-                                 "x" : 160,
-                                 "y" : 280
+                                 "x" : 150,
+                                 "y" : 270
                                  },
                                  {
                                  "type" : "input",
-                                 "connection" : "CV In",
-                                 "x" : 48,
-                                 "y" : 184
+                                 "connection" : "CV Freq In",
+                                 "x" : 75,
+                                 "y" : 220
                                  }
                                  ],
                  "controls" : [
                                {
-                               "type" : "continuous",
-                               "parameter" : "Cutoff",
+                               "type" : "rotary_encoder",
+                               "parameter" : "Frequency",
                                "asset" : "large_white",
-                               "x" : 48,
-                               "y" : 80
+                               "x" : 90,
+                               "y" : 75
                                },
                                {
-                               "type" : "continuous",
+                               "type" : "rotary_encoder",
                                "parameter" : "Resonance",
                                "asset" : "large_white",
-                               "x" : 144,
-                               "y" : 80
+                               "x" : 130,
+                               "y" : 170
                                },
                                {
-                               "type" : "continuous",
-                               "parameter" : "CV Amt",
+                               "type" : "rotary_encoder",
+                               "parameter" : "CV Freq Amount",
                                "asset" : "large_white",
-                               "x" : 144,
-                               "y" : 184
+                               "x" : 50,
+                               "y" : 170
                                }
                                ]
                  }
@@ -459,7 +460,7 @@
                  "width" : 1,
                  "type" : "CCOLComponentNoiseGenerator",
                  "view" : {
-                 "asset" : "ng",
+                 "asset" : "noise_generator",
                  "connectors" : [
                                  {
                                  "type" : "output",

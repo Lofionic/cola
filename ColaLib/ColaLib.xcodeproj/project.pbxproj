@@ -53,6 +53,7 @@
 		83D41F401C0E38AC00A22EBA /* CCOLTransportController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83D41F3E1C0E38AC00A22EBA /* CCOLTransportController.cpp */; };
 		83D41F441C0E4F3F00A22EBA /* CCOLComponentSequencer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83D41F421C0E4F3F00A22EBA /* CCOLComponentSequencer.cpp */; };
 		B405847B1C0F2D070002F278 /* CCOLComponentNoiseGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B405847A1C0F2D070002F278 /* CCOLComponentNoiseGenerator.cpp */; };
+		B40584831C0F88780002F278 /* CCOLComponentVCF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B40584811C0F88780002F278 /* CCOLComponentVCF.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -180,6 +181,8 @@
 		83D41F431C0E4F3F00A22EBA /* CCOLComponentSequencer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentSequencer.hpp; path = CCOL/CCOLComponentSequencer.hpp; sourceTree = "<group>"; };
 		B40584791C0F2D070002F278 /* CCOLComponentNoiseGenerator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentNoiseGenerator.hpp; path = CCOL/CCOLComponentNoiseGenerator.hpp; sourceTree = "<group>"; };
 		B405847A1C0F2D070002F278 /* CCOLComponentNoiseGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentNoiseGenerator.cpp; path = CCOL/CCOLComponentNoiseGenerator.cpp; sourceTree = "<group>"; };
+		B40584811C0F88780002F278 /* CCOLComponentVCF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentVCF.cpp; path = CCOL/CCOLComponentVCF.cpp; sourceTree = "<group>"; };
+		B40584821C0F88780002F278 /* CCOLComponentVCF.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentVCF.hpp; path = CCOL/CCOLComponentVCF.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -335,6 +338,8 @@
 				6C66D2CF1C0C87D40085988A /* CCOLComponentPan.hpp */,
 				83D41F421C0E4F3F00A22EBA /* CCOLComponentSequencer.cpp */,
 				83D41F431C0E4F3F00A22EBA /* CCOLComponentSequencer.hpp */,
+				B40584811C0F88780002F278 /* CCOLComponentVCF.cpp */,
+				B40584821C0F88780002F278 /* CCOLComponentVCF.hpp */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -449,6 +454,7 @@
 				6C1154751A8E306D005CF194 /* COLComponentIO.m in Sources */,
 				6C172A381ACC20F100BE1418 /* COLParameter.m in Sources */,
 				6C02D56E1B237DC200297F52 /* COLComponentDelay.m in Sources */,
+				B40584831C0F88780002F278 /* CCOLComponentVCF.cpp in Sources */,
 				6CE5819E1B13A97800CD8B62 /* COLTransportController.m in Sources */,
 				6C8C15931ADC51DC0077460A /* COLComponentVCF.m in Sources */,
 				6C65A4E61A9117CF000D9192 /* COLComponentWavePlayer.m in Sources */,
