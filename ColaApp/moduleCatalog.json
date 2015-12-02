@@ -1,459 +1,476 @@
 {
     "modules" : [
-        {
-            "id" : "VCOA",
-            "name" : "VCO A",
-            "width" : 2,
-            "type" : "CCOLComponentTypeVCO",
-            "view" : 
-            {
-                "asset" : "vco_a",
-                "connectors" : [
-                {
-                    "type" : "input",
-                    "connection" : "Key In",
-                    "x" : 45,
-                    "y" : 270
-                },
-                {                   
-                    "type" : "input",
-                    "connection" : "FM In",
-                    "x" : 90,
-                    "y" : 220
-                },
-                {                   
-                    "type" : "output",
-                    "connection" : "Out",
-                    "x" : 135,
-                    "y" : 270
-                }
-                ],
-                "controls" : [
-                    {
-                        "type" : "rotary_switch",
-                        "parameter" : "Range",
-                        "x" : 50,
-                        "y" : 70,
-                        "userinfo" : {
-                              "maxindex" : 4
-                              }
-                    },
-                    {
-                        "type" : "rotary_switch",
-                        "parameter" : "Waveform",
-                        "x" : 130,
-                        "y" : 170,
-                        "userinfo" : {
-                              "maxindex" : 4
-                              }
-                    },
-                    {
-                        "type" : "rotary_encoder",
-                        "parameter" : "Tune",
-                        "x" : 130,
-                        "y" : 70
-                    },
-                    {
-                        "type" : "rotary_encoder",
-                        "parameter" : "FM",
-                        "x" : 50,
-                        "y" : 170
-                    }
-                ]
-            }
-        },
-        {
-            "id" : "LFOA",
-            "name" : "LFO A",
-            "width" : 1,
-            "type" : "CCOLComponentTypeLFO",
-            "view" : {
-                "asset" : "lfo_a",
-                "connectors" : [
-                    {
-                        "type" : "output",
-                        "connection" : "Out",
-                        "x" : 45,
-                        "y" : 270
-                    }
-                    ],
-                    "controls" : [
-                    {
-                        "type" : "rotary_encoder",
-                        "parameter" : "Rate",
-                        "x" : 45,
-                        "y" : 70
-                    },
-                    {
-                        "type" : "rotary_switch",
-                        "parameter" : "Wave",
-                        "x" : 45,
-                        "y" : 170,
-                        "userinfo" : {
-                            "maxindex" : 5
-                        }
-                    }
-                ]
-            }     
-        },
-        {
-            "id" : "EGA",
-            "name" : "EG A",
-            "width" : 1,
-            "type" : "CCOLComponentTypeEG",
-            "view" : {
-                "asset" : "eg_a",
-                "connectors" : [
-                    {
-                        "type" : "input",
-                        "connection" : "Gate In",
-                        "x" : 25,
-                        "y" : 270
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Output",
-                        "x" : 65,
-                        "y" : 270
-                    }
-                ],
-                "controls" : [
-                     {
-                        "type" : "rotary_encoder",
-                        "parameter" : "Attack",
-                        "x" : 30,
-                          "y" : 60,
-                          "userinfo" : {
-                          "asset" : "small"
-                          }
-                    },
-                    {
-                        "type" : "rotary_encoder",
-                        "parameter" : "Decay",
-                        "x" : 30,
-                          "y" : 110,
-                          "userinfo" : {
-                          "asset" : "small"
-                          }
-                    }, 
-                    {
-                        "type" : "rotary_encoder",
-                        "parameter" : "Sustain",
-                        "x" : 30,
-                          "y" : 160,
-                          "userinfo" : {
-                          "asset" : "small"
-                          }
-                    }, 
-                    {
-                        "type" : "rotary_encoder",
-                        "parameter" : "Release",
-                        "x" : 30,
-                      "y" : 210,
-                      "userinfo" : {
-                      "asset" : "small"
-                      }
-                    }
-                ]
-            }
-        },
-        {
-            "id" : "VCAA",
-            "name" : "VCA A",
-            "width" : 1,
-            "type" : "CCOLComponentTypeVCA",
-            "view" : {
-                "asset" : "vca_a",
-                "connectors" : [
-                    {
-                        "type" : "input",
-                        "connection" : "In",
-                        "x" : 25,
-                        "y" : 270
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out",
-                        "x" : 65,
-                        "y" : 270
-                    },
-                    {
-                        "type" : "input",
-                        "connection" : "CV In",
-                        "x" : 45,
-                        "y" : 200
-                    }
-                ],
-                "controls" : [
-                     {
-                        "type" : "rotary_encoder",
-                        "parameter" : "Level",
-                        "x" : 45,
-                        "y" : 70
-                    },               
-                    {
-                        "type" : "rotary_encoder",
-                        "parameter" : "CV Amt",
-                        "asset" : "small_white",
-                        "x" : 45,
-                        "y" : 150
-                    }
-                ]
-            }
-        },
-        {
-            "id" : "MULT",
-            "name" : "Multiples",
-            "width" : 1,
-            "type" : "CCOLComponentTypeMultiples",
-            "view" : {
-                "asset" : "multiples",
-                "connectors" : [
-                    {
-                        "type" : "input",
-                        "connection" : "In A",
-                        "x" : 25,
-                        "y" : 50
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out A1",
-                        "x" : 25,
-                        "y" : 95
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out A2",
-                        "x" : 25,
-                        "y" : 135
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out A3",
-                        "x" : 65,
-                        "y" : 95
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out A4",
-                        "x" : 65,
-                        "y" : 135
-                    },
-                    {
-                        "type" : "input",
-                        "connection" : "In B",
-                        "x" : 25,
-                        "y" : 190
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out B1",
-                        "x" : 25,
-                        "y" : 235
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out B2",
-                        "x" : 25,
-                        "y" : 275
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out B3",
-                        "x" : 65,
-                        "y" : 235
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out B4",
-                        "x" : 65,
-                        "y" : 275
-                    }
-                ]
-            }
-        },
-        {
-            "id" : "MIX2",
-            "name" : "Mix II",
-            "width" : 1,
-            "type" : "CCOLComponentTypeMixer",
-            "view" : {
-                "asset" : "mixer2",
-                "connectors" : [
-                    {
-                        "type" : "input",
-                        "connection" : "In 1",
-                        "x" : 25,
-                        "y" : 270
-                    },
-                    {
-                        "type" : "input",
-                        "connection" : "In 2",
-                        "x" : 65,
-                        "y" : 270
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "Out",
-                        "x" : 45,
-                        "y" : 225
-                    }
-                ],
-                "controls" : [
-                     {
-                        "type" : "rotary_encoder",
-                        "parameter" : "Level 1",
-                        "x" : 45,
-                        "y" : 70
-                    },
-                      {
-                      "type" : "rotary_encoder",
-                      "parameter" : "Level 2",
-                      "x" : 45,
-                      "y" : 150
-                      }
-                ]
-            }
-        },
-        {
-            "id" : "VCFA",
-            "name" : "VCF A",
-            "width" : 2,
-            "type" : "COLComponentVCF",
-            "view" : {
-                "asset" : "vcf_a",
-                "connectors" : [
-                    {
-                        "type" : "input",
-                        "connection" : "In",
-                        "x" : 32,
-                        "y" : 280
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "LP Out",
-                        "x" : 96,
-                        "y" : 280
-                    },
-                    {
-                        "type" : "output",
-                        "connection" : "HP Out",
-                        "x" : 160,
-                        "y" : 280
-                    },
-                    {
-                        "type" : "input",
-                        "connection" : "CV In",
-                        "x" : 48,
-                        "y" : 184
-                    }
-                ],
-                "controls" : [
-                     {
-                        "type" : "continuous",
-                        "parameter" : "Cutoff",
-                        "asset" : "large_white",
-                        "x" : 48,
-                        "y" : 80
-                    },               
-                    {
-                        "type" : "continuous",
-                        "parameter" : "Resonance",
-                        "asset" : "large_white",
-                        "x" : 144,
-                        "y" : 80
-                    },               
-                    {
-                        "type" : "continuous",
-                        "parameter" : "CV Amt",
-                        "asset" : "large_white",
-                        "x" : 144,
-                        "y" : 184
-                    }
-                ]
-            }
-        },
-        {
-        "id" : "PAN",
-        "name" : "Pan",
-        "width" : 1,
-        "type" : "COLComponentPan",
-        "view" : {
-            "asset" : "pan",
-            "connectors" : [
-                         {
-                             "type" : "input",
-                             "connection" : "In",
-                             "x" : 48,
-                             "y" : 224
-                         },
-                         {
-                             "type" : "output",
-                             "connection" : "Out 1",
-                             "x" : 24,
-                             "y" : 280
-                         },
-                         {
-                             "type" : "output",
-                             "connection" : "Out 2",
-                             "x" : 72,
-                             "y" : 280
-                         },
-                         {
-                             "type" : "input",
-                             "connection" : "CV In",
-                             "x" : 48,
-                             "y" : 162
-                         }
-                         ],
-            "controls" : [
-                       {
-                       "type" : "continuous",
-                       "parameter" : "Pan",
-                       "asset" : "large_white",
-                       "x" : 48,
-                       "y" : 72
-                       }
-                       ]
-            }
-        },
-        {
-            "id" : "RING",
-            "name" : "Ring Modulator",
-            "width" : 1,
-            "type" : "COLComponentRingModulator",
-            "view" : {
-                "connectors" : [
-                    {
-                             "type" : "input",
-                             "connection" : "In 1",
-                             "x" : 24,
-                             "y" : 280
-                         },
-                         {
-                             "type" : "input",
-                             "connection" : "In 2",
-                             "x" : 72,
-                             "y" : 280
-                         },
-                         {
-                             "type" : "output",
-                             "connection" : "Out",
-                             "x" : 48,
-                             "y" : 162
-                         }
-                ],
-                "controls" : [
-                       {
-                       "type" : "continuous",
-                       "parameter" : "Mix",
-                       "asset" : "large_white",
-                       "x" : 48,
-                       "y" : 72
-                       }
-                       ]
-            }
-        },
+                 {
+                 "id" : "VCOA",
+                 "name" : "VCO A",
+                 "width" : 2,
+                 "type" : "CCOLComponentTypeVCO",
+                 "view" :
+                 {
+                 "asset" : "vco_a",
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "Key In",
+                                 "x" : 45,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "FM In",
+                                 "x" : 90,
+                                 "y" : 220
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out",
+                                 "x" : 135,
+                                 "y" : 270
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "rotary_switch",
+                               "parameter" : "Range",
+                               "x" : 50,
+                               "y" : 70,
+                               "userinfo" : {
+                               "maxindex" : 4
+                               }
+                               },
+                               {
+                               "type" : "rotary_switch",
+                               "parameter" : "Waveform",
+                               "x" : 130,
+                               "y" : 170,
+                               "userinfo" : {
+                               "maxindex" : 4
+                               }
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Tune",
+                               "x" : 130,
+                               "y" : 70
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "FM",
+                               "x" : 50,
+                               "y" : 170
+                               }
+                               ]
+                 }
+                 },
+                 {
+                 "id" : "LFOA",
+                 "name" : "LFO A",
+                 "width" : 1,
+                 "type" : "CCOLComponentTypeLFO",
+                 "view" : {
+                 "asset" : "lfo_a",
+                 "connectors" : [
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out",
+                                 "x" : 45,
+                                 "y" : 270
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Rate",
+                               "x" : 45,
+                               "y" : 70
+                               },
+                               {
+                               "type" : "rotary_switch",
+                               "parameter" : "Wave",
+                               "x" : 45,
+                               "y" : 170,
+                               "userinfo" : {
+                               "maxindex" : 5
+                               }
+                               }
+                               ]
+                 }
+                 },
+                 {
+                 "id" : "NG",
+                 "name" : "Noise Generator",
+                 "width" : 1,
+                 "type" : "CCOLComponentNoiseGenerator",
+                 "view" : {
+                 "asset" : "ng",
+                 "connectors" : [
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Output",
+                                 "x" : 45,
+                                 "y" : 270
+                                 }
+                                 ],
+                 }
+                 },
+                 {
+                 "id" : "EGA",
+                 "name" : "EG A",
+                 "width" : 1,
+                 "type" : "CCOLComponentTypeEG",
+                 "view" : {
+                 "asset" : "eg_a",
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "Gate In",
+                                 "x" : 25,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Output",
+                                 "x" : 65,
+                                 "y" : 270
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Attack",
+                               "x" : 30,
+                               "y" : 60,
+                               "userinfo" : {
+                               "asset" : "small"
+                               }
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Decay",
+                               "x" : 30,
+                               "y" : 110,
+                               "userinfo" : {
+                               "asset" : "small"
+                               }
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Sustain",
+                               "x" : 30,
+                               "y" : 160,
+                               "userinfo" : {
+                               "asset" : "small"
+                               }
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Release",
+                               "x" : 30,
+                               "y" : 210,
+                               "userinfo" : {
+                               "asset" : "small"
+                               }
+                               }
+                               ]
+                 }
+                 },
+                 {
+                 "id" : "VCAA",
+                 "name" : "VCA A",
+                 "width" : 1,
+                 "type" : "CCOLComponentTypeVCA",
+                 "view" : {
+                 "asset" : "vca_a",
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In",
+                                 "x" : 25,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out",
+                                 "x" : 65,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "CV In",
+                                 "x" : 45,
+                                 "y" : 200
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Level",
+                               "x" : 45,
+                               "y" : 70
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "CV Amt",
+                               "asset" : "small_white",
+                               "x" : 45,
+                               "y" : 150
+                               }
+                               ]
+                 }
+                 },
+                 {
+                 "id" : "MULT",
+                 "name" : "Multiples",
+                 "width" : 1,
+                 "type" : "CCOLComponentTypeMultiples",
+                 "view" : {
+                 "asset" : "multiples",
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In A",
+                                 "x" : 25,
+                                 "y" : 50
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out A1",
+                                 "x" : 25,
+                                 "y" : 95
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out A2",
+                                 "x" : 25,
+                                 "y" : 135
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out A3",
+                                 "x" : 65,
+                                 "y" : 95
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out A4",
+                                 "x" : 65,
+                                 "y" : 135
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In B",
+                                 "x" : 25,
+                                 "y" : 190
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out B1",
+                                 "x" : 25,
+                                 "y" : 235
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out B2",
+                                 "x" : 25,
+                                 "y" : 275
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out B3",
+                                 "x" : 65,
+                                 "y" : 235
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out B4",
+                                 "x" : 65,
+                                 "y" : 275
+                                 }
+                                 ]
+                 }
+                 },
+                 {
+                 "id" : "MIX2",
+                 "name" : "Mix II",
+                 "width" : 1,
+                 "type" : "CCOLComponentTypeMixer",
+                 "view" : {
+                 "asset" : "mixer2",
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In 1",
+                                 "x" : 25,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In 2",
+                                 "x" : 65,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out",
+                                 "x" : 45,
+                                 "y" : 225
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Level 1",
+                               "x" : 45,
+                               "y" : 70
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Level 2",
+                               "x" : 45,
+                               "y" : 150
+                               }
+                               ]
+                 }
+                 },
+                 {
+                 "id" : "VCFA",
+                 "name" : "VCF A",
+                 "width" : 2,
+                 "type" : "COLComponentVCF",
+                 "view" : {
+                 "asset" : "vcf_a",
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In",
+                                 "x" : 32,
+                                 "y" : 280
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "LP Out",
+                                 "x" : 96,
+                                 "y" : 280
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "HP Out",
+                                 "x" : 160,
+                                 "y" : 280
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "CV In",
+                                 "x" : 48,
+                                 "y" : 184
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "continuous",
+                               "parameter" : "Cutoff",
+                               "asset" : "large_white",
+                               "x" : 48,
+                               "y" : 80
+                               },
+                               {
+                               "type" : "continuous",
+                               "parameter" : "Resonance",
+                               "asset" : "large_white",
+                               "x" : 144,
+                               "y" : 80
+                               },
+                               {
+                               "type" : "continuous",
+                               "parameter" : "CV Amt",
+                               "asset" : "large_white",
+                               "x" : 144,
+                               "y" : 184
+                               }
+                               ]
+                 }
+                 },
+                 {
+                 "id" : "PAN",
+                 "name" : "Pan",
+                 "width" : 1,
+                 "type" : "COLComponentPan",
+                 "view" : {
+                 "asset" : "pan",
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In",
+                                 "x" : 48,
+                                 "y" : 224
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out 1",
+                                 "x" : 24,
+                                 "y" : 280
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out 2",
+                                 "x" : 72,
+                                 "y" : 280
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "CV In",
+                                 "x" : 48,
+                                 "y" : 162
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "continuous",
+                               "parameter" : "Pan",
+                               "asset" : "large_white",
+                               "x" : 48,
+                               "y" : 72
+                               }
+                               ]
+                 }
+                 },
+                 {
+                 "id" : "RING",
+                 "name" : "Ring Modulator",
+                 "width" : 1,
+                 "type" : "COLComponentRingModulator",
+                 "view" : {
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In 1",
+                                 "x" : 24,
+                                 "y" : 280
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In 2",
+                                 "x" : 72,
+                                 "y" : 280
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out",
+                                 "x" : 48,
+                                 "y" : 162
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "continuous",
+                               "parameter" : "Mix",
+                               "asset" : "large_white",
+                               "x" : 48,
+                               "y" : 72
+                               }
+                               ]
+                 }
+                 },
                  {
                  "id" : "DELAY",
                  "name" : "Delay",
@@ -499,62 +516,51 @@
                                ]
                  }
                  },
-        {
-            "id" : "SEQ",
-            "name" : "Sequencer",
-            "width" : 3,
-            "type" : "COLComponentSequencer",
-            "view" : {
-                "connectors" : [
-                    { "type" : "output", "connection" : "Pitch", "x" : 24, "y" : 280  },
-                    { "type" : "output", "connection" : "Gate", "x" : 64, "y" : 280  }
-                ],
-                "controls" : [
-                       { "type" : "continuous", "parameter" : "Pitch 1", "asset" : "small_white", "x" : 24, "y" : 56 },
-                       { "type" : "continuous", "parameter" : "Pitch 2", "asset" : "small_white", "x" : 58, "y" : 56 },
-                       { "type" : "continuous", "parameter" : "Pitch 3", "asset" : "small_white", "x" : 92, "y" : 56 },
-                       { "type" : "continuous", "parameter" : "Pitch 4", "asset" : "small_white", "x" : 126, "y" : 56 },
-                       { "type" : "continuous", "parameter" : "Pitch 5", "asset" : "small_white", "x" : 160, "y" : 56 },
-                       { "type" : "continuous", "parameter" : "Pitch 6", "asset" : "small_white", "x" : 194, "y" : 56 },
-                       { "type" : "continuous", "parameter" : "Pitch 7", "asset" : "small_white", "x" : 228, "y" : 56 },
-                       { "type" : "continuous", "parameter" : "Pitch 8", "asset" : "small_white", "x" : 262, "y" : 56 },
-                       { "type" : "continuous", "parameter" : "Pitch 9", "asset" : "small_white", "x" : 24, "y" : 162 },
-                       { "type" : "continuous", "parameter" : "Pitch 10", "asset" : "small_white", "x" : 58, "y" : 162 },
-                       { "type" : "continuous", "parameter" : "Pitch 11", "asset" : "small_white", "x" : 92, "y" : 162 },
-                       { "type" : "continuous", "parameter" : "Pitch 12", "asset" : "small_white", "x" : 126, "y" : 162 },
-                       { "type" : "continuous", "parameter" : "Pitch 13", "asset" : "small_white", "x" : 160, "y" : 162 },
-                       { "type" : "continuous", "parameter" : "Pitch 14", "asset" : "small_white", "x" : 194, "y" : 162 },
-                       { "type" : "continuous", "parameter" : "Pitch 15", "asset" : "small_white", "x" : 228, "y" : 162 },
-                       { "type" : "continuous", "parameter" : "Pitch 16", "asset" : "small_white", "x" : 262, "y" : 162 },
-                      { "type" : "continuous", "parameter" : "Gate 1", "asset" : "small_white", "x" : 24, "y" : 96 },
-                      { "type" : "continuous", "parameter" : "Gate 2", "asset" : "small_white", "x" : 58, "y" : 96 },
-                      { "type" : "continuous", "parameter" : "Gate 3", "asset" : "small_white", "x" : 92, "y" : 96 },
-                      { "type" : "continuous", "parameter" : "Gate 4", "asset" : "small_white", "x" : 126, "y" : 96 },
-                      { "type" : "continuous", "parameter" : "Gate 5", "asset" : "small_white", "x" : 160, "y" : 96 },
-                      { "type" : "continuous", "parameter" : "Gate 6", "asset" : "small_white", "x" : 194, "y" : 96 },
-                      { "type" : "continuous", "parameter" : "Gate 7", "asset" : "small_white", "x" : 228, "y" : 96 },
-                      { "type" : "continuous", "parameter" : "Gate 8", "asset" : "small_white", "x" : 262, "y" : 96 },
-                      { "type" : "continuous", "parameter" : "Gate 9", "asset" : "small_white", "x" : 24, "y" : 202 },
-                      { "type" : "continuous", "parameter" : "Gate 10", "asset" : "small_white", "x" : 58, "y" : 202 },
-                      { "type" : "continuous", "parameter" : "Gate 11", "asset" : "small_white", "x" : 92, "y" : 202 },
-                      { "type" : "continuous", "parameter" : "Gate 12", "asset" : "small_white", "x" : 126, "y" : 202 },
-                      { "type" : "continuous", "parameter" : "Gate 13", "asset" : "small_white", "x" : 160, "y" : 202 },
-                      { "type" : "continuous", "parameter" : "Gate 14", "asset" : "small_white", "x" : 194, "y" : 202 },
-                      { "type" : "continuous", "parameter" : "Gate 15", "asset" : "small_white", "x" : 228, "y" : 202 },
-                      { "type" : "continuous", "parameter" : "Gate 16", "asset" : "small_white", "x" : 262, "y" : 202 }
-                ]
-            }
-        }, 
-        {
-            "id" : "NG",
-            "name" : "Noise Generator",
-            "width" : 1,
-            "type" : "COLComponentNoiseGenerator",
-            "view" : {
-                "connectors" : [
-                { "type" : "output", "connection" : "Output", "x" : 24, "y" : 280  }
-                ]
-            }
-        }
-    ]
+                 {
+                 "id" : "SEQ",
+                 "name" : "Sequencer",
+                 "width" : 3,
+                 "type" : "COLComponentSequencer",
+                 "view" : {
+                 "connectors" : [
+                                 { "type" : "output", "connection" : "Pitch", "x" : 24, "y" : 280  },
+                                 { "type" : "output", "connection" : "Gate", "x" : 64, "y" : 280  }
+                                 ],
+                 "controls" : [
+                               { "type" : "continuous", "parameter" : "Pitch 1", "asset" : "small_white", "x" : 24, "y" : 56 },
+                               { "type" : "continuous", "parameter" : "Pitch 2", "asset" : "small_white", "x" : 58, "y" : 56 },
+                               { "type" : "continuous", "parameter" : "Pitch 3", "asset" : "small_white", "x" : 92, "y" : 56 },
+                               { "type" : "continuous", "parameter" : "Pitch 4", "asset" : "small_white", "x" : 126, "y" : 56 },
+                               { "type" : "continuous", "parameter" : "Pitch 5", "asset" : "small_white", "x" : 160, "y" : 56 },
+                               { "type" : "continuous", "parameter" : "Pitch 6", "asset" : "small_white", "x" : 194, "y" : 56 },
+                               { "type" : "continuous", "parameter" : "Pitch 7", "asset" : "small_white", "x" : 228, "y" : 56 },
+                               { "type" : "continuous", "parameter" : "Pitch 8", "asset" : "small_white", "x" : 262, "y" : 56 },
+                               { "type" : "continuous", "parameter" : "Pitch 9", "asset" : "small_white", "x" : 24, "y" : 162 },
+                               { "type" : "continuous", "parameter" : "Pitch 10", "asset" : "small_white", "x" : 58, "y" : 162 },
+                               { "type" : "continuous", "parameter" : "Pitch 11", "asset" : "small_white", "x" : 92, "y" : 162 },
+                               { "type" : "continuous", "parameter" : "Pitch 12", "asset" : "small_white", "x" : 126, "y" : 162 },
+                               { "type" : "continuous", "parameter" : "Pitch 13", "asset" : "small_white", "x" : 160, "y" : 162 },
+                               { "type" : "continuous", "parameter" : "Pitch 14", "asset" : "small_white", "x" : 194, "y" : 162 },
+                               { "type" : "continuous", "parameter" : "Pitch 15", "asset" : "small_white", "x" : 228, "y" : 162 },
+                               { "type" : "continuous", "parameter" : "Pitch 16", "asset" : "small_white", "x" : 262, "y" : 162 },
+                               { "type" : "continuous", "parameter" : "Gate 1", "asset" : "small_white", "x" : 24, "y" : 96 },
+                               { "type" : "continuous", "parameter" : "Gate 2", "asset" : "small_white", "x" : 58, "y" : 96 },
+                               { "type" : "continuous", "parameter" : "Gate 3", "asset" : "small_white", "x" : 92, "y" : 96 },
+                               { "type" : "continuous", "parameter" : "Gate 4", "asset" : "small_white", "x" : 126, "y" : 96 },
+                               { "type" : "continuous", "parameter" : "Gate 5", "asset" : "small_white", "x" : 160, "y" : 96 },
+                               { "type" : "continuous", "parameter" : "Gate 6", "asset" : "small_white", "x" : 194, "y" : 96 },
+                               { "type" : "continuous", "parameter" : "Gate 7", "asset" : "small_white", "x" : 228, "y" : 96 },
+                               { "type" : "continuous", "parameter" : "Gate 8", "asset" : "small_white", "x" : 262, "y" : 96 },
+                               { "type" : "continuous", "parameter" : "Gate 9", "asset" : "small_white", "x" : 24, "y" : 202 },
+                               { "type" : "continuous", "parameter" : "Gate 10", "asset" : "small_white", "x" : 58, "y" : 202 },
+                               { "type" : "continuous", "parameter" : "Gate 11", "asset" : "small_white", "x" : 92, "y" : 202 },
+                               { "type" : "continuous", "parameter" : "Gate 12", "asset" : "small_white", "x" : 126, "y" : 202 },
+                               { "type" : "continuous", "parameter" : "Gate 13", "asset" : "small_white", "x" : 160, "y" : 202 },
+                               { "type" : "continuous", "parameter" : "Gate 14", "asset" : "small_white", "x" : 194, "y" : 202 },
+                               { "type" : "continuous", "parameter" : "Gate 15", "asset" : "small_white", "x" : 228, "y" : 202 },
+                               { "type" : "continuous", "parameter" : "Gate 16", "asset" : "small_white", "x" : 262, "y" : 202 }
+                               ]
+                 }
+                 },
+                 ]
 }
