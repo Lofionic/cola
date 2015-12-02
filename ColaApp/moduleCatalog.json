@@ -97,23 +97,6 @@
                  }
                  },
                  {
-                 "id" : "NG",
-                 "name" : "Noise Generator",
-                 "width" : 1,
-                 "type" : "CCOLComponentNoiseGenerator",
-                 "view" : {
-                 "asset" : "ng",
-                 "connectors" : [
-                                 {
-                                 "type" : "output",
-                                 "connection" : "Output",
-                                 "x" : 45,
-                                 "y" : 270
-                                 }
-                                 ],
-                 }
-                 },
-                 {
                  "id" : "EGA",
                  "name" : "EG A",
                  "width" : 1,
@@ -394,25 +377,25 @@
                  "id" : "PAN",
                  "name" : "Pan",
                  "width" : 1,
-                 "type" : "COLComponentPan",
+                 "type" : "CCOLComponentTypePan",
                  "view" : {
                  "asset" : "pan",
                  "connectors" : [
                                  {
                                  "type" : "input",
-                                 "connection" : "In",
+                                 "connection" : "Input",
                                  "x" : 48,
                                  "y" : 224
                                  },
                                  {
                                  "type" : "output",
-                                 "connection" : "Out 1",
+                                 "connection" : "Output 1",
                                  "x" : 24,
                                  "y" : 280
                                  },
                                  {
                                  "type" : "output",
-                                 "connection" : "Out 2",
+                                 "connection" : "Output 2",
                                  "x" : 72,
                                  "y" : 280
                                  },
@@ -425,9 +408,8 @@
                                  ],
                  "controls" : [
                                {
-                               "type" : "continuous",
+                               "type" : "rotary_encoder",
                                "parameter" : "Pan",
-                               "asset" : "large_white",
                                "x" : 48,
                                "y" : 72
                                }
@@ -469,6 +451,23 @@
                                "y" : 72
                                }
                                ]
+                 }
+                 },
+                 {
+                 "id" : "NG",
+                 "name" : "Noise Generator",
+                 "width" : 1,
+                 "type" : "CCOLComponentNoiseGenerator",
+                 "view" : {
+                 "asset" : "ng",
+                 "connectors" : [
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Output",
+                                 "x" : 45,
+                                 "y" : 270
+                                 }
+                                 ],
                  }
                  },
                  {
@@ -519,48 +518,43 @@
                  {
                  "id" : "SEQ",
                  "name" : "Sequencer",
-                 "width" : 3,
-                 "type" : "COLComponentSequencer",
+                 "width" : 4,
+                 "type" : "CCOLComponentTypeSequencer",
                  "view" : {
                  "connectors" : [
-                                 { "type" : "output", "connection" : "Pitch", "x" : 24, "y" : 280  },
-                                 { "type" : "output", "connection" : "Gate", "x" : 64, "y" : 280  }
+                                 { "type" : "output", "connection" : "Pitch Out", "x" : 280, "y" : 270  },
+                                 { "type" : "output", "connection" : "Gate Out", "x" : 320, "y" : 270  }
                                  ],
                  "controls" : [
-                               { "type" : "continuous", "parameter" : "Pitch 1", "asset" : "small_white", "x" : 24, "y" : 56 },
-                               { "type" : "continuous", "parameter" : "Pitch 2", "asset" : "small_white", "x" : 58, "y" : 56 },
-                               { "type" : "continuous", "parameter" : "Pitch 3", "asset" : "small_white", "x" : 92, "y" : 56 },
-                               { "type" : "continuous", "parameter" : "Pitch 4", "asset" : "small_white", "x" : 126, "y" : 56 },
-                               { "type" : "continuous", "parameter" : "Pitch 5", "asset" : "small_white", "x" : 160, "y" : 56 },
-                               { "type" : "continuous", "parameter" : "Pitch 6", "asset" : "small_white", "x" : 194, "y" : 56 },
-                               { "type" : "continuous", "parameter" : "Pitch 7", "asset" : "small_white", "x" : 228, "y" : 56 },
-                               { "type" : "continuous", "parameter" : "Pitch 8", "asset" : "small_white", "x" : 262, "y" : 56 },
-                               { "type" : "continuous", "parameter" : "Pitch 9", "asset" : "small_white", "x" : 24, "y" : 162 },
-                               { "type" : "continuous", "parameter" : "Pitch 10", "asset" : "small_white", "x" : 58, "y" : 162 },
-                               { "type" : "continuous", "parameter" : "Pitch 11", "asset" : "small_white", "x" : 92, "y" : 162 },
-                               { "type" : "continuous", "parameter" : "Pitch 12", "asset" : "small_white", "x" : 126, "y" : 162 },
-                               { "type" : "continuous", "parameter" : "Pitch 13", "asset" : "small_white", "x" : 160, "y" : 162 },
-                               { "type" : "continuous", "parameter" : "Pitch 14", "asset" : "small_white", "x" : 194, "y" : 162 },
-                               { "type" : "continuous", "parameter" : "Pitch 15", "asset" : "small_white", "x" : 228, "y" : 162 },
-                               { "type" : "continuous", "parameter" : "Pitch 16", "asset" : "small_white", "x" : 262, "y" : 162 },
-                               { "type" : "continuous", "parameter" : "Gate 1", "asset" : "small_white", "x" : 24, "y" : 96 },
-                               { "type" : "continuous", "parameter" : "Gate 2", "asset" : "small_white", "x" : 58, "y" : 96 },
-                               { "type" : "continuous", "parameter" : "Gate 3", "asset" : "small_white", "x" : 92, "y" : 96 },
-                               { "type" : "continuous", "parameter" : "Gate 4", "asset" : "small_white", "x" : 126, "y" : 96 },
-                               { "type" : "continuous", "parameter" : "Gate 5", "asset" : "small_white", "x" : 160, "y" : 96 },
-                               { "type" : "continuous", "parameter" : "Gate 6", "asset" : "small_white", "x" : 194, "y" : 96 },
-                               { "type" : "continuous", "parameter" : "Gate 7", "asset" : "small_white", "x" : 228, "y" : 96 },
-                               { "type" : "continuous", "parameter" : "Gate 8", "asset" : "small_white", "x" : 262, "y" : 96 },
-                               { "type" : "continuous", "parameter" : "Gate 9", "asset" : "small_white", "x" : 24, "y" : 202 },
-                               { "type" : "continuous", "parameter" : "Gate 10", "asset" : "small_white", "x" : 58, "y" : 202 },
-                               { "type" : "continuous", "parameter" : "Gate 11", "asset" : "small_white", "x" : 92, "y" : 202 },
-                               { "type" : "continuous", "parameter" : "Gate 12", "asset" : "small_white", "x" : 126, "y" : 202 },
-                               { "type" : "continuous", "parameter" : "Gate 13", "asset" : "small_white", "x" : 160, "y" : 202 },
-                               { "type" : "continuous", "parameter" : "Gate 14", "asset" : "small_white", "x" : 194, "y" : 202 },
-                               { "type" : "continuous", "parameter" : "Gate 15", "asset" : "small_white", "x" : 228, "y" : 202 },
-                               { "type" : "continuous", "parameter" : "Gate 16", "asset" : "small_white", "x" : 262, "y" : 202 }
+                               { "type" : "rotary_encoder","parameter" : "Pitch 1","x" : 40, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 2","x" : 80, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 3","x" : 120, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 4","x" : 160, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 5","x" : 200, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 6","x" : 240, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 7","x" : 280, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 8","x" : 320, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 9","x" : 40, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 10","x" : 80, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 11","x" : 120, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 12","x" : 160, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 13","x" : 200, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 14","x" : 240, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 15","x" : 280, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
+                               { "type" : "rotary_encoder","parameter" : "Pitch 16","x" : 320, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
                                ]
                  }
-                 },
+                 }, 
+                 {
+                 "id" : "NG",
+                 "name" : "Noise Generator",
+                 "width" : 1,
+                 "type" : "COLComponentNoiseGenerator",
+                 "view" : {
+                 "connectors" : [
+                                 { "type" : "output", "connection" : "Output", "x" : 24, "y" : 280  }
+                                 ]
+                 }
+                 }
                  ]
 }
