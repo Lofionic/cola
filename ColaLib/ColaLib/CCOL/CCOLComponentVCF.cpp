@@ -95,21 +95,21 @@ void CCOLComponentVCF::renderOutputs(unsigned int numFrames) {
         
         b4 = b4 - b4 * b4 * b4 * 0.166667f;    //clipping
         
-//        if ([self.lpOut isConnected]) {
+        if (lpOut->isConnected()) {
             lpOutBuffer[i] = (SignalType)b4;
-//        }
+        }
         
-//        if ([self.hpOut isConnected]) {
+        if (hpOut->isConnected()) {
             hpOutBuffer[i] = (SignalType)(valueIn - b4);
-//        }
+        }
         
-//        if ([self.bpOut isConnected]) {
+        if (bpOut->isConnected()) {
             bpOutBuffer[i] = (SignalType)(3.0f * (b3 - b4));
-//        }
+        }
         
-//        if ([self.notchOut isConnected]) {
+        if (notchOut->isConnected()) {
             notchOutBuffer[i] = (SignalType)(valueIn - (3.0f * (b3 - b4)));
-//        }
+        }
     
         b0 = valueIn;
     }
