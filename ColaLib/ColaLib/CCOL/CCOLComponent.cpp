@@ -11,25 +11,21 @@
 #include "CCOLAudioContext.hpp"
 #include "CCOLComponentIO.hpp"
 #include "CCOLComponentParameter.hpp"
+
 #include <stdlib.h>
 #include <string>
 
-// Generated a random string of characters
 void gen_random(char *s, const int len) {
     static const char alphanum[] =
     "0123456789"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "abcdefghijklmnopqrstuvwxyz";
     
-    int j = 0;
     for (int i = 0; i < len; ++i) {
-        if (i > 0 && i % 5 == 0) {
-            s[j++] = '-';
-        }
-        s[j++] = alphanum[rand() % (sizeof(alphanum) - 1)];
+        s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
     }
     
-    s[j] = 0;
+    s[len] = 0;
 }
 
 CCOLComponent::CCOLComponent(CCOLAudioContext* contextIn) {
@@ -43,6 +39,7 @@ CCOLComponent::CCOLComponent(CCOLAudioContext* contextIn) {
     outputs =       vector<CCOLComponentOutput*> { };
     parameters =    vector<CCOLComponentParameter*> { };
 }
+
 
 void CCOLComponent::renderOutputs(unsigned int numFrames) {
     rendered = true;

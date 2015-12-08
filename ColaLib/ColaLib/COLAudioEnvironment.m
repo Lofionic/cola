@@ -13,7 +13,7 @@
 #import "CCOLMIDIComponent.hpp"
 #import "CCOLTransportController.hpp"
 #import "CCOLDefines.h"
-#import "CCOLUtility.h"
+#import "Endian.h"
 
 @interface COLAudioEnvironment()
 
@@ -313,6 +313,20 @@ static void setAudioSessionInactiveCallback(CFNotificationCenterRef center, void
 
 -(void)exportEnvironment {
     // [COLExporter getJSONObjectForEnvironment:self];
+}
+
+
+static OSType fourCharCode(NSString *string) {
+    unsigned int fourCharCode;
+    
+    const char *bytes = (char*)[[string dataUsingEncoding:NSUTF8StringEncoding] bytes];
+    
+    *((char *) &fourCharCode + 0) = *(bytes + 0);
+    *((char *) &fourCharCode + 1) = *(bytes + 1);
+    *((char *) &fourCharCode + 2) = *(bytes + 2);
+    *((char *) &fourCharCode + 3) = *(bytes + 3);
+    
+    return EndianU32_NtoB(fourCharCode);
 }
 
 @end

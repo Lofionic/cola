@@ -12,6 +12,7 @@
 #import "Endian.h"
 #import "COLDefines.h"
 #import "COLTransportController.h"
+#import "CCOLUtility.h"
 #import "Audiobus.h"
 
 // Extern wavetables used by components
@@ -502,26 +503,6 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 void audioUnitPropertyListenerDispatcher(void *inRefCon, AudioUnit inUnit, AudioUnitPropertyID inID, AudioUnitScope inScope, AudioUnitElement inElement) {
     COLAudioEngine *SELF = (__bridge COLAudioEngine *)inRefCon;
     [SELF audioUnitPropertyChanged:inRefCon unit:inUnit propID:inID scope:inScope element:inElement];
-}
-
-static OSType fourCharCode(NSString *string) {
-    unsigned int fourCharCode;
-    
-    const char *bytes = (char*)[[string dataUsingEncoding:NSUTF8StringEncoding] bytes];
-    
-    *((char *) &fourCharCode + 0) = *(bytes + 0);
-    *((char *) &fourCharCode + 1) = *(bytes + 1);
-    *((char *) &fourCharCode + 2) = *(bytes + 2);
-    *((char *) &fourCharCode + 3) = *(bytes + 3);
-    
-    return EndianU32_NtoB(fourCharCode);
-}
-
-static void checkError(OSStatus error, const char *operation) {
-    if (error == noErr) return;
-    char errorString[20];
-    
-    fprintf(stderr, "Error: %s (%s)\n", operation, errorString); exit(1);
 }
 
 #pragma mark Wavetables
