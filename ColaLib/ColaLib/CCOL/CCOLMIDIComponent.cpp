@@ -121,7 +121,5 @@ void CCOLMIDIComponent::renderOutputs(unsigned int numFrames) {
         gateTrigger = false;
     }
     prevPitchbend = pitchbend;
-    
-    printf("MIDI: %.0f _ %.0f\n", gateOutBuffer[0], gateOutBuffer[1]);
 }
 
