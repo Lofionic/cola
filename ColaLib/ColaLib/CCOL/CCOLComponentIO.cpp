@@ -79,8 +79,8 @@ SignalType* CCOLComponentInput::getEmptyBuffer(unsigned int numFrames) {
     if (numFrames != emptyBufferSize) {
         free(emptyBuffer);
         emptyBufferSize = numFrames;
-        emptyBuffer = (SignalType*)malloc(emptyBufferSize * sizeof(SignalType*));
-        memset(emptyBuffer, 0, emptyBufferSize * sizeof(SignalType*));
+        emptyBuffer = (SignalType*)malloc(emptyBufferSize * sizeof(SignalType));
+        memset(emptyBuffer, 0, emptyBufferSize * sizeof(SignalType));
     }
     
     return emptyBuffer;
@@ -130,7 +130,7 @@ bool CCOLComponentInput::makeDynamicConnection(CCOLComponentOutput *outputIn) {
                 //CFDictionaryAddValue(dictionary, CFSTR("output"), (CCOLOutputAddress)thisOutput);
                 CFDictionarySetValue(dictionary, CFSTR("output"), thisOutput);
                 
-                CFNotificationCenterPostNotification(center, CFSTR(CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT), NULL, dictionary, false);
+                CFNotificationCenterPostNotification(center, kCCOLEngineDidForceDisconnectNotification, NULL, dictionary, true);
                 
                 CFRelease(dictionary);
             }
@@ -170,8 +170,8 @@ SignalType* CCOLComponentOutput::prepareBufferOfSize(unsigned int numFrames) {
             free(buffer);
         }
         bufferSize = numFrames;
-        buffer = (SignalType*)malloc(bufferSize * sizeof(SignalType*));
-        memset(buffer, 0, bufferSize * sizeof(SignalType*));
+        buffer = (SignalType*)malloc(bufferSize * sizeof(SignalType));
+        memset(buffer, 0, bufferSize * sizeof(SignalType));
     }
     
     return buffer;

@@ -124,8 +124,8 @@ HostCallbackInfo *callbackInfo;
     if (self.isForeground || self.iaaConnected) {
         NSLog(@"App is foreground or Inter-App connected");
         
-        sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
-        
+//        sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
+//        
         if (mGraph) {
             Boolean initialized = YES;
             checkError(AUGraphIsInitialized(mGraph, &initialized), "Error checking initializing of AUGraph");
@@ -227,15 +227,15 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
             outA[i] = leftBuffer[i] * audioEngine.attenuation;
             outB[i] = rightBuffer[i] * audioEngine.attenuation;
             
-            if (audioEngine.isMuting && audioEngine.attenuation > 0.0) {
-                Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
-                Float32 newAttenuation = MAX(audioEngine.attenuation -= attenuationDelta, 0.0);
-                [audioEngine setAttenuation:newAttenuation];
-            } else if (!audioEngine.isMuting && audioEngine.attenuation < 1.0) {
-                Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
-                Float32 newAttenuation = MIN(audioEngine.attenuation += attenuationDelta, 1.0);
-                [audioEngine setAttenuation:newAttenuation];
-            }
+//            if (audioEngine.isMuting && audioEngine.attenuation > 0.0) {
+//                Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
+//                Float32 newAttenuation = MAX(audioEngine.attenuation -= attenuationDelta, 0.0);
+//                [audioEngine setAttenuation:newAttenuation];
+//            } else if (!audioEngine.isMuting && audioEngine.attenuation < 1.0) {
+//                Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
+//                Float32 newAttenuation = MIN(audioEngine.attenuation += attenuationDelta, 1.0);
+//                [audioEngine setAttenuation:newAttenuation];
+//            }
         }
         
         [audioEngine.masterInputL engineDidRender];
@@ -320,9 +320,9 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 -(void)initializeInterAppAudio {
     // Get the inter app info dictionary from the delegate
     NSDictionary *infoDictionary = nil;
-    if ([self.delegate respondsToSelector:@selector(interAppInfoDictionaryForAudioEngine:)]) {
-        // infoDictionary = [self.delegate interAppInfoDictionaryForAudioEngine:self];
-    }
+//    if ([self respondsToSelector:@selector(interAppInfoDictionaryForAudioEngine:)]) {
+//        // infoDictionary = [self.delegate interAppInfoDictionaryForAudioEngine:self];
+//    }
     
     if (infoDictionary) {
         NSLog(@"Registering Inter-App Audio");

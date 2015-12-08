@@ -14,20 +14,12 @@
 -(NSDictionary*)interAppInfoDictionary;
 @end
 
-@protocol COLAudioEngineDelegate <NSObject>
-@optional
-//-(NSDictionary*)interAppInfoDictionaryForAudioEngine:(CCOLAudioEngine*)audioEngine;
-//-(void)audioEngineInterAppAudioConnected:(CCOLAudioEngine*)audioEngine;
-//-(void)audioEngineInterAppAudioDisconnected:(CCOLAudioEngine*)audioEngine;
-//-(void)audioEngineHostStateDidChange:(CCOLAudioEngine*)audioEngine;
-@end
-
 @class COLKeyboardComponent;
 @class COLTransportController;
-@interface COLAudioEnvironment : NSObject <COLAudioEngineDelegate>
+@interface COLAudioEnvironment : NSObject
 
 @property (nonatomic, weak) id      infoDelegate;
-@property (readonly) Float64        sampleRate;
+@property (readonly) BOOL           iaaConnected;
 
 @property (readonly, strong) COLTransportController     *transportController;
 

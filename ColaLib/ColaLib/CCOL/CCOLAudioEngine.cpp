@@ -10,9 +10,12 @@
 #include "CCOLComponents.h"
 #include "CCOLComponentIO.hpp"
 #include "CCOLTransportController.hpp"
+#include "CCOLUtility.h"
 
 #include <math.h>
 #include <string>
+#include <UIKit/UIKit.h>
+#include <AVFoundation/AVFoundation.h>
 
 // Extern wavetables used by components
 SignalType ccSinWaveTable[WAVETABLE_SIZE];
@@ -24,6 +27,27 @@ SignalType ccSquareWaveTable[WAVETABLE_SIZE];
 const float CCOL_AUDIO_ENGINE_MUTE_RATE = 0.02;
 
 using namespace std;
+
+#pragma mark App State
+void appDidEnterBackgroundNotification(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)  {
+    CCOLAudioEngine *engine = (CCOLAudioEngine*)observer;
+    engine->appDidEnterBackground();
+}
+
+void appWillEnterForegroundNotification(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)  {
+    CCOLAudioEngine *engine = (CCOLAudioEngine*)observer;
+    engine->appWillEnterForeground();
+}
+
+void appWillTerminateNotification(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)  {
+    CCOLAudioEngine *engine = (CCOLAudioEngine*)observer;
+    engine->appWillTerminate();
+}
+
+void mediaServicesWereResetNotification(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)  {
+    CCOLAudioEngine *engine = (CCOLAudioEngine*)observer;
+    engine->mediaServicesWereReset();
+}
 
 #pragma mark render
 static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
@@ -94,30 +118,12 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     return noErr;
 }
 
-static void checkError(OSStatus error, const char *operation)
-{
-    if (error == noErr) return;
-    
-    char errorString[20];
-    // see if it appears to be a 4-char-code
-    *(UInt32 *)(errorString + 1) = CFSwapInt32HostToBig(error);
-    if (isprint(errorString[1]) && isprint(errorString[2]) && isprint(errorString[3]) && isprint(errorString[4])) {
-        errorString[0] = errorString[5] = '\'';
-        errorString[6] = '\0';
-    } else
-        // no, format it as an integer
-        sprintf(errorString, "%d", (int)error);
-    
-    fprintf(stderr, "CCOLAudioEngine: Error: %s (%s)\n", operation, errorString);
-    
-    exit(1);
-}
-
 CCOLAudioEngine::CCOLAudioEngine() {
-
     sampleRate = 0;
     attenuation = 1.0;
     mute = false;
+    
+    iaaConnected = false;
     
     audioContext = new CCOLAudioContext(this, 2);
 
@@ -126,9 +132,12 @@ CCOLAudioEngine::CCOLAudioEngine() {
     transportController = new CCOLTransportController(this);
 }
 
-void CCOLAudioEngine::initializeAUGraph(double sampleRateIn) {
+void CCOLAudioEngine::initializeAUGraph(bool isForegroundIn) {
     
-    sampleRate = sampleRateIn;
+    isForeground = isForegroundIn;
+    
+    sampleRate = AVAudioSession.sharedInstance.sampleRate;
+    printf("CCOLAudioEngine: Sample rate %.fHz.\n", sampleRate);
     
     printf("CCOLAudioEngine: Creating AUGraph\n");
     checkError(NewAUGraph(&mGraph), "Cannot create new AUGraph");
@@ -146,7 +155,7 @@ void CCOLAudioEngine::initializeAUGraph(double sampleRateIn) {
     checkError(AUGraphAddNode(mGraph, &outputNodeDescription, &remoteIONode), "Cannot create RemoteIO node");
     
     // Open the graph - AudioUnits are opened but not initialized
-    printf("CCOLAudioEngine: Opening AUGraph");
+    printf("CCOLAudioEngine: Opening AUGraph\n");
     checkError(AUGraphOpen(mGraph), "Cannot open AUGraph");
     
     // Get a link to the RemoteIO AU
@@ -174,12 +183,154 @@ void CCOLAudioEngine::initializeAUGraph(double sampleRateIn) {
     
     checkError(AudioUnitSetProperty(mRemoteIO, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(streamFormat)), "Cannot set RemoteIO stream format");
     
-    // Init & Start
-    checkError(AUGraphInitialize (mGraph), "Error initializing AUGraph");
-    checkError(AUGraphStart(mGraph), "Error starting AUGraph");
+//    // Initialize graph
+//    checkError(AUGraphInitialize (mGraph), "Error initializing AUGraph");
     
-    // Initialize Inter-App Audio
-    //TODO: Initialize inter-app audio
+    // Register observers
+    CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(),
+                                    this,
+                                    &appDidEnterBackgroundNotification,
+                                    (__bridge CFStringRef)UIApplicationDidEnterBackgroundNotification,
+                                    NULL,
+                                    CFNotificationSuspensionBehaviorDeliverImmediately);
+    
+    CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(),
+                                    this,
+                                    &appWillEnterForegroundNotification,
+                                    (__bridge CFStringRef)UIApplicationWillEnterForegroundNotification,
+                                    NULL,
+                                    CFNotificationSuspensionBehaviorDeliverImmediately);
+    
+    CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(),
+                                    this,
+                                    &appWillTerminateNotification,
+                                    (__bridge CFStringRef)UIApplicationWillTerminateNotification,
+                                    NULL,
+                                    CFNotificationSuspensionBehaviorDeliverImmediately);
+    
+    CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(),
+                                    this,
+                                    &mediaServicesWereResetNotification,
+                                    (__bridge CFStringRef)AVAudioSessionMediaServicesWereResetNotification,
+                                    NULL,
+                                    CFNotificationSuspensionBehaviorDeliverImmediately);
+}
+
+void CCOLAudioEngine::startStop() {
+    // Start or stop the engine depending on state
+    printf("CCOLAudioEngine: Start/stop.\n");
+    
+    if (isForeground || iaaConnected) {
+        printf("CCOLAudioEngine: App is foreground or IAA connected.\n");
+        if (mGraph != nullptr) {
+            Boolean initialized = true;
+            checkError(AUGraphIsInitialized(mGraph, &initialized), "Error checking initializing of AUGraph");
+            if (!initialized) {
+                printf("CCOLAudioEngine: Initializing AUGraph.\n");
+                checkError(AUGraphInitialize (mGraph), "Error initializing AUGraph");
+            }
+            startGraph();
+        }
+    } else {
+        printf("CCOLAudioEngine: App is background, IAA disconnected.\n");
+        stopGraph();
+    }
+}
+
+void CCOLAudioEngine::startGraph() {
+    
+    Boolean isRunning = false;
+    AUGraphIsRunning(mGraph, &isRunning);
+    
+    if (!isRunning) {
+        printf("CCOLAudioEngine: Starting AUGraph.\n");
+        CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kCCOLSetAudioSessionActiveNotification, NULL, NULL, true);
+        checkError(AUGraphStart(mGraph), "Error starting AUGraph");
+    }
+}
+
+void CCOLAudioEngine::stopGraph() {
+
+    Boolean isRunning = false;
+    AUGraphIsRunning(mGraph, &isRunning);
+    
+    if (isRunning) {
+        printf("CCOLAudioEngine: Stopping AUGraph.\n");
+        checkError(AUGraphStop(mGraph),"Cannot stop AUGraph");
+        CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kCCOLSetAudioSessionInactiveNotification, NULL, NULL, true);
+    }
+    
+}
+
+#pragma mark Inter App Audio
+void audioUnitPropertyListenerDispatcher(void *inRefCon, AudioUnit inUnit, AudioUnitPropertyID inID, AudioUnitScope inScope, AudioUnitElement inElement) {
+    printf("CCOLAudioEngine: AudioUnitPropertyListenerDispatcher");
+    CCOLAudioEngine *SELF = (CCOLAudioEngine*)inRefCon;
+    //[SELF audioUnitPropertyChanged:inRefCon unit:inUnit propID:inID scope:inScope element:inElement];
+    
+    if (inID == kAudioUnitProperty_IsInterAppConnected) {
+        SELF->interAppAudioConnectedDidChange();
+    }
+}
+
+void CCOLAudioEngine::initializeIAA(CFStringRef componentName, OSType componentManufacturer) {
+
+    printf("CCOLAudioEngine: Registering IAA...\n");
+    iaaConnected = false;
+    
+    // Add property listener for inter-app audio
+    checkError(AudioUnitAddPropertyListener(mRemoteIO, kAudioUnitProperty_IsInterAppConnected, audioUnitPropertyListenerDispatcher, this), "Error setting IAA connected property listener");
+    checkError(AudioUnitAddPropertyListener(mRemoteIO, kAudioOutputUnitProperty_HostTransportState, audioUnitPropertyListenerDispatcher, this), "Error setting IAA host transport state listener");
+
+    // Publish the inter-app audio component
+    AudioComponentDescription audioComponentDescription = {
+        kAudioUnitType_RemoteInstrument,
+        'iasp',
+        componentManufacturer,
+        0,
+        1
+    };
+    
+    checkError(AudioOutputUnitPublish(&audioComponentDescription, componentName, 1, mRemoteIO), "Cannot publish IAA component");
+}
+
+void CCOLAudioEngine::interAppAudioConnectedDidChange() {
+    UInt32 connected;
+    UInt32 dataSize = sizeof(UInt32);
+    checkError(AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_IsInterAppConnected, kAudioUnitScope_Global, 0, &connected, &dataSize), "Error getting IsInterAppConnected property");
+    if (connected != iaaConnected) {
+        iaaConnected = connected;
+        if (iaaConnected) {
+            printf("CCOLAudioEngine: IAA has connected.\n");
+        } else {
+            printf("CCOLAudioEngine: IAA has disconnected.\n");
+        }
+    }
+}
+
+#pragma mark App State Management
+void CCOLAudioEngine::appDidEnterBackground() {
+    printf("CCOLAudioEngine: App did enter background.\n");
+    isForeground = false;
+    startStop();
+}
+
+void CCOLAudioEngine::appWillEnterForeground() {
+    printf("CCOLAudioEngine: App will enter foreground.\n");
+    isForeground = true;
+    startStop();
+    // Update transport state
+}
+
+void CCOLAudioEngine::appWillTerminate() {
+    printf("CCOLAudioEngine: App will terminate.\n");
+    // cleanup
+}
+
+void CCOLAudioEngine::mediaServicesWereReset() {
+    printf("CCOLAudioEngine: Media services were reset.\n");
+    // clean up
+    // re-initialize AUGraph
 }
 
 #pragma mark Component Management

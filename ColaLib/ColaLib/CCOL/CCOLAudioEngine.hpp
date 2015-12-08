@@ -34,16 +34,34 @@ private:
     float                   attenuation;
     bool                    mute;
     
+    bool                    isForeground;
+    bool                    iaaConnected;
+    
     vector<CCOLComponent*>  components;
     
     CCOLTransportController*    transportController;
     
     void buildWaveTables();
-
+    void startGraph();
+    void stopGraph();
+    
 public:
     CCOLAudioEngine();
 
-    void initializeAUGraph(double sampleRateIn);
+    void initializeAUGraph(bool isForegroundIn);
+    void initializeIAA(CFStringRef componentName, OSType componentManufacturer);
+    void startStop();
+    
+    void interAppAudioConnectedDidChange();
+    
+    void appDidEnterBackground();
+    void appWillEnterForeground();
+    void appWillTerminate();
+    void mediaServicesWereReset();
+    
+    AudioUnit *getRemoteIO() {
+        return &mRemoteIO;
+    }
     
     // Component Management
     CCOLComponentAddress createComponent(char* componentType);

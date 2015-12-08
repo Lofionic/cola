@@ -13,11 +13,13 @@
 #import "CCOLMIDIComponent.hpp"
 #import "CCOLTransportController.hpp"
 #import "CCOLDefines.h"
+#import "CCOLUtility.h"
 
 @interface COLAudioEnvironment()
 
-@property (nonatomic) Float64                   sampleRate;
-@property (nonatomic) BOOL                      isForeground;
+@property (nonatomic) Float64   sampleRate;
+@property (nonatomic) BOOL      isForeground;
+@property (nonatomic) BOOL      iaaConnected;
 
 @end
 
@@ -57,14 +59,17 @@
         midiComponent = (CCOLMIDIComponent*)ccAudioEngine.createComponent((char*)[@"CCOLMIDIComponent" UTF8String]);
         
         // Observer for forced disconnects
-        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, engineNotificationCallback, CFSTR(CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, engineNotificationCallback, kCCOLEngineDidForceDisconnectNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, setAudioSessionActiveCallback, kCCOLSetAudioSessionActiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, setAudioSessionInactiveCallback, kCCOLSetAudioSessionInactiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+
     }
     return self;
 }
 
 static void engineNotificationCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     // Bounce the notifications from CFNotificationCenter into NSNotificationCenter
-    if (name == CFSTR(CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT)) {
+    if (name == kCCOLEngineDidForceDisconnectNotification) {
         CCOLOutputAddress outputAddress = (CCOLOutputAddress)CFDictionaryGetValue(userInfo, CFSTR("output"));
      
         NSDictionary *nsUserInfo = @{@"output" : [NSNumber numberWithUnsignedLongLong:outputAddress]};
@@ -72,8 +77,38 @@ static void engineNotificationCallback(CFNotificationCenterRef center, void *obs
     }
 }
 
+static void setAudioSessionActiveCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    printf("COLAudioEnvironment: Set AVAudioSession active.\n");
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error = nil;
+    [session setCategory: AVAudioSessionCategoryPlayback withOptions: AVAudioSessionCategoryOptionMixWithOthers error: &error];
+    if (error) {
+        NSLog(@"COLAudioEnvironment: Error setting AVAudioSession category : %@", error.description);
+    } else {
+        [session setActive: YES error: &error];
+        if (error) {
+            NSLog(@"COLAudioEnvironment: Error setting AVAudioSession active : %@", error.description);
+        }
+    }
+}
+
+static void setAudioSessionInactiveCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    printf("COLAudioEnvironment: Set AVAudioSession inactive.\n");
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error = nil;
+    [session setActive: NO error: &error];
+    if (error) {
+        NSLog(@"COLAudioEnvironment: Error setting AVAudioSession inactive : %@", error.description);
+    }
+}
+
 -(void)start {
-    ccAudioEngine.initializeAUGraph(self.sampleRate);
+    UIApplicationState appState = [[UIApplication sharedApplication] applicationState];
+    ccAudioEngine.initializeAUGraph(appState != UIApplicationStateBackground);
+    
+    [self initializeInterAppAudio];
+    
+    ccAudioEngine.startStop();
 }
 
 -(void)mute {
@@ -233,6 +268,24 @@ static void engineNotificationCallback(CFNotificationCenterRef center, void *obs
 -(void)allNotesOff {
     midiComponent->allNotesOff();
 }
+
+#pragma mark Inter-app-audio
+-(void)initializeInterAppAudio {
+    // Get the inter app info dictionary from the delegate
+    NSDictionary *infoDictionary = nil;
+    
+    if ([self.infoDelegate respondsToSelector:@selector(interAppInfoDictionary)]) {
+        infoDictionary = [self.infoDelegate interAppInfoDictionary];
+    }
+    
+    if (infoDictionary) {
+        NSString *componentName = infoDictionary[kDictionaryKeyComponentName];
+        NSString *manufacturerCode = infoDictionary[kDictionaryKeyComponentMaufacturer];
+        
+        ccAudioEngine.initializeIAA((__bridge CFStringRef)componentName, fourCharCode(manufacturerCode));
+    }
+}
+
 
 #pragma mark AudioEngine delegates
 //-(NSDictionary *)interAppInfoDictionaryForAudioEngine:(COLAudioEngine *)audioEngine {
