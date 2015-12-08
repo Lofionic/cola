@@ -91,6 +91,9 @@ void CCOLMIDIComponent::closeGate() {
 }
 
 void CCOLMIDIComponent::renderOutputs(unsigned int numFrames) {
+    
+    CCOLComponent::renderOutputs(numFrames);
+    
     // Output Buffers
     SignalType *keyboardOutBuffer = keyboardOut->prepareBufferOfSize(numFrames);
     SignalType *gateOutBuffer = gateOut->prepareBufferOfSize(numFrames);
@@ -118,5 +121,7 @@ void CCOLMIDIComponent::renderOutputs(unsigned int numFrames) {
         gateTrigger = false;
     }
     prevPitchbend = pitchbend;
+    
+    printf("MIDI: %.0f _ %.0f\n", gateOutBuffer[0], gateOutBuffer[1]);
 }
 

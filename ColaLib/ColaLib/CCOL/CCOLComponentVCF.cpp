@@ -54,6 +54,8 @@ void CCOLComponentVCF::initializeIO() {
 
 void CCOLComponentVCF::renderOutputs(unsigned int numFrames) {
     
+    CCOLComponent::renderOutputs(numFrames);
+    
     SignalType *lpOutBuffer = lpOut->prepareBufferOfSize(numFrames);
     SignalType *hpOutBuffer = hpOut->prepareBufferOfSize(numFrames);
     SignalType *bpOutBuffer = bpOut->prepareBufferOfSize(numFrames);
