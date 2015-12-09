@@ -54,16 +54,27 @@ void CCOLTransportController::renderOutputs(unsigned int numFrames, double sampl
             currentBeat += sampleDelta;
         }
     }
-    
-    if (playing) {
-        printf("CCOLTransporterControl : %.3f\n", beatBuffer[0]);
-    }
 }
 
 void CCOLTransportController::syncWithIAA() {
     // TODO: Inter-app audio sync
+    if (engine->isIAAHostConnected()) {
+        Float64 iaaTempo = engine->getIAATempo();
+        if (iaaTempo > 0) {
+            tempo = iaaTempo;
+            currentBeat = engine->getIAABeat();
+        }
+    }
 }
 
-void CCOLTransportController::interappAudioTransportStateDidChange() {
+void CCOLTransportController::interappAudioTransportStateDidChange(bool hostIsPlaying) {
     // TODO: Respond to inter-app audio instructions
+    if (hostIsPlaying && !isPlaying()) {
+        syncWithIAA();
+        playing = true;
+        postUpdateNotification();
+    } else if (!hostIsPlaying && isPlaying()) {
+        playing = false;
+        postUpdateNotification();
+    }
 }

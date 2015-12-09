@@ -56,7 +56,7 @@ public:
     void stop();
     void stopAndReset();
     void renderOutputs(unsigned int numFrames, double sampleRate);
-    void interappAudioTransportStateDidChange();
+    void interappAudioTransportStateDidChange(bool hostIsPaying);
 };
 
 #endif /* CCOLTransportController_hpp */

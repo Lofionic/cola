@@ -25,6 +25,7 @@ SignalType ccSquareWaveTable[WAVETABLE_SIZE];
 
 const float CCOL_AUDIO_ENGINE_MUTE_RATE = 0.02;
 
+
 using namespace std;
 
 #pragma mark App State
@@ -79,13 +80,11 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     SignalType *outB;
     
     // Sync with iaa
-    //[audioEngine updateHostBeatAndTempo];
+    audioEngine->updateHostBeatAndTempo();
     
     // Fill the beat buffer
     audioEngine->getTransportController()->renderOutputs(inNumberFrames, audioEngine->getSampleRate());
-    //COLTransportController *transportController = [[COLAudioEnvironment sharedEnvironment] transportController];
-    //[transportController renderOutputs:inNumberFrames];
-    
+
     // Pull the buffer chain
     CCOLComponentInput *masterL = (CCOLComponentInput*)audioEngine->getMasterInput(0);
     CCOLComponentInput *masterR = (CCOLComponentInput*)audioEngine->getMasterInput(1);
@@ -94,7 +93,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
                                          
     // Split left channel into across both channels, if right is not connected
     if (masterR->isConnected()) {
-        rightBuffer     = masterR->getBuffer(inNumberFrames);
+        rightBuffer = masterR->getBuffer(inNumberFrames);
     } else {
         rightBuffer = leftBuffer;
     }
@@ -121,6 +120,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
             audioEngine->setAttenuation(attenuation);
         }
     }
+    
     // Render the orphans (disconnected components)
     size_t componentCount = audioEngine->getComponentCount();
     for (int i = 0; i < componentCount; i++) {
@@ -142,7 +142,7 @@ CCOLAudioEngine::CCOLAudioEngine() {
     attenuation = 1.0;
     mute = false;
     
-    iaaConnected = false;
+    iaaHostConnected = false;
     
     audioContext = new CCOLAudioContext(this, 2);
 
@@ -202,9 +202,6 @@ void CCOLAudioEngine::initializeAUGraph(bool isForegroundIn) {
     
     checkError(AudioUnitSetProperty(mRemoteIO, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(streamFormat)), "Cannot set RemoteIO stream format");
     
-//    // Initialize graph
-//    checkError(AUGraphInitialize (mGraph), "Error initializing AUGraph");
-    
     // Register observers
     CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(),
                                     this,
@@ -238,18 +235,10 @@ void CCOLAudioEngine::initializeAUGraph(bool isForegroundIn) {
 void CCOLAudioEngine::startStop() {
     // Start or stop the engine depending on state
     printf("CCOLAudioEngine: Start/stop.\n");
-    
-    if (isForeground || iaaConnected) {
+
+    if (isForeground || iaaHostConnected) {
         printf("CCOLAudioEngine: App is foreground or IAA connected.\n");
-        if (mGraph != nullptr) {
-            Boolean initialized = true;
-            checkError(AUGraphIsInitialized(mGraph, &initialized), "Error checking initializing of AUGraph");
-            if (!initialized) {
-                printf("CCOLAudioEngine: Initializing AUGraph.\n");
-                checkError(AUGraphInitialize (mGraph), "Error initializing AUGraph");
-            }
-            startGraph();
-        }
+        startGraph();
     } else {
         printf("CCOLAudioEngine: App is background, IAA disconnected.\n");
         stopGraph();
@@ -258,13 +247,22 @@ void CCOLAudioEngine::startStop() {
 
 void CCOLAudioEngine::startGraph() {
     
-    Boolean isRunning = false;
-    AUGraphIsRunning(mGraph, &isRunning);
-    
-    if (!isRunning) {
-        printf("CCOLAudioEngine: Starting AUGraph.\n");
-        CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kCCOLSetAudioSessionActiveNotification, NULL, NULL, true);
-        checkError(AUGraphStart(mGraph), "Error starting AUGraph");
+    if (mGraph != nullptr) {
+        Boolean initialized = true;
+        checkError(AUGraphIsInitialized(mGraph, &initialized), "Error checking initializing of AUGraph");
+        if (!initialized) {
+            printf("CCOLAudioEngine: Initializing AUGraph.\n");
+            checkError(AUGraphInitialize (mGraph), "Error initializing AUGraph");
+        }
+        
+        Boolean isRunning = false;
+        AUGraphIsRunning(mGraph, &isRunning);
+        
+        if (!isRunning) {
+            printf("CCOLAudioEngine: Starting AUGraph.\n");
+            CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kCCOLSetAudioSessionActiveNotification, NULL, NULL, true);
+            checkError(AUGraphStart(mGraph), "Error starting AUGraph");
+        }
     }
 }
 
@@ -289,13 +287,15 @@ void audioUnitPropertyListenerDispatcher(void *inRefCon, AudioUnit inUnit, Audio
     
     if (inID == kAudioUnitProperty_IsInterAppConnected) {
         SELF->interAppAudioConnectedDidChange();
+    } else if (inID == kAudioOutputUnitProperty_HostTransportState) {
+        SELF->interAppAudioHostTransportStateDidChange();
     }
 }
 
 void CCOLAudioEngine::initializeIAA(CFStringRef componentName, OSType componentManufacturer) {
 
     printf("CCOLAudioEngine: Registering IAA...\n");
-    iaaConnected = false;
+    iaaHostConnected = false;
     
     // Add property listener for inter-app audio
     checkError(AudioUnitAddPropertyListener(mRemoteIO, kAudioUnitProperty_IsInterAppConnected, audioUnitPropertyListenerDispatcher, this), "Error setting IAA connected property listener");
@@ -317,12 +317,89 @@ void CCOLAudioEngine::interAppAudioConnectedDidChange() {
     UInt32 connected;
     UInt32 dataSize = sizeof(UInt32);
     checkError(AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_IsInterAppConnected, kAudioUnitScope_Global, 0, &connected, &dataSize), "Error getting IsInterAppConnected property");
-    if (connected != iaaConnected) {
-        iaaConnected = connected;
-        if (iaaConnected) {
+    if (connected != iaaHostConnected) {
+        iaaHostConnected = connected;
+        if (iaaHostConnected) {
             printf("CCOLAudioEngine: IAA has connected.\n");
+            iaaHostImage = AudioOutputUnitGetHostIcon(mRemoteIO, 114);
+            startStop();
         } else {
             printf("CCOLAudioEngine: IAA has disconnected.\n");
+            startStop();
+        }
+    }
+}
+
+void CCOLAudioEngine::interAppAudioHostTransportStateDidChange() {
+    updateTransportStateFromHostCallback();
+}
+
+void CCOLAudioEngine::updateTransportStateFromHostCallback() {
+    if (iaaHostConnected) {
+        if (callbackInfo == nil) {
+            getHostCalbackInfo();
+        }
+        if (callbackInfo != nil) {
+            Boolean isPlaying =     iaaHostPlaying;
+            Boolean isRecording =   iaaHostRecording;
+            Float64 outCurrentSampleInTimeline = 0;
+            void * hostUserData = callbackInfo->hostUserData;
+            
+            // Get transport state
+            OSStatus result =  callbackInfo->transportStateProc2(hostUserData,
+                                                                 &isPlaying,
+                                                                 &isRecording, NULL,
+                                                                 &outCurrentSampleInTimeline,
+                                                                 NULL, NULL, NULL);
+            if (result == noErr) {
+                iaaHostPlaying = isPlaying;
+                iaaHostRecording = isRecording;
+                iaaHostPlayTime = outCurrentSampleInTimeline;
+            } else {
+                printf("CCOLAudioEngine: Error occured fetching callBackInfo->transportStateProc2 : %d", (int)result);
+            }
+            
+            getTransportController()->interappAudioTransportStateDidChange(iaaHostPlaying);
+        }
+    }
+}
+
+void CCOLAudioEngine::updateHostBeatAndTempo() {
+    if (iaaHostConnected) {
+        if (callbackInfo == nil) {
+            getHostCalbackInfo();
+        }
+        if (callbackInfo != nil) {
+            Float64 outCurrentBeat;
+            Float64 outTempo;
+            
+            void * hostUserData = callbackInfo->hostUserData;
+            OSStatus result = callbackInfo->beatAndTempoProc(hostUserData,
+                                                             &outCurrentBeat,
+                                                             &outTempo);
+            
+            if (result == noErr) {
+                iaaHostBeat = outCurrentBeat;
+                iaaHostTempo = outTempo;
+            } else  {
+                printf("Error occured fetching callbackInfo->beatAndTempProc : %d", (int)result);
+            }
+        }
+    }
+}
+
+void CCOLAudioEngine::getHostCalbackInfo() {
+    if (iaaHostConnected) {
+        if (callbackInfo) {
+            free(callbackInfo);
+        }
+        UInt32 dataSize = sizeof(HostCallbackInfo);
+        callbackInfo = (HostCallbackInfo*) malloc(dataSize);
+        OSStatus result = AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_HostCallbacks, kAudioUnitScope_Global, 0, callbackInfo, &dataSize);
+        if (result != noErr) {
+            printf("CCOLAudioEngine: Error occured fetching kAudioUnitProperty_HostCallbacks : %d", (int)result);
+            free(callbackInfo);
+            callbackInfo = NULL;
         }
     }
 }

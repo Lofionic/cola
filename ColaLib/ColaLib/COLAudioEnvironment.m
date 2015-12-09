@@ -49,9 +49,7 @@
         if ([appDelegate conformsToProtocol:@protocol(COLAudioEnvironmentInfoDelegate) ]) {
             self.infoDelegate = appDelegate;
         }
-        
-        [self registerApplicationStateNotifications];
-        
+
         // Cherry Cola
         // ccAudioEngine = new CCOLAudioEngine();
         
@@ -81,6 +79,7 @@ static void setAudioSessionActiveCallback(CFNotificationCenterRef center, void *
     printf("COLAudioEnvironment: Set AVAudioSession active.\n");
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *error = nil;
+    [session setPreferredSampleRate: [[AVAudioSession sharedInstance] sampleRate] error: nil];
     [session setCategory: AVAudioSessionCategoryPlayback withOptions: AVAudioSessionCategoryOptionMixWithOthers error: &error];
     if (error) {
         NSLog(@"COLAudioEnvironment: Error setting AVAudioSession category : %@", error.description);
@@ -135,63 +134,6 @@ static void setAudioSessionInactiveCallback(CFNotificationCenterRef center, void
     ccAudioEngine.getTransportController()->stopAndReset();
 }
 
-#pragma mark App State Management
-#pragma mark App State Management
--(void)registerApplicationStateNotifications {
-    
-    UIApplicationState appState = [[UIApplication sharedApplication] applicationState];
-    self.isForeground = (appState != UIApplicationStateBackground);
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(appDidEnterBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(appWillEnterForeground)
-                                                 name: UIApplicationWillEnterForegroundNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(mediaServicesWereReset)
-                                                 name: AVAudioSessionMediaServicesWereResetNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(appWillTerminate)
-                                                 name: UIApplicationWillTerminateNotification
-                                               object: nil];
-}
-
--(void)appDidEnterBackground {
-    NSLog(@"COLAudioEnvironment: App did enter background");
-    self.isForeground = NO;
-    // [self startStopEngine];
-    
-    ccAudioEngine.setMute(true);
-}
-
--(void)appWillEnterForeground {
-    NSLog(@"COLAudioEnvironment: App will enter foreground");
-    self.isForeground = YES;
-    // [self startStopEngine];
-    // [self updateTransportStateFromHostCallback];
-    
-    ccAudioEngine.setMute(false);
-}
-
--(void)mediaServicesWereReset {
-    NSLog(@"COLAudioEnvironment: Media services were reset");
-    // TODO: Clear up & rebuild audio engine
-    // [self cleanup];
-    // [self initializeAUGraph];
-}
-
--(void)appWillTerminate {
-    NSLog(@"COLAudioEnvironment: App will terminate");
-    // [self cleanup];
-    
-}
 
 #pragma mark Communication with Engine
 -(CCOLComponentAddress)createComponentOfType:(char*)componentType {
