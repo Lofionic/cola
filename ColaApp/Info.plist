@@ -6,9 +6,9 @@
 	<array>
 		<dict>
 			<key>manufacturer</key>
-			<string>lfco</string>
+			<string>lfnc</string>
 			<key>name</key>
-			<string>Cola Demo App</string>
+			<string>Cola Out</string>
 			<key>subtype</key>
 			<string>iasp</string>
 			<key>type</key>

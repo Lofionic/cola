@@ -105,8 +105,8 @@ CGFloat kKeyboardHeight;
 
 -(NSDictionary *)interAppInfoDictionary {
     return @{
-             kDictionaryKeyComponentName : @"Cola Demo App",
-             kDictionaryKeyComponentMaufacturer : @"lfco"
+             kDictionaryKeyComponentName : @"Cola Out",
+             kDictionaryKeyComponentMaufacturer : @"lfnc"
              };
 }
 

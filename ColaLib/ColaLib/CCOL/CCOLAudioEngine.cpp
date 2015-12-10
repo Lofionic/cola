@@ -310,7 +310,7 @@ void CCOLAudioEngine::initializeIAA(CFStringRef componentName, OSType componentM
         1
     };
     
-    checkError(AudioOutputUnitPublish(&audioComponentDescription, componentName, 1, mRemoteIO), "Cannot publish IAA component");
+    checkError(AudioOutputUnitPublish(&audioComponentDescription, componentName, 0, mRemoteIO), "Cannot publish IAA component");
 }
 
 void CCOLAudioEngine::interAppAudioConnectedDidChange() {
