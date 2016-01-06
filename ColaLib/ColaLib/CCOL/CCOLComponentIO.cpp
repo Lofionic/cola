@@ -79,8 +79,8 @@ SignalType* CCOLComponentInput::getEmptyBuffer(unsigned int numFrames) {
     if (numFrames != emptyBufferSize) {
         free(emptyBuffer);
         emptyBufferSize = numFrames;
-        emptyBuffer = (SignalType*)malloc(emptyBufferSize * sizeof(SignalType*));
-        memset(emptyBuffer, 0, emptyBufferSize * sizeof(SignalType*));
+        emptyBuffer = (SignalType*)malloc(emptyBufferSize * sizeof(SignalType));
+        memset(emptyBuffer, 0, emptyBufferSize * sizeof(SignalType));
     }
     
     return emptyBuffer;
@@ -170,8 +170,8 @@ SignalType* CCOLComponentOutput::prepareBufferOfSize(unsigned int numFrames) {
             free(buffer);
         }
         bufferSize = numFrames;
-        buffer = (SignalType*)malloc(bufferSize * sizeof(SignalType*));
-        memset(buffer, 0, bufferSize * sizeof(SignalType*));
+        buffer = (SignalType*)malloc(bufferSize * sizeof(SignalType));
+        memset(buffer, 0, bufferSize * sizeof(SignalType));
     }
     
     return buffer;
@@ -240,7 +240,7 @@ bool CCOLComponentOutput::connect(CCOLComponentInput *inputIn) {
 bool CCOLComponentOutput::disconnect() {
     if (isConnected()) {
         setConnected(nullptr);
-        memset(buffer, 0, bufferSize * sizeof(SignalType*)); // Empty the buffer
+        memset(buffer, 0, bufferSize * sizeof(SignalType)); // Empty the buffer
         printf("%s|%s disconnected.\n", getComponent()->getIdentifier(), getName());
         return true;
     } else {
