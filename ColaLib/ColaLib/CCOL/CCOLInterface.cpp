@@ -12,6 +12,7 @@ void CCOLInterfaceComponent::initializeIO(unsigned int inputCount) {
     for (int i = 0; i < inputCount; ++i) {
         string* inputName = new string("In " + std::to_string(i));
         inputs[i] = new CCOLComponentInput(this, kIOTypeAudio, (const char*)inputName->c_str());
+        delete inputName;
     }
 
     printf("Initialized interface with %i inputs\n", inputCount);

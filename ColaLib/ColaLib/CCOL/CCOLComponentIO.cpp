@@ -17,7 +17,7 @@ static unsigned int    emptyBufferSize;
 CCOLComponentConnector::CCOLComponentConnector(CCOLComponent *componentIn, kIOType ioTypeIn, const char *nameIn) {
     component = componentIn;
     ioType = ioTypeIn;
-    name = nameIn;
+    strcpy(name, nameIn);
 
     connectedTo = nullptr;
 }

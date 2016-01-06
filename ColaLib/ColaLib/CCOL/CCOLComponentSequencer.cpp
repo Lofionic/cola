@@ -16,6 +16,7 @@ void CCOLComponentSequencer::initializeIO() {
         string* inputName = new string("Pitch " + std::to_string(i + 1));
         pitchControls[i] = new CCOLComponentParameter(this, (char*)inputName->c_str());
         theParameters.push_back(pitchControls[i]);
+        delete inputName;
     }
     setParameters(theParameters);
     

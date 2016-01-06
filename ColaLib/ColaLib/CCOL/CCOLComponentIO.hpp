@@ -40,7 +40,7 @@ protected:
     CCOLComponentConnector*    connectedTo;
    
 private:
-    const char*         name;
+    char            name[32];
 };
 
 class CCOLComponentInput : public CCOLComponentConnector {

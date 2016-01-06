@@ -48,6 +48,9 @@ private:
     
     vector<CCOLComponent*>  components;
     
+    // Vectors of deferred changes to render chain
+    vector<CCOLComponentConnector*> pendingDisconnects;
+    
     CCOLTransportController*    transportController;
     
     void buildWaveTables();
@@ -76,6 +79,8 @@ public:
     void appWillEnterForeground();
     void appWillTerminate();
     void mediaServicesWereReset();
+    
+    void doPending();
     
     AudioUnit *getRemoteIO() {
         return &mRemoteIO;

@@ -25,7 +25,6 @@ SignalType ccSquareWaveTable[WAVETABLE_SIZE];
 
 const float CCOL_AUDIO_ENGINE_MUTE_RATE = 0.02;
 
-
 using namespace std;
 
 #pragma mark App State
@@ -134,7 +133,18 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     masterL->engineDidRender(inNumberFrames);
     masterR->engineDidRender(inNumberFrames);
     
+    audioEngine->doPending();
+    
     return noErr;
+}
+
+void CCOLAudioEngine::doPending() {
+    while (pendingDisconnects.size() > 0) {
+        CCOLComponentConnector *disconnectConnector = pendingDisconnects.back();
+        disconnectConnector->disconnect();
+        pendingDisconnects.pop_back();
+        
+    }
 }
 
 CCOLAudioEngine::CCOLAudioEngine() {
@@ -267,7 +277,6 @@ void CCOLAudioEngine::startGraph() {
 }
 
 void CCOLAudioEngine::stopGraph() {
-
     Boolean isRunning = false;
     AUGraphIsRunning(mGraph, &isRunning);
     
@@ -276,7 +285,6 @@ void CCOLAudioEngine::stopGraph() {
         checkError(AUGraphStop(mGraph),"Cannot stop AUGraph");
         CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kCCOLSetAudioSessionInactiveNotification, NULL, NULL, true);
     }
-    
 }
 
 #pragma mark Inter App Audio
@@ -435,27 +443,29 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
     
     CCOLComponent *newComponent = nullptr;
     
-    if (string(componentType) == kCCOLComponentTypeVCO) {
+    string componentTypeString = string(componentType);
+    
+    if (componentTypeString == kCCOLComponentTypeVCO) {
         newComponent = new CCOLComponentVCO(audioContext);
-    } else if (string(componentType) == kCCOLComponentTypeEG) {
+    } else if (componentTypeString == kCCOLComponentTypeEG) {
         newComponent = new CCOLComponentEG(audioContext);
-    } else if (string(componentType) == kCCOLComponentTypeLFO) {
+    } else if (componentTypeString == kCCOLComponentTypeLFO) {
         newComponent = new CCOLComponentLFO(audioContext);
-    } else if (string(componentType) == kCCOLComponentTypeVCA) {
+    } else if (componentTypeString == kCCOLComponentTypeVCA) {
         newComponent = new CCOLComponentVCA(audioContext);
-    } else if (string(componentType) == kCCOLComponentTypeMultiples) {
+    } else if (componentTypeString == kCCOLComponentTypeMultiples) {
         newComponent = new CCOLComponentMultiples(audioContext);
-    } else if (string(componentType) == kCCOLComponentTypeMixer) {
+    } else if (componentTypeString == kCCOLComponentTypeMixer) {
         newComponent = new CCOLComponentMixer(audioContext);
-    } else if (string(componentType) == kCCOLComponentTypePan) {
+    } else if (componentTypeString == kCCOLComponentTypePan) {
         newComponent = new CCOLComponentPan(audioContext);
-    } else if (string(componentType) == kCCOLComponentTypeSequencer) {
+    } else if (componentTypeString == kCCOLComponentTypeSequencer) {
         newComponent = new CCOLComponentSequencer(audioContext);
-    } else if (string(componentType) == KCCOLComponentTypeMIDI) {
+    } else if (componentTypeString == KCCOLComponentTypeMIDI) {
         newComponent = new CCOLMIDIComponent(audioContext);
-    } else if (string(componentType) == kCCOLComponentNoiseGenerator) {
+    } else if (componentTypeString == kCCOLComponentNoiseGenerator) {
         newComponent = new CCOLComponentNoiseGenerator(audioContext);
-    } else if (string(componentType) == kCCOLComponentTypeVCF) {
+    } else if (componentTypeString == kCCOLComponentTypeVCF) {
         newComponent = new CCOLComponentVCF(audioContext);
     }
     
@@ -517,18 +527,22 @@ bool CCOLAudioEngine::connect(CCOLOutputAddress outputAddress, CCOLInputAddress 
 
 // Disconnect an input from its output, return true if successful
 bool CCOLAudioEngine::disconnect(CCOLConnectorAddress connectorAddress) {
+    
     CCOLComponentConnector *connector = (CCOLComponentConnector*)connectorAddress;
     if (connector->getIOType() & kIOTypeInput) {
         // Connector is input
-        connector->disconnect();
+        pendingDisconnects.push_back(connector);
+//        connector->disconnect();
         return true;
     } else {
         if (connector->isConnected()) {
-            connector->getConnected()->disconnect();
+            pendingDisconnects.push_back(connector->getConnected());
+//            connector->getConnected()->disconnect();
             return true;
         }
     }
     return false;
+
 }
 
 // Returns the global context master input at specified index
