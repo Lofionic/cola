@@ -81,7 +81,7 @@ void CCOLComponentVCF::renderOutputs(unsigned int numFrames) {
         float cutoff = paramCutoffFreq->getOutputAtDelta(delta);
         
         cutoff = cutoff + (cvFreqBuffer[i] * paramCvFreqAmount->getOutputAtDelta(delta));
-        cutoff = fmin(fmax(cutoff, 0), 1);
+        cutoff = fmin(fmax(cutoff, 0.0f), 1.0f);
         
         
         q = 1.0f - cutoff;
@@ -90,7 +90,7 @@ void CCOLComponentVCF::renderOutputs(unsigned int numFrames) {
         
         float res = paramRes->getOutputAtDelta(delta);
         res = res + (cvResBuffer[i] * paramCvResAmount->getOutputAtDelta(delta));
-        res = fminf(fmaxf(res, 0), 1.0);
+        res = fminf(fmaxf(res, 0.0f), 1.0f);
         
         q = res * (1.0f + 0.5f * q * (1.0f - q + 5.6f * q * q));
         

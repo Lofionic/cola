@@ -324,18 +324,18 @@
                  "width" : 2,
                  "type" : "CCOLComponentTypeVCF",
                  "view" : {
-                 "asset" : "vcf_aa",
+                 "asset" : "vcf_a",
                  "connectors" : [
                                  {
                                  "type" : "input",
                                  "connection" : "Audio in",
-                                 "x" : 30,
+                                 "x" : 24,
                                  "y" : 270
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "LP Out",
-                                 "x" : 60,
+                                 "x" : 57,
                                  "y" : 270
                                  },
                                  {
@@ -347,26 +347,26 @@
                                  {
                                  "type" : "output",
                                  "connection" : "BP Out",
-                                 "x" : 120,
+                                 "x" : 123,
                                  "y" : 270
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Notch Out",
-                                 "x" : 150,
+                                 "x" : 156,
                                  "y" : 270
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "CV Freq In",
-                                 "x" : 75,
-                                 "y" : 125
+                                 "x" : 90,
+                                 "y" : 122
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "CV Res In",
-                                 "x" : 75,
-                                 "y" : 220
+                                 "x" : 90,
+                                 "y" : 218
                                  }
                                  ],
                  "controls" : [
@@ -375,14 +375,14 @@
                                "parameter" : "Frequency",
                                "asset" : "large_white",
                                "x" : 50,
-                               "y" : 75
+                               "y" : 69
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "CV Freq Amount",
                                "asset" : "large_white",
                                "x" : 130,
-                               "y" : 75
+                               "y" : 69
                                },
                                {
                                "type" : "rotary_encoder",
