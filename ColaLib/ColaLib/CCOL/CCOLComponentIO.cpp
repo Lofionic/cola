@@ -79,8 +79,8 @@ SignalType* CCOLComponentInput::getEmptyBuffer(unsigned int numFrames) {
     if (numFrames != emptyBufferSize) {
         free(emptyBuffer);
         emptyBufferSize = numFrames;
-        emptyBuffer = (SignalType*)malloc(emptyBufferSize * sizeof(SignalType));
-        memset(emptyBuffer, 0, emptyBufferSize * sizeof(SignalType));
+        emptyBuffer = (SignalType*)malloc(emptyBufferSize * sizeof(SignalType*));
+        memset(emptyBuffer, 0, emptyBufferSize * sizeof(SignalType*));
     }
     
     return emptyBuffer;
@@ -170,8 +170,8 @@ SignalType* CCOLComponentOutput::prepareBufferOfSize(unsigned int numFrames) {
             free(buffer);
         }
         bufferSize = numFrames;
-        buffer = (SignalType*)malloc(bufferSize * sizeof(SignalType));
-        memset(buffer, 0, bufferSize * sizeof(SignalType));
+        buffer = (SignalType*)malloc(bufferSize * sizeof(SignalType*));
+        memset(buffer, 0, bufferSize * sizeof(SignalType*));
     }
     
     return buffer;
