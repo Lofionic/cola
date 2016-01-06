@@ -209,7 +209,6 @@
 -(void)loadPresetAtIndex:(NSUInteger)index {
     
     Preset *selectedPreset = [[PresetController sharedController] recallPresetAtIndex:index];
-    [self.collectionView reloadData];
     
     UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
     [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
