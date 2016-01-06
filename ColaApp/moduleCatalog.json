@@ -316,13 +316,15 @@
                  }
                  },
                  
+                 
+                 
                  {
                  "id" : "VCFA",
                  "name" : "VCF A",
                  "width" : 2,
                  "type" : "CCOLComponentTypeVCF",
                  "view" : {
-                 "asset" : "vcf_a",
+                 "asset" : "vcf_aa",
                  "connectors" : [
                                  {
                                  "type" : "input",
@@ -333,18 +335,36 @@
                                  {
                                  "type" : "output",
                                  "connection" : "LP Out",
-                                 "x" : 120,
+                                 "x" : 60,
                                  "y" : 270
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "HP Out",
+                                 "x" : 90,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "BP Out",
+                                 "x" : 120,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Notch Out",
                                  "x" : 150,
                                  "y" : 270
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "CV Freq In",
+                                 "x" : 75,
+                                 "y" : 125
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "CV Res In",
                                  "x" : 75,
                                  "y" : 220
                                  }
@@ -354,26 +374,40 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Frequency",
                                "asset" : "large_white",
-                               "x" : 90,
+                               "x" : 50,
+                               "y" : 75
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "CV Freq Amount",
+                               "asset" : "large_white",
+                               "x" : 130,
                                "y" : 75
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "Resonance",
                                "asset" : "large_white",
-                               "x" : 130,
+                               "x" : 50,
                                "y" : 170
                                },
                                {
                                "type" : "rotary_encoder",
-                               "parameter" : "CV Freq Amount",
+                               "parameter" : "CV Res Amount",
                                "asset" : "large_white",
-                               "x" : 50,
+                               "x" : 130,
                                "y" : 170
                                }
                                ]
                  }
                  },
+                 
+                 
+                 
+                 
+                 
+                 
+                 
                  {
                  "id" : "PAN",
                  "name" : "Pan",
