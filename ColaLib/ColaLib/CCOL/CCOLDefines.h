@@ -10,6 +10,7 @@
 #define CCOLDefines_h
 
 #import "CCOLTypes.h"
+#import <UIKit/UIKit.h>
 
 #define CV_FREQUENCY_RANGE 8372 // C9
 
@@ -22,6 +23,8 @@ extern SignalType ccSawWaveTable[WAVETABLE_SIZE];
 extern SignalType ccRampWaveTable[WAVETABLE_SIZE];
 extern SignalType ccSquareWaveTable[WAVETABLE_SIZE];
 
-#define CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT "CFNoteEngineDidForceDisconnect"
+const CFStringRef kCCOLEngineDidForceDisconnectNotification     = CFSTR("kCCOLEngineDidForceDisconnectNotification");
+const CFStringRef kCCOLSetAudioSessionActiveNotification        = CFSTR("CCOLSetAudioSessionActiveNotification");
+const CFStringRef kCCOLSetAudioSessionInactiveNotification      = CFSTR("CCOLSetAudioSessionInactiveNotification");
 
 #endif /* CCOLDefines_h */

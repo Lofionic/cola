@@ -13,11 +13,13 @@
 #import "CCOLMIDIComponent.hpp"
 #import "CCOLTransportController.hpp"
 #import "CCOLDefines.h"
+#import "Endian.h"
 
 @interface COLAudioEnvironment()
 
-@property (nonatomic) Float64                   sampleRate;
-@property (nonatomic) BOOL                      isForeground;
+@property (nonatomic) Float64   sampleRate;
+@property (nonatomic) BOOL      isForeground;
+@property (nonatomic) BOOL      iaaConnected;
 
 @end
 
@@ -47,9 +49,7 @@
         if ([appDelegate conformsToProtocol:@protocol(COLAudioEnvironmentInfoDelegate) ]) {
             self.infoDelegate = appDelegate;
         }
-        
-        [self registerApplicationStateNotifications];
-        
+
         // Cherry Cola
         // ccAudioEngine = new CCOLAudioEngine();
         
@@ -57,14 +57,17 @@
         midiComponent = (CCOLMIDIComponent*)ccAudioEngine.createComponent((char*)[@"CCOLMIDIComponent" UTF8String]);
         
         // Observer for forced disconnects
-        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, engineNotificationCallback, CFSTR(CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, engineNotificationCallback, kCCOLEngineDidForceDisconnectNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, setAudioSessionActiveCallback, kCCOLSetAudioSessionActiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, setAudioSessionInactiveCallback, kCCOLSetAudioSessionInactiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+
     }
     return self;
 }
 
 static void engineNotificationCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     // Bounce the notifications from CFNotificationCenter into NSNotificationCenter
-    if (name == CFSTR(CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT)) {
+    if (name == kCCOLEngineDidForceDisconnectNotification) {
         CCOLOutputAddress outputAddress = (CCOLOutputAddress)CFDictionaryGetValue(userInfo, CFSTR("output"));
      
         NSDictionary *nsUserInfo = @{@"output" : [NSNumber numberWithUnsignedLongLong:outputAddress]};
@@ -72,8 +75,39 @@ static void engineNotificationCallback(CFNotificationCenterRef center, void *obs
     }
 }
 
+static void setAudioSessionActiveCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    printf("COLAudioEnvironment: Set AVAudioSession active.\n");
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error = nil;
+    [session setPreferredSampleRate: [[AVAudioSession sharedInstance] sampleRate] error: nil];
+    [session setCategory: AVAudioSessionCategoryPlayback withOptions: AVAudioSessionCategoryOptionMixWithOthers error: &error];
+    if (error) {
+        NSLog(@"COLAudioEnvironment: Error setting AVAudioSession category : %@", error.description);
+    } else {
+        [session setActive: YES error: &error];
+        if (error) {
+            NSLog(@"COLAudioEnvironment: Error setting AVAudioSession active : %@", error.description);
+        }
+    }
+}
+
+static void setAudioSessionInactiveCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    printf("COLAudioEnvironment: Set AVAudioSession inactive.\n");
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error = nil;
+    [session setActive: NO error: &error];
+    if (error) {
+        NSLog(@"COLAudioEnvironment: Error setting AVAudioSession inactive : %@", error.description);
+    }
+}
+
 -(void)start {
-    ccAudioEngine.initializeAUGraph(self.sampleRate);
+    UIApplicationState appState = [[UIApplication sharedApplication] applicationState];
+    ccAudioEngine.initializeAUGraph(appState != UIApplicationStateBackground);
+    
+    [self initializeInterAppAudio];
+    
+    ccAudioEngine.startStop();
 }
 
 -(void)mute {
@@ -100,63 +134,6 @@ static void engineNotificationCallback(CFNotificationCenterRef center, void *obs
     ccAudioEngine.getTransportController()->stopAndReset();
 }
 
-#pragma mark App State Management
-#pragma mark App State Management
--(void)registerApplicationStateNotifications {
-    
-    UIApplicationState appState = [[UIApplication sharedApplication] applicationState];
-    self.isForeground = (appState != UIApplicationStateBackground);
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(appDidEnterBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(appWillEnterForeground)
-                                                 name: UIApplicationWillEnterForegroundNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(mediaServicesWereReset)
-                                                 name: AVAudioSessionMediaServicesWereResetNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(appWillTerminate)
-                                                 name: UIApplicationWillTerminateNotification
-                                               object: nil];
-}
-
--(void)appDidEnterBackground {
-    NSLog(@"COLAudioEnvironment: App did enter background");
-    self.isForeground = NO;
-    // [self startStopEngine];
-    
-    ccAudioEngine.setMute(true);
-}
-
--(void)appWillEnterForeground {
-    NSLog(@"COLAudioEnvironment: App will enter foreground");
-    self.isForeground = YES;
-    // [self startStopEngine];
-    // [self updateTransportStateFromHostCallback];
-    
-    ccAudioEngine.setMute(false);
-}
-
--(void)mediaServicesWereReset {
-    NSLog(@"COLAudioEnvironment: Media services were reset");
-    // TODO: Clear up & rebuild audio engine
-    // [self cleanup];
-    // [self initializeAUGraph];
-}
-
--(void)appWillTerminate {
-    NSLog(@"COLAudioEnvironment: App will terminate");
-    // [self cleanup];
-    
-}
 
 #pragma mark Communication with Engine
 -(CCOLComponentAddress)createComponentOfType:(char*)componentType {
@@ -234,6 +211,24 @@ static void engineNotificationCallback(CFNotificationCenterRef center, void *obs
     midiComponent->allNotesOff();
 }
 
+#pragma mark Inter-app-audio
+-(void)initializeInterAppAudio {
+    // Get the inter app info dictionary from the delegate
+    NSDictionary *infoDictionary = nil;
+    
+    if ([self.infoDelegate respondsToSelector:@selector(interAppInfoDictionary)]) {
+        infoDictionary = [self.infoDelegate interAppInfoDictionary];
+    }
+    
+    if (infoDictionary) {
+        NSString *componentName = infoDictionary[kDictionaryKeyComponentName];
+        NSString *manufacturerCode = infoDictionary[kDictionaryKeyComponentMaufacturer];
+        
+        ccAudioEngine.initializeIAA((__bridge CFStringRef)componentName, fourCharCode(manufacturerCode));
+    }
+}
+
+
 #pragma mark AudioEngine delegates
 //-(NSDictionary *)interAppInfoDictionaryForAudioEngine:(COLAudioEngine *)audioEngine {
 //    // Fetch the inter-app audio info from the app delegate
@@ -260,6 +255,20 @@ static void engineNotificationCallback(CFNotificationCenterRef center, void *obs
 
 -(void)exportEnvironment {
     // [COLExporter getJSONObjectForEnvironment:self];
+}
+
+
+static OSType fourCharCode(NSString *string) {
+    unsigned int fourCharCode;
+    
+    const char *bytes = (char*)[[string dataUsingEncoding:NSUTF8StringEncoding] bytes];
+    
+    *((char *) &fourCharCode + 0) = *(bytes + 0);
+    *((char *) &fourCharCode + 1) = *(bytes + 1);
+    *((char *) &fourCharCode + 2) = *(bytes + 2);
+    *((char *) &fourCharCode + 3) = *(bytes + 3);
+    
+    return EndianU32_NtoB(fourCharCode);
 }
 
 @end

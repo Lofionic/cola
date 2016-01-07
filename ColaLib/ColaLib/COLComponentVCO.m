@@ -75,7 +75,7 @@
     // Output Buffers
     AudioSignalType *outBuffer = [self.out prepareBufferOfSize:numFrames];
 
-    Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
+    // Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
     for (int i = 0; i < numFrames; i++) {
 
@@ -120,7 +120,7 @@
             freq *= lfoValue;
         }
         
-        phase += (M_PI * freq * CV_FREQUENCY_RANGE * powf(2, [self.range selectedIndex]) * [self.tune outputAtDelta:((float)i / numFrames)]) / sampleRate;
+        // phase += (M_PI * freq * CV_FREQUENCY_RANGE * powf(2, [self.range selectedIndex]) * [self.tune outputAtDelta:((float)i / numFrames)]) / sampleRate;
         
         if (phase > 2.0 * M_PI) {
             phase -= (2.0 * M_PI);

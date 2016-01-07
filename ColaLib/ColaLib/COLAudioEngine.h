@@ -25,7 +25,7 @@
     AudioUnit   mRemoteIO;
 }
 
-@property (nonatomic, weak) id<COLAudioEngineDelegate>  delegate;
+@property (nonatomic, weak) id  delegate;
 
 @property (readonly) BOOL isForeground;
 @property (readonly) BOOL iaaConnected;

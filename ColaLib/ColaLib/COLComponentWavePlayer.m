@@ -84,7 +84,7 @@
     
     // Set the client format description
     AudioStreamBasicDescription clientFormat = fileFormat;
-    clientFormat.mSampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
+    // clientFormat.mSampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     clientFormat.mFormatID = kAudioFormatLinearPCM;
     clientFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagIsNonInterleaved;
     clientFormat.mBitsPerChannel = sizeof(AudioSignalType) * 8;

@@ -73,13 +73,13 @@
 
     
     float barLength = (60.0 / tempo) * 4.0;
-    float samplesInBar = barLength * [[COLAudioEnvironment sharedEnvironment] sampleRate];
-    float sampleDelta = 4.0 / samplesInBar;
+    // float samplesInBar = barLength * [[COLAudioEnvironment sharedEnvironment] sampleRate];
+    // float sampleDelta = 4.0 / samplesInBar;
     
     for (int i = 0; i < numFrames; i++) {
         if (self.isPlaying) {
             self.beatBuffer[i] = currentBeat;
-            currentBeat += sampleDelta;
+            // currentBeat += sampleDelta;
         }
     }
     

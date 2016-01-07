@@ -91,6 +91,9 @@ void CCOLMIDIComponent::closeGate() {
 }
 
 void CCOLMIDIComponent::renderOutputs(unsigned int numFrames) {
+    
+    CCOLComponent::renderOutputs(numFrames);
+    
     // Output Buffers
     SignalType *keyboardOutBuffer = keyboardOut->prepareBufferOfSize(numFrames);
     SignalType *gateOutBuffer = gateOut->prepareBufferOfSize(numFrames);

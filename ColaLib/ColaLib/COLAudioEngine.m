@@ -12,6 +12,7 @@
 #import "Endian.h"
 #import "COLDefines.h"
 #import "COLTransportController.h"
+#import "CCOLUtility.h"
 #import "Audiobus.h"
 
 // Extern wavetables used by components
@@ -124,8 +125,8 @@ HostCallbackInfo *callbackInfo;
     if (self.isForeground || self.iaaConnected) {
         NSLog(@"App is foreground or Inter-App connected");
         
-        sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
-        
+//        sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
+//        
         if (mGraph) {
             Boolean initialized = YES;
             checkError(AUGraphIsInitialized(mGraph, &initialized), "Error checking initializing of AUGraph");
@@ -227,15 +228,15 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
             outA[i] = leftBuffer[i] * audioEngine.attenuation;
             outB[i] = rightBuffer[i] * audioEngine.attenuation;
             
-            if (audioEngine.isMuting && audioEngine.attenuation > 0.0) {
-                Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
-                Float32 newAttenuation = MAX(audioEngine.attenuation -= attenuationDelta, 0.0);
-                [audioEngine setAttenuation:newAttenuation];
-            } else if (!audioEngine.isMuting && audioEngine.attenuation < 1.0) {
-                Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
-                Float32 newAttenuation = MIN(audioEngine.attenuation += attenuationDelta, 1.0);
-                [audioEngine setAttenuation:newAttenuation];
-            }
+//            if (audioEngine.isMuting && audioEngine.attenuation > 0.0) {
+//                Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
+//                Float32 newAttenuation = MAX(audioEngine.attenuation -= attenuationDelta, 0.0);
+//                [audioEngine setAttenuation:newAttenuation];
+//            } else if (!audioEngine.isMuting && audioEngine.attenuation < 1.0) {
+//                Float32 attenuationDelta = 2.0 / [[COLAudioEnvironment sharedEnvironment] sampleRate];
+//                Float32 newAttenuation = MIN(audioEngine.attenuation += attenuationDelta, 1.0);
+//                [audioEngine setAttenuation:newAttenuation];
+//            }
         }
         
         [audioEngine.masterInputL engineDidRender];
@@ -320,9 +321,9 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 -(void)initializeInterAppAudio {
     // Get the inter app info dictionary from the delegate
     NSDictionary *infoDictionary = nil;
-    if ([self.delegate respondsToSelector:@selector(interAppInfoDictionaryForAudioEngine:)]) {
-        // infoDictionary = [self.delegate interAppInfoDictionaryForAudioEngine:self];
-    }
+//    if ([self respondsToSelector:@selector(interAppInfoDictionaryForAudioEngine:)]) {
+//        // infoDictionary = [self.delegate interAppInfoDictionaryForAudioEngine:self];
+//    }
     
     if (infoDictionary) {
         NSLog(@"Registering Inter-App Audio");
@@ -502,26 +503,6 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
 void audioUnitPropertyListenerDispatcher(void *inRefCon, AudioUnit inUnit, AudioUnitPropertyID inID, AudioUnitScope inScope, AudioUnitElement inElement) {
     COLAudioEngine *SELF = (__bridge COLAudioEngine *)inRefCon;
     [SELF audioUnitPropertyChanged:inRefCon unit:inUnit propID:inID scope:inScope element:inElement];
-}
-
-static OSType fourCharCode(NSString *string) {
-    unsigned int fourCharCode;
-    
-    const char *bytes = (char*)[[string dataUsingEncoding:NSUTF8StringEncoding] bytes];
-    
-    *((char *) &fourCharCode + 0) = *(bytes + 0);
-    *((char *) &fourCharCode + 1) = *(bytes + 1);
-    *((char *) &fourCharCode + 2) = *(bytes + 2);
-    *((char *) &fourCharCode + 3) = *(bytes + 3);
-    
-    return EndianU32_NtoB(fourCharCode);
-}
-
-static void checkError(OSStatus error, const char *operation) {
-    if (error == noErr) return;
-    char errorString[20];
-    
-    fprintf(stderr, "Error: %s (%s)\n", operation, errorString); exit(1);
 }
 
 #pragma mark Wavetables

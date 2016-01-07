@@ -45,9 +45,9 @@ const float maxDelayTimeMS = 2000;
     [self.feedback setNormalizedValue:0.8];
     [self.delayTime setNormalizedValue:0.5];
     
-    Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
+    // Float64 sampleRate = [[COLAudioEnvironment sharedEnvironment] sampleRate];
     
-    bufferSize = sampleRate * (maxDelayTimeMS / 1000);
+    // bufferSize = sampleRate * (maxDelayTimeMS / 1000);
     
     free(delayBuffer);
     delayBuffer = (AudioSignalType*)malloc(bufferSize * sizeof(AudioSignalType));

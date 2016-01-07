@@ -34,16 +34,57 @@ private:
     float                   attenuation;
     bool                    mute;
     
+    bool                    isForeground;
+    
+    bool        iaaHostConnected;
+    bool        iaaHostPlaying;
+    bool        iaaHostRecording;
+    Float64     iaaHostPlayTime;
+    Float64     iaaHostTempo;
+    Float64     iaaHostBeat;
+    UIImage     *iaaHostImage;
+    
+    HostCallbackInfo *callbackInfo;
+    
     vector<CCOLComponent*>  components;
+    
+    // Vectors of deferred changes to render chain
+    vector<CCOLComponentConnector*> pendingDisconnects;
     
     CCOLTransportController*    transportController;
     
     void buildWaveTables();
+    void startGraph();
+    void stopGraph();
+    void updateTransportStateFromHostCallback();
 
+    void getHostCalbackInfo();
+    
 public:
     CCOLAudioEngine();
 
-    void initializeAUGraph(double sampleRateIn);
+    void initializeAUGraph(bool isForegroundIn);
+    void initializeIAA(CFStringRef componentName, OSType componentManufacturer);
+    void updateHostBeatAndTempo();
+    void startStop();
+    
+    bool isIAAHostConnected() { return iaaHostConnected; }
+    Float64 getIAATempo() { return iaaHostTempo; }
+    Float64 getIAABeat() { return iaaHostBeat; }
+    
+    void interAppAudioConnectedDidChange();
+    void interAppAudioHostTransportStateDidChange();
+    
+    void appDidEnterBackground();
+    void appWillEnterForeground();
+    void appWillTerminate();
+    void mediaServicesWereReset();
+    
+    void doPending();
+    
+    AudioUnit *getRemoteIO() {
+        return &mRemoteIO;
+    }
     
     // Component Management
     CCOLComponentAddress createComponent(char* componentType);

@@ -22,6 +22,7 @@ void CCOLComponentMultiples::initializeIO() {
         newOutputA->setLinkedInput(inputA);
         
         theOutputs.push_back(newOutputA);
+        free(outputNameA);
     }
     
     for (int i = 0; i < 4; i++) {
@@ -32,6 +33,7 @@ void CCOLComponentMultiples::initializeIO() {
         newOutputB->setLinkedInput(inputB);
         
         theOutputs.push_back(newOutputB);
+        free(outputNameB);
     }
     
     setOutputs(theOutputs);

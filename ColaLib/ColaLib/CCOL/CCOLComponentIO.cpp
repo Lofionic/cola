@@ -17,7 +17,7 @@ static unsigned int    emptyBufferSize;
 CCOLComponentConnector::CCOLComponentConnector(CCOLComponent *componentIn, kIOType ioTypeIn, const char *nameIn) {
     component = componentIn;
     ioType = ioTypeIn;
-    name = nameIn;
+    strcpy(name, nameIn);
 
     connectedTo = nullptr;
 }
@@ -79,8 +79,8 @@ SignalType* CCOLComponentInput::getEmptyBuffer(unsigned int numFrames) {
     if (numFrames != emptyBufferSize) {
         free(emptyBuffer);
         emptyBufferSize = numFrames;
-        emptyBuffer = (SignalType*)malloc(emptyBufferSize * sizeof(SignalType*));
-        memset(emptyBuffer, 0, emptyBufferSize * sizeof(SignalType*));
+        emptyBuffer = (SignalType*)malloc(emptyBufferSize * sizeof(SignalType));
+        memset(emptyBuffer, 0, emptyBufferSize * sizeof(SignalType));
     }
     
     return emptyBuffer;
@@ -130,7 +130,7 @@ bool CCOLComponentInput::makeDynamicConnection(CCOLComponentOutput *outputIn) {
                 //CFDictionaryAddValue(dictionary, CFSTR("output"), (CCOLOutputAddress)thisOutput);
                 CFDictionarySetValue(dictionary, CFSTR("output"), thisOutput);
                 
-                CFNotificationCenterPostNotification(center, CFSTR(CCOLEVENT_ENGINE_DID_FORCE_DISCONNECT), NULL, dictionary, false);
+                CFNotificationCenterPostNotification(center, kCCOLEngineDidForceDisconnectNotification, NULL, dictionary, true);
                 
                 CFRelease(dictionary);
             }
@@ -170,8 +170,8 @@ SignalType* CCOLComponentOutput::prepareBufferOfSize(unsigned int numFrames) {
             free(buffer);
         }
         bufferSize = numFrames;
-        buffer = (SignalType*)malloc(bufferSize * sizeof(SignalType*));
-        memset(buffer, 0, bufferSize * sizeof(SignalType*));
+        buffer = (SignalType*)malloc(bufferSize * sizeof(SignalType));
+        memset(buffer, 0, bufferSize * sizeof(SignalType));
     }
     
     return buffer;
@@ -240,7 +240,7 @@ bool CCOLComponentOutput::connect(CCOLComponentInput *inputIn) {
 bool CCOLComponentOutput::disconnect() {
     if (isConnected()) {
         setConnected(nullptr);
-        memset(buffer, 0, bufferSize * sizeof(SignalType*)); // Empty the buffer
+        memset(buffer, 0, bufferSize * sizeof(SignalType)); // Empty the buffer
         printf("%s|%s disconnected.\n", getComponent()->getIdentifier(), getName());
         return true;
     } else {
