@@ -21,6 +21,7 @@ class CCOLComponentVCF : public CCOLComponent {
     
     CCOLComponentInput*         audioInput;
     CCOLComponentInput*         cvFreq;
+    CCOLComponentInput*         cvRes;
     
     CCOLComponentOutput*        audioOutput;
     
@@ -31,7 +32,8 @@ class CCOLComponentVCF : public CCOLComponent {
     
     CCOLComponentParameter*     paramCutoffFreq;
     CCOLComponentParameter*     paramRes;
-    CCOLComponentParameter*     paramCvAmount;
+    CCOLComponentParameter*     paramCvFreqAmount;
+    CCOLComponentParameter*     paramCvResAmount;
     
     float f, p, q;             //filter coefficients
     float b0, b1, b2, b3, b4;  //filter buffers (beware denormals!)
