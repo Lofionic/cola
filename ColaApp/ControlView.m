@@ -9,6 +9,7 @@
 #import "ControlView.h"
 #import "RotarySwitch.h"
 #import "RotaryEncoder.h"
+#import "StateButton.h"
 
 @interface ControlView()
 
@@ -25,9 +26,10 @@
     
     if ([description.type isEqualToString:@"rotary_encoder"]) {
         result = [[RotaryEncoder alloc] initWithParameter:parameter Description:description];
-
     } else if ([description.type isEqualToString:@"rotary_switch"]) {
         result = [[RotarySwitch alloc] initWithParameter:parameter Description:description];
+    } else if ([description.type isEqualToString:@"state_button"]) {
+        result = [[StateButton alloc] initWithParameter:parameter Description:description];
     }
  
     return result;

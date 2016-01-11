@@ -14,8 +14,12 @@ void CCOLComponentSequencer::initializeIO() {
     vector<CCOLComponentParameter*> theParameters;
     for (int i = 0; i < 16; ++i) {
         string* inputName = new string("Pitch " + std::to_string(i + 1));
-        pitchControls[i] = new CCOLComponentParameter(this, (char*)inputName->c_str());
-        theParameters.push_back(pitchControls[i]);
+        stepPitch[i] = new CCOLComponentParameter(this, (char*)inputName->c_str());
+        theParameters.push_back(stepPitch[i]);
+        
+        inputName = new string("Gate " + std::to_string(i + 1));
+        stepGate[i] = new CCOLComponentParameter(this, (char*)inputName->c_str());
+        theParameters.push_back(stepGate[i]);
     }
     setParameters(theParameters);
     
@@ -45,12 +49,26 @@ void CCOLComponentSequencer::renderOutputs(unsigned int numFrames) {
         
         if (transportController->isPlaying() && currentBeat >= 0) {
             
-            gateOutputBuffer[i] = 1;
+            float delta = (float)i / numFrames;
             
-            CCOLComponentParameter *pitchParameter = pitchControls[step];
-            unsigned short note = pitchParameter->getOutputAtDelta((float)i / numFrames) * 12.0;
-            
-            freqOut = powf(2, (note - 9) / 12.0) * 440;
+            float gateValue = stepGate[step]->getOutputAtDelta(delta);
+            if (gateValue == 0) {
+                // Note is off
+                gateOutputBuffer[i] = 0;
+            } else {
+                // Note is on - update the pitch
+                CCOLComponentParameter *pitchParameter = stepPitch[step];
+                unsigned short note = pitchParameter->getOutputAtDelta(delta) * 12.0;
+                freqOut = powf(2, (note - 9) / 12.0) * 440;
+                
+                // Open / close gate
+                if (gateValue == 0.5) {
+                    float whence = (currentBeat * 4.0) - step;
+                    gateOutputBuffer[i] = (whence > 0.2) ? 0 : 1;
+                } else if (gateValue > 0.5) {
+                    gateOutputBuffer[i] = 1;
+                }
+            }
         }
         
         pitchOutputBuffer[i] = freqOut / CV_FREQUENCY_RANGE;

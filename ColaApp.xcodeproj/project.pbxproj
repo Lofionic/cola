@@ -42,6 +42,7 @@
 		6CCA30B31AE10B5500CAF1AF /* FilesViewControllerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCA30B21AE10B5500CAF1AF /* FilesViewControllerCell.m */; };
 		6CDA9F141AA9017E00D64EB0 /* BuildView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6CDA9F131AA9017E00D64EB0 /* BuildView.mm */; };
 		6CEF81151ACC779000FB1943 /* Icons in Resources */ = {isa = PBXBuildFile; fileRef = 6CEF81141ACC779000FB1943 /* Icons */; };
+		83CF1FC51C444FF400C159C7 /* StateButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 83CF1FC41C444FF400C159C7 /* StateButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +122,8 @@
 		6CDA9F121AA9017E00D64EB0 /* BuildView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildView.h; sourceTree = "<group>"; };
 		6CDA9F131AA9017E00D64EB0 /* BuildView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BuildView.mm; sourceTree = "<group>"; };
 		6CEF81141ACC779000FB1943 /* Icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Icons; sourceTree = "<group>"; };
+		83CF1FC31C444FF400C159C7 /* StateButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateButton.h; sourceTree = "<group>"; };
+		83CF1FC41C444FF400C159C7 /* StateButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +180,8 @@
 				6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */,
 				6C172A2F1ACC1EDD00BE1418 /* RotarySwitch.h */,
 				6C172A301ACC1EDD00BE1418 /* RotarySwitch.m */,
+				83CF1FC31C444FF400C159C7 /* StateButton.h */,
+				83CF1FC41C444FF400C159C7 /* StateButton.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -439,6 +444,7 @@
 				6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */,
 				6C7459021AE84D3200AEC106 /* BuildViewScrollView.m in Sources */,
 				6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */,
+				83CF1FC51C444FF400C159C7 /* StateButton.m in Sources */,
 				6C1CF0E31AC20A020004A2FA /* BuildViewCableLayer.m in Sources */,
 				6C172A311ACC1EDD00BE1418 /* RotarySwitch.m in Sources */,
 				6C0D48831AC3663D008AD869 /* KeyboardView.m in Sources */,
