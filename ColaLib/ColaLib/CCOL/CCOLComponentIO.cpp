@@ -17,7 +17,7 @@ static unsigned int    emptyBufferSize;
 CCOLComponentConnector::CCOLComponentConnector(CCOLComponent *componentIn, kIOType ioTypeIn, const char *nameIn) {
     component = componentIn;
     ioType = ioTypeIn;
-    name = nameIn;
+    strcpy(name, nameIn);
 
     connectedTo = nullptr;
 }
@@ -240,7 +240,7 @@ bool CCOLComponentOutput::connect(CCOLComponentInput *inputIn) {
 bool CCOLComponentOutput::disconnect() {
     if (isConnected()) {
         setConnected(nullptr);
-        memset(buffer, 0, bufferSize * sizeof(SignalType*)); // Empty the buffer
+        memset(buffer, 0, bufferSize * sizeof(SignalType)); // Empty the buffer
         printf("%s|%s disconnected.\n", getComponent()->getIdentifier(), getName());
         return true;
     } else {

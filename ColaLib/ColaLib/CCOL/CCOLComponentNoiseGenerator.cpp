@@ -26,6 +26,6 @@ void CCOLComponentNoiseGenerator::renderOutputs(unsigned int numFrames) {
     SignalType *mainBuffer = mainOutput->prepareBufferOfSize(numFrames);
     
     for (int i = 0; i < numFrames; i++) {
-        mainBuffer[i] = ((double)arc4random() / ARC4RANDOM_MAX) * 2.0 - 1.0;
+        mainBuffer[i] = ((double)arc4random() / ARC4RANDOM_MAX);
     }
 }

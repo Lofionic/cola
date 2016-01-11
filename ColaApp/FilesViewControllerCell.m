@@ -72,7 +72,6 @@
 }
 
 -(void)updateContents {
-    
     if (self.preset.thumbnail) {
         [self.thumbnailView setImage:self.preset.thumbnail];
     } else {

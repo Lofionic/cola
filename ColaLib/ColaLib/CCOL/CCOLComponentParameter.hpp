@@ -19,7 +19,7 @@ typedef double (*parameterFunction)(double valueIn);
 public:
     CCOLComponentParameter(CCOLComponent *componentIn, char* nameIn) {
         component = componentIn;
-        name = nameIn;
+        strcpy(name, nameIn);
         
         preValue = postValue = pendingValue = 0;
         cachedInput = cachedOutput = 0;
@@ -45,7 +45,7 @@ protected:
     CCOLComponent   *component;
     
 private:
-    char*               name;
+    char               name[32];
     parameterFunction   function;
     
     double preValue, postValue, pendingValue;
