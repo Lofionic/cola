@@ -16,10 +16,12 @@ void CCOLComponentSequencer::initializeIO() {
         string* inputName = new string("Pitch " + std::to_string(i + 1));
         stepPitch[i] = new CCOLComponentParameter(this, (char*)inputName->c_str());
         theParameters.push_back(stepPitch[i]);
+        delete inputName;
         
         inputName = new string("Gate " + std::to_string(i + 1));
         stepGate[i] = new CCOLComponentParameter(this, (char*)inputName->c_str());
         theParameters.push_back(stepGate[i]);
+        delete inputName;
     }
     setParameters(theParameters);
     
