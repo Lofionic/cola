@@ -36,6 +36,7 @@
 		6C7D48751BE227430092BC95 /* libColaLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5E911A8BF30600ECEAB2 /* libColaLib.a */; };
 		6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */; };
 		6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2941AC0C9CC00320628 /* ModuleView.m */; };
+		6C9758D71C46DB94000EA81B /* SequencerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9758D61C46DB94000EA81B /* SequencerView.m */; };
 		6CB828381AC2F58000610DD4 /* ImageAssets in Resources */ = {isa = PBXBuildFile; fileRef = 6CB828371AC2F58000610DD4 /* ImageAssets */; };
 		6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */; };
 		6CB8FAAB1BEE671B00DCAB2E /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB8FAAA1BEE671B00DCAB2E /* UIImage+Resize.m */; };
@@ -112,6 +113,8 @@
 		6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotaryEncoder.m; sourceTree = "<group>"; };
 		6C8DD2931AC0C9CC00320628 /* ModuleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleView.h; sourceTree = "<group>"; };
 		6C8DD2941AC0C9CC00320628 /* ModuleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleView.m; sourceTree = "<group>"; };
+		6C9758D51C46DB94000EA81B /* SequencerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencerView.h; sourceTree = "<group>"; };
+		6C9758D61C46DB94000EA81B /* SequencerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequencerView.m; sourceTree = "<group>"; };
 		6CB828371AC2F58000610DD4 /* ImageAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ImageAssets; sourceTree = "<group>"; };
 		6CB8283C1AC3077800610DD4 /* UIColor+Shades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Shades.h"; sourceTree = "<group>"; };
 		6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Shades.m"; sourceTree = "<group>"; };
@@ -290,6 +293,7 @@
 		6C8DD2961AC0DA2400320628 /* BuildView */ = {
 			isa = PBXGroup;
 			children = (
+				6C9758D41C46DB59000EA81B /* SequencerView */,
 				6C0D487F1AC3662E008AD869 /* KeyboardView */,
 				6C0F86CF1AA7B2220092FB18 /* BuildViewController.h */,
 				6C0F86D01AA7B2220092FB18 /* BuildViewController.m */,
@@ -310,6 +314,15 @@
 				6C0F86D91AA7BF070092FB18 /* ComponentShelf */,
 			);
 			name = BuildView;
+			sourceTree = "<group>";
+		};
+		6C9758D41C46DB59000EA81B /* SequencerView */ = {
+			isa = PBXGroup;
+			children = (
+				6C9758D51C46DB94000EA81B /* SequencerView.h */,
+				6C9758D61C46DB94000EA81B /* SequencerView.m */,
+			);
+			name = SequencerView;
 			sourceTree = "<group>";
 		};
 		6CB5DA9A1AC582DF005D80FD /* ModuleView */ = {
@@ -445,6 +458,7 @@
 				6C7459021AE84D3200AEC106 /* BuildViewScrollView.m in Sources */,
 				6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */,
 				83CF1FC51C444FF400C159C7 /* StateButton.m in Sources */,
+				6C9758D71C46DB94000EA81B /* SequencerView.m in Sources */,
 				6C1CF0E31AC20A020004A2FA /* BuildViewCableLayer.m in Sources */,
 				6C172A311ACC1EDD00BE1418 /* RotarySwitch.m in Sources */,
 				6C0D48831AC3663D008AD869 /* KeyboardView.m in Sources */,

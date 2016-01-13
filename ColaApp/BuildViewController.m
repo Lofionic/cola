@@ -10,6 +10,7 @@
 #import "BuildViewController.h"
 #import "KeyboardView.h"
 #import "BuildView.h"
+#import "SequencerView.h"
 #import "ModuleView.h"
 #import "ModuleCatalog.h"
 #import "FilesViewController.h"
@@ -30,8 +31,13 @@ static BuildView *buildView = nil;
 @property (nonatomic, strong) BuildView             *buildView;
 
 @property (nonatomic, strong) ComponentShelfView    *componentShelf;
+@property (nonatomic, strong) UIImageView           *bottomPanel;
+
 @property (nonatomic, strong) UIView                *keyboardContainerView;
 @property (nonatomic, strong) KeyboardView          *keyboardView;
+
+@property (nonatomic, strong) UIView                *sequencerContainerView;
+@property (nonatomic, strong) SequencerView         *sequencerView;
 
 @property (nonatomic, strong) IAAView               *iaaView;
 
@@ -40,6 +46,7 @@ static BuildView *buildView = nil;
 
 @property (nonatomic, strong) UIBarButtonItem       *buildBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem       *keyboardBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem       *sequencerBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem       *playStopBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem       *saveBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem       *filesBarButtonItem;
@@ -48,7 +55,7 @@ static BuildView *buildView = nil;
 @property (nonatomic, strong) NSLayoutConstraint    *iaaPositionConstraint;
 
 @property (nonatomic) BOOL buildMode;
-@property (nonatomic) BOOL keyboardHidden;
+@property (nonatomic) BOOL bottomPanelHidden;
 
 @property (nonatomic, strong) NSLayoutConstraint    *shiftBuildViewConstraint; // Constraint to shift the build view down when the build view appears
 
@@ -83,15 +90,31 @@ static BuildView *buildView = nil;
     [self.view addSubview:self.componentShelf];
     
     UIImage *keyboard_bg = [[UIImage imageNamed:@"keyboard_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(48, 24, 0, 24) resizingMode:UIImageResizingModeTile];
-    self.keyboardContainerView = [[UIImageView alloc] initWithImage:keyboard_bg];
-    [self.keyboardContainerView setBackgroundColor:[UIColor darkGrayColor]];
+    self.bottomPanel = [[UIImageView alloc] initWithImage:keyboard_bg];
+    [self.bottomPanel setBackgroundColor:[UIColor darkGrayColor]];
+    [self.bottomPanel setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.bottomPanel setUserInteractionEnabled:YES];
+    [self.view addSubview:self.bottomPanel];
+    
+    // Setup keyboard container in bottom shelf
+    self.keyboardContainerView = [[UIView alloc] init];
     [self.keyboardContainerView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.keyboardContainerView setUserInteractionEnabled:YES];
-    [self.view addSubview:self.keyboardContainerView];
+    [self.bottomPanel addSubview:self.keyboardContainerView];
     
     self.keyboardView = [[KeyboardView alloc] init];
     [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.keyboardContainerView addSubview:self.keyboardView];
+    
+    // Setup sequencer container in bottom shelf
+    self.sequencerContainerView = [[UIView alloc] init];
+    [self.sequencerContainerView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.bottomPanel addSubview:self.sequencerContainerView];
+    
+    self.sequencerView = [[SequencerView alloc] init];
+    [self.sequencerView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.sequencerContainerView addSubview:self.sequencerView];
+    
+    [self.keyboardContainerView setHidden:YES];
     
     self.iaaView = [[IAAView alloc] init];
     [self.iaaView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -101,8 +124,11 @@ static BuildView *buildView = nil;
     NSDictionary *viewsDictionary = @{
                                       @"buildView"              :   self.buildViewScrollView,
                                       @"componentShelf"         :   self.componentShelf,
+                                      @"bottomPanel"            :   self.bottomPanel,
                                       @"keyboardContainerView"  :   self.keyboardContainerView,
                                       @"keyboardView"           :   self.keyboardView,
+                                      @"sequencerContainerView" :   self.sequencerContainerView,
+                                      @"sequencerView"          :   self.sequencerView,
                                       @"iaaView"                :   self.iaaView,
                                       @"topGuide"               :   self.topLayoutGuide,
                                       @"bottomGuide"            :   self.bottomLayoutGuide
@@ -113,7 +139,7 @@ static BuildView *buildView = nil;
                                                                       metrics:nil
                                                                         views:viewsDictionary]];
 
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[keyboardContainerView]|"
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomPanel]|"
                                                                       options:0
                                                                       metrics:nil
                                                                         views:viewsDictionary]];
@@ -154,12 +180,12 @@ static BuildView *buildView = nil;
     self.iaaPositionConstraint = [NSLayoutConstraint constraintWithItem:self.iaaView
                                                               attribute:NSLayoutAttributeBottom
                                                               relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.keyboardContainerView
+                                                                 toItem:self.bottomPanel
                                                               attribute:NSLayoutAttributeTop
                                                              multiplier:1
                                                                constant:0];
     
-    self.keyboardPositionConstraint = [NSLayoutConstraint constraintWithItem:self.keyboardContainerView
+    self.keyboardPositionConstraint = [NSLayoutConstraint constraintWithItem:self.bottomPanel
                                                                    attribute:NSLayoutAttributeBottom
                                                                    relatedBy:NSLayoutRelationEqual
                                                                       toItem:self.bottomLayoutGuide
@@ -167,9 +193,18 @@ static BuildView *buildView = nil;
                                                                   multiplier:1
                                                                     constant:0];
     
-    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-80-[keyboardView]-24-|" options:0 metrics:nil views:viewsDictionary]];
-    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-24-[keyboardView]|" options:0 metrics:nil views:viewsDictionary]];
+    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[keyboardContainerView]|" options:0 metrics:nil views:viewsDictionary]];
+    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-24-[keyboardContainerView]|" options:0 metrics:nil views:viewsDictionary]];
     
+    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-80-[keyboardView]-20-|" options:0 metrics:nil views:viewsDictionary]];
+    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[keyboardView]|" options:0 metrics:nil views:viewsDictionary]];
+    
+    
+    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sequencerContainerView]|" options:0 metrics:nil views:viewsDictionary]];
+    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-24-[sequencerContainerView]|" options:0 metrics:nil views:viewsDictionary]];
+    
+    [self.sequencerContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[sequencerView]-20-|" options:0 metrics:nil views:viewsDictionary]];
+    [self.sequencerContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[sequencerView]|" options:0 metrics:nil views:viewsDictionary]];
     
     [self.view addConstraint:self.iaaPositionConstraint];
     [self.view addConstraint:self.keyboardPositionConstraint];
@@ -205,10 +240,12 @@ static BuildView *buildView = nil;
     UIImage *keyboardIcon = [UIImage imageNamed:TOOLBAR_PIANO_ICON];
     self.keyboardBarButtonItem = [[UIBarButtonItem alloc] initWithImage:keyboardIcon style:UIBarButtonItemStylePlain target:self action:@selector(keyboardTapped)];
     
+    self.sequencerBarButtonItem = [[UIBarButtonItem alloc] initWithImage:keyboardIcon style:UIBarButtonItemStylePlain target:self action:@selector(sequencerTapped)];
+    
     UIImage *playIcon = [UIImage imageNamed:TOOLBAR_PLAY_ICON];
     self.playStopBarButtonItem = [[UIBarButtonItem alloc] initWithImage:playIcon style:UIBarButtonItemStylePlain target:self action:@selector(playStopTapped)];
 
-    [self.navigationItem setLeftBarButtonItems:@[self.buildBarButtonItem, self.keyboardBarButtonItem, self.playStopBarButtonItem]];
+    [self.navigationItem setLeftBarButtonItems:@[self.buildBarButtonItem, self.keyboardBarButtonItem, self.sequencerBarButtonItem, self.playStopBarButtonItem]];
     
     UIImage *filesIcon = [UIImage imageNamed:TOOLBAR_FILES_ICON];
     self.filesBarButtonItem = [[UIBarButtonItem alloc] initWithImage:filesIcon style:UIBarButtonItemStylePlain target:self action:@selector(filesTapped)];
@@ -224,7 +261,7 @@ static BuildView *buildView = nil;
                                                object: nil];
     
     // Setup initial view
-    [self setKeyboardHidden:NO animated:NO];
+    [self setBottomPanelHidden:NO animated:NO onCompletion:nil];
     [self setIaaViewHidden:YES];
     
     // Load initial preset
@@ -281,10 +318,54 @@ static BuildView *buildView = nil;
 }
 
 -(void)keyboardTapped {
-    if (!self.keyboardHidden) {
-        [self setKeyboardHidden:YES animated:YES];
+    [self showOrHideKeyboard];
+}
+
+-(void)sequencerTapped {
+    [self showOrHideSequencer];
+}
+
+-(void)showOrHideKeyboard {
+    if (self.bottomPanelHidden) {
+        // Bottom panel hidden
+        // Make keyboard visible and show bottom panel
+        [self.sequencerContainerView setHidden:YES];
+        [self.keyboardContainerView setHidden:NO];
+        [self setBottomPanelHidden:NO animated:YES onCompletion:nil];
     } else {
-        [self setKeyboardHidden:NO animated:YES];
+        // Bottom panel not hidden
+        if ([self.keyboardContainerView isHidden]) {
+            // Hide the bottom panel, then show the keyboard
+            __weak BuildViewController *weakSelf = self;
+            [self setBottomPanelHidden:YES animated:YES onCompletion:^{
+                [weakSelf showOrHideKeyboard];
+            }];
+        } else {
+            // Keyboard is already showing, hide bottom panel
+            [self setBottomPanelHidden:YES animated:YES onCompletion:nil];
+        }
+    }
+}
+
+-(void)showOrHideSequencer {
+    if (self.bottomPanelHidden) {
+        // Bottom panel hidden
+        // Make sequecer visible and show bottom panel
+        [self.sequencerContainerView setHidden:NO];
+        [self.keyboardContainerView setHidden:YES];
+        [self setBottomPanelHidden:NO animated:YES onCompletion:nil];
+    } else {
+        // Bottom panel not hidden
+        if ([self.sequencerContainerView isHidden]) {
+            // Hide the bottom panel, then show the sequencer
+            __weak BuildViewController *weakSelf = self;
+            [self setBottomPanelHidden:YES animated:YES onCompletion:^{
+                [weakSelf showOrHideSequencer];
+            }];
+        } else {
+            // Sequencer is already showing, hide bottom panel
+            [self setBottomPanelHidden:YES animated:YES onCompletion:nil];
+        }
     }
 }
 
@@ -357,29 +438,46 @@ static BuildView *buildView = nil;
     }
 }
 
-
--(void)setKeyboardHidden:(BOOL)keyboardHidden animated:(BOOL)animated {
-    self.keyboardHidden = keyboardHidden;
+-(void)setBottomPanelHidden:(BOOL)keyboardHidden animated:(BOOL)animated onCompletion:(void (^)())onCompletion {
+    self.bottomPanelHidden = keyboardHidden;
     if (keyboardHidden) {
         // Hide keyboard
         if (animated) {
-            [UIView animateWithDuration:0.2f animations:^ {
+            [UIView animateWithDuration:0.12f animations:^ {
                 [self.keyboardPositionConstraint setConstant:kKeyboardHeight];
                 [self.view layoutIfNeeded];
+            } completion:^(BOOL finished) {
+                dispatch_async(dispatch_get_main_queue(), ^ {
+                    if (onCompletion) {
+                        onCompletion();
+                    }
+                });
             }];
         } else {
             [self.keyboardPositionConstraint setConstant:kKeyboardHeight];
+            if (onCompletion) {
+                onCompletion();
+            }
         }
         [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON]];
     } else {
         // Show keyboard
         if (animated) {
-            [UIView animateWithDuration:0.2f animations:^ {
+            [UIView animateWithDuration:0.12f animations:^ {
                 [self.keyboardPositionConstraint setConstant:0];
                 [self.view layoutIfNeeded];
+            } completion:^(BOOL finished) {
+                dispatch_async(dispatch_get_main_queue(), ^ {
+                    if (onCompletion) {
+                        onCompletion();
+                    }
+                });
             }];
         } else {
             [self.keyboardPositionConstraint setConstant:0];
+            if (onCompletion) {
+                onCompletion();
+            }
         }
         [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON_SELECTED]];
     }
