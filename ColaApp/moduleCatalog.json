@@ -315,7 +315,73 @@
                                ]
                  }
                  },
-                 
+                 {
+                 "id" : "MIX4",
+                 "name" : "Mix IV",
+                 "width" : 2,
+                 "type" : "CCOLComponentTypeMixer4",
+                 "view" : {
+                 "asset" : "mixer4_a",
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In 1",
+                                 "x" : 24,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In 2",
+                                 "x" : 57,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In 3",
+                                 "x" : 90,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "In 4",
+                                 "x" : 123,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Out",
+                                 "x" : 156,
+                                 "y" : 270
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Level 1",
+                               "x" : 50,
+                               "y" : 69
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Level 2",
+                               "x" : 130,
+                               "y" : 69
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Level 3",
+                               "x" : 50,
+                               "y" : 170
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Level 4",
+                               "x" : 130,
+                               "y" : 170
+                               }
+                               ]
+                 }
+                 },
                  
                  
                  {

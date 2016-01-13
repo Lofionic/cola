@@ -29,6 +29,7 @@
 		83D41F441C0E4F3F00A22EBA /* CCOLComponentSequencer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83D41F421C0E4F3F00A22EBA /* CCOLComponentSequencer.cpp */; };
 		B405847B1C0F2D070002F278 /* CCOLComponentNoiseGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B405847A1C0F2D070002F278 /* CCOLComponentNoiseGenerator.cpp */; };
 		B40584831C0F88780002F278 /* CCOLComponentVCF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B40584811C0F88780002F278 /* CCOLComponentVCF.cpp */; };
+		B45C08811C46DC0800F930BF /* CCOLComponentMixer4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B45C087F1C46DC0800F930BF /* CCOLComponentMixer4.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -157,6 +158,8 @@
 		B405847A1C0F2D070002F278 /* CCOLComponentNoiseGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentNoiseGenerator.cpp; path = CCOL/CCOLComponentNoiseGenerator.cpp; sourceTree = "<group>"; };
 		B40584811C0F88780002F278 /* CCOLComponentVCF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentVCF.cpp; path = CCOL/CCOLComponentVCF.cpp; sourceTree = "<group>"; };
 		B40584821C0F88780002F278 /* CCOLComponentVCF.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentVCF.hpp; path = CCOL/CCOLComponentVCF.hpp; sourceTree = "<group>"; };
+		B45C087F1C46DC0800F930BF /* CCOLComponentMixer4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentMixer4.cpp; path = CCOL/CCOLComponentMixer4.cpp; sourceTree = "<group>"; };
+		B45C08801C46DC0800F930BF /* CCOLComponentMixer4.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentMixer4.hpp; path = CCOL/CCOLComponentMixer4.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -305,6 +308,8 @@
 				83078FCF1C03AEF500B2080E /* CCOLComponentMultiples.hpp */,
 				6C6D017F1C04A16100FD9961 /* CCOLComponentMixer.cpp */,
 				6C6D01801C04A16100FD9961 /* CCOLComponentMixer.hpp */,
+				B45C087F1C46DC0800F930BF /* CCOLComponentMixer4.cpp */,
+				B45C08801C46DC0800F930BF /* CCOLComponentMixer4.hpp */,
 				B40584791C0F2D070002F278 /* CCOLComponentNoiseGenerator.hpp */,
 				B405847A1C0F2D070002F278 /* CCOLComponentNoiseGenerator.cpp */,
 				6C66D2CE1C0C87D40085988A /* CCOLComponentPan.cpp */,
@@ -401,6 +406,7 @@
 			files = (
 				6C6D01811C04A16100FD9961 /* CCOLComponentMixer.cpp in Sources */,
 				6C7D48AA1BE23B970092BC95 /* CCOLComponent.cpp in Sources */,
+				B45C08811C46DC0800F930BF /* CCOLComponentMixer4.cpp in Sources */,
 				6C66D2D01C0C87D40085988A /* CCOLComponentPan.cpp in Sources */,
 				83D41F441C0E4F3F00A22EBA /* CCOLComponentSequencer.cpp in Sources */,
 				6C7D48281BE215780092BC95 /* CCOLComponentIO.cpp in Sources */,
