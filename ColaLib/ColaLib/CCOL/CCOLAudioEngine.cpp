@@ -126,6 +126,12 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
         CCOLComponent *thisComponent = audioEngine->getComponent(i);
         if (!thisComponent->hasRendered()) {
             thisComponent->renderOutputs(inNumberFrames);
+        }
+    }
+    
+    for (int i = 0; i < componentCount; i++) {
+        CCOLComponent *thisComponent = audioEngine->getComponent(i);
+        if (!thisComponent->hasRendered()) {
             thisComponent->engineDidRender(inNumberFrames);
         }
     }
