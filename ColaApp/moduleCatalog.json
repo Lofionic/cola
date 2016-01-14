@@ -382,8 +382,6 @@
                                ]
                  }
                  },
-                 
-                 
                  {
                  "id" : "VCFA",
                  "name" : "VCF A",
@@ -521,36 +519,37 @@
                  "id" : "RING",
                  "name" : "Ring Modulator",
                  "width" : 1,
-                 "type" : "COLComponentRingModulator",
+                 "type" : "CCOLComponentTypeRingMod",
                  "view" : {
+                 "asset" : "ring_mod",
                  "connectors" : [
                                  {
                                  "type" : "input",
                                  "connection" : "In 1",
-                                 "x" : 24,
-                                 "y" : 280
+                                 "x" : 25,
+                                 "y" : 270
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "In 2",
-                                 "x" : 72,
-                                 "y" : 280
+                                 "x" : 65,
+                                 "y" : 270
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out",
-                                 "x" : 48,
-                                 "y" : 162
+                                 "x" : 45,
+                                 "y" : 165
                                  }
                                  ],
                  "controls" : [
                                {
-                               "type" : "continuous",
+                               "type" : "rotary_encoder",
                                "parameter" : "Mix",
                                "asset" : "large_white",
-                               "x" : 48,
-                               "y" : 72
-                               }
+                               "x" : 45,
+                               "y" : 70
+                               },
                                ]
                  }
                  },
@@ -661,17 +660,6 @@
                                { "type" : "state_button", "parameter" : "Gate 16", "x" : 320, "y" : 225, "userinfo" : { "states" : 3 } },
                                ]
                  }
-                 }, 
-                 {
-                 "id" : "NG",
-                 "name" : "Noise Generator",
-                 "width" : 1,
-                 "type" : "COLComponentNoiseGenerator",
-                 "view" : {
-                 "connectors" : [
-                                 { "type" : "output", "connection" : "Output", "x" : 24, "y" : 280  }
-                                 ]
-                 }
-                 }
+                 },
                  ]
 }
