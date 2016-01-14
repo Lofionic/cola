@@ -198,8 +198,9 @@ bool CCOLComponentOutput::connect(CCOLComponentInput *inputIn) {
        if (isDynamic()) {
             // This is a dynamic output
             if (linkedInput != nullptr) {
-                kIOType linkedType = (kIOType)(linkedInput->getIOType() & ~(1 << 2)); // remove kIOTypeOutput from bitmask
-                if (linkedType != inputIn->getIOType()) {
+                kIOType linkedType = (kIOType)(linkedInput->getIOType() & ~(1 << 0)); // remove kIOTypeInput from bitmask
+                kIOType inputType = inputIn->getIOType();
+                if ((linkedType | kIOTypeInput) != inputIn->getIOType()) {
                     printf("Dynamic connection failed : dynamic output's linked input does not match input type.\n");
                     return false;
                 }
