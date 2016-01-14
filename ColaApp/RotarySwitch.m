@@ -99,12 +99,8 @@
     if (tracking) {
         UITouch *touch = [touches anyObject];
         CGFloat translation = trackingY - [touch locationInView:self].y;
-        NSInteger delta = floor(translation / 40.0);
-        if (delta > 1) {
-            delta = 1;
-        } else if (delta < -1) {
-            delta = -1;
-        }
+        NSInteger delta = floor(translation / 60.0);
+
         if (self.selectedIndex != trackingValue + delta) {
             self.selectedIndex = trackingValue + delta;
             [[COLAudioEnvironment sharedEnvironment] setParameter:self.parameter value:self.selectedIndex / (float)self.maxIndex];

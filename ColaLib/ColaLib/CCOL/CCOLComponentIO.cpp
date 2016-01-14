@@ -109,7 +109,7 @@ bool CCOLComponentInput::disconnect() {
 // Make a dynamic connection from dynamic input to output
 bool CCOLComponentInput::makeDynamicConnection(CCOLComponentOutput *outputIn) {
     if (isDynamic()) {
-        kIOType dynamicType = (kIOType)(outputIn->getIOType() & ~(1 << 1));
+        kIOType dynamicType = outputIn->getIOType();
         
         // Check the linked outputs are of the direct type
         unsigned long int numOutputs = component->getNumberOfOutputs();
@@ -119,7 +119,7 @@ bool CCOLComponentInput::makeDynamicConnection(CCOLComponentOutput *outputIn) {
             if (thisOutput->isDynamic() &&
                 thisOutput->isConnected() &&
                 thisOutput->getLinkedInput() == this &&
-                !(dynamicType & thisOutput->getIOType())) {
+                dynamicType != thisOutput->getIOType()) {
                 
                 // Force dynamic disconnect and post a notification
                 thisOutput->getConnected()->disconnect();
@@ -197,15 +197,12 @@ bool CCOLComponentOutput::connect(CCOLComponentInput *inputIn) {
     } else {
        if (isDynamic()) {
             // This is a dynamic output
-            if (linkedInput != nullptr) {
-                kIOType linkedType = (kIOType)(linkedInput->getIOType() & ~(1 << 2)); // remove kIOTypeOutput from bitmask
-                if (linkedType != inputIn->getIOType()) {
+            if (linkedInput != nullptr && linkedInput->isConnected()) {
+                kIOType linkedType = (kIOType)(linkedInput->getIOType() & ~(1 << 0)); // remove kIOTypeInput from bitmask
+                if ((linkedType | kIOTypeInput) != inputIn->getIOType()) {
                     printf("Dynamic connection failed : dynamic output's linked input does not match input type.\n");
                     return false;
                 }
-            } else {
-                printf("Dynamic connection failed : Attempted to connect dynamic output with no linked input.\n");
-                return false;
             }
         } else {
             kIOType connectionType = (kIOType)(getIOType() & ~(1 << 1)); // remove kIOTypeOutput from bitmask
@@ -250,6 +247,10 @@ bool CCOLComponentOutput::disconnect() {
 }
 
 kIOType CCOLComponentOutput::getIOType() {
-    return (kIOType)(ioType | kIOTypeOutput);
+    if (isDynamic() && isConnected()) {
+        return (kIOType)((connectedTo->getIOType() & ~(1 << 0)) | kIOTypeOutput);
+    } else {
+        return (kIOType)(ioType | kIOTypeOutput);
+    }
 }
 
