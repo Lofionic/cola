@@ -51,7 +51,7 @@ static BuildView *buildView = nil;
 @property (nonatomic, strong) UIBarButtonItem       *saveBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem       *filesBarButtonItem;
 
-@property (nonatomic, strong) NSLayoutConstraint    *keyboardPositionConstraint;
+@property (nonatomic, strong) NSLayoutConstraint    *bottomPanelPositionConstraint;
 @property (nonatomic, strong) NSLayoutConstraint    *iaaPositionConstraint;
 
 @property (nonatomic) BOOL buildMode;
@@ -185,7 +185,7 @@ static BuildView *buildView = nil;
                                                              multiplier:1
                                                                constant:0];
     
-    self.keyboardPositionConstraint = [NSLayoutConstraint constraintWithItem:self.bottomPanel
+    self.bottomPanelPositionConstraint = [NSLayoutConstraint constraintWithItem:self.bottomPanel
                                                                    attribute:NSLayoutAttributeBottom
                                                                    relatedBy:NSLayoutRelationEqual
                                                                       toItem:self.bottomLayoutGuide
@@ -194,22 +194,22 @@ static BuildView *buildView = nil;
                                                                     constant:0];
     
     [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[keyboardContainerView]|" options:0 metrics:nil views:viewsDictionary]];
-    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-24-[keyboardContainerView]|" options:0 metrics:nil views:viewsDictionary]];
+    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-44-[keyboardContainerView]|" options:0 metrics:nil views:viewsDictionary]];
     
     [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-80-[keyboardView]-20-|" options:0 metrics:nil views:viewsDictionary]];
     [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[keyboardView]|" options:0 metrics:nil views:viewsDictionary]];
     
+    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[sequencerContainerView(768)]" options:0 metrics:nil views:viewsDictionary]];
+    [self.bottomPanel addConstraint:[NSLayoutConstraint constraintWithItem:self.sequencerContainerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.bottomPanel attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-44-[sequencerContainerView]|" options:0 metrics:nil views:viewsDictionary]];
     
-    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sequencerContainerView]|" options:0 metrics:nil views:viewsDictionary]];
-    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-24-[sequencerContainerView]|" options:0 metrics:nil views:viewsDictionary]];
-    
-    [self.sequencerContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[sequencerView]-20-|" options:0 metrics:nil views:viewsDictionary]];
+    [self.sequencerContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sequencerView]|" options:0 metrics:nil views:viewsDictionary]];
     [self.sequencerContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[sequencerView]|" options:0 metrics:nil views:viewsDictionary]];
     
     [self.view addConstraint:self.iaaPositionConstraint];
-    [self.view addConstraint:self.keyboardPositionConstraint];
+    [self.view addConstraint:self.bottomPanelPositionConstraint];
     
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.keyboardView
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomPanel
                                                           attribute:NSLayoutAttributeHeight
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:nil
@@ -444,7 +444,7 @@ static BuildView *buildView = nil;
         // Hide keyboard
         if (animated) {
             [UIView animateWithDuration:0.12f animations:^ {
-                [self.keyboardPositionConstraint setConstant:kKeyboardHeight];
+                [self.bottomPanelPositionConstraint setConstant:kKeyboardHeight - 44];
                 [self.view layoutIfNeeded];
             } completion:^(BOOL finished) {
                 dispatch_async(dispatch_get_main_queue(), ^ {
@@ -454,17 +454,17 @@ static BuildView *buildView = nil;
                 });
             }];
         } else {
-            [self.keyboardPositionConstraint setConstant:kKeyboardHeight];
+            [self.bottomPanelPositionConstraint setConstant:kKeyboardHeight - 44];
             if (onCompletion) {
                 onCompletion();
             }
         }
-        [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON]];
+//        [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON]];
     } else {
         // Show keyboard
         if (animated) {
             [UIView animateWithDuration:0.12f animations:^ {
-                [self.keyboardPositionConstraint setConstant:0];
+                [self.bottomPanelPositionConstraint setConstant:0];
                 [self.view layoutIfNeeded];
             } completion:^(BOOL finished) {
                 dispatch_async(dispatch_get_main_queue(), ^ {
@@ -474,12 +474,12 @@ static BuildView *buildView = nil;
                 });
             }];
         } else {
-            [self.keyboardPositionConstraint setConstant:0];
+            [self.bottomPanelPositionConstraint setConstant:0];
             if (onCompletion) {
                 onCompletion();
             }
         }
-        [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON_SELECTED]];
+//        [self.keyboardBarButtonItem setImage:[UIImage imageNamed:TOOLBAR_PIANO_ICON_SELECTED]];
     }
 }
 

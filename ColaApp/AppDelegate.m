@@ -66,7 +66,7 @@ CGFloat kKeyboardHeight;
     kBuildViewColumnWidth = 90;
     kBuildViewRowHeight =   320;
     kComponentShelfHeight = 150;
-    kKeyboardHeight =       150;
+    kKeyboardHeight =       180;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         kBuildViewPadding =         12;
