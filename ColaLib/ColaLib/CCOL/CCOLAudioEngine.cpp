@@ -459,6 +459,8 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
         newComponent = new CCOLComponentMixer(audioContext);
     } else if (componentTypeString == kCCOLComponentTypeMixer4) {
         newComponent = new CCOLComponentMixer4(audioContext);
+    } else if (componentTypeString == kCCOLComponentTypeRingMod) {
+        newComponent = new CCOLComponentRingMod(audioContext);
     } else if (componentTypeString == kCCOLComponentTypePan) {
         newComponent = new CCOLComponentPan(audioContext);
     } else if (componentTypeString == kCCOLComponentTypeSequencer) {
