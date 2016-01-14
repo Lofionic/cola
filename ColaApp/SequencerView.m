@@ -7,14 +7,27 @@
 //
 
 #import "SequencerView.h"
+#import <ColaLib/COLAudioEnvironment.h>
+
+@interface SequencerView()
+
+@property (nonatomic) CCOLComponentAddress component;
+
+@end
 
 @implementation SequencerView
 
 -(instancetype)init {
     if (self = [super init]) {
         [self setBackgroundColor:[UIColor blueColor]];
+        [self createSequencerComponent];
     }
     return self;
+}
+
+-(void)createSequencerComponent {
+    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+    self.component = [cae createComponentOfType:"CCOLComponentTypeSequencer"];
 }
 
 @end
