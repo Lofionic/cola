@@ -51,16 +51,16 @@
     for (BuildViewCable *cable in self.buildView.cables) {
         CGContextSaveGState(ctx);
         
-        CGContextSetFillColorWithColor(ctx, [[UIColor darkGrayColor] CGColor]);
-        CGRect rect1 = CGRectMake(cable.point1.x - 8, cable.point1.y - 9, 16, 16);
-        CGContextFillEllipseInRect(ctx, rect1);
-        
-        CGRect rect2 = CGRectMake(cable.point2.x - 8, cable.point2.y - 9, 16, 16);
-        CGContextFillEllipseInRect(ctx, rect2);
-        
-        CGContextSetFillColorWithColor(ctx, [[UIColor lightGrayColor] CGColor]);
-        CGContextFillEllipseInRect(ctx, CGRectOffset(rect1, 0, 0));
-        CGContextFillEllipseInRect(ctx, CGRectOffset(rect2, 0, 0));
+//        CGContextSetFillColorWithColor(ctx, [[UIColor darkGrayColor] CGColor]);
+//        CGRect rect1 = CGRectMake(cable.point1.x - 8, cable.point1.y - 9, 16, 16);
+//        CGContextFillEllipseInRect(ctx, rect1);
+//        
+//        CGRect rect2 = CGRectMake(cable.point2.x - 8, cable.point2.y - 9, 16, 16);
+//        CGContextFillEllipseInRect(ctx, rect2);
+//        
+//        CGContextSetFillColorWithColor(ctx, [[UIColor lightGrayColor] CGColor]);
+//        CGContextFillEllipseInRect(ctx, CGRectOffset(rect1, 0, 0));
+//        CGContextFillEllipseInRect(ctx, CGRectOffset(rect2, 0, 0));
     }
     
     for (BuildViewCable *cable in self.buildView.cables) {
@@ -92,26 +92,26 @@
         
         CGContextSetLineCap(ctx, kCGLineCapRound);
         
-        // Stroke Shadow
-        CGContextAddPath(ctx, bezierPath.CGPath);
-        CGContextSetStrokeColorWithColor(ctx, [[cable.colour darkerShade] CGColor]);
-        CGContextSetLineWidth(ctx, 6);
-
-        CGContextStrokePath(ctx);
+//        // Stroke Shadow
+//        CGContextAddPath(ctx, bezierPath.CGPath);
+//        CGContextSetStrokeColorWithColor(ctx, [[cable.colour darkerShade] CGColor]);
+//        CGContextSetLineWidth(ctx, 6);
+//
+//        CGContextStrokePath(ctx);
         
         // Stroke Mid
         CGContextSetStrokeColorWithColor(ctx, [[cable.colour midShade] CGColor]);
-        CGContextTranslateCTM(ctx, 0, -2);
-        CGContextSetLineWidth(ctx, 4);
+        CGContextTranslateCTM(ctx, 0, 0);
+        CGContextSetLineWidth(ctx, 6);
         CGContextAddPath(ctx, bezierPath.CGPath);
         CGContextStrokePath(ctx);
         
-        // Stroke Highlight
-        CGContextSetStrokeColorWithColor(ctx, [[cable.colour lighterShade] CGColor]);
-        CGContextTranslateCTM(ctx, 0, -2);
-        CGContextSetLineWidth(ctx, 1);
-        CGContextAddPath(ctx, bezierPath.CGPath);
-        CGContextStrokePath(ctx);
+//        // Stroke Highlight
+//        CGContextSetStrokeColorWithColor(ctx, [[cable.colour lighterShade] CGColor]);
+//        CGContextTranslateCTM(ctx, 0, -2);
+//        CGContextSetLineWidth(ctx, 1);
+//        CGContextAddPath(ctx, bezierPath.CGPath);
+//        CGContextStrokePath(ctx);
         
         CGContextRestoreGState(ctx);
     }
