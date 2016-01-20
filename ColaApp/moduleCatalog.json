@@ -382,6 +382,63 @@
                                ]
                  }
                  },
+                 
+                 {
+                 "id" : "LOGIC",
+                 "name" : "Logic",
+                 "width" : 2,
+                 "type" : "CCOLComponentTypeLogic",
+                 "view" :
+                 {
+                 "asset" : "logic",
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "Carrier In",
+                                 "x" : 45,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "input",
+                                 "connection" : "Modulator In",
+                                 "x" : 135,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "GreatThanMod Out",
+                                 "x" : 90,
+                                 "y" : 30
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "IfModIsPos Out",
+                                 "x" : 90,
+                                 "y" : 90
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "ModBufferDelay Out",
+                                 "x" : 90,
+                                 "y" : 150
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "ModBufferDelay2 Out",
+                                 "x" : 90,
+                                 "y" : 180
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "ModBufferDelay3 Out",
+                                 "x" : 90,
+                                 "y" : 210
+                                 }
+
+                                 ]
+                 }
+                 },
+                 
                  {
                  "id" : "VCFA",
                  "name" : "VCF A",
@@ -465,11 +522,6 @@
                                ]
                  }
                  },
-                 
-                 
-                 
-                 
-                 
                  
                  
                  {

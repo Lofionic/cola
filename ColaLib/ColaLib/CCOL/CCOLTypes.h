@@ -23,6 +23,7 @@ typedef unsigned long long  CCOLParameterAddress;
 #define kCCOLComponentTypeMultiples     "CCOLComponentTypeMultiples"
 #define kCCOLComponentTypeMixer         "CCOLComponentTypeMixer"
 #define kCCOLComponentTypeMixer4        "CCOLComponentTypeMixer4"
+#define kCCOLComponentTypeLogic         "CCOLComponentTypeLogic"
 #define kCCOLComponentTypeRingMod       "CCOLComponentTypeRingMod"
 #define kCCOLComponentTypePan           "CCOLComponentTypePan"
 #define kCCOLComponentTypeSequencer     "CCOLComponentTypeSequencer"
