@@ -45,7 +45,7 @@ void CCOLComponentMixer4::renderOutputs(unsigned int numframes) {
     SignalType *outputBuffer = output->prepareBufferOfSize(numframes);
     
     for (int i = 0; i < numframes; i++) {
-        float delta = i / numframes;
+        float delta = i / (float)numframes;
         float level1Output = level1->getOutputAtDelta(delta);
         float level2Output = level2->getOutputAtDelta(delta);
         float level3Output = level3->getOutputAtDelta(delta);
