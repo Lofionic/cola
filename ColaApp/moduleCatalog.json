@@ -396,13 +396,13 @@
                                  "type" : "input",
                                  "connection" : "Carrier In",
                                  "x" : 45,
-                                 "y" : 285
+                                 "y" : 280
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "Modulator In",
                                  "x" : 135,
-                                 "y" : 285
+                                 "y" : 280
                                  },
                                  
                                  {

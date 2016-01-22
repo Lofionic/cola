@@ -90,7 +90,9 @@ void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
         }
         
         // If carrier and modulator are both positive or both negative then output the carrier, else output the modulator
-        if ((inputBuffer1[i] > 0 && inputBuffer2[i] < 0) || (inputBuffer1[i] < 0 && inputBuffer2[i] > 0)) {
+        if ((inputBuffer1[i] > 0 && inputBuffer2[i] < 0)
+            || (inputBuffer1[i] < 0 && inputBuffer2[i] > 0)
+            || inputBuffer2[i] == 0 ) {
             outputBufferSamePolarity[i] = inputBuffer1[i];
         } else {
             outputBufferSamePolarity[i] = inputBuffer2[i];
@@ -109,9 +111,9 @@ void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
         // Offset the input buffer read by a multiple of the modulator
         // May produce weird behaviour if offset pushes the buffer read position outside of buffer range
         
-        // Get an approximated logarithmic multiplier for the offset (0 - numframes/2)
+        // Get multiplier for the offset (0 - numframes/2)
         float offsetParamLog = modOffsetAmount->getOutputAtDelta(delta);
-//        offsetParamLog = offsetParamLog * offsetParamLog * offsetParamLog;
+        offsetParamLog = offsetParamLog * offsetParamLog * offsetParamLog; // Approximate log scale
         float offsetAmount = numFrames/2 * offsetParamLog;
         
         // Offset with no bounds
@@ -121,7 +123,6 @@ void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
         // Offset and constrained within buffer (will cause distortion at the beginning and end of the render cycle)
         if (bufferOffset+i < numFrames && bufferOffset+i >= 0) {
             outputBufferOffset2[i] = inputBuffer1[bufferOffset+i];
-            outputBufferOffset2[i] = inputBuffer1[i];
         } else if (bufferOffset+i >= numFrames) {
             outputBufferOffset2[i] = inputBuffer1[numFrames-1];
         } else if (bufferOffset+i < 0) {
@@ -129,9 +130,19 @@ void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
         }
         
         
-        // POSITIVE OFFSET: Offset by 0-1 * numframes with no bounds
+        // POSITIVE OFFSET CONSTRAINED: Offset by 0 to 1 * numframes constrained within buffer
         int bufferOffset2 = int((inputBuffer2[i]+1) * 0.5  * offsetAmount);
-        outputBufferOffset3[i] = inputBuffer1[i+bufferOffset2];
+        
+        if (bufferOffset2+i < numFrames && bufferOffset2+i >= 0) {
+            outputBufferOffset3[i] = inputBuffer1[bufferOffset2+i];
+            outputBufferOffset3[i] = inputBuffer1[i];
+        } else if (bufferOffset2+i >= numFrames) {
+            outputBufferOffset3[i] = inputBuffer1[numFrames-1];
+        } else if (bufferOffset2+i < 0) {
+            outputBufferOffset3[i] = inputBuffer1[0];
+        }
+        
+        
         
     }
 
