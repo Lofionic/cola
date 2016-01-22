@@ -17,13 +17,22 @@ class CCOLComponentLogic : public CCOLComponent {
     
     CCOLComponentOutput *outputGreatThanMod;
     CCOLComponentOutput *outputModIsPos;
-    CCOLComponentOutput *outputModBufferDelay;
-    CCOLComponentOutput *outputModBufferDelay2;
-    CCOLComponentOutput *outputModBufferDelay3;
+    CCOLComponentOutput *outputSamePolarity;
+    
+    CCOLComponentOutput *outputRectified;
+    CCOLComponentOutput *outputRectifiedAbsoluteMod;
+    CCOLComponentOutput *outputRectifiedMod;
+    
+    CCOLComponentOutput *outputModOffset;
+    CCOLComponentOutput *outputModOffset2;
+    CCOLComponentOutput *outputModOffset3;
+    
     
     CCOLComponentInput  *input1;
     CCOLComponentInput  *input2;
-  
+
+    CCOLComponentParameter *modOffsetAmount;
+    
 public:
     CCOLComponentLogic(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
     }

@@ -396,46 +396,79 @@
                                  "type" : "input",
                                  "connection" : "Carrier In",
                                  "x" : 45,
-                                 "y" : 270
+                                 "y" : 285
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "Modulator In",
                                  "x" : 135,
-                                 "y" : 270
+                                 "y" : 285
                                  },
+                                 
                                  {
                                  "type" : "output",
                                  "connection" : "GreatThanMod Out",
-                                 "x" : 90,
-                                 "y" : 30
+                                 "x" : 150,
+                                 "y" : 120
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "IfModIsPos Out",
-                                 "x" : 90,
-                                 "y" : 90
-                                 },
-                                 {
-                                 "type" : "output",
-                                 "connection" : "ModBufferDelay Out",
-                                 "x" : 90,
+                                 "x" : 150,
                                  "y" : 150
                                  },
                                  {
                                  "type" : "output",
-                                 "connection" : "ModBufferDelay2 Out",
-                                 "x" : 90,
+                                 "connection" : "SamePolarity Out",
+                                 "x" : 150,
                                  "y" : 180
                                  },
                                  {
                                  "type" : "output",
-                                 "connection" : "ModBufferDelay3 Out",
-                                 "x" : 90,
-                                 "y" : 210
+                                 "connection" : "Rectified Out",
+                                 "x" : 150,
+                                 "y" : 30
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "RectifiedAbsMod Out",
+                                 "x" : 150,
+                                 "y" : 60
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "RectifiedMod Out",
+                                 "x" : 150,
+                                 "y" : 90
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "ModOffset Out",
+                                 "x" : 80,
+                                 "y" : 230
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "ModOffset2 Out",
+                                 "x" : 120,
+                                 "y" : 230
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "ModOffset3 Out",
+                                 "x" : 160,
+                                 "y" : 230
                                  }
-
-                                 ]
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "modOffsetAmount",
+                               "asset" : "large_white",
+                               "x" : 30,
+                               "y" : 225
+                               }
+                               ]
                  }
                  },
                  

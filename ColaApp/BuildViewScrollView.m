@@ -8,6 +8,7 @@
 #import "defines.h"
 #import "BuildViewScrollView.h"
 #define TOUCH_MOVEMENT_THRESHOLD    10
+#define AUTOSCROLL_PROPORTION    0.1
 
 @interface BuildViewScrollView ()
 
@@ -85,7 +86,7 @@
 -(void)autoScroll {
     if (!self.tracking && self.enableAutoscroll) {
         // Auto-scroll if necessary
-        if (self.touchPoint.y < (self.frame.size.height * 0.3) + self.contentOffset.y) {
+        if (self.touchPoint.y < (self.frame.size.height * AUTOSCROLL_PROPORTION) + self.contentOffset.y) {
             // Audoscroll up
             CGFloat targetY = MAX(self.touchPoint.y - (self.frame.size.height / 2.0), 0);
             CGRect targetRect = CGRectMake(0, targetY, 1, 1);
@@ -95,7 +96,7 @@
             
             CGFloat deltaY = self.touchPoint.y - targetY;
             self.touchPoint = CGPointMake(self.touchPoint.x, self.touchPoint.y - deltaY);
-        } else if (self.touchPoint.y > (self.frame.size.height * 0.7) + self.contentOffset.y) {
+        } else if (self.touchPoint.y > (self.frame.size.height * (1-AUTOSCROLL_PROPORTION)) + self.contentOffset.y) {
             // Audoscroll down
             
             CGFloat targetY = MIN(self.touchPoint.y + (self.frame.size.height / 2.0), self.contentSize.height - 1    );

@@ -15,13 +15,33 @@ void CCOLComponentLogic::initializeIO() {
     input2 = new CCOLComponentInput(this, kIOTypeAudio, (char*)"Modulator In");
     setInputs(vector<CCOLComponentInput*> { input1, input2 });
     
-    outputGreatThanMod = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"GreatThanMod Out");
-    outputModIsPos    = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"IfModIsPos Out");
-    outputModBufferDelay = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"ModBufferDelay Out");
-    outputModBufferDelay2 = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"ModBufferDelay2 Out");
-    outputModBufferDelay3 = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"ModBufferDelay3 Out");
-
-    setOutputs(vector<CCOLComponentOutput *> { outputGreatThanMod, outputModIsPos, outputModBufferDelay, outputModBufferDelay2, outputModBufferDelay3 });
+    outputGreatThanMod  = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"GreatThanMod Out");
+    outputModIsPos      = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"IfModIsPos Out");
+    outputSamePolarity  = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"SamePolarity Out");
+    
+    outputRectified             = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"Rectified Out");
+    outputRectifiedAbsoluteMod  = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"RectifiedAbsMod Out");
+    outputRectifiedMod          = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"RectifiedMod Out");
+    
+    outputModOffset     = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"ModOffset Out");
+    outputModOffset2    = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"ModOffset2 Out");
+    outputModOffset3    = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"ModOffset3 Out");
+    
+    setOutputs(vector<CCOLComponentOutput *> {
+        outputGreatThanMod,
+        outputModIsPos,
+        outputSamePolarity,
+        outputRectified,
+        outputRectifiedAbsoluteMod,
+        outputRectifiedMod,
+        outputModOffset,
+        outputModOffset2,
+        outputModOffset3 });
+    
+    
+    modOffsetAmount    = new CCOLComponentParameter(this, (char*)"modOffsetAmount");
+    setParameters(vector<CCOLComponentParameter*> { modOffsetAmount });
+    modOffsetAmount->setNormalizedValue(0.5);
 }
 
 void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
@@ -30,52 +50,89 @@ void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
     SignalType *inputBuffer1 = input1->getBuffer(numFrames);
     SignalType *inputBuffer2 = input2->getBuffer(numFrames);
     
-    SignalType *outputBuffer1 = outputGreatThanMod->prepareBufferOfSize(numFrames);
-    SignalType *outputBuffer2 = outputModIsPos->prepareBufferOfSize(numFrames);
-    SignalType *outputBuffer3 = outputModBufferDelay->prepareBufferOfSize(numFrames);
-    SignalType *outputBuffer3a = outputModBufferDelay2->prepareBufferOfSize(numFrames);
-    SignalType *outputBuffer3b = outputModBufferDelay3->prepareBufferOfSize(numFrames);
+    SignalType *outputBufferGreaterThan = outputGreatThanMod->prepareBufferOfSize(numFrames);
+    SignalType *outputBufferModIsPos = outputModIsPos->prepareBufferOfSize(numFrames);
+    SignalType *outputBufferSamePolarity = outputSamePolarity->prepareBufferOfSize(numFrames);
+    
+    SignalType *outputBufferRectified = outputRectified->prepareBufferOfSize(numFrames);
+    SignalType *outputBufferRectifiedAbsMod = outputRectifiedAbsoluteMod->prepareBufferOfSize(numFrames);
+    SignalType *outputBufferRectifiedMod = outputRectifiedMod->prepareBufferOfSize(numFrames);
+    
+    SignalType *outputBufferOffset = outputModOffset->prepareBufferOfSize(numFrames);
+    SignalType *outputBufferOffset2 = outputModOffset2->prepareBufferOfSize(numFrames);
+    SignalType *outputBufferOffset3 = outputModOffset3->prepareBufferOfSize(numFrames);
     
     
     
     for (int i = 0; i < numFrames; i++) {
         
-        // If the absolute carrier level is greater than the absolute modulator level, output the carrier signal.
+        float delta = i/(float)numFrames;
+        
+        // If the absolute carrier level is greater than the absolute modulator level, output the carrier signal else output 0.
         if (fabsf(inputBuffer1[i]) > fabsf(inputBuffer2[i])) {
-            outputBuffer1[i] = inputBuffer1[i];
+            outputBufferGreaterThan[i] = inputBuffer1[i];
         } else {
-            outputBuffer1[i] = 0;
+            outputBufferGreaterThan[i] = 0;
         }
         
-        // If the modulator level is positive, output the carrier signal.
+        // If the modulator level is positive, output the carrier signal, else output 0.
         if (inputBuffer2[i] > 0) {
-            outputBuffer2[i] = inputBuffer1[i];
+            outputBufferModIsPos[i] = inputBuffer1[i];
         } else {
-            outputBuffer2[i] = 0;
+            outputBufferModIsPos[i] = 0;
         }
         
+        // If carrier and modulator are both positive or both negative then output the carrier, else output 0.
+        if ((inputBuffer1[i] > 0 && inputBuffer2[i] > 0) || (inputBuffer1[i] < 0 && inputBuffer2[i] < 0)) {
+            outputBufferSamePolarity[i] = inputBuffer1[i];
+        } else {
+            outputBufferSamePolarity[i] = 0;
+        }
         
+        // If carrier and modulator are both positive or both negative then output the carrier, else output the modulator
+        if ((inputBuffer1[i] > 0 && inputBuffer2[i] < 0) || (inputBuffer1[i] < 0 && inputBuffer2[i] > 0)) {
+            outputBufferSamePolarity[i] = inputBuffer1[i];
+        } else {
+            outputBufferSamePolarity[i] = inputBuffer2[i];
+        }
+        
+        // Rectified and scaled carrier
+        outputBufferRectified[i] = (fabsf(inputBuffer1[i]) * 2.0) - 1.0;
+
+        // Rectified and scaled carrier multiplied by absolute modulator
+        outputBufferRectifiedAbsMod[i] = ((fabsf(inputBuffer1[i]) * 2.0 ) - 1.0) * (fabsf(inputBuffer2[i]));
+        
+        // Rectified and scaled carrier multiplied by modulator
+        outputBufferRectifiedMod[i] = ((fabsf(inputBuffer1[i]) * 2.0 ) - 1.0) * inputBuffer2[i];
+        
+
         // Offset the input buffer read by a multiple of the modulator
         // May produce weird behaviour if offset pushes the buffer read position outside of buffer range
         
-        // Offset with no bounds
-        int bufferOffset = int(inputBuffer2[i] * numFrames);
-        outputBuffer3[i] = inputBuffer1[i+bufferOffset];
+        // Get an approximated logarithmic multiplier for the offset (0 - numframes/2)
+        float offsetParamLog = modOffsetAmount->getOutputAtDelta(delta);
+//        offsetParamLog = offsetParamLog * offsetParamLog * offsetParamLog;
+        float offsetAmount = numFrames/2 * offsetParamLog;
         
-        // Offset and constrained within buffer
-        if (bufferOffset+i < numFrames && bufferOffset+i > 0) {
-            outputBuffer3a[i] = inputBuffer1[bufferOffset+i];
-        } else if (bufferOffset+i > numFrames) {
-            outputBuffer3a[i] = inputBuffer1[numFrames];
+        // Offset with no bounds
+        int bufferOffset = int(inputBuffer2[i] * offsetAmount);
+        outputBufferOffset[i] = inputBuffer1[i+bufferOffset];
+        
+        // Offset and constrained within buffer (will cause distortion at the beginning and end of the render cycle)
+        if (bufferOffset+i < numFrames && bufferOffset+i >= 0) {
+            outputBufferOffset2[i] = inputBuffer1[bufferOffset+i];
+            outputBufferOffset2[i] = inputBuffer1[i];
+        } else if (bufferOffset+i >= numFrames) {
+            outputBufferOffset2[i] = inputBuffer1[numFrames-1];
         } else if (bufferOffset+i < 0) {
-            outputBuffer3a[i] = inputBuffer1[0];
+            outputBufferOffset2[i] = inputBuffer1[0];
         }
         
-        // Offset by 0-1 * numframes with no bounds
-        int bufferOffset2 = int((inputBuffer2[i]+1) * 0.5  * numFrames);
-        outputBuffer3b[i] = inputBuffer1[i+bufferOffset2];
+        
+        // POSITIVE OFFSET: Offset by 0-1 * numframes with no bounds
+        int bufferOffset2 = int((inputBuffer2[i]+1) * 0.5  * offsetAmount);
+        outputBufferOffset3[i] = inputBuffer1[i+bufferOffset2];
         
     }
-    
-    
+
 }
