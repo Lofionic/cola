@@ -44,6 +44,9 @@
 		6CDA9F141AA9017E00D64EB0 /* BuildView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6CDA9F131AA9017E00D64EB0 /* BuildView.mm */; };
 		6CEF81151ACC779000FB1943 /* Icons in Resources */ = {isa = PBXBuildFile; fileRef = 6CEF81141ACC779000FB1943 /* Icons */; };
 		83CF1FC51C444FF400C159C7 /* StateButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 83CF1FC41C444FF400C159C7 /* StateButton.m */; };
+		83F313DD1C56CBEA00356B2E /* SequencerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83F313DC1C56CBEA00356B2E /* SequencerView.xib */; };
+		83F313DF1C56D0CC00356B2E /* Sequencer.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83F313DE1C56D0CC00356B2E /* Sequencer.xcassets */; };
+		83F313E51C56DCD400356B2E /* SequencerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F313E41C56DCD400356B2E /* SequencerButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +130,10 @@
 		6CEF81141ACC779000FB1943 /* Icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Icons; sourceTree = "<group>"; };
 		83CF1FC31C444FF400C159C7 /* StateButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateButton.h; sourceTree = "<group>"; };
 		83CF1FC41C444FF400C159C7 /* StateButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateButton.m; sourceTree = "<group>"; };
+		83F313DC1C56CBEA00356B2E /* SequencerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SequencerView.xib; sourceTree = "<group>"; };
+		83F313DE1C56D0CC00356B2E /* Sequencer.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Sequencer.xcassets; sourceTree = "<group>"; };
+		83F313E31C56DCD400356B2E /* SequencerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencerButton.h; sourceTree = "<group>"; };
+		83F313E41C56DCD400356B2E /* SequencerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequencerButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -319,8 +326,12 @@
 		6C9758D41C46DB59000EA81B /* SequencerView */ = {
 			isa = PBXGroup;
 			children = (
+				83F313DE1C56D0CC00356B2E /* Sequencer.xcassets */,
+				83F313DC1C56CBEA00356B2E /* SequencerView.xib */,
 				6C9758D51C46DB94000EA81B /* SequencerView.h */,
 				6C9758D61C46DB94000EA81B /* SequencerView.m */,
+				83F313E31C56DCD400356B2E /* SequencerButton.h */,
+				83F313E41C56DCD400356B2E /* SequencerButton.m */,
 			);
 			name = SequencerView;
 			sourceTree = "<group>";
@@ -421,7 +432,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83F313DD1C56CBEA00356B2E /* SequencerView.xib in Resources */,
 				6CEF81151ACC779000FB1943 /* Icons in Resources */,
+				83F313DF1C56D0CC00356B2E /* Sequencer.xcassets in Resources */,
 				6C12010B1AAE49A100C6ACB6 /* moduleCatalog.json in Resources */,
 				6C2A5EA31A8C0B2A00ECEAB2 /* Interapp.txt in Resources */,
 				6CB828381AC2F58000610DD4 /* ImageAssets in Resources */,
@@ -437,6 +450,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C0BAEBE1B1BBA94007314CB /* IAAView.m in Sources */,
+				83F313E51C56DCD400356B2E /* SequencerButton.m in Sources */,
 				6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */,
 				6C0B16B21ADBD5F70058BA18 /* FilesViewController.m in Sources */,
 				6C1201091AAE44D200C6ACB6 /* ModuleDescription.m in Sources */,

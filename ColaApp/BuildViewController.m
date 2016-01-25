@@ -108,11 +108,16 @@ static BuildView *buildView = nil;
     // Setup sequencer container in bottom shelf
     self.sequencerContainerView = [[UIView alloc] init];
     [self.sequencerContainerView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    
+    
     [self.bottomPanel addSubview:self.sequencerContainerView];
     
     self.sequencerView = [[SequencerView alloc] init];
     [self.sequencerView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.sequencerContainerView addSubview:self.sequencerView];
+    
+    
     
     [self.keyboardContainerView setHidden:YES];
     
