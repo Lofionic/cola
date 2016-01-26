@@ -45,12 +45,7 @@
 }
 
 - (IBAction)touchNoteButton:(id)sender {
-    UIButton* button = (UIButton*)sender;
-    if ([button isSelected]) {
-        [button setSelected:false];
-    } else {
-        [button setSelected:true];
-    }
+    NSLog(@"FOO");
 }
 
 @end

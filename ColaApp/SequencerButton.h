@@ -11,10 +11,4 @@
 IB_DESIGNABLE
 @interface SequencerButton : UIButton
 
-typedef enum : NSUInteger {
-    VerticalLight,
-    Horizontal,
-    Large
-} SequencerButtonType;
-
 @end

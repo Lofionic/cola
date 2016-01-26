@@ -35,7 +35,7 @@
 @implementation ModuleView
 
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame identifier:(NSString*)identifier {
-    
+        
     CCOLComponentAddress component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:(char*)[moduleDescription.component UTF8String]];
 
     if (component == 0) {

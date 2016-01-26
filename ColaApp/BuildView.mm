@@ -643,9 +643,11 @@ static NSArray *cableColours;
     for (NSDictionary *thisModule in modules) {
         CGPoint center = [[thisModule objectForKey:PRESET_KEY_MODULE_CENTER] CGPointValue];
         ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[thisModule objectForKey:PRESET_KEY_MODULE_TYPE]];
-        NSString *identifier = [thisModule objectForKey:PRESET_KEY_MODULE_IDENTIFIER];
-        NSDictionary *controlsDictionary = [thisModule objectForKey:PRESET_KEY_MODULE_CONTROLS];
-        [[self addViewForModule:moduleDescription atPoint:center identifier:identifier] setParametersFromDictionary:controlsDictionary];
+        if (moduleDescription) {
+            NSString *identifier = [thisModule objectForKey:PRESET_KEY_MODULE_IDENTIFIER];
+            NSDictionary *controlsDictionary = [thisModule objectForKey:PRESET_KEY_MODULE_CONTROLS];
+            [[self addViewForModule:moduleDescription atPoint:center identifier:identifier] setParametersFromDictionary:controlsDictionary];
+        }
     }
 
     NSArray *cablesArray = [dictionary objectForKey:PRESET_KEY_CABLES];

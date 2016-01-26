@@ -37,6 +37,7 @@
 		6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */; };
 		6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2941AC0C9CC00320628 /* ModuleView.m */; };
 		6C9758D71C46DB94000EA81B /* SequencerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9758D61C46DB94000EA81B /* SequencerView.m */; };
+		6C98BACD1C57A94900751CC6 /* SequencerLED.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C98BACC1C57A94900751CC6 /* SequencerLED.m */; };
 		6CB828381AC2F58000610DD4 /* ImageAssets in Resources */ = {isa = PBXBuildFile; fileRef = 6CB828371AC2F58000610DD4 /* ImageAssets */; };
 		6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */; };
 		6CB8FAAB1BEE671B00DCAB2E /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CB8FAAA1BEE671B00DCAB2E /* UIImage+Resize.m */; };
@@ -118,6 +119,8 @@
 		6C8DD2941AC0C9CC00320628 /* ModuleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleView.m; sourceTree = "<group>"; };
 		6C9758D51C46DB94000EA81B /* SequencerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencerView.h; sourceTree = "<group>"; };
 		6C9758D61C46DB94000EA81B /* SequencerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequencerView.m; sourceTree = "<group>"; };
+		6C98BACB1C57A94900751CC6 /* SequencerLED.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencerLED.h; sourceTree = "<group>"; };
+		6C98BACC1C57A94900751CC6 /* SequencerLED.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequencerLED.m; sourceTree = "<group>"; };
 		6CB828371AC2F58000610DD4 /* ImageAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ImageAssets; sourceTree = "<group>"; };
 		6CB8283C1AC3077800610DD4 /* UIColor+Shades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Shades.h"; sourceTree = "<group>"; };
 		6CB8283D1AC3077800610DD4 /* UIColor+Shades.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Shades.m"; sourceTree = "<group>"; };
@@ -332,6 +335,8 @@
 				6C9758D61C46DB94000EA81B /* SequencerView.m */,
 				83F313E31C56DCD400356B2E /* SequencerButton.h */,
 				83F313E41C56DCD400356B2E /* SequencerButton.m */,
+				6C98BACB1C57A94900751CC6 /* SequencerLED.h */,
+				6C98BACC1C57A94900751CC6 /* SequencerLED.m */,
 			);
 			name = SequencerView;
 			sourceTree = "<group>";
@@ -464,6 +469,7 @@
 				6C1CF0E01AC206BD0004A2FA /* BuildViewHighlightLayer.m in Sources */,
 				6C2A5E251A8BF2CC00ECEAB2 /* AppDelegate.m in Sources */,
 				6C0F86D81AA7BEB70092FB18 /* ComponentShelfView.m in Sources */,
+				6C98BACD1C57A94900751CC6 /* SequencerLED.m in Sources */,
 				6C6DB53D1AD6B48C0001343E /* ModuleCatalog.m in Sources */,
 				6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */,
 				6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */,
