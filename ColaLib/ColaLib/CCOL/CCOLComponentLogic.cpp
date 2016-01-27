@@ -44,6 +44,14 @@ void CCOLComponentLogic::initializeIO() {
     modOffsetAmount->setNormalizedValue(0.5);
 }
 
+float interpolatedBetweenValues(float firstValue, float secondValue, float delta) {
+    
+    float val = firstValue + ((secondValue - firstValue) * delta);
+    
+//    printf("%4.4f, %4.4f, %4.4f = %4.4f \n", firstValue, secondValue, delta, val);
+    return firstValue + (secondValue - firstValue * delta);
+}
+
 void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
     CCOLComponent::renderOutputs(numFrames);
     
@@ -63,51 +71,63 @@ void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
     SignalType *outputBufferOffset3 = outputModOffset3->prepareBufferOfSize(numFrames);
     
     
-    
     for (int i = 0; i < numFrames; i++) {
         
         float delta = i/(float)numFrames;
         
         // If the absolute carrier level is greater than the absolute modulator level, output the carrier signal else output 0.
-        if (fabsf(inputBuffer1[i]) > fabsf(inputBuffer2[i])) {
-            outputBufferGreaterThan[i] = inputBuffer1[i];
-        } else {
-            outputBufferGreaterThan[i] = 0;
+        if (outputGreatThanMod->isConnected()) {
+            if (fabsf(inputBuffer1[i]) > fabsf(inputBuffer2[i])) {
+                outputBufferGreaterThan[i] = inputBuffer1[i];
+            } else {
+                outputBufferGreaterThan[i] = 0;
+            }
         }
         
         // If the modulator level is positive, output the carrier signal, else output 0.
-        if (inputBuffer2[i] > 0) {
-            outputBufferModIsPos[i] = inputBuffer1[i];
-        } else {
-            outputBufferModIsPos[i] = 0;
+        if (outputModIsPos->isConnected()) {
+            if (inputBuffer2[i] > 0) {
+                outputBufferModIsPos[i] = inputBuffer1[i];
+            } else {
+                outputBufferModIsPos[i] = 0;
+            }
         }
         
         // If carrier and modulator are both positive or both negative then output the carrier, else output 0.
-        if ((inputBuffer1[i] > 0 && inputBuffer2[i] > 0) || (inputBuffer1[i] < 0 && inputBuffer2[i] < 0)) {
-            outputBufferSamePolarity[i] = inputBuffer1[i];
-        } else {
-            outputBufferSamePolarity[i] = 0;
+        if (outputSamePolarity->isConnected()) {
+            if ((inputBuffer1[i] > 0 && inputBuffer2[i] > 0) || (inputBuffer1[i] < 0 && inputBuffer2[i] < 0)) {
+                outputBufferSamePolarity[i] = inputBuffer1[i];
+            } else {
+                outputBufferSamePolarity[i] = 0;
+            }
         }
         
         // If carrier and modulator are both positive or both negative then output the carrier, else output the modulator
-        if ((inputBuffer1[i] > 0 && inputBuffer2[i] < 0)
-            || (inputBuffer1[i] < 0 && inputBuffer2[i] > 0)
-            || inputBuffer2[i] == 0 ) {
-            outputBufferSamePolarity[i] = inputBuffer1[i];
-        } else {
-            outputBufferSamePolarity[i] = inputBuffer2[i];
+        if (outputModOffset->isConnected()) {
+            if ((inputBuffer1[i] > 0 && inputBuffer2[i] < 0)
+                || (inputBuffer1[i] < 0 && inputBuffer2[i] > 0)
+                || inputBuffer2[i] == 0 ) {
+                outputBufferSamePolarity[i] = inputBuffer1[i];
+            } else {
+                outputBufferSamePolarity[i] = inputBuffer2[i];
+            }
         }
         
         // Rectified and scaled carrier
-        outputBufferRectified[i] = (fabsf(inputBuffer1[i]) * 2.0) - 1.0;
-
+        if (outputRectified->isConnected()) {
+            outputBufferRectified[i] = (fabsf(inputBuffer1[i]) * 2.0) - 1.0;
+        }
+        
         // Rectified and scaled carrier multiplied by absolute modulator
-        outputBufferRectifiedAbsMod[i] = ((fabsf(inputBuffer1[i]) * 2.0 ) - 1.0) * (fabsf(inputBuffer2[i]));
+        if (outputRectifiedAbsoluteMod->isConnected()) {
+            outputBufferRectifiedAbsMod[i] = ((fabsf(inputBuffer1[i]) * 2.0 ) - 1.0) * (fabsf(inputBuffer2[i]));
+        }
         
         // Rectified and scaled carrier multiplied by modulator
-        outputBufferRectifiedMod[i] = ((fabsf(inputBuffer1[i]) * 2.0 ) - 1.0) * inputBuffer2[i];
+        if (outputRectifiedMod->isConnected()) {
+            outputBufferRectifiedMod[i] = ((fabsf(inputBuffer1[i]) * 2.0 ) - 1.0) * inputBuffer2[i];
+        }
         
-
         // Offset the input buffer read by a multiple of the modulator
         // May produce weird behaviour if offset pushes the buffer read position outside of buffer range
         
@@ -118,32 +138,40 @@ void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
         
         // Offset with no bounds
         int bufferOffset = int(inputBuffer2[i] * offsetAmount);
-        outputBufferOffset[i] = inputBuffer1[i+bufferOffset];
+        
+        // Offset with no bounds
+        // May produce weird behaviour if offset pushes the buffer read position outside of buffer range
+        if (outputModOffset->isConnected()) {
+            outputBufferOffset[i] = inputBuffer1[i+bufferOffset];
+        }
         
         // Offset and constrained within buffer (will cause distortion at the beginning and end of the render cycle)
-        if (bufferOffset+i < numFrames && bufferOffset+i >= 0) {
-            outputBufferOffset2[i] = inputBuffer1[bufferOffset+i];
-        } else if (bufferOffset+i >= numFrames) {
-            outputBufferOffset2[i] = inputBuffer1[numFrames-1];
-        } else if (bufferOffset+i < 0) {
-            outputBufferOffset2[i] = inputBuffer1[0];
+        if (outputModOffset2->isConnected()) {
+            if (bufferOffset+i < numFrames && bufferOffset+i >= 0) {
+                outputBufferOffset2[i] = inputBuffer1[bufferOffset+i];
+            } else if (bufferOffset+i >= numFrames) {
+                outputBufferOffset2[i] = inputBuffer1[numFrames-1];
+            } else if (bufferOffset+i < 0) {
+                outputBufferOffset2[i] = inputBuffer1[0];
+            }
         }
         
         
         // POSITIVE OFFSET CONSTRAINED: Offset by 0 to 1 * numframes constrained within buffer
-        int bufferOffset2 = int((inputBuffer2[i]+1) * 0.5  * offsetAmount);
-        
-        if (bufferOffset2+i < numFrames && bufferOffset2+i >= 0) {
-            outputBufferOffset3[i] = inputBuffer1[bufferOffset2+i];
-            outputBufferOffset3[i] = inputBuffer1[i];
-        } else if (bufferOffset2+i >= numFrames) {
-            outputBufferOffset3[i] = inputBuffer1[numFrames-1];
-        } else if (bufferOffset2+i < 0) {
-            outputBufferOffset3[i] = inputBuffer1[0];
+        if (outputModOffset3->isConnected()) {
+            int bufferOffset2 = int((inputBuffer2[i]+1) * 0.5  * offsetAmount);
+            
+            if (bufferOffset2+i < numFrames && bufferOffset2+i >= 0) {
+                outputBufferOffset3[i] = inputBuffer1[bufferOffset2+i];
+                outputBufferOffset3[i] = inputBuffer1[i];
+            } else if (bufferOffset2+i >= numFrames) {
+                outputBufferOffset3[i] = inputBuffer1[numFrames-1];
+            } else if (bufferOffset2+i < 0) {
+                outputBufferOffset3[i] = inputBuffer1[0];
+            }
         }
         
         
         
     }
-
 }
