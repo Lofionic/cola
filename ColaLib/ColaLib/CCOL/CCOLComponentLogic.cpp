@@ -44,14 +44,6 @@ void CCOLComponentLogic::initializeIO() {
     modOffsetAmount->setNormalizedValue(0.5);
 }
 
-float interpolatedBetweenValues(float firstValue, float secondValue, float delta) {
-    
-    float val = firstValue + ((secondValue - firstValue) * delta);
-    
-//    printf("%4.4f, %4.4f, %4.4f = %4.4f \n", firstValue, secondValue, delta, val);
-    return firstValue + (secondValue - firstValue * delta);
-}
-
 void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
     CCOLComponent::renderOutputs(numFrames);
     
@@ -129,14 +121,11 @@ void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
         }
         
         // Offset the input buffer read by a multiple of the modulator
-        // May produce weird behaviour if offset pushes the buffer read position outside of buffer range
         
         // Get multiplier for the offset (0 - numframes/2)
         float offsetParamLog = modOffsetAmount->getOutputAtDelta(delta);
         offsetParamLog = offsetParamLog * offsetParamLog * offsetParamLog; // Approximate log scale
         float offsetAmount = numFrames/2 * offsetParamLog;
-        
-        // Offset with no bounds
         int bufferOffset = int(inputBuffer2[i] * offsetAmount);
         
         // Offset with no bounds
@@ -156,6 +145,19 @@ void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
             }
         }
         
+        // Offset and constrained within buffer but interpolating between values (will cause distortion at the beginning and end of the render cycle)
+        
+//        if (outputModOffset2->isConnected()) {
+//            float bufferOffsetFloat = (inputBuffer2[i] * offsetAmount);
+//            
+//            if (bufferOffsetFloat+i < numFrames && bufferOffsetFloat+i >= 0) {
+//                outputBufferOffset2[i]= inputBuffer1[i] + ((inputBuffer1[i+1] - inputBuffer1[i]) * (bufferOffsetFloat - (int)bufferOffsetFloat));
+//            } else if (bufferOffsetFloat+i >= numFrames) {
+//                outputBufferOffset2[i] = inputBuffer1[numFrames-1];
+//            } else if (bufferOffsetFloat+i < 0) {
+//                outputBufferOffset2[i] = inputBuffer1[0];
+//            }
+//        }
         
         // POSITIVE OFFSET CONSTRAINED: Offset by 0 to 1 * numframes constrained within buffer
         if (outputModOffset3->isConnected()) {
@@ -163,15 +165,12 @@ void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
             
             if (bufferOffset2+i < numFrames && bufferOffset2+i >= 0) {
                 outputBufferOffset3[i] = inputBuffer1[bufferOffset2+i];
-                outputBufferOffset3[i] = inputBuffer1[i];
             } else if (bufferOffset2+i >= numFrames) {
                 outputBufferOffset3[i] = inputBuffer1[numFrames-1];
             } else if (bufferOffset2+i < 0) {
                 outputBufferOffset3[i] = inputBuffer1[0];
             }
         }
-        
-        
-        
     }
 }
+
