@@ -17,12 +17,12 @@
 #import "CCOLComponentMixer.hpp"
 #import "CCOLComponentMixer4.hpp"
 #import "CCOLComponentLogic.hpp"
+#import "CCOLComponentDelay.hpp"
 #import "CCOLComponentRingMod.hpp"
 #import "CCOLComponentNoiseGenerator.hpp"
 #import "CCOLComponentPan.hpp"
 #import "CCOLComponentSequencer.hpp"
 #import "CCOLComponentVCF.hpp"
 #import "CCOLMIDIComponent.hpp"
-
 
 #endif /* CCOLComponents_h */

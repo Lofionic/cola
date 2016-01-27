@@ -24,11 +24,12 @@ typedef unsigned long long  CCOLParameterAddress;
 #define kCCOLComponentTypeMixer         "CCOLComponentTypeMixer"
 #define kCCOLComponentTypeMixer4        "CCOLComponentTypeMixer4"
 #define kCCOLComponentTypeLogic         "CCOLComponentTypeLogic"
+#define kCCOLComponentTypeDelay         "CCOLComponentTypeDelay"
 #define kCCOLComponentTypeRingMod       "CCOLComponentTypeRingMod"
 #define kCCOLComponentTypePan           "CCOLComponentTypePan"
 #define kCCOLComponentTypeSequencer     "CCOLComponentTypeSequencer"
 #define KCCOLComponentTypeMIDI          "CCOLMIDIComponent"
-#define kCCOLComponentNoiseGenerator    "CCOLComponentNoiseGenerator"
+#define kCCOLComponentNoiseGenerator    "CCOLComponentTypeNoiseGenerator"
 #define kCCOLComponentTypeVCF           "CCOLComponentTypeVCF"
 
 // Interapp audio keys
