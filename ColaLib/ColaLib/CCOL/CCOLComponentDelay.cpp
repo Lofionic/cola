@@ -31,7 +31,6 @@ void CCOLComponentDelay::initializeIO() {
     
     
     // Setup delay buffer
-    
     double sampleRate = getContext()->getEngine()->getSampleRate();
     
     bufferSize = sampleRate * (maxDelayTimeMS / 1000);
@@ -60,8 +59,7 @@ void CCOLComponentDelay::renderOutputs(unsigned int numFrames) {
         SignalType inSignal = inputBuffer[i];
         
         SignalType delaySignal = inSignal + delayBuffer[bufferLocation];
-        delaySignal = fmin(fmax(delaySignal, -1.0f), 1.0f);        
-
+        delaySignal = fmin(fmax(delaySignal, -1.0f), 1.0f);
         
         outputBuffer[i] = inSignal + (delaySignal - inSignal) * mixValue;
         

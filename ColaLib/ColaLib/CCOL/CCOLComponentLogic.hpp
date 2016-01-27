@@ -14,6 +14,9 @@
 #include "CCOLTypes.h"
 
 class CCOLComponentLogic : public CCOLComponent {
+
+    CCOLComponentInput  *carrier;
+    CCOLComponentInput  *modulator;
     
     CCOLComponentOutput *outputGreatThanMod;
     CCOLComponentOutput *outputModIsPos;
@@ -26,12 +29,12 @@ class CCOLComponentLogic : public CCOLComponent {
     CCOLComponentOutput *outputModOffset;
     CCOLComponentOutput *outputModOffset2;
     CCOLComponentOutput *outputModOffset3;
-    
-    
-    CCOLComponentInput  *input1;
-    CCOLComponentInput  *input2;
 
     CCOLComponentParameter *modOffsetAmount;
+    
+    SignalType *offsetBuffer;
+    UInt32 bufferSize;
+    UInt32 bufferLocation;
     
 public:
     CCOLComponentLogic(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
