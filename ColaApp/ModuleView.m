@@ -22,6 +22,8 @@
 #import "RotaryEncoder.h"
 #import "RotarySwitch.h"
 
+#import "SequencerSubview.h"
+
 #define BACKGROUND_COLOUR [UIColor colorWithRed:64/255.0 green:64/255.0 blue:64/255.0 alpha:1]
 
 @interface ModuleView ()
@@ -52,6 +54,10 @@
         
         if (moduleDescription.controls) {
             [self addControls:moduleDescription.controls];
+        }
+        
+        if (moduleDescription.subviews) {
+            [self addSubviews:moduleDescription.subviews];
         }
         
         UIImage *assetImage = nil;
@@ -158,6 +164,22 @@
     }
     
     self.controlViews = [NSArray arrayWithArray:controlViews];
+}
+
+-(void)addSubviews:(NSArray *)subviews {
+    
+    NSMutableArray *subviewViews = [[NSMutableArray alloc] initWithCapacity:[subviews count]];
+    
+    for (SubviewDescription *thisSubview in subviews) {
+        
+        UIView *subview = [ModuleSubview subviewForComponent:self.component description:thisSubview];
+        if (subview) {
+            [self addSubview:subview];
+            [subviewViews addObject:subview];
+        }
+    }
+    
+    self.subviewViews = [NSArray arrayWithArray:subviewViews];
 }
 
 -(void)handleLongPress:(UIGestureRecognizer*)uigr {

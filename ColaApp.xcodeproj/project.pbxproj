@@ -27,6 +27,9 @@
 		6C2A5EA31A8C0B2A00ECEAB2 /* Interapp.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6C2A5EA21A8C0B2A00ECEAB2 /* Interapp.txt */; };
 		6C2A5EA61A8C0B8D00ECEAB2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */; };
 		6C300BE61AD3182E00D51544 /* NSString+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C300BE51AD3182E00D51544 /* NSString+Random.m */; };
+		6C37DAC51C58F5A300BF0C97 /* SequencerSubview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C37DAC41C58F5A300BF0C97 /* SequencerSubview.xib */; };
+		6C37DAC91C5905F400BF0C97 /* SequencerSubview.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37DAC81C5905F400BF0C97 /* SequencerSubview.m */; };
+		6C37DACC1C5908C300BF0C97 /* ModuleSubview.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37DACB1C5908C300BF0C97 /* ModuleSubview.m */; };
 		6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C59C5651ABF4273001EE663 /* ConnectorView.m */; };
 		6C64D6FE1AD9394800012108 /* MasterModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D6FD1AD9394800012108 /* MasterModuleView.m */; };
 		6C64D7061AD9B0DD00012108 /* PresetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D7051AD9B0DD00012108 /* PresetController.m */; };
@@ -45,7 +48,6 @@
 		6CDA9F141AA9017E00D64EB0 /* BuildView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6CDA9F131AA9017E00D64EB0 /* BuildView.mm */; };
 		6CEF81151ACC779000FB1943 /* Icons in Resources */ = {isa = PBXBuildFile; fileRef = 6CEF81141ACC779000FB1943 /* Icons */; };
 		83CF1FC51C444FF400C159C7 /* StateButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 83CF1FC41C444FF400C159C7 /* StateButton.m */; };
-		83F313DD1C56CBEA00356B2E /* SequencerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83F313DC1C56CBEA00356B2E /* SequencerView.xib */; };
 		83F313DF1C56D0CC00356B2E /* Sequencer.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83F313DE1C56D0CC00356B2E /* Sequencer.xcassets */; };
 		83F313E51C56DCD400356B2E /* SequencerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F313E41C56DCD400356B2E /* SequencerButton.m */; };
 /* End PBXBuildFile section */
@@ -102,6 +104,11 @@
 		6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		6C300BE41AD3182E00D51544 /* NSString+Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Random.h"; sourceTree = "<group>"; };
 		6C300BE51AD3182E00D51544 /* NSString+Random.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Random.m"; sourceTree = "<group>"; };
+		6C37DAC41C58F5A300BF0C97 /* SequencerSubview.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SequencerSubview.xib; sourceTree = "<group>"; };
+		6C37DAC71C5905F400BF0C97 /* SequencerSubview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencerSubview.h; sourceTree = "<group>"; };
+		6C37DAC81C5905F400BF0C97 /* SequencerSubview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequencerSubview.m; sourceTree = "<group>"; };
+		6C37DACA1C5908C300BF0C97 /* ModuleSubview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleSubview.h; sourceTree = "<group>"; };
+		6C37DACB1C5908C300BF0C97 /* ModuleSubview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleSubview.m; sourceTree = "<group>"; };
 		6C59C5641ABF4273001EE663 /* ConnectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorView.h; sourceTree = "<group>"; };
 		6C59C5651ABF4273001EE663 /* ConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorView.m; sourceTree = "<group>"; };
 		6C64D6FC1AD9394800012108 /* MasterModuleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterModuleView.h; sourceTree = "<group>"; };
@@ -133,7 +140,6 @@
 		6CEF81141ACC779000FB1943 /* Icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Icons; sourceTree = "<group>"; };
 		83CF1FC31C444FF400C159C7 /* StateButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateButton.h; sourceTree = "<group>"; };
 		83CF1FC41C444FF400C159C7 /* StateButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateButton.m; sourceTree = "<group>"; };
-		83F313DC1C56CBEA00356B2E /* SequencerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SequencerView.xib; sourceTree = "<group>"; };
 		83F313DE1C56D0CC00356B2E /* Sequencer.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Sequencer.xcassets; sourceTree = "<group>"; };
 		83F313E31C56DCD400356B2E /* SequencerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencerButton.h; sourceTree = "<group>"; };
 		83F313E41C56DCD400356B2E /* SequencerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequencerButton.m; sourceTree = "<group>"; };
@@ -270,6 +276,31 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		6C37DAC21C58F58000BF0C97 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				6C37DACA1C5908C300BF0C97 /* ModuleSubview.h */,
+				6C37DACB1C5908C300BF0C97 /* ModuleSubview.m */,
+				6C37DAC61C58F5D400BF0C97 /* SequencerSubview */,
+			);
+			name = Subviews;
+			sourceTree = "<group>";
+		};
+		6C37DAC61C58F5D400BF0C97 /* SequencerSubview */ = {
+			isa = PBXGroup;
+			children = (
+				83F313E31C56DCD400356B2E /* SequencerButton.h */,
+				83F313E41C56DCD400356B2E /* SequencerButton.m */,
+				6C98BACB1C57A94900751CC6 /* SequencerLED.h */,
+				6C98BACC1C57A94900751CC6 /* SequencerLED.m */,
+				83F313DE1C56D0CC00356B2E /* Sequencer.xcassets */,
+				6C37DAC41C58F5A300BF0C97 /* SequencerSubview.xib */,
+				6C37DAC71C5905F400BF0C97 /* SequencerSubview.h */,
+				6C37DAC81C5905F400BF0C97 /* SequencerSubview.m */,
+			);
+			name = SequencerSubview;
+			sourceTree = "<group>";
+		};
 		6C64D7031AD9B06600012108 /* PresetController */ = {
 			isa = PBXGroup;
 			children = (
@@ -329,14 +360,8 @@
 		6C9758D41C46DB59000EA81B /* SequencerView */ = {
 			isa = PBXGroup;
 			children = (
-				83F313DE1C56D0CC00356B2E /* Sequencer.xcassets */,
-				83F313DC1C56CBEA00356B2E /* SequencerView.xib */,
 				6C9758D51C46DB94000EA81B /* SequencerView.h */,
 				6C9758D61C46DB94000EA81B /* SequencerView.m */,
-				83F313E31C56DCD400356B2E /* SequencerButton.h */,
-				83F313E41C56DCD400356B2E /* SequencerButton.m */,
-				6C98BACB1C57A94900751CC6 /* SequencerLED.h */,
-				6C98BACC1C57A94900751CC6 /* SequencerLED.m */,
 			);
 			name = SequencerView;
 			sourceTree = "<group>";
@@ -350,6 +375,7 @@
 				6C59C5651ABF4273001EE663 /* ConnectorView.m */,
 				6C64D6FC1AD9394800012108 /* MasterModuleView.h */,
 				6C64D6FD1AD9394800012108 /* MasterModuleView.m */,
+				6C37DAC21C58F58000BF0C97 /* Subviews */,
 				6C172A431ACC256B00BE1418 /* Controls */,
 			);
 			name = ModuleView;
@@ -437,13 +463,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83F313DD1C56CBEA00356B2E /* SequencerView.xib in Resources */,
 				6CEF81151ACC779000FB1943 /* Icons in Resources */,
 				83F313DF1C56D0CC00356B2E /* Sequencer.xcassets in Resources */,
 				6C12010B1AAE49A100C6ACB6 /* moduleCatalog.json in Resources */,
 				6C2A5EA31A8C0B2A00ECEAB2 /* Interapp.txt in Resources */,
 				6CB828381AC2F58000610DD4 /* ImageAssets in Resources */,
 				6C2A5E2D1A8BF2CC00ECEAB2 /* Images.xcassets in Resources */,
+				6C37DAC51C58F5A300BF0C97 /* SequencerSubview.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,6 +509,8 @@
 				6C172A311ACC1EDD00BE1418 /* RotarySwitch.m in Sources */,
 				6C0D48831AC3663D008AD869 /* KeyboardView.m in Sources */,
 				6C1CF0DD1AC202F50004A2FA /* BuildViewGridLayer.m in Sources */,
+				6C37DACC1C5908C300BF0C97 /* ModuleSubview.m in Sources */,
+				6C37DAC91C5905F400BF0C97 /* SequencerSubview.m in Sources */,
 				6C0F86D11AA7B2220092FB18 /* BuildViewController.m in Sources */,
 				6C21D86A1ADD2AC000CCFDD4 /* UIView+Snapshot.m in Sources */,
 			);

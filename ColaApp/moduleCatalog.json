@@ -622,44 +622,14 @@
                  "width" : 4,
                  "type" : "CCOLComponentTypeSequencer",
                  "view" : {
+                 "asset" : "sequencer",
                  "connectors" : [
-                                 { "type" : "output", "connection" : "Pitch Out", "x" : 280, "y" : 270  },
-                                 { "type" : "output", "connection" : "Gate Out", "x" : 320, "y" : 270  }
+                                 { "type" : "output", "connection" : "Pitch Out", "x" : 320, "y" : 270  },
+                                 { "type" : "output", "connection" : "Gate Out", "x" : 280, "y" : 270  }
                                  ],
-                 "controls" : [
-                               { "type" : "rotary_encoder","parameter" : "Pitch 1","x" : 40, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 2","x" : 80, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 3","x" : 120, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 4","x" : 160, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 5","x" : 200, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 6","x" : 240, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 7","x" : 280, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 8","x" : 320, "y" : 60, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 9","x" : 40, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 10","x" : 80, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 11","x" : 120, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 12","x" : 160, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 13","x" : 200, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 14","x" : 240, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 15","x" : 280, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "rotary_encoder","parameter" : "Pitch 16","x" : 320, "y" : 165, "userinfo" : { "maxindex" : 12, "asset" : "small" } },
-                               { "type" : "state_button", "parameter" : "Gate 1", "x" : 40, "y" : 120, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 2", "x" : 80, "y" : 120, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 3", "x" : 120, "y" : 120, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 4", "x" : 160, "y" : 120, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 5", "x" : 200, "y" : 120, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 6", "x" : 240, "y" : 120, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 7", "x" : 280, "y" : 120, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 8", "x" : 320, "y" : 120, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 9", "x" : 40, "y" : 225, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 10", "x" : 80, "y" : 225, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 11", "x" : 120, "y" : 225, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 12", "x" : 160, "y" : 225, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 13", "x" : 200, "y" : 225, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 14", "x" : 240, "y" : 225, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 15", "x" : 280, "y" : 225, "userinfo" : { "states" : 3 } },
-                               { "type" : "state_button", "parameter" : "Gate 16", "x" : 320, "y" : 225, "userinfo" : { "states" : 3 } },
-                               ]
+                 "subviews" : [
+                               { "type" : "sequencer", "x" : 0, "y" : 0, "width" : 360, "height" : 250 }
+                                ]
                  }
                  }, 
                  {

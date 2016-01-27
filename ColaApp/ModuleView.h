@@ -29,6 +29,7 @@
 @property (nonatomic, strong) NSString              *identifier;
 @property (nonatomic, strong) NSArray               *connectorViews;
 @property (nonatomic, strong) NSArray               *controlViews;
+@property (nonatomic, strong) NSArray               *subviewViews;
 
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame identifier:(NSString*)identifier;
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription;

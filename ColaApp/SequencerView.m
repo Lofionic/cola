@@ -22,15 +22,15 @@
 
 -(instancetype)init {
     if (self = [super init]) {
-        self.mainView = [[[NSBundle mainBundle] loadNibNamed:@"SequencerView" owner:self options:nil] objectAtIndex:0];
-        [self.mainView setFrame:self.bounds];
-        [self.mainView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight)];
-        
-        [self addSubview:self.mainView];
-    
-        [self createSequencerComponent];
-        
-        [self.downButton setSelected:true];
+//        self.mainView = [[[NSBundle mainBundle] loadNibNamed:@"SequencerView" owner:self options:nil] objectAtIndex:0];
+//        [self.mainView setFrame:self.bounds];
+//        [self.mainView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight)];
+//        
+//        [self addSubview:self.mainView];
+//    
+//        [self createSequencerComponent];
+//        
+//        [self.downButton setSelected:true];
     }
     return self;
 }

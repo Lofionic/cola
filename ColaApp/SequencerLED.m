@@ -17,10 +17,10 @@
 @property (nonatomic)           CGRect imageDrawRect;
 
 // IB properties
-#if TARGET_INTERFACE_BUILDER
+//#if TARGET_INTERFACE_BUILDER
 @property (nonatomic, strong)   UIImage *ibImage;
 @property (nonatomic)           CGRect ibDrawRect;
-#endif
+//#endif
 
 @end
 
@@ -70,8 +70,7 @@
     
     if (self.ibImage) {
         // Calculate a centered rect to draw into
-        float frameSize = self.ibImage.size.width;
-        
+        float frameSize = self.ibImage.size.width ;
         float offsetX = (self.bounds.size.width - frameSize) / 2.0;
         float offsetY = (self.bounds.size.height -  frameSize) / 2.0;
         
@@ -90,8 +89,8 @@
         CGContextSaveGState(ctx);
         CGContextScaleCTM(ctx, 1.0, -1.0);
 
-        CGRect sourceRect = CGRectMake(0, 0, self.ibDrawRect.size.width, self.ibDrawRect.size.width);
-        CGImageRef drawImage = CGImageCreateWithImageInRect([self.ibImage CGImage], sourceRect);
+        float scale = [[UIScreen mainScreen] scale];
+        CGImageRef drawImage = CGImageCreateWithImageInRect([self.ibImage CGImage], CGRectMake(0, 0, 20 * scale , 20 * scale));
    
         CGContextDrawImage(ctx, CGRectApplyAffineTransform(self.ibDrawRect, CGAffineTransformMakeScale(1.0, -1.0)), drawImage);
         CGImageRelease(drawImage);
