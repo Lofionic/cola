@@ -29,7 +29,7 @@
 @interface ModuleView ()
 
 @property (nonatomic) CCOLComponentAddress      component;
-@property (nonatomic, strong) NSString          *asset;
+@property (nonatomic, strong) NSString          *assetPath;
 @property (nonatomic, strong) ModuleDescription *moduleDescription;
 
 @end
@@ -61,9 +61,18 @@
         }
         
         UIImage *assetImage = nil;
+        
+        // Check image path for asset
         if (moduleDescription.asset) {
-            self.asset = [ASSETS_PATH_COMPONENTS stringByAppendingString:moduleDescription.asset];
-            assetImage = [UIImage imageNamed:self.asset];
+            
+            self.assetPath = moduleDescription.asset;
+            assetImage = [UIImage imageNamed:moduleDescription.asset];
+            
+            if (!assetImage) {
+                // No asset in resources: check asset path in bundle
+                self.assetPath = [ASSETS_PATH_COMPONENTS stringByAppendingString:moduleDescription.asset];
+                assetImage = [UIImage imageNamed:self.assetPath];
+            }
         }
         
         if (assetImage) {
@@ -202,7 +211,7 @@
 
 -(void)drawRect:(CGRect)rect {
     [super drawRect:rect];
-    if (!self.asset) {
+    if (!self.assetPath) {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         CGContextSetStrokeColorWithColor(ctx, [[UIColor blackColor] CGColor]);
         CGContextSetLineWidth(ctx, 2);

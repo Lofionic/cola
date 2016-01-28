@@ -90,7 +90,7 @@
         CGContextScaleCTM(ctx, 1.0, -1.0);
 
         float scale = [[UIScreen mainScreen] scale];
-        CGImageRef drawImage = CGImageCreateWithImageInRect([self.ibImage CGImage], CGRectMake(0, 0, 20 * scale , 20 * scale));
+        CGImageRef drawImage = CGImageCreateWithImageInRect([self.ibImage CGImage], CGRectMake(0, 0 * scale, 20 * scale , 20 * scale));
    
         CGContextDrawImage(ctx, CGRectApplyAffineTransform(self.ibDrawRect, CGAffineTransformMakeScale(1.0, -1.0)), drawImage);
         CGImageRelease(drawImage);
