@@ -12,6 +12,8 @@
 
 @interface ModuleSubview : UIView
 
+@property (readonly) CCOLComponentAddress component;
+
 // Factory method
 + (ModuleSubview*)subviewForComponent:(CCOLComponentAddress)component description:(SubviewDescription*)description;
 

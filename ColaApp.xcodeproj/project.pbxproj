@@ -289,14 +289,14 @@
 		6C37DAC61C58F5D400BF0C97 /* SequencerSubview */ = {
 			isa = PBXGroup;
 			children = (
-				83F313E31C56DCD400356B2E /* SequencerButton.h */,
-				83F313E41C56DCD400356B2E /* SequencerButton.m */,
-				6C98BACB1C57A94900751CC6 /* SequencerLED.h */,
-				6C98BACC1C57A94900751CC6 /* SequencerLED.m */,
 				83F313DE1C56D0CC00356B2E /* Sequencer.xcassets */,
 				6C37DAC41C58F5A300BF0C97 /* SequencerSubview.xib */,
 				6C37DAC71C5905F400BF0C97 /* SequencerSubview.h */,
 				6C37DAC81C5905F400BF0C97 /* SequencerSubview.m */,
+				83F313E31C56DCD400356B2E /* SequencerButton.h */,
+				83F313E41C56DCD400356B2E /* SequencerButton.m */,
+				6C98BACB1C57A94900751CC6 /* SequencerLED.h */,
+				6C98BACC1C57A94900751CC6 /* SequencerLED.m */,
 			);
 			name = SequencerSubview;
 			sourceTree = "<group>";

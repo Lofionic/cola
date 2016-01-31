@@ -25,7 +25,10 @@
 
 static BuildView *buildView = nil;
 
+@class ControlView;
 @interface BuildViewController()
+
+@property (nonatomic, weak) COLAudioEnvironment     *cae;
 
 @property (nonatomic, strong) BuildViewScrollView   *buildViewScrollView;
 @property (nonatomic, strong) BuildView             *buildView;
@@ -69,6 +72,8 @@ static BuildView *buildView = nil;
     
     [super viewDidLoad];
 
+    self.cae = [COLAudioEnvironment sharedEnvironment];
+    
     UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"wallpaper"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeTile]];
     [backgroundView setFrame:self.view.bounds];
     [backgroundView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
@@ -108,8 +113,6 @@ static BuildView *buildView = nil;
     // Setup sequencer container in bottom shelf
     self.sequencerContainerView = [[UIView alloc] init];
     [self.sequencerContainerView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
-    
     
     [self.bottomPanel addSubview:self.sequencerContainerView];
     
@@ -291,7 +294,7 @@ static BuildView *buildView = nil;
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [[COLAudioEnvironment sharedEnvironment] unmute];
+    [self.cae unmute];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -299,11 +302,11 @@ static BuildView *buildView = nil;
     
 //    [[[COLAudioEnvironment sharedEnvironment] transportController] stop];
 //    [[[COLAudioEnvironment sharedEnvironment] transportController] stopAndReset];
-    [[COLAudioEnvironment sharedEnvironment] mute];
+    [self.cae mute];
 }
 
 -(void)appWillEnterForeground {
-    if ([[COLAudioEnvironment sharedEnvironment] isInterAppAudioConnected]) {
+    if ([self.cae isInterAppAudioConnected]) {
         [self setIaaViewHidden:NO];
         [self.playStopBarButtonItem setEnabled:NO];
     } else {
@@ -379,7 +382,7 @@ static BuildView *buildView = nil;
         [self setBuildMode:NO animated:YES];
     }
     
-    [[COLAudioEnvironment sharedEnvironment] allNotesOff];
+    [self.cae allNotesOff];
     
     //[[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
     
@@ -390,7 +393,7 @@ static BuildView *buildView = nil;
 }
 
 -(void)saveTapped {
-    [[COLAudioEnvironment sharedEnvironment] exportEnvironment];
+    [self.cae exportEnvironment];
     
     if (self.buildMode) {
         [self setBuildMode:NO animated:YES];
@@ -491,12 +494,11 @@ static BuildView *buildView = nil;
 #pragma mark Transport
 
 -(void)playStopTapped {
-    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
     
-    if ([cae isTransportPlaying]) {
-        [cae transportStop];
+    if ([self.cae isTransportPlaying]) {
+        [self.cae transportStop];
     } else {
-        [cae transportPlay];
+        [self.cae transportPlay];
     }
 }
 

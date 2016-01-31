@@ -30,6 +30,7 @@ void CCOLComponentSequencer::initializeIO() {
     setOutputs(vector<CCOLComponentOutput*> { pitchOut, gateOut });
     
     transportController = getContext()->getEngine()->getTransportController();
+    
 }
 
 void CCOLComponentSequencer::renderOutputs(unsigned int numFrames) {
@@ -72,8 +73,6 @@ void CCOLComponentSequencer::renderOutputs(unsigned int numFrames) {
                 }
             }
         }
-        
         pitchOutputBuffer[i] = freqOut / CV_FREQUENCY_RANGE;
     }
-    
 }

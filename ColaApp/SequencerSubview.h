@@ -22,8 +22,17 @@
 
 @end
 
+typedef enum : NSUInteger {
+    TimeModeOff,
+    TimeModeOn,
+    TimeModeTied
+} SequencerSubviewTimeMode;
+
 @interface Step : NSObject
 
-@property (nonatomic) NSInteger note;
+@property (nonatomic) NSUInteger note;
+@property (nonatomic) NSUInteger octave;
+@property (nonatomic) SequencerSubviewTimeMode timeMode;
+@property (nonatomic) bool slide;
 
 @end

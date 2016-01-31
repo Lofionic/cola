@@ -12,5 +12,6 @@ IB_DESIGNABLE
 @interface SequencerLED : UIView
 
 @property (nonatomic) float level;
+@property (nonatomic) bool blinking;
 
 @end
