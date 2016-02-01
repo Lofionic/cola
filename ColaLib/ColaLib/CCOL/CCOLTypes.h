@@ -9,6 +9,8 @@
 #ifndef CCOLTypes_h
 #define CCOLTypes_h
 
+#define CV_FREQUENCY_RANGE 8372 // C9
+
 typedef float               SignalType;
 typedef unsigned long long  CCOLComponentAddress;
 typedef unsigned long long  CCOLInputAddress;

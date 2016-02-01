@@ -8,6 +8,9 @@
 
 #import "SequencerSubview.h"
 #import "SequencerLED.h"
+#import <ColaLib/CCOLTypes.h>
+
+#define MIDI_NOTE_MIDDLE_C 48
 
 @interface SequencerSubview()
 
@@ -221,7 +224,33 @@
         Step *step = self.steps[i];
         
         CCOLParameterAddress noteParameter = [cae getParameterNamed:[NSString stringWithFormat:@"Pitch %d", i + 1] onComponent:component];
-        [cae setParameter:noteParameter value:(step.note / 13.0)];
+        
+        NSUInteger note = MIDI_NOTE_MIDDLE_C + step.note;
+        switch (step.octave) {
+            case 0:
+                note = note - 24;
+                break;
+            case 1:
+                note = note - 12;
+                break;
+            case 2:
+                note = note;
+                break;
+            case 3:
+                note = note + 12;
+                break;
+            case 4:
+                note = note + 24;
+                break;
+        }
+        
+        // Convert the note to frequency
+        float frequency = powf(2, ((int)note - 69) / 12.0) * 110;
+        
+        // Return as value 0-1, relative to range
+        float outputValue = frequency / CV_FREQUENCY_RANGE;
+        
+        [cae setParameter:noteParameter value:outputValue];
         
         CCOLParameterAddress gateParameter = [cae getParameterNamed:[NSString stringWithFormat:@"Gate %d", i + 1] onComponent:component];
         [cae setParameter:gateParameter value:(int)step.timeMode / 2.0];

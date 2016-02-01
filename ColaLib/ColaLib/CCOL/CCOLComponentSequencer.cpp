@@ -66,8 +66,7 @@ void CCOLComponentSequencer::renderOutputs(unsigned int numFrames) {
             } else {
                 // Note is on - update the pitch
                 CCOLComponentParameter *pitchParameter = stepPitch[step];
-                unsigned short note = pitchParameter->getOutputAtDelta(delta) * 12.0;
-                freqOut = powf(2, (note - 9) / 12.0) * 440;
+                freqOut = pitchParameter->getOutputAtDelta(delta) * 12.0;
                 
                 // Open / close gate
                 if (gateValue == 0.5) {
@@ -78,6 +77,6 @@ void CCOLComponentSequencer::renderOutputs(unsigned int numFrames) {
                 }
             }
         }
-        pitchOutputBuffer[i] = freqOut / CV_FREQUENCY_RANGE;
+        pitchOutputBuffer[i] = freqOut;
     }
 }

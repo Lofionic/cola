@@ -48,7 +48,7 @@
             <rect key="frame" x="0.0" y="0.0" width="360" height="250"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sequencer" translatesAutoresizingMaskIntoConstraints="NO" id="Uf1-fP-nRc">
+                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sequencer" translatesAutoresizingMaskIntoConstraints="NO" id="Uf1-fP-nRc">
                     <rect key="frame" x="0.0" y="0.0" width="360" height="250"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="250" id="c65-n3-lna"/>
@@ -380,11 +380,6 @@
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <variation key="default">
-                <mask key="subviews">
-                    <exclude reference="Uf1-fP-nRc"/>
-                </mask>
-            </variation>
             <point key="canvasLocation" x="436" y="250"/>
         </view>
     </objects>
