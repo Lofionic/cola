@@ -114,11 +114,8 @@
     
     Step *step = [self.sequence getStep:self.stepIndex];
     [step setNote:senderView.tag];
-
-    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
-    CCOLParameterAddress parameter = [cae getParameterNamed:[NSString stringWithFormat:@"Pitch %ld", (long)senderView.tag + 1] onComponent:self.component];
-    [cae setParameter:parameter value:(senderView.tag / 13.0)];
     
+    [self.sequence applyToSequencerComponent:self.component];
     [self updateUI];
 }
 
@@ -132,6 +129,7 @@
         step.timeMode++;
     }
     
+    [self.sequence applyToSequencerComponent:self.component];
     [self updateUI];
 }
 
@@ -140,6 +138,8 @@
     if (step.octave > 0) {
         step.octave --;
     }
+    
+    [self.sequence applyToSequencerComponent:self.component];
     [self updateUI];
 }
 
@@ -148,12 +148,16 @@
     if (step.octave < 4) {
         step.octave ++;
     }
+    
+    [self.sequence applyToSequencerComponent:self.component];
     [self updateUI];
 }
 
 -(IBAction)touchSlide:(id)sender {
     Step *step = [self.sequence getStep:self.stepIndex];
     step.slide = !step.slide;
+    
+    [self.sequence applyToSequencerComponent:self.component];
     [self updateUI];
 }
 
@@ -163,7 +167,7 @@
     } else {
         [self setStepIndex:0];
     }
-    
+
     [self updateUI];
 }
 
@@ -197,7 +201,7 @@
     return self;
 }
 
--(NSArray*)createEmptyPatternOfLenght:(NSUInteger)length {
+- (NSArray*)createEmptyPatternOfLenght:(NSUInteger)length {
     
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:length];
     
@@ -208,7 +212,26 @@
     return [NSArray arrayWithArray:result];
 }
 
--(Step *)getStep:(NSUInteger)index {
+- (void)applyToSequencerComponent:(CCOLComponentAddress)component {
+    
+    // Apply this sequence to the sequencer component.
+    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+    for (int i = 0; i < self.length; i++) {
+        
+        Step *step = self.steps[i];
+        
+        CCOLParameterAddress noteParameter = [cae getParameterNamed:[NSString stringWithFormat:@"Pitch %d", i + 1] onComponent:component];
+        [cae setParameter:noteParameter value:(step.note / 13.0)];
+        
+        CCOLParameterAddress gateParameter = [cae getParameterNamed:[NSString stringWithFormat:@"Gate %d", i + 1] onComponent:component];
+        [cae setParameter:gateParameter value:(int)step.timeMode / 2.0];
+        
+        CCOLParameterAddress slideParameter = [cae getParameterNamed:[NSString stringWithFormat:@"Slide %d" , i + 1] onComponent:component];
+        [cae setParameter:slideParameter value:(step.slide ? 1.0 : 0.0)];
+    }
+}
+
+- (Step*)getStep:(NSUInteger)index {
     if (index < self.length) {
         return [self.steps objectAtIndex:index];
     } else {

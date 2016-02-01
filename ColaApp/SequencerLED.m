@@ -28,11 +28,12 @@
 
 @implementation SequencerLED
 
-// A universal timer to control blinking, maintained whilst 1+ LEDs exist
+// A universal timer to sync blinking across all LEDs, maintained whilst 1+ LEDs exist
 static int blinkCount = 0;
 static bool blinking = false;
 static bool blinkOn = false;
 
+// Must be called whenever a new LED is created.
 +(void)addBlinkCount {
     blinkCount ++;
     if (!blinking) {
@@ -46,12 +47,15 @@ static bool blinkOn = false;
     }
 }
 
+// Must be called whenever an LED is destroyed.
 +(void)removeBlinkCount {
     blinkCount--;
 }
 
 +(void)blink:(NSTimer*)timer {
     blinkOn = !blinkOn;
+    
+    // Post notification for LEDs to change their blink state.
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_LED_BLINK object:nil userInfo:@{ NOTIFICATION_KEY_BLINKON : [NSNumber numberWithBool:blinkOn] }];
     
     // When blinkcount is 0, we have no LEDs to blink.
@@ -88,7 +92,6 @@ static bool blinkOn = false;
     [self setUserInteractionEnabled:false];
     [self loadImageRoll];
     
-    // Blink notification
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(blinkDidChange:) name:NOTIFICATION_LED_BLINK object:nil];
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="octaveDownLED" destination="bHb-uw-GHW" id="Tg8-MI-2Mq"/>
                 <outlet property="octaveUpLED" destination="F2L-0D-L8R" id="8VI-JC-CPX"/>
+                <outlet property="slideLED" destination="reC-EA-UH9" id="9fL-Uc-arc"/>
                 <outlet property="timeModeOnLED" destination="uiS-6q-iRn" id="oGi-ov-xeC"/>
                 <outlet property="timeModeTiedLED" destination="MLR-fy-rs3" id="FmH-ho-RGk"/>
                 <outletCollection property="noteLEDs" destination="kQs-OF-qhj" id="1pP-Di-fBP"/>
@@ -47,7 +48,7 @@
             <rect key="frame" x="0.0" y="0.0" width="360" height="250"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sequencer" translatesAutoresizingMaskIntoConstraints="NO" id="Uf1-fP-nRc">
+                <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sequencer" translatesAutoresizingMaskIntoConstraints="NO" id="Uf1-fP-nRc">
                     <rect key="frame" x="0.0" y="0.0" width="360" height="250"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="250" id="c65-n3-lna"/>
@@ -310,6 +311,9 @@
                             <integer key="value" value="1"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="touchSlide:" destination="-1" eventType="touchDown" id="J4v-tz-tYs"/>
+                    </connections>
                 </view>
                 <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="reC-EA-UH9" userLabel="Slide_LED" customClass="SequencerLED">
                     <rect key="frame" x="204" y="92" width="40" height="20"/>
@@ -376,6 +380,11 @@
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="Uf1-fP-nRc"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="436" y="250"/>
         </view>
     </objects>

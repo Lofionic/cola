@@ -22,6 +22,11 @@ void CCOLComponentSequencer::initializeIO() {
         stepGate[i] = new CCOLComponentParameter(this, (char*)inputName->c_str());
         theParameters.push_back(stepGate[i]);
         delete inputName;
+        
+        inputName = new string("Slide " + std::to_string(i + 1));
+        stepSlide[i] = new CCOLComponentParameter(this, (char*)inputName->c_str());
+        theParameters.push_back(stepSlide[i]);
+        delete inputName;
     }
     setParameters(theParameters);
     

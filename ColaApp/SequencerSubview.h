@@ -20,6 +20,8 @@
 - (instancetype)initWithLength:(NSUInteger)length;
 - (Step*)getStep:(NSUInteger)step;
 
+- (void)applyToSequencerComponent:(CCOLComponentAddress)component;
+
 @end
 
 typedef enum : NSUInteger {
