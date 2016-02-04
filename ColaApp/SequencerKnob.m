@@ -48,6 +48,11 @@
     [self updateNeedleAnimated:YES];
 }
 
+-(void)setLevel:(double)level {
+    _level = level;
+    [self updateNeedleAnimated:NO];
+}
+
 -(void)updateNeedleAnimated:(BOOL)animated {
     double theta = ((M_PI * 2.0) * self.level * (5.0 / 6.0)) + (M_PI * (2.0 / 3.0));
     
