@@ -77,6 +77,7 @@ void CCOLComponentSequencer::renderOutputs(unsigned int numFrames) {
                 }
             }
         }
+        
         pitchOutputBuffer[i] = freqOut;
     }
 }

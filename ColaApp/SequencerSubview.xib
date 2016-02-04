@@ -48,7 +48,7 @@
             <rect key="frame" x="0.0" y="0.0" width="360" height="250"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sequencer" translatesAutoresizingMaskIntoConstraints="NO" id="Uf1-fP-nRc">
+                <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sequencer" translatesAutoresizingMaskIntoConstraints="NO" id="Uf1-fP-nRc">
                     <rect key="frame" x="0.0" y="0.0" width="360" height="250"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="250" id="c65-n3-lna"/>
@@ -370,6 +370,30 @@
                             <rect key="frame" x="305" y="0.0" width="15" height="20"/>
                         </view>
                     </subviews>
+                </view>
+                <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OMD-tQ-Acc" customClass="SequencerKnob">
+                    <rect key="frame" x="20" y="16" width="40" height="40"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="pJl-ND-WbR"/>
+                    </connections>
+                </view>
+                <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d60-fv-oJv" customClass="SequencerKnob">
+                    <rect key="frame" x="70" y="16" width="40" height="40"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="fsN-ZL-lO1"/>
+                    </connections>
+                </view>
+                <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fr8-zq-5aR" customClass="SequencerKnob">
+                    <rect key="frame" x="120" y="16" width="40" height="40"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="dmV-Vr-J6n"/>
+                    </connections>
+                </view>
+                <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uSU-Pt-wEZ" customClass="SequencerKnob">
+                    <rect key="frame" x="170" y="16" width="40" height="40"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="kWP-3s-C7A"/>
+                    </connections>
                 </view>
             </subviews>
             <constraints>

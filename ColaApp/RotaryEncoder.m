@@ -28,14 +28,17 @@
     if (self = [super initWithParameter:parameter Description:controlDescription]) {
         self.value = 0;
         
+        // Default assets
         NSString *encoderAssetName = @"encoder";
         NSString *needleAssetName = @"encoder_needle";
+        
+        // Custom assets included in user info
         if ([controlDescription.userInfo objectForKey:CONTROL_USERINFO_ASSET_KEY]) {
             encoderAssetName = [NSString stringWithFormat:@"%@_%@", encoderAssetName, [controlDescription.userInfo objectForKey:CONTROL_USERINFO_ASSET_KEY]];
             needleAssetName = [NSString stringWithFormat:@"%@_%@", needleAssetName, [controlDescription.userInfo objectForKey:CONTROL_USERINFO_ASSET_KEY]];
-            
         }
         
+        // Load the assets
         NSString *encoderAsset = [ASSETS_PATH_CONTROLS stringByAppendingString:encoderAssetName];
         UIImage *encoderImage = [UIImage imageNamed:encoderAsset];
         if (encoderImage) {

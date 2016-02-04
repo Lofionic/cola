@@ -6,9 +6,10 @@
 //  Copyright © 2016 Chris Rivers. All rights reserved.
 //
 #import "ModuleSubview.h"
+#import "SequencerKnob.h"
 #import <UIKit/UIKit.h>
 
-@interface SequencerSubview : ModuleSubview
+@interface SequencerSubview : ModuleSubview <SequencerKnobDelegate>
 
 @end
 

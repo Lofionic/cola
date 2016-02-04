@@ -17,11 +17,15 @@
 @property (nonatomic, weak)     UIView *view;
 @property (nonatomic, strong)   IBOutletCollection(SequencerLED) NSArray *noteLEDs;
 @property (nonatomic, strong)   IBOutletCollection(SequencerLED) NSArray *stepLEDs;
-@property (nonatomic, strong)   IBOutlet SequencerLED* timeModeOnLED;
-@property (nonatomic, strong)   IBOutlet SequencerLED* timeModeTiedLED;
-@property (nonatomic, strong)   IBOutlet SequencerLED* octaveDownLED;
-@property (nonatomic, strong)   IBOutlet SequencerLED* octaveUpLED;
-@property (nonatomic, strong)   IBOutlet SequencerLED* slideLED;
+@property (nonatomic, strong)   IBOutlet SequencerLED *timeModeOnLED;
+@property (nonatomic, strong)   IBOutlet SequencerLED *timeModeTiedLED;
+@property (nonatomic, strong)   IBOutlet SequencerLED *octaveDownLED;
+@property (nonatomic, strong)   IBOutlet SequencerLED *octaveUpLED;
+@property (nonatomic, strong)   IBOutlet SequencerLED *slideLED;
+@property (nonatomic, strong)   IBOutlet SequencerKnob *mod1Knob;
+@property (nonatomic, strong)   IBOutlet SequencerKnob *mod2Knob;
+@property (nonatomic, strong)   IBOutlet SequencerKnob *knob3;
+@property (nonatomic, strong)   IBOutlet SequencerKnob *knob4;
 
 @property (nonatomic, strong)   StepSequence *sequence;
 @property (nonatomic)           NSUInteger stepIndex;
@@ -184,6 +188,11 @@
     [self updateUI];
 }
 
+// Sequencer knob delegate
+-(void)sequencerKnob:(SequencerKnob *)knob didChangeLevelTo:(float)level {
+    
+}
+
 @end
 
 @interface StepSequence()
@@ -270,6 +279,7 @@
 
 @end
 
+// Data class for one step of sequence.
 @implementation Step
 
 -(instancetype)init {

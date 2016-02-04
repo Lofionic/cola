@@ -10,7 +10,6 @@
 #import "BuildViewController.h"
 #import "KeyboardView.h"
 #import "BuildView.h"
-#import "SequencerView.h"
 #import "ModuleView.h"
 #import "ModuleCatalog.h"
 #import "FilesViewController.h"
@@ -40,7 +39,6 @@ static BuildView *buildView = nil;
 @property (nonatomic, strong) KeyboardView          *keyboardView;
 
 @property (nonatomic, strong) UIView                *sequencerContainerView;
-@property (nonatomic, strong) SequencerView         *sequencerView;
 
 @property (nonatomic, strong) IAAView               *iaaView;
 
@@ -116,12 +114,6 @@ static BuildView *buildView = nil;
     
     [self.bottomPanel addSubview:self.sequencerContainerView];
     
-    self.sequencerView = [[SequencerView alloc] init];
-    [self.sequencerView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.sequencerContainerView addSubview:self.sequencerView];
-    
-    
-    
     [self.keyboardContainerView setHidden:YES];
     
     self.iaaView = [[IAAView alloc] init];
@@ -136,7 +128,6 @@ static BuildView *buildView = nil;
                                       @"keyboardContainerView"  :   self.keyboardContainerView,
                                       @"keyboardView"           :   self.keyboardView,
                                       @"sequencerContainerView" :   self.sequencerContainerView,
-                                      @"sequencerView"          :   self.sequencerView,
                                       @"iaaView"                :   self.iaaView,
                                       @"topGuide"               :   self.topLayoutGuide,
                                       @"bottomGuide"            :   self.bottomLayoutGuide
@@ -210,10 +201,7 @@ static BuildView *buildView = nil;
     [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[sequencerContainerView(768)]" options:0 metrics:nil views:viewsDictionary]];
     [self.bottomPanel addConstraint:[NSLayoutConstraint constraintWithItem:self.sequencerContainerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.bottomPanel attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-44-[sequencerContainerView]|" options:0 metrics:nil views:viewsDictionary]];
-    
-    [self.sequencerContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sequencerView]|" options:0 metrics:nil views:viewsDictionary]];
-    [self.sequencerContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[sequencerView]|" options:0 metrics:nil views:viewsDictionary]];
-    
+
     [self.view addConstraint:self.iaaPositionConstraint];
     [self.view addConstraint:self.bottomPanelPositionConstraint];
     
