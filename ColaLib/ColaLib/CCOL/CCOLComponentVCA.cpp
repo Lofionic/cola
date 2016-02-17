@@ -40,8 +40,10 @@ void CCOLComponentVCA::renderOutputs(unsigned int numFrames) {
         float delta = i / (float)numFrames;
         float amp = level->getOutputAtDelta(delta);
         if (CVin->isConnected()) {
-            amp = amp + (cvBuffer[i] * CVAmt->getOutputAtDelta(delta));
-            amp = MIN(MAX(amp, 0), 1.0);
+            float cvAmount = CVAmt->getOutputAtDelta(delta);
+            // Interpolate between level and CV
+            SignalType cv = cvBuffer[i];
+            amp = amp + ((cv - amp) * cvAmount);
         }
         
         SignalType output = inputBuffer[i] * amp;
