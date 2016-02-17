@@ -22,6 +22,11 @@ void CCOLComponentSequencer::initializeIO() {
         stepGate[i] = new CCOLComponentParameter(this, (char*)inputName->c_str());
         theParameters.push_back(stepGate[i]);
         delete inputName;
+        
+        inputName = new string("Slide " + std::to_string(i + 1));
+        stepSlide[i] = new CCOLComponentParameter(this, (char*)inputName->c_str());
+        theParameters.push_back(stepSlide[i]);
+        delete inputName;
     }
     setParameters(theParameters);
     
@@ -30,6 +35,7 @@ void CCOLComponentSequencer::initializeIO() {
     setOutputs(vector<CCOLComponentOutput*> { pitchOut, gateOut });
     
     transportController = getContext()->getEngine()->getTransportController();
+    
 }
 
 void CCOLComponentSequencer::renderOutputs(unsigned int numFrames) {
@@ -60,8 +66,7 @@ void CCOLComponentSequencer::renderOutputs(unsigned int numFrames) {
             } else {
                 // Note is on - update the pitch
                 CCOLComponentParameter *pitchParameter = stepPitch[step];
-                unsigned short note = pitchParameter->getOutputAtDelta(delta) * 12.0;
-                freqOut = powf(2, (note - 9) / 12.0) * 440;
+                freqOut = pitchParameter->getOutputAtDelta(delta) * 12.0;
                 
                 // Open / close gate
                 if (gateValue == 0.5) {
@@ -73,7 +78,6 @@ void CCOLComponentSequencer::renderOutputs(unsigned int numFrames) {
             }
         }
         
-        pitchOutputBuffer[i] = freqOut / CV_FREQUENCY_RANGE;
+        pitchOutputBuffer[i] = freqOut;
     }
-    
 }

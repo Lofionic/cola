@@ -10,7 +10,6 @@
 #import "BuildViewController.h"
 #import "KeyboardView.h"
 #import "BuildView.h"
-#import "SequencerView.h"
 #import "ModuleView.h"
 #import "ModuleCatalog.h"
 #import "FilesViewController.h"
@@ -25,7 +24,10 @@
 
 static BuildView *buildView = nil;
 
+@class ControlView;
 @interface BuildViewController()
+
+@property (nonatomic, weak) COLAudioEnvironment     *cae;
 
 @property (nonatomic, strong) BuildViewScrollView   *buildViewScrollView;
 @property (nonatomic, strong) BuildView             *buildView;
@@ -37,7 +39,6 @@ static BuildView *buildView = nil;
 @property (nonatomic, strong) KeyboardView          *keyboardView;
 
 @property (nonatomic, strong) UIView                *sequencerContainerView;
-@property (nonatomic, strong) SequencerView         *sequencerView;
 
 @property (nonatomic, strong) IAAView               *iaaView;
 
@@ -69,6 +70,8 @@ static BuildView *buildView = nil;
     
     [super viewDidLoad];
 
+    self.cae = [COLAudioEnvironment sharedEnvironment];
+    
     UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"wallpaper"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeTile]];
     [backgroundView setFrame:self.view.bounds];
     [backgroundView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
@@ -108,11 +111,8 @@ static BuildView *buildView = nil;
     // Setup sequencer container in bottom shelf
     self.sequencerContainerView = [[UIView alloc] init];
     [self.sequencerContainerView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.bottomPanel addSubview:self.sequencerContainerView];
     
-    self.sequencerView = [[SequencerView alloc] init];
-    [self.sequencerView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.sequencerContainerView addSubview:self.sequencerView];
+    [self.bottomPanel addSubview:self.sequencerContainerView];
     
     [self.keyboardContainerView setHidden:YES];
     
@@ -128,7 +128,6 @@ static BuildView *buildView = nil;
                                       @"keyboardContainerView"  :   self.keyboardContainerView,
                                       @"keyboardView"           :   self.keyboardView,
                                       @"sequencerContainerView" :   self.sequencerContainerView,
-                                      @"sequencerView"          :   self.sequencerView,
                                       @"iaaView"                :   self.iaaView,
                                       @"topGuide"               :   self.topLayoutGuide,
                                       @"bottomGuide"            :   self.bottomLayoutGuide
@@ -202,10 +201,7 @@ static BuildView *buildView = nil;
     [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[sequencerContainerView(768)]" options:0 metrics:nil views:viewsDictionary]];
     [self.bottomPanel addConstraint:[NSLayoutConstraint constraintWithItem:self.sequencerContainerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.bottomPanel attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-44-[sequencerContainerView]|" options:0 metrics:nil views:viewsDictionary]];
-    
-    [self.sequencerContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sequencerView]|" options:0 metrics:nil views:viewsDictionary]];
-    [self.sequencerContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[sequencerView]|" options:0 metrics:nil views:viewsDictionary]];
-    
+
     [self.view addConstraint:self.iaaPositionConstraint];
     [self.view addConstraint:self.bottomPanelPositionConstraint];
     
@@ -286,7 +282,7 @@ static BuildView *buildView = nil;
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [[COLAudioEnvironment sharedEnvironment] unmute];
+    [self.cae unmute];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -294,11 +290,11 @@ static BuildView *buildView = nil;
     
 //    [[[COLAudioEnvironment sharedEnvironment] transportController] stop];
 //    [[[COLAudioEnvironment sharedEnvironment] transportController] stopAndReset];
-    [[COLAudioEnvironment sharedEnvironment] mute];
+    [self.cae mute];
 }
 
 -(void)appWillEnterForeground {
-    if ([[COLAudioEnvironment sharedEnvironment] isInterAppAudioConnected]) {
+    if ([self.cae isInterAppAudioConnected]) {
         [self setIaaViewHidden:NO];
         [self.playStopBarButtonItem setEnabled:NO];
     } else {
@@ -374,7 +370,7 @@ static BuildView *buildView = nil;
         [self setBuildMode:NO animated:YES];
     }
     
-    [[COLAudioEnvironment sharedEnvironment] allNotesOff];
+    [self.cae allNotesOff];
     
     //[[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
     
@@ -385,7 +381,7 @@ static BuildView *buildView = nil;
 }
 
 -(void)saveTapped {
-    [[COLAudioEnvironment sharedEnvironment] exportEnvironment];
+    [self.cae exportEnvironment];
     
     if (self.buildMode) {
         [self setBuildMode:NO animated:YES];
@@ -486,12 +482,11 @@ static BuildView *buildView = nil;
 #pragma mark Transport
 
 -(void)playStopTapped {
-    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
     
-    if ([cae isTransportPlaying]) {
-        [cae transportStop];
+    if ([self.cae isTransportPlaying]) {
+        [self.cae transportStop];
     } else {
-        [cae transportPlay];
+        [self.cae transportPlay];
     }
 }
 

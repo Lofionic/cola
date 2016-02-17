@@ -19,6 +19,7 @@
 
 @property (readonly, strong) NSArray    *connectors;
 @property (readonly, strong) NSArray    *controls;
+@property (readonly, strong) NSArray    *subviews;
 
 @property (readonly, strong) UIImage    *thumbnail;
 
@@ -45,5 +46,15 @@
 @property (readonly, strong) NSDictionary   *userInfo;
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary;
+
+@end
+
+@interface SubviewDescription : NSObject
+
+@property (readonly, strong) NSString       *type;
+@property (readonly) CGPoint                location;
+@property (readonly) CGSize                 size;
+
+-(instancetype)initWidthDictionary:(NSDictionary*)dictionary;
 
 @end

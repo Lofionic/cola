@@ -22,6 +22,7 @@
 
 @property (nonatomic, strong) NSArray *connectors;
 @property (nonatomic, strong) NSArray *controls;
+@property (nonatomic, strong) NSArray *subviews;
 
 @property (nonatomic, strong) UIImage *thumbnail;
 
@@ -72,6 +73,16 @@
                     [controlDescriptions addObject:controlDescription];
                 }
                 self.controls = [NSArray arrayWithArray:controlDescriptions];
+            }
+            
+            if ([viewInfo objectForKey:@"subviews"]) {
+                NSArray *subviews = [viewInfo objectForKey:@"subviews"];
+                NSMutableArray *subviewDescriptions = [[NSMutableArray alloc] initWithCapacity:[subviews count]];
+                for (NSDictionary *thisSubview in subviews) {
+                    SubviewDescription *subviewDescription = [[SubviewDescription alloc] initWidthDictionary:thisSubview];
+                    [subviewDescriptions addObject:subviewDescription];
+                }
+                self.subviews = [NSArray arrayWithArray:subviewDescriptions];
             }
         }
         
@@ -155,6 +166,39 @@
         
         if ([dictionary valueForKey:@"userinfo"]) {
             self.userInfo = [dictionary objectForKey:@"userinfo"];
+        }
+    }
+    return self;
+}
+
+@end
+
+@interface SubviewDescription ()
+
+@property (nonatomic, strong) NSString  *type;
+@property (nonatomic) CGPoint           location;
+@property (nonatomic) CGSize            size;
+
+@end
+
+@implementation SubviewDescription
+
+-(instancetype)initWidthDictionary:(NSDictionary *)dictionary {
+    if (self = [super init]) {
+        
+        if ([dictionary objectForKey:@"type"]) {
+            self.type = [dictionary objectForKey:@"type"];
+        }
+        
+        if ([dictionary objectForKey:@"x"] && [dictionary objectForKey:@"y"]) {
+            self.location = CGPointMake([[dictionary objectForKey:@"x"] floatValue],
+                                        [[dictionary objectForKey:@"y"] floatValue]);
+                                        
+        }
+        
+        if ([dictionary objectForKey:@"width"] && [dictionary objectForKey:@"height"]) {
+            self.size = CGSizeMake([[dictionary objectForKey:@"width"] floatValue],
+                                   [[dictionary objectForKey:@"height"] floatValue]);
         }
     }
     return self;
