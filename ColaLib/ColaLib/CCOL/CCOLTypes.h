@@ -39,6 +39,7 @@ typedef unsigned long long  CCOLParameterAddress;
 
 // Engine events
 #define kCCOLEventEngineDidForceDisconnect  @"NSNoteEngineDidForceDisconnect"
+#define kCCOLEventTransportUpdate           @"NSNoteTransportUpdate"
 
 typedef enum kIOType {
     kIOTypeInput    = 1,

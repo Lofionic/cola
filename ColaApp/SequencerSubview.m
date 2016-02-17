@@ -45,8 +45,20 @@
         
         self.sequence = [[StepSequence alloc] initWithLength:16];
         [self setStepIndex:0];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(transportUpdateNotification:) name:kCCOLEventTransportUpdate object:nil];
+        
     }
     return self;
+}
+
+-(void)transportUpdateNotification:(NSNotification*)note {
+    // Transport status has changed, update UI.
+    float transportLocation = [[COLAudioEnvironment sharedEnvironment] getTransportLocation];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.stepIndex = (int)(transportLocation * 4) % 16;
+        [self updateUI];
+    });
 }
 
 -(void)didMoveToSuperview {

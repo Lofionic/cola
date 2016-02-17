@@ -101,6 +101,9 @@ public:
     CCOLParameterAddress getParameter(CCOLComponentAddress componentAddress, char* parameterName);
     CCOLInputAddress getMasterInput(unsigned int index);
     
+    // Transpot
+    float getTransportLocation();
+    
     size_t getComponentCount() {
         return components.size();
     }

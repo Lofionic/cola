@@ -58,6 +58,8 @@
         
         // Observer for forced disconnects
         CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, engineNotificationCallback, kCCOLEngineDidForceDisconnectNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, transportUpdateNotificationCallback, kCCOLTransportUpdateNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        
         CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, setAudioSessionActiveCallback, kCCOLSetAudioSessionActiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
         CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, setAudioSessionInactiveCallback, kCCOLSetAudioSessionInactiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 
@@ -73,6 +75,10 @@ static void engineNotificationCallback(CFNotificationCenterRef center, void *obs
         NSDictionary *nsUserInfo = @{@"output" : [NSNumber numberWithUnsignedLongLong:outputAddress]};
         [[NSNotificationCenter defaultCenter] postNotificationName:kCCOLEventEngineDidForceDisconnect object:nil userInfo:nsUserInfo];
     }
+}
+
+static void transportUpdateNotificationCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCCOLEventTransportUpdate object:nil];
 }
 
 static void setAudioSessionActiveCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
@@ -134,6 +140,9 @@ static void setAudioSessionInactiveCallback(CFNotificationCenterRef center, void
     ccAudioEngine.getTransportController()->stopAndReset();
 }
 
+-(float)getTransportLocation {
+    return ccAudioEngine.getTransportController()->getLocation();
+}
 
 #pragma mark Communication with Engine
 -(CCOLComponentAddress)createComponentOfType:(char*)componentType {

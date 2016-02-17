@@ -568,16 +568,7 @@ void audioUnitPropertyListenerDispatcher(void *inRefCon, AudioUnit inUnit, Audio
         squareWaveTable[i] = result;
     }
     
-    // NSLOG the waves
-    int res = 40;
-    for (int i = 0; i < res; i++) {
-        NSInteger sampleIndex = (i / (float)res) * WAVETABLE_SIZE;
-        AudioSignalType sample = sinWaveTable[sampleIndex];
-        
-        NSInteger level = ((sample + 1) / 2.0) * res * 2;
-        NSString *padding = [@"" stringByPaddingToLength:level withString:@"-" startingAtIndex:0];
-        NSLog(@"%@", [padding stringByAppendingString:@"*"]);
-    }
+
 }
 
 #pragma mark Cleanup

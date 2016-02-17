@@ -61,6 +61,7 @@
 -(BOOL)isTransportPlaying;
 -(void)transportPlay;
 -(void)transportStop;
+-(float)getTransportLocation;
 
 @property (readonly) NSMutableArray *components;
 

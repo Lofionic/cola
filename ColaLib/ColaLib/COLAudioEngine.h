@@ -54,6 +54,8 @@
 -(void)iaaTogglePlay;
 -(void)iaaRewind;
 
+-(float)getTransportLocation;
+
 @end
 
 #endif

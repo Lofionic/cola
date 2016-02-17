@@ -25,6 +25,8 @@ class CCOLTransportController {
     bool            playing;
     double*         beatBuffer;
     
+    float           location;
+    
     void postUpdateNotification();
     void syncWithIAA();
     
@@ -57,6 +59,8 @@ public:
     void stopAndReset();
     void renderOutputs(unsigned int numFrames, double sampleRate);
     void interappAudioTransportStateDidChange(bool hostIsPaying);
+    
+    float getLocation();
 };
 
 #endif /* CCOLTransportController_hpp */

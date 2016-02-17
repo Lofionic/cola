@@ -27,7 +27,8 @@ void CCOLTransportController::stopAndReset() {
 }
 
 void CCOLTransportController::postUpdateNotification() {
-    // post a notification that the transport status has changed
+    // TODO: post a notification that the transport status has changed
+    CFNotificationCenterPostNotification(CFNotificationCenterGetLocalCenter(), kCCOLTransportUpdateNotification, NULL, NULL, true);
 }
 
 void CCOLTransportController::renderOutputs(unsigned int numFrames, double sampleRate) {
@@ -48,11 +49,19 @@ void CCOLTransportController::renderOutputs(unsigned int numFrames, double sampl
     float samplesInBar = barLength * sampleRate;
     float sampleDelta = 4.0 / samplesInBar;
     
+    float d = currentBeat;
+    
     for (int i =0; i < numFrames; i++) {
         if (playing) {
-            beatBuffer[i] = currentBeat;
-            currentBeat += sampleDelta;
+            beatBuffer[i] = d;
+            d += sampleDelta;
         }
+    }
+    
+    currentBeat = d;
+    
+    if (playing) {
+        postUpdateNotification();
     }
 }
 
@@ -77,4 +86,8 @@ void CCOLTransportController::interappAudioTransportStateDidChange(bool hostIsPl
         playing = false;
         postUpdateNotification();
     }
+}
+
+float CCOLTransportController::getLocation() {
+    return currentBeat;
 }

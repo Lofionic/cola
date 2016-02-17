@@ -619,4 +619,17 @@ void CCOLAudioEngine::buildWaveTables() {
         }
         ccSquareWaveTable[i] = result;
     }
+    
+    // NSLOG the waves
+    int res = 20;
+    for (int i = 0; i < res; i++) {
+        int sampleIndex = (i / (float)res) * WAVETABLE_SIZE;
+        SignalType sample = ccSinWaveTable[sampleIndex];
+        
+        int level = ((sample + 1) / 2.0) * res * 2;
+        for (int i = 0; i < level; i++) {
+            printf("-");
+        }
+        printf("*\n");
+    }
 }
