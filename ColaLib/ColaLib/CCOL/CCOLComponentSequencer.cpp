@@ -32,7 +32,12 @@ void CCOLComponentSequencer::initializeIO() {
     
     pitchOut = new CCOLComponentOutput(this, kIOType1VOct, (char*)"Pitch Out");
     gateOut = new CCOLComponentOutput(this, kIOTypeGate, (char*)"Gate Out");
-    setOutputs(vector<CCOLComponentOutput*> { pitchOut, gateOut });
+    
+    mod1Out = new CCOLComponentOutput(this, kIOTypeControl, (char*)"Mod 1");
+    mod2Out = new CCOLComponentOutput(this, kIOTypeControl, (char*)"Mod 2");
+    
+    
+    setOutputs(vector<CCOLComponentOutput*> { pitchOut, gateOut, mod1Out, mod2Out });
     
     transportController = getContext()->getEngine()->getTransportController();
     
@@ -65,13 +70,32 @@ void CCOLComponentSequencer::renderOutputs(unsigned int numFrames) {
                 gateOutputBuffer[i] = 0;
             } else {
                 // Note is on - update the pitch
-                CCOLComponentParameter *pitchParameter = stepPitch[step];
-                freqOut = pitchParameter->getOutputAtDelta(delta) * 12.0;
-                
+                float whence = (currentBeat * 4.0) - step;
+                float slide = stepSlide[step]->getOutputAtDelta(delta);
+                if (slide > 0 && whence < 0.5) {
+                    // Slide the note
+                    
+                    // Get the freq of the previous step
+                    CCOLComponentParameter *prevPitchParameter = stepPitch[15];
+                    if (step > 0) {
+                        prevPitchParameter = stepPitch[step - 1];
+                    }
+                    SignalType prevFreqOut = prevPitchParameter->getOutputAtDelta(delta) * 12.0;
+                    
+                    // Get the freq of this step
+                    CCOLComponentParameter *pitchParameter = stepPitch[step];
+                    SignalType thisFreqOut = pitchParameter->getOutputAtDelta(delta) * 12.0;
+                    
+                    // Interpolate between the two
+                    freqOut = prevFreqOut + ((thisFreqOut - prevFreqOut) * (whence * 2.0));
+                    
+                } else {
+                    CCOLComponentParameter *pitchParameter = stepPitch[step];
+                    freqOut = pitchParameter->getOutputAtDelta(delta) * 12.0;
+                }
                 // Open / close gate
                 if (gateValue == 0.5) {
-                    float whence = (currentBeat * 4.0) - step;
-                    gateOutputBuffer[i] = (whence > 0.2) ? 0 : 1;
+                    gateOutputBuffer[i] = (whence > 0.5) ? 0 : 1;
                 } else if (gateValue > 0.5) {
                     gateOutputBuffer[i] = 1;
                 }

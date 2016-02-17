@@ -17,6 +17,8 @@ class CCOLComponentSequencer : public CCOLComponent {
     
     CCOLComponentOutput *pitchOut;
     CCOLComponentOutput *gateOut;
+    CCOLComponentOutput *mod1Out;
+    CCOLComponentOutput *mod2Out;
     
     CCOLComponentParameter* stepPitch[16];
     CCOLComponentParameter* stepGate[16];   // gate: 0 = off, 0.5 = on, 1.0 = tie

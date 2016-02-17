@@ -625,7 +625,9 @@
                  "asset" : "sequencer",
                  "connectors" : [
                                  { "type" : "output", "connection" : "Pitch Out", "x" : 320, "y" : 270  },
-                                 { "type" : "output", "connection" : "Gate Out", "x" : 280, "y" : 270  }
+                                 { "type" : "output", "connection" : "Gate Out", "x" : 280, "y" : 270  },
+                                 { "type" : "output", "connection" : "Mod 1", "x" : 240, "y" : 270 },
+                                 { "type" : "output", "connection" : "Mod 2", "x" : 200, "y" : 270 }
                                  ],
                  "subviews" : [
                                { "type" : "sequencer", "x" : 0, "y" : 0, "width" : 360, "height" : 250 }
