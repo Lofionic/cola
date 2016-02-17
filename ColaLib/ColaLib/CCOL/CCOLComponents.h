@@ -18,6 +18,7 @@
 #import "CCOLComponentMixer4.hpp"
 #import "CCOLComponentLogic.hpp"
 #import "CCOLComponentDelay.hpp"
+#import "CCOLComponentReverb.hpp"
 #import "CCOLComponentRingMod.hpp"
 #import "CCOLComponentNoiseGenerator.hpp"
 #import "CCOLComponentPan.hpp"

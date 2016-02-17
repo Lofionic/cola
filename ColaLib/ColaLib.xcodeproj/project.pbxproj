@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0241127A1C750F440052BB13 /* CCOLComponentReverb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 024112781C750F440052BB13 /* CCOLComponentReverb.cpp */; };
 		6C2428891BE37D0F003AB2FF /* CCOLAudioEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C2428871BE37D0F003AB2FF /* CCOLAudioEngine.cpp */; };
 		6C2A5E9C1A8BF7B100ECEAB2 /* COLAudioEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2A5E9B1A8BF7B100ECEAB2 /* COLAudioEnvironment.m */; };
 		6C3D06E71BE3CC1900667BAE /* CCOLTypes.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C3D06E61BE3C95D00667BAE /* CCOLTypes.h */; };
@@ -50,6 +51,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		024112781C750F440052BB13 /* CCOLComponentReverb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCOLComponentReverb.cpp; path = CCOL/CCOLComponentReverb.cpp; sourceTree = "<group>"; };
+		024112791C750F440052BB13 /* CCOLComponentReverb.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CCOLComponentReverb.hpp; path = CCOL/CCOLComponentReverb.hpp; sourceTree = "<group>"; };
 		6C02D56C1B237DC200297F52 /* COLComponentDelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLComponentDelay.h; sourceTree = "<group>"; };
 		6C02D56D1B237DC200297F52 /* COLComponentDelay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COLComponentDelay.m; sourceTree = "<group>"; };
 		6C0D487B1AC358C2008AD869 /* COLKeyboardComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COLKeyboardComponent.h; sourceTree = "<group>"; };
@@ -333,6 +336,8 @@
 				B40584821C0F88780002F278 /* CCOLComponentVCF.hpp */,
 				B41816A51C594AED0042FCA7 /* CCOLComponentDelay.cpp */,
 				B41816A61C594AED0042FCA7 /* CCOLComponentDelay.hpp */,
+				024112781C750F440052BB13 /* CCOLComponentReverb.cpp */,
+				024112791C750F440052BB13 /* CCOLComponentReverb.hpp */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -431,6 +436,7 @@
 				6C64D7021AD9A4A900012108 /* NSString+Random.m in Sources */,
 				6C5A125B1BE6A9F000B1227D /* CCOLComponentParameter.cpp in Sources */,
 				83078FD01C03AEF500B2080E /* CCOLComponentMultiples.cpp in Sources */,
+				0241127A1C750F440052BB13 /* CCOLComponentReverb.cpp in Sources */,
 				B40584831C0F88780002F278 /* CCOLComponentVCF.cpp in Sources */,
 				6C2428891BE37D0F003AB2FF /* CCOLAudioEngine.cpp in Sources */,
 				6CB1276F1BE91FBB005FBDAD /* CCOLMIDIComponent.cpp in Sources */,

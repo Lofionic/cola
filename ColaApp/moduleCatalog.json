@@ -708,6 +708,56 @@
                  
                  
                  {
+                 "id" : "REVERB",
+                 "name" : "Reverb",
+                 "width" : 1,
+                 "type" : "CCOLComponentTypeReverb",
+                 "view" : {
+                 "asset" : "reverb",
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "Input",
+                                 "x" : 25,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Output",
+                                 "x" : 65,
+                                 "y" : 270
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Mix",
+                               "asset" : "small",
+                               "x" : 45,
+                               "y" : 60
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Feedback",
+                               "asset" : "small",
+                               "x" : 45,
+                               "y" : 135
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Delay Time",
+                               "asset" : "small",
+                               "x" : 45,
+                               "y" : 210
+                               }
+                               ]
+                 }
+                 },
+                 
+                 
+                 
+                 
+                 {
                  "id" : "SEQ",
                  "name" : "Sequencer",
                  "width" : 4,

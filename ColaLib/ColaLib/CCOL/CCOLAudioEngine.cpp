@@ -469,6 +469,8 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
         newComponent = new CCOLComponentLogic(audioContext);
     } else if (componentTypeString == kCCOLComponentTypeDelay) {
         newComponent = new CCOLComponentDelay(audioContext);
+    } else if (componentTypeString == kCCOLComponentTypeReverb) {
+        newComponent = new CCOLComponentReverb(audioContext);
     } else if (componentTypeString == kCCOLComponentTypeRingMod) {
         newComponent = new CCOLComponentRingMod(audioContext);
     } else if (componentTypeString == kCCOLComponentTypePan) {
