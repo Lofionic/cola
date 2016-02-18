@@ -642,7 +642,7 @@
                  "id" : "NG",
                  "name" : "Noise Generator",
                  "width" : 1,
-                 "type" : "CCOLComponentNoiseGenerator",
+                 "type" : "CCOLComponentTypeNoiseGenerator",
                  "view" : {
                  "asset" : "noise_generator",
                  "connectors" : [
@@ -655,51 +655,108 @@
                                  ],
                  }
                  },
+                 
+                 
                  {
                  "id" : "DELAY",
                  "name" : "Delay",
                  "width" : 1,
-                 "type" : "COLComponentDelay",
+                 "type" : "CCOLComponentTypeDelay",
                  "view" : {
+                 "asset" : "delay",
                  "connectors" : [
                                  {
                                  "type" : "input",
-                                 "connection" : "input",
-                                 "x" : 48,
-                                 "y" : 280
+                                 "connection" : "Input",
+                                 "x" : 25,
+                                 "y" : 270
                                  },
                                  {
                                  "type" : "output",
-                                 "connection" : "output",
-                                 "x" : 48,
-                                 "y" : 162
+                                 "connection" : "Output",
+                                 "x" : 65,
+                                 "y" : 270
                                  }
                                  ],
                  "controls" : [
                                {
-                               "type" : "continuous",
-                               "parameter" : "mix",
-                               "asset" : "small_white",
-                               "x" : 48,
-                               "y" : 32
+                               "type" : "rotary_encoder",
+                               "parameter" : "Mix",
+                               "asset" : "small",
+                               "x" : 45,
+                               "y" : 60
                                },
                                {
-                               "type" : "continuous",
-                               "parameter" : "feedback",
-                               "asset" : "small_white",
-                               "x" : 48,
-                               "y" : 72
+                               "type" : "rotary_encoder",
+                               "parameter" : "Feedback",
+                               "asset" : "small",
+                               "x" : 45,
+                               "y" : 135
                                },
                                {
-                               "type" : "continuous",
-                               "parameter" : "delayTime",
-                               "asset" : "small_white",
-                               "x" : 48,
-                               "y" : 112
+                               "type" : "rotary_encoder",
+                               "parameter" : "Delay Time",
+                               "asset" : "small",
+                               "x" : 45,
+                               "y" : 210
                                }
                                ]
                  }
                  },
+                 
+                 
+                 
+                 
+                 {
+                 "id" : "REVERB",
+                 "name" : "Reverb",
+                 "width" : 1,
+                 "type" : "CCOLComponentTypeReverb",
+                 "view" : {
+                 "asset" : "reverb",
+                 "connectors" : [
+                                 {
+                                 "type" : "input",
+                                 "connection" : "Input",
+                                 "x" : 25,
+                                 "y" : 270
+                                 },
+                                 {
+                                 "type" : "output",
+                                 "connection" : "Output",
+                                 "x" : 65,
+                                 "y" : 270
+                                 }
+                                 ],
+                 "controls" : [
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Mix",
+                               "asset" : "small",
+                               "x" : 45,
+                               "y" : 60
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Feedback",
+                               "asset" : "small",
+                               "x" : 45,
+                               "y" : 135
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Delay Time",
+                               "asset" : "small",
+                               "x" : 45,
+                               "y" : 210
+                               }
+                               ]
+                 }
+                 },
+                 
+                 
+                 
+                 
                  {
                  "id" : "SEQ",
                  "name" : "Sequencer",
