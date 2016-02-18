@@ -7,6 +7,8 @@
 //
 
 #include "CCOLComponentLogic.hpp"
+#include "CCOLAudioEngine.hpp"
+
 #include <math.h>
 
 void CCOLComponentLogic::initializeIO() {
@@ -42,7 +44,71 @@ void CCOLComponentLogic::initializeIO() {
     modOffsetAmount    = new CCOLComponentParameter(this, (char*)"modOffsetAmount");
     setParameters(vector<CCOLComponentParameter*> { modOffsetAmount });
     modOffsetAmount->setNormalizedValue(0.5);
+    
+    
+    // Setup offset buffer
+    bufferSize = (512 * 3); // work out how to calculate buffer size
+    
+    offsetBuffer = (SignalType*)malloc(bufferSize * sizeof(SignalType));
+    memset(offsetBuffer, 0, bufferSize * sizeof(SignalType));
+    
+    for (int i = 0 ; i < bufferSize; i++) {
+        offsetBuffer[i] = 0.0f;
+    }
+
+    bufferReadPos =  -512;
+    bufferWritePos = 0;
 }
+
+//void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
+//    CCOLComponent::renderOutputs(numFrames);
+//    
+//    SignalType *carrierBuffer = carrier->getBuffer(numFrames);
+//    SignalType *modulatorBuffer = modulator->getBuffer(numFrames);
+//    
+//    
+//    SignalType *outBufferWithOffset = outputModOffset->prepareBufferOfSize(numFrames);
+//    
+//    for (int i = 0 ; i < numFrames; i++) {
+//        offsetBuffer[bufferWritePos] = carrierBuffer[i];
+//        
+//        bufferWritePos++;
+//        if (bufferWritePos >= (numFrames * 3)) {
+//            bufferWritePos -= (numFrames * 3);
+//        }
+//    }
+//    
+//    //    bufferReadPos = bufferWritePos - numFrames;
+//    
+//    if (bufferReadPos < 0) {
+//        bufferReadPos += numFrames * 3;
+//    }
+//    
+//    for (int i = 0; i < numFrames; i++) {
+//        
+//        if (bufferReadPos >= (numFrames * 3)) {
+//            bufferReadPos -= (numFrames * 3);
+//        }
+//        
+//        float delta = i/(float)numFrames;
+//        
+//        // Offset the input buffer read by a multiple of the modulator
+//        
+//        // Get multiplier for the offset (0 - numframes/2)
+//        float offsetParamLog = modOffsetAmount->getOutputAtDelta(delta);
+//        offsetParamLog = offsetParamLog * offsetParamLog * offsetParamLog; // Approximate log scale
+//        
+//        float offsetAmount = numFrames/2 * offsetParamLog;
+//        int bufferOffset = int(modulatorBuffer[i] * offsetAmount);
+//        
+//        if (outputModOffset->isConnected()) {
+//            outBufferWithOffset[i] = offsetBuffer[bufferReadPos + bufferOffset];
+//        }
+//        
+//        bufferReadPos++;
+//    }
+//    
+//}
 
 void CCOLComponentLogic::renderOutputs(unsigned int numFrames) {
     CCOLComponent::renderOutputs(numFrames);

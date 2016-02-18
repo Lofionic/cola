@@ -34,7 +34,8 @@ class CCOLComponentLogic : public CCOLComponent {
     
     SignalType *offsetBuffer;
     UInt32 bufferSize;
-    UInt32 bufferLocation;
+    SInt32 bufferReadPos;
+    SInt32 bufferWritePos;
     
 public:
     CCOLComponentLogic(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {

@@ -12,7 +12,7 @@
 #import "CCOLTypes.h"
 #import <UIKit/UIKit.h>
 
-#define CV_FREQUENCY_RANGE 8372 // C9
+
 
 #define WAVETABLE_SIZE      8196
 #define ANALOG_HARMONICS    50

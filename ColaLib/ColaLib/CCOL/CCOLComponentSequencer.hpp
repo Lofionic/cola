@@ -19,7 +19,10 @@ class CCOLComponentSequencer : public CCOLComponent {
     CCOLComponentOutput *gateOut;
     
     CCOLComponentParameter* stepPitch[16];
-    CCOLComponentParameter* stepGate[16]; // gate: 0 = off, 0.5 = on, 1.0 = tie
+    CCOLComponentParameter* stepGate[16];   // gate: 0 = off, 0.5 = on, 1.0 = tie
+    CCOLComponentParameter* stepSlide[16];  // slide: 0 = off, 1 = on
+    CCOLComponentParameter* stepMod1[16];   // Mod1 value
+    CCOLComponentParameter* stepMod2[16];   // Mod2 value
     
     CCOLTransportController* transportController;
     

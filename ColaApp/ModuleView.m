@@ -22,12 +22,14 @@
 #import "RotaryEncoder.h"
 #import "RotarySwitch.h"
 
+#import "SequencerSubview.h"
+
 #define BACKGROUND_COLOUR [UIColor colorWithRed:64/255.0 green:64/255.0 blue:64/255.0 alpha:1]
 
 @interface ModuleView ()
 
 @property (nonatomic) CCOLComponentAddress      component;
-@property (nonatomic, strong) NSString          *asset;
+@property (nonatomic, strong) NSString          *assetPath;
 @property (nonatomic, strong) ModuleDescription *moduleDescription;
 
 @end
@@ -35,7 +37,7 @@
 @implementation ModuleView
 
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame identifier:(NSString*)identifier {
-    
+        
     CCOLComponentAddress component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:(char*)[moduleDescription.component UTF8String]];
 
     if (component == 0) {
@@ -54,10 +56,23 @@
             [self addControls:moduleDescription.controls];
         }
         
+        if (moduleDescription.subviews) {
+            [self addSubviews:moduleDescription.subviews];
+        }
+        
         UIImage *assetImage = nil;
+        
+        // Check image path for asset
         if (moduleDescription.asset) {
-            self.asset = [ASSETS_PATH_COMPONENTS stringByAppendingString:moduleDescription.asset];
-            assetImage = [UIImage imageNamed:self.asset];
+            
+            self.assetPath = moduleDescription.asset;
+            assetImage = [UIImage imageNamed:moduleDescription.asset];
+            
+            if (!assetImage) {
+                // No asset in resources: check asset path in bundle
+                self.assetPath = [ASSETS_PATH_COMPONENTS stringByAppendingString:moduleDescription.asset];
+                assetImage = [UIImage imageNamed:self.assetPath];
+            }
         }
         
         if (assetImage) {
@@ -160,6 +175,22 @@
     self.controlViews = [NSArray arrayWithArray:controlViews];
 }
 
+-(void)addSubviews:(NSArray *)subviews {
+    
+    NSMutableArray *subviewViews = [[NSMutableArray alloc] initWithCapacity:[subviews count]];
+    
+    for (SubviewDescription *thisSubview in subviews) {
+        
+        UIView *subview = [ModuleSubview subviewForComponent:self.component description:thisSubview];
+        if (subview) {
+            [self addSubview:subview];
+            [subviewViews addObject:subview];
+        }
+    }
+    
+    self.subviewViews = [NSArray arrayWithArray:subviewViews];
+}
+
 -(void)handleLongPress:(UIGestureRecognizer*)uigr {
     UILongPressGestureRecognizer *longPressGesture = (UILongPressGestureRecognizer*)uigr;
     
@@ -180,7 +211,7 @@
 
 -(void)drawRect:(CGRect)rect {
     [super drawRect:rect];
-    if (!self.asset) {
+    if (!self.assetPath) {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         CGContextSetStrokeColorWithColor(ctx, [[UIColor blackColor] CGColor]);
         CGContextSetLineWidth(ctx, 2);
