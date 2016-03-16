@@ -105,8 +105,6 @@ static BuildView *buildView = nil;
     self.keyboardView = [[KeyboardView alloc] init];
     [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.keyboardContainerView addSubview:self.keyboardView];
-
-    [self.keyboardContainerView setHidden:NO];
     
     self.iaaView = [[IAAView alloc] init];
     [self.iaaView setTranslatesAutoresizingMaskIntoConstraints:NO];
