@@ -38,8 +38,6 @@ static BuildView *buildView = nil;
 @property (nonatomic, strong) UIView                *keyboardContainerView;
 @property (nonatomic, strong) KeyboardView          *keyboardView;
 
-@property (nonatomic, strong) UIView                *sequencerContainerView;
-
 @property (nonatomic, strong) IAAView               *iaaView;
 
 @property (nonatomic, strong) UIView                *dragView;
@@ -107,14 +105,8 @@ static BuildView *buildView = nil;
     self.keyboardView = [[KeyboardView alloc] init];
     [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.keyboardContainerView addSubview:self.keyboardView];
-    
-    // Setup sequencer container in bottom shelf
-    self.sequencerContainerView = [[UIView alloc] init];
-    [self.sequencerContainerView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
-    [self.bottomPanel addSubview:self.sequencerContainerView];
-    
-    [self.keyboardContainerView setHidden:YES];
+
+    [self.keyboardContainerView setHidden:NO];
     
     self.iaaView = [[IAAView alloc] init];
     [self.iaaView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -127,7 +119,6 @@ static BuildView *buildView = nil;
                                       @"bottomPanel"            :   self.bottomPanel,
                                       @"keyboardContainerView"  :   self.keyboardContainerView,
                                       @"keyboardView"           :   self.keyboardView,
-                                      @"sequencerContainerView" :   self.sequencerContainerView,
                                       @"iaaView"                :   self.iaaView,
                                       @"topGuide"               :   self.topLayoutGuide,
                                       @"bottomGuide"            :   self.bottomLayoutGuide
@@ -197,10 +188,6 @@ static BuildView *buildView = nil;
     
     [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-80-[keyboardView]-20-|" options:0 metrics:nil views:viewsDictionary]];
     [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[keyboardView]|" options:0 metrics:nil views:viewsDictionary]];
-    
-    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[sequencerContainerView(768)]" options:0 metrics:nil views:viewsDictionary]];
-    [self.bottomPanel addConstraint:[NSLayoutConstraint constraintWithItem:self.sequencerContainerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.bottomPanel attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
-    [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-44-[sequencerContainerView]|" options:0 metrics:nil views:viewsDictionary]];
 
     [self.view addConstraint:self.iaaPositionConstraint];
     [self.view addConstraint:self.bottomPanelPositionConstraint];
@@ -236,20 +223,20 @@ static BuildView *buildView = nil;
     UIImage *keyboardIcon = [UIImage imageNamed:TOOLBAR_PIANO_ICON];
     self.keyboardBarButtonItem = [[UIBarButtonItem alloc] initWithImage:keyboardIcon style:UIBarButtonItemStylePlain target:self action:@selector(keyboardTapped)];
     
-    self.sequencerBarButtonItem = [[UIBarButtonItem alloc] initWithImage:keyboardIcon style:UIBarButtonItemStylePlain target:self action:@selector(sequencerTapped)];
-    
-    UIImage *playIcon = [UIImage imageNamed:TOOLBAR_PLAY_ICON];
-    self.playStopBarButtonItem = [[UIBarButtonItem alloc] initWithImage:playIcon style:UIBarButtonItemStylePlain target:self action:@selector(playStopTapped)];
+//    self.sequencerBarButtonItem = [[UIBarButtonItem alloc] initWithImage:keyboardIcon style:UIBarButtonItemStylePlain target:self action:@selector(sequencerTapped)];
+//    
+//    UIImage *playIcon = [UIImage imageNamed:TOOLBAR_PLAY_ICON];
+//    self.playStopBarButtonItem = [[UIBarButtonItem alloc] initWithImage:playIcon style:UIBarButtonItemStylePlain target:self action:@selector(playStopTapped)];
 
-    [self.navigationItem setLeftBarButtonItems:@[self.buildBarButtonItem, self.keyboardBarButtonItem, self.sequencerBarButtonItem, self.playStopBarButtonItem]];
+    [self.navigationItem setLeftBarButtonItems:@[self.buildBarButtonItem, self.keyboardBarButtonItem]];
     
     UIImage *filesIcon = [UIImage imageNamed:TOOLBAR_FILES_ICON];
     self.filesBarButtonItem = [[UIBarButtonItem alloc] initWithImage:filesIcon style:UIBarButtonItemStylePlain target:self action:@selector(filesTapped)];
     
-    UIImage *saveIcon = [UIImage imageNamed:TOOLBAR_SAVE_ICON];
-    self.saveBarButtonItem = [[UIBarButtonItem alloc] initWithImage:saveIcon style:UIBarButtonItemStylePlain target:self action:@selector(saveTapped)];
+//    UIImage *saveIcon = [UIImage imageNamed:TOOLBAR_SAVE_ICON];
+//    self.saveBarButtonItem = [[UIBarButtonItem alloc] initWithImage:saveIcon style:UIBarButtonItemStylePlain target:self action:@selector(saveTapped)];
     
-    [self.navigationItem setRightBarButtonItems:@[self.filesBarButtonItem, self.saveBarButtonItem]];
+    [self.navigationItem setRightBarButtonItems:@[self.filesBarButtonItem]];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(appWillEnterForeground)
@@ -317,51 +304,13 @@ static BuildView *buildView = nil;
     [self showOrHideKeyboard];
 }
 
--(void)sequencerTapped {
-    [self showOrHideSequencer];
-}
-
 -(void)showOrHideKeyboard {
     if (self.bottomPanelHidden) {
-        // Bottom panel hidden
-        // Make keyboard visible and show bottom panel
-        [self.sequencerContainerView setHidden:YES];
-        [self.keyboardContainerView setHidden:NO];
+        // Show bottom panel
         [self setBottomPanelHidden:NO animated:YES onCompletion:nil];
     } else {
-        // Bottom panel not hidden
-        if ([self.keyboardContainerView isHidden]) {
-            // Hide the bottom panel, then show the keyboard
-            __weak BuildViewController *weakSelf = self;
-            [self setBottomPanelHidden:YES animated:YES onCompletion:^{
-                [weakSelf showOrHideKeyboard];
-            }];
-        } else {
-            // Keyboard is already showing, hide bottom panel
-            [self setBottomPanelHidden:YES animated:YES onCompletion:nil];
-        }
-    }
-}
-
--(void)showOrHideSequencer {
-    if (self.bottomPanelHidden) {
-        // Bottom panel hidden
-        // Make sequecer visible and show bottom panel
-        [self.sequencerContainerView setHidden:NO];
-        [self.keyboardContainerView setHidden:YES];
-        [self setBottomPanelHidden:NO animated:YES onCompletion:nil];
-    } else {
-        // Bottom panel not hidden
-        if ([self.sequencerContainerView isHidden]) {
-            // Hide the bottom panel, then show the sequencer
-            __weak BuildViewController *weakSelf = self;
-            [self setBottomPanelHidden:YES animated:YES onCompletion:^{
-                [weakSelf showOrHideSequencer];
-            }];
-        } else {
-            // Sequencer is already showing, hide bottom panel
-            [self setBottomPanelHidden:YES animated:YES onCompletion:nil];
-        }
+        // Hide bottom panel
+        [self setBottomPanelHidden:YES animated:YES onCompletion:nil];
     }
 }
 
