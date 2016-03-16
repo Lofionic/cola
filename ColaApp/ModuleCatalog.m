@@ -8,6 +8,8 @@
 #import "ModuleCatalog.h"
 #import "ModuleDescription.h"
 
+#import "buildSettings.h"
+
 @interface ModuleCatalog ()
 
 @property (nonatomic, strong) NSArray *moduleDescriptions;
@@ -38,10 +40,9 @@
             NSArray *modules = [moduleCatalogJSON objectForKey:@"modules"];
             __block NSMutableArray *moduleDescriptions = [[NSMutableArray alloc] initWithCapacity:[modules count]];
             
-            [modules enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
-                NSDictionary *moduleDictionary = (NSDictionary*)obj;
+            [modules enumerateObjectsUsingBlock:^(NSDictionary *moduleDictionary, NSUInteger index, BOOL *stop) {
                 ModuleDescription *thisModuleDescription = [[ModuleDescription alloc] initWithDictionary:moduleDictionary];
-                if (thisModuleDescription) {
+                if (thisModuleDescription && (thisModuleDescription.isFree || ALL_MODULES > 0)) {
                     [moduleDescriptions addObject:thisModuleDescription];
                 }
             }];

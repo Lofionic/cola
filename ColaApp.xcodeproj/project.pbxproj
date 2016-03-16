@@ -109,6 +109,7 @@
 		6C37DAC81C5905F400BF0C97 /* SequencerSubview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SequencerSubview.m; sourceTree = "<group>"; };
 		6C37DACA1C5908C300BF0C97 /* ModuleSubview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleSubview.h; sourceTree = "<group>"; };
 		6C37DACB1C5908C300BF0C97 /* ModuleSubview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleSubview.m; sourceTree = "<group>"; };
+		6C3D5F521C996BAB00828F59 /* buildSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = buildSettings.h; sourceTree = "<group>"; };
 		6C59C5641ABF4273001EE663 /* ConnectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorView.h; sourceTree = "<group>"; };
 		6C59C5651ABF4273001EE663 /* ConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorView.m; sourceTree = "<group>"; };
 		6C64D6FC1AD9394800012108 /* MasterModuleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterModuleView.h; sourceTree = "<group>"; };
@@ -246,6 +247,7 @@
 				6C64D7031AD9B06600012108 /* PresetController */,
 				6C2A5EA41A8C0B8D00ECEAB2 /* ColaApp.entitlements */,
 				6C1DB6B11AADDEB60041F5F9 /* defines.h */,
+				6C3D5F521C996BAB00828F59 /* buildSettings.h */,
 				6C2A5E231A8BF2CC00ECEAB2 /* AppDelegate.h */,
 				6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */,
 				6C6DB53E1AD6C5480001343E /* ModuleCatalog */,

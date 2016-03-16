@@ -26,6 +26,8 @@
 
 @property (nonatomic, strong) UIImage *thumbnail;
 
+@property (nonatomic) bool isFree;
+
 @end
 
 @implementation ModuleDescription
@@ -47,6 +49,10 @@
         
         if ([dictionary valueForKey:@"width"]) {
             self.width = [[dictionary valueForKey:@"width"] integerValue];
+        }
+        
+        if ([dictionary valueForKey:@"free"]) {
+            self.isFree = [[dictionary valueForKey:@"free"] boolValue];
         }
 
         if ([dictionary objectForKey:@"view"]) {

@@ -5,6 +5,7 @@
                  "name" : "VCO A",
                  "width" : 2,
                  "type" : "CCOLComponentTypeVCO",
+                 "free" : 1,
                  "view" :
                  {
                  "asset" : "vco_a",
@@ -67,6 +68,7 @@
                  "name" : "LFO A",
                  "width" : 1,
                  "type" : "CCOLComponentTypeLFO",
+                 "free" : 1,
                  "view" : {
                  "asset" : "lfo_a",
                  "connectors" : [
@@ -101,6 +103,7 @@
                  "name" : "EG A",
                  "width" : 1,
                  "type" : "CCOLComponentTypeEG",
+                 "free" : 1,
                  "view" : {
                  "asset" : "eg_a",
                  "connectors" : [
@@ -162,6 +165,7 @@
                  "name" : "VCA A",
                  "width" : 1,
                  "type" : "CCOLComponentTypeVCA",
+                 "free" : 1,
                  "view" : {
                  "asset" : "vca_a",
                  "connectors" : [
@@ -206,6 +210,7 @@
                  "name" : "Multiples",
                  "width" : 1,
                  "type" : "CCOLComponentTypeMultiples",
+                 "free" : 1,
                  "view" : {
                  "asset" : "multiples",
                  "connectors" : [
@@ -277,6 +282,7 @@
                  "name" : "Mix II",
                  "width" : 1,
                  "type" : "CCOLComponentTypeMixer",
+                 "free" : 1,
                  "view" : {
                  "asset" : "mixer2",
                  "connectors" : [
@@ -320,6 +326,7 @@
                  "name" : "Mix IV",
                  "width" : 2,
                  "type" : "CCOLComponentTypeMixer4",
+                 "free" : 1,
                  "view" : {
                  "asset" : "mixer4_a",
                  "connectors" : [
@@ -477,6 +484,7 @@
                  "name" : "VCF A",
                  "width" : 2,
                  "type" : "CCOLComponentTypeVCF",
+                 "free" : 1,
                  "view" : {
                  "asset" : "vcf_a",
                  "connectors" : [
@@ -562,6 +570,7 @@
                  "name" : "Pan",
                  "width" : 1,
                  "type" : "CCOLComponentTypePan",
+                 "free" : 1,
                  "view" : {
                  "asset" : "pan",
                  "connectors" : [
@@ -605,6 +614,7 @@
                  "name" : "Ring Modulator",
                  "width" : 1,
                  "type" : "CCOLComponentTypeRingMod",
+                 "free" : 1,
                  "view" : {
                  "asset" : "ring_mod",
                  "connectors" : [
@@ -643,6 +653,7 @@
                  "name" : "Noise Generator",
                  "width" : 1,
                  "type" : "CCOLComponentTypeNoiseGenerator",
+                 "free" : 1,
                  "view" : {
                  "asset" : "noise_generator",
                  "connectors" : [

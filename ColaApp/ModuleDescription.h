@@ -23,6 +23,8 @@
 
 @property (readonly, strong) UIImage    *thumbnail;
 
+@property (readonly) bool isFree;
+
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary;
 
 @end
