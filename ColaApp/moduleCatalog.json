@@ -13,19 +13,19 @@
                                  {
                                  "type" : "input",
                                  "connection" : "Key In",
-                                 "x" : 45,
+                                 "x" : 30,
                                  "y" : 270
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "FM In",
-                                 "x" : 90,
-                                 "y" : 220
+                                 "x" : 70,
+                                 "y" : 270
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out",
-                                 "x" : 135,
+                                 "x" : 150,
                                  "y" : 270
                                  }
                                  ],
