@@ -185,7 +185,7 @@
                                  "type" : "input",
                                  "connection" : "CV In",
                                  "x" : 45,
-                                 "y" : 200
+                                 "y" : 215
                                  }
                                  ],
                  "controls" : [
@@ -200,7 +200,7 @@
                                "parameter" : "CV Amt",
                                "asset" : "small_white",
                                "x" : 45,
-                               "y" : 150
+                               "y" : 155
                                }
                                ]
                  }
