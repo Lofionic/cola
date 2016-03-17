@@ -202,13 +202,20 @@ static void setAudioSessionInactiveCallback(CFNotificationCenterRef center, void
     midiComponent->noteOn(noteIndex);
 }
 
-
 -(void)noteOff:(NoteIndex)noteIndex {
     midiComponent->noteOff(noteIndex);
 }
 
 -(void)allNotesOff {
     midiComponent->allNotesOff();
+}
+
+-(void)pitchBend:(float)value {
+    midiComponent->setPitchbend(value);
+}
+
+-(void)modulate:(float)value {
+    midiComponent->setModulation(value);
 }
 
 #pragma mark Inter-app-audio

@@ -68,6 +68,14 @@ void CCOLMIDIComponent::allNotesOff() {
     setFrequency();
 }
 
+void CCOLMIDIComponent::setPitchbend(float value) {
+    pitchbend = value;
+}
+
+void CCOLMIDIComponent::setModulation(float value) {
+    modulation = value;
+}
+
 void CCOLMIDIComponent::setFrequency() {
     if (noteOns.size() > 0) {
         // Set frequency to match last note

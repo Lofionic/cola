@@ -32,6 +32,9 @@ public:
     void noteOff(NoteIndex note);
     void allNotesOff();
     
+    void setPitchbend(float value);
+    void setModulation(float value);
+    
 private:
     vector<NoteIndex>   noteOns;
     
@@ -43,6 +46,7 @@ private:
     bool            gateTrigger;
     bool            gliss;
     float           pitchbend;
+    float           modulation;
     float           prevPitchbend;
     unsigned int    pitchbendRange;
   

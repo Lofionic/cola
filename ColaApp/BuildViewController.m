@@ -9,6 +9,7 @@
 #import "ModuleDescription.h"
 #import "BuildViewController.h"
 #import "KeyboardView.h"
+#import "WheelControl.h"
 #import "BuildView.h"
 #import "ModuleView.h"
 #import "ModuleCatalog.h"
@@ -37,6 +38,8 @@ static BuildView *buildView = nil;
 
 @property (nonatomic, strong) UIView                *keyboardContainerView;
 @property (nonatomic, strong) KeyboardView          *keyboardView;
+@property (nonatomic, strong) WheelControl          *pitchbendWheelControl;
+@property (nonatomic, strong) WheelControl          *modWheelControl;
 
 @property (nonatomic, strong) IAAView               *iaaView;
 
@@ -106,6 +109,18 @@ static BuildView *buildView = nil;
     [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.keyboardContainerView addSubview:self.keyboardView];
     
+    // Setup modulation wheel in bottom shelf
+    self.modWheelControl =  [[WheelControl alloc] init];
+    self.modWheelControl.wheelControlType = WheelControlTypeModulation;
+    [self.modWheelControl setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.keyboardContainerView addSubview:self.modWheelControl];
+    
+    // Setup pitchbend wheel in bottom shelf
+    self.pitchbendWheelControl =  [[WheelControl alloc] init];
+    self.pitchbendWheelControl.wheelControlType = WheelControlTypePitchbend;
+    [self.pitchbendWheelControl setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.keyboardContainerView addSubview:self.pitchbendWheelControl];
+    
     self.iaaView = [[IAAView alloc] init];
     [self.iaaView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.iaaView setHidden:YES];
@@ -117,6 +132,8 @@ static BuildView *buildView = nil;
                                       @"bottomPanel"            :   self.bottomPanel,
                                       @"keyboardContainerView"  :   self.keyboardContainerView,
                                       @"keyboardView"           :   self.keyboardView,
+                                      @"modWheelControl"        :   self.modWheelControl,
+                                      @"pitchWheelControl"      :   self.pitchbendWheelControl,
                                       @"iaaView"                :   self.iaaView,
                                       @"topGuide"               :   self.topLayoutGuide,
                                       @"bottomGuide"            :   self.bottomLayoutGuide
@@ -184,9 +201,12 @@ static BuildView *buildView = nil;
     [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[keyboardContainerView]|" options:0 metrics:nil views:viewsDictionary]];
     [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-44-[keyboardContainerView]|" options:0 metrics:nil views:viewsDictionary]];
     
-    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-80-[keyboardView]-20-|" options:0 metrics:nil views:viewsDictionary]];
+    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[modWheelControl(40)][pitchWheelControl(40)][keyboardView]-20-|"
+                                                                                       options:0 metrics:nil views:viewsDictionary]];
+    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[modWheelControl]|" options:0 metrics:nil views:viewsDictionary]];
+    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[pitchWheelControl]|" options:0 metrics:nil views:viewsDictionary]];
     [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[keyboardView]|" options:0 metrics:nil views:viewsDictionary]];
-
+    
     [self.view addConstraint:self.iaaPositionConstraint];
     [self.view addConstraint:self.bottomPanelPositionConstraint];
     

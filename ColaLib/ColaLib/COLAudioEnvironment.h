@@ -57,6 +57,9 @@
 -(void)noteOff:(NoteIndex)noteIndex;
 -(void)allNotesOff;
 
+-(void)pitchBend:(float)value;
+-(void)modulate:(float)value;
+
 // Transport
 -(BOOL)isTransportPlaying;
 -(void)transportPlay;
