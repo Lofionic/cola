@@ -58,13 +58,13 @@ void CCOLTransportController::renderOutputs(unsigned int numFrames, double sampl
 
 void CCOLTransportController::syncWithIAA() {
     // TODO: Inter-app audio sync
-    if (engine->isIAAHostConnected()) {
-        Float64 iaaTempo = engine->getIAATempo();
-        if (iaaTempo > 0) {
-            tempo = iaaTempo;
-            currentBeat = engine->getIAABeat();
-        }
-    }
+//    if (engine->isIAAHostConnected()) {
+//        Float64 iaaTempo = engine->getIAATempo();
+//        if (iaaTempo > 0) {
+//            tempo = iaaTempo;
+//            currentBeat = engine->getIAABeat();
+//        }
+//    }
 }
 
 void CCOLTransportController::interappAudioTransportStateDidChange(bool hostIsPlaying) {

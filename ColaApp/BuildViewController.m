@@ -17,7 +17,6 @@
 #import "UIView+Snapshot.h"
 #import "UIImage+Resize.h"
 #import "BuildViewScrollView.h"
-#import "IAAView.h"
 
 #import <ColaLib/CCOLTypes.h>
 #import <ColaLib/COLAudioEnvironment.h>
@@ -109,6 +108,7 @@ static BuildView *buildView = nil;
     self.iaaView = [[IAAView alloc] init];
     [self.iaaView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.iaaView setHidden:YES];
+    [self.iaaView setDelegate:self];
     [self.view addSubview:self.iaaView];
 
     NSDictionary *viewsDictionary = @{
@@ -504,6 +504,36 @@ static BuildView *buildView = nil;
             }
         }
     }
+}
+
+#pragma mark IAAViewDelegate
+
+-(UIImage*)getIAAHostImageForIAAView:(IAAView *)iaaView {
+    return [[COLAudioEnvironment sharedEnvironment] getIAAHostImage];
+}
+
+-(void)iaaViewDidTapHostImage:(IAAView *)iaaView {
+    [[COLAudioEnvironment sharedEnvironment] iaaGoToHost];
+}
+
+-(bool)isIAAHostPlayingForIAAView:(IAAView *)iaaView {
+    return [[COLAudioEnvironment sharedEnvironment] iaaIsPlaying];
+}
+
+-(bool)isIAAHostRecordingForIAAView:(IAAView *)iaaView {
+    return [[COLAudioEnvironment sharedEnvironment] iaaIsRecording];
+}
+
+-(void)iaaViewDidTapPlay:(IAAView *)iaaView {
+    [[COLAudioEnvironment sharedEnvironment] iaaTogglePlay];
+}
+
+-(void)iaaViewDidTapRecord:(IAAView *)iaaView {
+    [[COLAudioEnvironment sharedEnvironment] iaaToggleRecord];
+}
+
+-(void)iaaViewdidTapRewind:(IAAView *)iaaView {
+    [[COLAudioEnvironment sharedEnvironment] iaaRewind];
 }
 
 #pragma LoadSave

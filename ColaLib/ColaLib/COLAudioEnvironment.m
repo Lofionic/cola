@@ -7,6 +7,7 @@
 //
 
 #import "COLAudioEnvironment.h"
+#import "CCOLIAAController.h"
 #import "CCOLAudioEngine.hpp"
 #import "CCOLComponentParameter.hpp"
 #import "CCOLComponentIO.hpp"
@@ -18,8 +19,7 @@
 @interface COLAudioEnvironment()
 
 @property (nonatomic) Float64   sampleRate;
-@property (nonatomic) BOOL      isForeground;
-@property (nonatomic) BOOL      iaaConnected;
+@property (nonatomic, strong) CCOLIAAController *iaaController;
 
 @end
 
@@ -54,13 +54,13 @@
         // ccAudioEngine = new CCOLAudioEngine();
         
         // Prepare keyboard component
-        midiComponent = (CCOLMIDIComponent*)ccAudioEngine.createComponent((char*)[@"CCOLMIDIComponent" UTF8String]);
+        midiComponent = ccAudioEngine.getMIDIComponent();
         
         // Observer for forced disconnects
         CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, engineNotificationCallback, kCCOLEngineDidForceDisconnectNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
         CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, setAudioSessionActiveCallback, kCCOLSetAudioSessionActiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
         CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, setAudioSessionInactiveCallback, kCCOLSetAudioSessionInactiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
-
+        
     }
     return self;
 }
@@ -224,10 +224,10 @@ static void setAudioSessionInactiveCallback(CFNotificationCenterRef center, void
         NSString *componentName = infoDictionary[kDictionaryKeyComponentName];
         NSString *manufacturerCode = infoDictionary[kDictionaryKeyComponentMaufacturer];
         
-        ccAudioEngine.initializeIAA((__bridge CFStringRef)componentName, fourCharCode(manufacturerCode));
+        self.iaaController = [[CCOLIAAController alloc] init];
+        [self.iaaController initializeIAAwithComponentName:(__bridge CFStringRef)componentName manufactureCode:fourCharCode(manufacturerCode) engine:&ccAudioEngine];
     }
 }
-
 
 #pragma mark AudioEngine delegates
 //-(NSDictionary *)interAppInfoDictionaryForAudioEngine:(COLAudioEngine *)audioEngine {
@@ -248,9 +248,38 @@ static void setAudioSessionInactiveCallback(CFNotificationCenterRef center, void
 //    NSLog(@"COLAudioEnvironment: Inter-app audio disconnected");
 //}
 
+// IAA Callbacks
 -(BOOL)isInterAppAudioConnected {
-    // return [self.audioEngine iaaConnected];
-    return NO;
+    return [self.iaaController isHostConnected];
+}
+
+-(BOOL)iaaIsPlaying {
+    return [self.iaaController isHostPlaying];
+}
+
+-(BOOL)iaaIsRecording {
+    return [self.iaaController isHostRecording];
+}
+
+-(UIImage*)getIAAHostImage {
+    return [self.iaaController hostImage];
+}
+
+-(void)iaaGoToHost {
+    [self.iaaController gotoHost];
+}
+
+-(void)iaaTogglePlay {
+    [self.iaaController togglePlay];
+}
+
+-(void)iaaToggleRecord {
+    [self.iaaController toggleRecord];
+}
+
+
+-(void)iaaRewind {
+    [self.iaaController rewind];
 }
 
 -(void)exportEnvironment {

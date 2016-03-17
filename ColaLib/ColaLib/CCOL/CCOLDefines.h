@@ -12,8 +12,6 @@
 #import "CCOLTypes.h"
 #import <UIKit/UIKit.h>
 
-
-
 #define WAVETABLE_SIZE      8196
 #define ANALOG_HARMONICS    50
 

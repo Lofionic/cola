@@ -10,6 +10,7 @@
 #include "CCOLComponents.h"
 #include "CCOLComponentIO.hpp"
 #include "CCOLTransportController.hpp"
+#include "CCOLMIDIComponent.hpp"
 
 #include <math.h>
 #include <string>
@@ -157,14 +158,16 @@ CCOLAudioEngine::CCOLAudioEngine() {
     sampleRate = 0;
     attenuation = 1.0;
     mute = false;
-    
-    iaaHostConnected = false;
-    
+   
     audioContext = new CCOLAudioContext(this, 2);
 
     buildWaveTables();
     
     transportController = new CCOLTransportController(this);
+    midiComponent = new CCOLMIDIComponent(audioContext);
+    midiComponent->initializeIO();
+    
+    iaaConnected = false;
 }
 
 void CCOLAudioEngine::initializeAUGraph(bool isForegroundIn) {
@@ -252,7 +255,7 @@ void CCOLAudioEngine::startStop() {
     // Start or stop the engine depending on state
     printf("CCOLAudioEngine: Start/stop.\n");
 
-    if (isForeground || iaaHostConnected) {
+    if (isForeground || iaaConnected) {
         printf("CCOLAudioEngine: App is foreground or IAA connected.\n");
         startGraph();
     } else {
@@ -293,127 +296,34 @@ void CCOLAudioEngine::stopGraph() {
     }
 }
 
-#pragma mark Inter App Audio
-void audioUnitPropertyListenerDispatcher(void *inRefCon, AudioUnit inUnit, AudioUnitPropertyID inID, AudioUnitScope inScope, AudioUnitElement inElement) {
-    printf("CCOLAudioEngine: AudioUnitPropertyListenerDispatcher");
-    CCOLAudioEngine *SELF = (CCOLAudioEngine*)inRefCon;
-    //[SELF audioUnitPropertyChanged:inRefCon unit:inUnit propID:inID scope:inScope element:inElement];
-    
-    if (inID == kAudioUnitProperty_IsInterAppConnected) {
-        SELF->interAppAudioConnectedDidChange();
-    } else if (inID == kAudioOutputUnitProperty_HostTransportState) {
-        SELF->interAppAudioHostTransportStateDidChange();
-    }
-}
-
-void CCOLAudioEngine::initializeIAA(CFStringRef componentName, OSType componentManufacturer) {
-
-    printf("CCOLAudioEngine: Registering IAA...\n");
-    iaaHostConnected = false;
-    
-    // Add property listener for inter-app audio
-    checkError(AudioUnitAddPropertyListener(mRemoteIO, kAudioUnitProperty_IsInterAppConnected, audioUnitPropertyListenerDispatcher, this), "Error setting IAA connected property listener");
-    checkError(AudioUnitAddPropertyListener(mRemoteIO, kAudioOutputUnitProperty_HostTransportState, audioUnitPropertyListenerDispatcher, this), "Error setting IAA host transport state listener");
-
-    // Publish the inter-app audio component
-    AudioComponentDescription audioComponentDescription = {
-        kAudioUnitType_RemoteInstrument,
-        'iasp',
-        componentManufacturer,
-        0,
-        1
-    };
-    
-    checkError(AudioOutputUnitPublish(&audioComponentDescription, componentName, 0, mRemoteIO), "Cannot publish IAA component");
-}
-
-void CCOLAudioEngine::interAppAudioConnectedDidChange() {
-    UInt32 connected;
-    UInt32 dataSize = sizeof(UInt32);
-    checkError(AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_IsInterAppConnected, kAudioUnitScope_Global, 0, &connected, &dataSize), "Error getting IsInterAppConnected property");
-    if (connected != iaaHostConnected) {
-        iaaHostConnected = connected;
-        if (iaaHostConnected) {
-            printf("CCOLAudioEngine: IAA has connected.\n");
-            iaaHostImage = AudioOutputUnitGetHostIcon(mRemoteIO, 114);
-            startStop();
-        } else {
-            printf("CCOLAudioEngine: IAA has disconnected.\n");
-            startStop();
-        }
-    }
-}
-
-void CCOLAudioEngine::interAppAudioHostTransportStateDidChange() {
-    updateTransportStateFromHostCallback();
-}
-
-void CCOLAudioEngine::updateTransportStateFromHostCallback() {
-    if (iaaHostConnected) {
-        if (callbackInfo == nil) {
-            getHostCalbackInfo();
-        }
-        if (callbackInfo != nil) {
-            Boolean isPlaying =     iaaHostPlaying;
-            Boolean isRecording =   iaaHostRecording;
-            Float64 outCurrentSampleInTimeline = 0;
-            void * hostUserData = callbackInfo->hostUserData;
-            
-            // Get transport state
-            OSStatus result =  callbackInfo->transportStateProc2(hostUserData,
-                                                                 &isPlaying,
-                                                                 &isRecording, NULL,
-                                                                 &outCurrentSampleInTimeline,
-                                                                 NULL, NULL, NULL);
-            if (result == noErr) {
-                iaaHostPlaying = isPlaying;
-                iaaHostRecording = isRecording;
-                iaaHostPlayTime = outCurrentSampleInTimeline;
-            } else {
-                printf("CCOLAudioEngine: Error occured fetching callBackInfo->transportStateProc2 : %d", (int)result);
-            }
-            
-            getTransportController()->interappAudioTransportStateDidChange(iaaHostPlaying);
-        }
-    }
-}
-
+// Get the current beat & tempo from iaa host.
 void CCOLAudioEngine::updateHostBeatAndTempo() {
-    if (iaaHostConnected) {
-        if (callbackInfo == nil) {
-            getHostCalbackInfo();
+    if (iaaConnected) {
+        if (callbackInfo == NULL) {
+            UInt32 dataSize = sizeof(HostCallbackInfo);
+            callbackInfo = (HostCallbackInfo*) malloc(dataSize);
+            OSStatus result = AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_HostCallbacks, kAudioUnitScope_Global, 0, callbackInfo, &dataSize);
+            if (result != noErr) {
+                printf("CCOLAudioEngine: Error occured fetching kAudioUnitProperty_HostCallbacks : %d", (int)result);
+                free(callbackInfo);
+                callbackInfo = NULL;
+            }
         }
-        if (callbackInfo != nil) {
+        if (callbackInfo != NULL) {
             Float64 outCurrentBeat;
             Float64 outTempo;
             
             void * hostUserData = callbackInfo->hostUserData;
             OSStatus result = callbackInfo->beatAndTempoProc(hostUserData,
-                                                             &outCurrentBeat,
-                                                             &outTempo);
+                                                                  &outCurrentBeat,
+                                                                  &outTempo);
             
             if (result == noErr) {
-                iaaHostBeat = outCurrentBeat;
-                iaaHostTempo = outTempo;
+                hostBeat = outCurrentBeat;
+                hostTempo = outTempo;
             } else  {
                 printf("Error occured fetching callbackInfo->beatAndTempProc : %d", (int)result);
             }
-        }
-    }
-}
-
-void CCOLAudioEngine::getHostCalbackInfo() {
-    if (iaaHostConnected) {
-        if (callbackInfo) {
-            free(callbackInfo);
-        }
-        UInt32 dataSize = sizeof(HostCallbackInfo);
-        callbackInfo = (HostCallbackInfo*) malloc(dataSize);
-        OSStatus result = AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_HostCallbacks, kAudioUnitScope_Global, 0, callbackInfo, &dataSize);
-        if (result != noErr) {
-            printf("CCOLAudioEngine: Error occured fetching kAudioUnitProperty_HostCallbacks : %d", (int)result);
-            free(callbackInfo);
-            callbackInfo = NULL;
         }
     }
 }

@@ -8,6 +8,8 @@
 #import "IAAView.h"
 #import "defines.h"
 
+#import <ColaLib/CCOLTypes.h>
+
 @interface IAAView()
 
 @property (nonatomic, strong) UIImageView *hostImageView;
@@ -65,36 +67,65 @@
                                                                      options:NSLayoutFormatAlignAllCenterY
                                                                      metrics:nil
                                                                        views:viewsDictionary]];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(iaaTransportStateDidChange:) name:kCCOLEventIAATransportStateDidChange object:nil];
     }
     return self;
 }
 
+-(void)iaaTransportStateDidChange:(NSNotification*)note {
+    [self updateContents];
+}
+
 -(void)updateContents {
-//    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-//    [self.hostImageView setImage:[audioEngine iaaHostImage]];
-//    
-//    [self.playButton setSelected:audioEngine.isHostPlaying];
-//    [self.recordButton setSelected:audioEngine.isHostRecording];
+    if (self.delegate) {
+        // Update Host Image
+        UIImage *hostImage = nil;
+        if ([self.delegate respondsToSelector:@selector(getIAAHostImageForIAAView:)]) {
+            hostImage = [self.delegate getIAAHostImageForIAAView:self];
+        }
+        
+        bool isPlaying = false;
+        if ([self.delegate respondsToSelector:@selector(isIAAHostPlayingForIAAView:)]) {
+            isPlaying = [self.delegate isIAAHostPlayingForIAAView:self];
+        }
+        
+        bool isRecording = false;
+        if ([self.delegate respondsToSelector:@selector(isIAAHostRecordingForIAAView:)]) {
+            isRecording = [self.delegate isIAAHostRecordingForIAAView:self];
+        }
+        
+        // Update states of play / record toggles.
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            [self.hostImageView setImage:[self.delegate getIAAHostImageForIAAView:self]];
+            [self.playButton setSelected:isPlaying];
+            [self.recordButton setSelected:isRecording];
+        });
+    }
 }
 
 -(void)hostImageTapped:(UIGestureRecognizer*)uigr {
-//    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-//    [audioEngine iaaGotoHost];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(iaaViewDidTapHostImage:)]) {
+        [self.delegate iaaViewDidTapHostImage:self];
+    }
 }
 
 -(void)rewindTapped {
-//    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-//    [audioEngine iaaRewind];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(iaaViewdidTapRewind:)]) {
+        [self.delegate iaaViewdidTapRewind:self];
+    }
 }
 
 -(void)playTapped {
-//    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-//    [audioEngine iaaTogglePlay];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(iaaViewDidTapPlay:)]) {
+        [self.delegate iaaViewDidTapPlay:self];
+    }
 }
 
 -(void)recordTapped {
-//    COLAudioEngine *audioEngine = [[COLAudioEnvironment sharedEnvironment] audioEngine];
-//    [audioEngine iaaToggleRecord];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(iaaViewDidTapRecord:)]) {
+        [self.delegate iaaViewDidTapRecord:self];
+    }
 }
 
 @end
