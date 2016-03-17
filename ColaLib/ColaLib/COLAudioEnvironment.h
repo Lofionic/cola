@@ -69,7 +69,7 @@
 -(void)iaaToggleRecord;
 -(void)iaaRewind;
 -(BOOL)iaaIsPlaying;
--(bool)iaaIsRecording;
+-(BOOL)iaaIsRecording;
 
 @property (readonly) NSMutableArray *components;
 

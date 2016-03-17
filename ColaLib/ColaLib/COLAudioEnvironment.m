@@ -7,7 +7,6 @@
 //
 
 #import "COLAudioEnvironment.h"
-#import "CCOLIAAController.h"
 #import "CCOLAudioEngine.hpp"
 #import "CCOLComponentParameter.hpp"
 #import "CCOLComponentIO.hpp"
@@ -19,13 +18,13 @@
 @interface COLAudioEnvironment()
 
 @property (nonatomic) Float64   sampleRate;
-@property (nonatomic, strong) CCOLIAAController *iaaController;
 
 @end
 
 @implementation COLAudioEnvironment {
     CCOLAudioEngine         ccAudioEngine;
     CCOLMIDIComponent       *midiComponent;
+    CCOLIAAController       *iaaController;
 }
 
 + (instancetype) sharedEnvironment {
@@ -50,23 +49,26 @@
             self.infoDelegate = appDelegate;
         }
 
-        // Cherry Cola
-        // ccAudioEngine = new CCOLAudioEngine();
-        
-        // Prepare keyboard component
         midiComponent = ccAudioEngine.getMIDIComponent();
+        iaaController = ccAudioEngine.getIAAController();
         
-        // Observer for forced disconnects
-        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, engineNotificationCallback, kCCOLEngineDidForceDisconnectNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
-        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, setAudioSessionActiveCallback, kCCOLSetAudioSessionActiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
-        CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, setAudioSessionInactiveCallback, kCCOLSetAudioSessionInactiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
-        
+        // Engine observers
+        CFNotificationCenterRef center = CFNotificationCenterGetLocalCenter();
+        CFNotificationCenterAddObserver(center, (void*)self, engineForcedDisconnectNotificationReceived, kCCOLEngineDidForceDisconnectNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFNotificationCenterAddObserver(center, (void*)self, setAudioSessionActiveNotificationReceived, kCCOLSetAudioSessionActiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFNotificationCenterAddObserver(center, (void*)self, setAudioSessionInactiveNotificationReceived, kCCOLSetAudioSessionInactiveNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFNotificationCenterAddObserver(center, (void*)self, iaaTransportStateDidChangeNotificatoinReceived, kCCOLIAAControllerTransportStateDidChange, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
     }
     return self;
 }
 
-static void engineNotificationCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    // Bounce the notifications from CFNotificationCenter into NSNotificationCenter
+-(void)dealloc {
+    // Remove observers
+    CFNotificationCenterRemoveEveryObserver(CFNotificationCenterGetLocalCenter(), (void*)self);
+}
+
+static void engineForcedDisconnectNotificationReceived(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    // Bounce forced disconnect notification from CFNotificationCenter into NSNotificationCenter
     if (name == kCCOLEngineDidForceDisconnectNotification) {
         CCOLOutputAddress outputAddress = (CCOLOutputAddress)CFDictionaryGetValue(userInfo, CFSTR("output"));
      
@@ -75,7 +77,12 @@ static void engineNotificationCallback(CFNotificationCenterRef center, void *obs
     }
 }
 
-static void setAudioSessionActiveCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+static void iaaTransportStateDidChangeNotificatoinReceived(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    // Bounce the iaa transport state notifications from CFNotificationCenter into NSNotificationCenter
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCCOLEventIAATransportStateDidChange object:nil];
+}
+
+static void setAudioSessionActiveNotificationReceived(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     printf("COLAudioEnvironment: Set AVAudioSession active.\n");
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *error = nil;
@@ -91,7 +98,7 @@ static void setAudioSessionActiveCallback(CFNotificationCenterRef center, void *
     }
 }
 
-static void setAudioSessionInactiveCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+static void setAudioSessionInactiveNotificationReceived(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     printf("COLAudioEnvironment: Set AVAudioSession inactive.\n");
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *error = nil;
@@ -224,62 +231,43 @@ static void setAudioSessionInactiveCallback(CFNotificationCenterRef center, void
         NSString *componentName = infoDictionary[kDictionaryKeyComponentName];
         NSString *manufacturerCode = infoDictionary[kDictionaryKeyComponentMaufacturer];
         
-        self.iaaController = [[CCOLIAAController alloc] init];
-        [self.iaaController initializeIAAwithComponentName:(__bridge CFStringRef)componentName manufactureCode:fourCharCode(manufacturerCode) engine:&ccAudioEngine];
+        // Initialize IAA 
+        ccAudioEngine.initializeIAA((__bridge CFStringRef)componentName, fourCharCode(manufacturerCode));
     }
 }
 
-#pragma mark AudioEngine delegates
-//-(NSDictionary *)interAppInfoDictionaryForAudioEngine:(COLAudioEngine *)audioEngine {
-//    // Fetch the inter-app audio info from the app delegate
-//    if ([self.infoDelegate respondsToSelector:@selector(interAppInfoDictionary)]) {
-//        return [self.infoDelegate interAppInfoDictionary];
-//    }
-//    else {
-//        return nil;
-//    }
-//}
-//
-//-(void)audioEngineInterAppAudioConnected:(COLAudioEngine *)audioEngine {
-//    NSLog(@"COLAudioEnvironment: Inter-app audio connected");
-//}
-//
-//-(void)audioEngineInterAppAudioDisconnected:(COLAudioEngine *)audioEngine {
-//    NSLog(@"COLAudioEnvironment: Inter-app audio disconnected");
-//}
-
 // IAA Callbacks
 -(BOOL)isInterAppAudioConnected {
-    return [self.iaaController isHostConnected];
+    return iaaController->isHostConnected();
 }
 
 -(BOOL)iaaIsPlaying {
-    return [self.iaaController isHostPlaying];
+    return iaaController->isHostPlaying();
 }
 
 -(BOOL)iaaIsRecording {
-    return [self.iaaController isHostRecording];
+    return iaaController->isHostRecording();
 }
 
 -(UIImage*)getIAAHostImage {
-    return [self.iaaController hostImage];
+    return iaaController->getHostImage();
 }
 
 -(void)iaaGoToHost {
-    [self.iaaController gotoHost];
+    iaaController->goToHost();
 }
 
 -(void)iaaTogglePlay {
-    [self.iaaController togglePlay];
+    iaaController->hostTogglePlay();
 }
 
 -(void)iaaToggleRecord {
-    [self.iaaController toggleRecord];
+    iaaController->hostToggleRecord();
 }
 
 
 -(void)iaaRewind {
-    [self.iaaController rewind];
+    iaaController->hostRewind();
 }
 
 -(void)exportEnvironment {

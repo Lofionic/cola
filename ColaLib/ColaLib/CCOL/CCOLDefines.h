@@ -21,7 +21,7 @@ extern SignalType ccSawWaveTable[WAVETABLE_SIZE];
 extern SignalType ccRampWaveTable[WAVETABLE_SIZE];
 extern SignalType ccSquareWaveTable[WAVETABLE_SIZE];
 
-const CFStringRef kCCOLEngineDidForceDisconnectNotification     = CFSTR("kCCOLEngineDidForceDisconnectNotification");
+const CFStringRef kCCOLEngineDidForceDisconnectNotification     = CFSTR("CCOLEngineDidForceDisconnectNotification");
 const CFStringRef kCCOLSetAudioSessionActiveNotification        = CFSTR("CCOLSetAudioSessionActiveNotification");
 const CFStringRef kCCOLSetAudioSessionInactiveNotification      = CFSTR("CCOLSetAudioSessionInactiveNotification");
 

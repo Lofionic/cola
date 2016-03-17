@@ -6,8 +6,11 @@
 //  Copyright © 2015 Chris Rivers. All rights reserved.
 //
 
-#include "CCOLTransportController.hpp"
+
 #include <AudioToolbox/AudioToolbox.h>
+
+#include "CCOLTransportController.hpp"
+#include "CCOLIAAController.hpp"
 
 void CCOLTransportController::start() {
     playing = true;
@@ -58,22 +61,23 @@ void CCOLTransportController::renderOutputs(unsigned int numFrames, double sampl
 
 void CCOLTransportController::syncWithIAA() {
     // TODO: Inter-app audio sync
-//    if (engine->isIAAHostConnected()) {
-//        Float64 iaaTempo = engine->getIAATempo();
-//        if (iaaTempo > 0) {
-//            tempo = iaaTempo;
-//            currentBeat = engine->getIAABeat();
-//        }
-//    }
+    if (iaaController->isHostConnected()) {
+        Float64 iaaTempo = iaaController->getHostTempo();
+        if (iaaTempo > 0) {
+            tempo = iaaTempo;
+            currentBeat = iaaController->getHostBeat();
+        }
+    }
 }
 
-void CCOLTransportController::interappAudioTransportStateDidChange(bool hostIsPlaying) {
+void CCOLTransportController::interappAudioTransportStateDidChange(CCOLIAAController *iaaController) {
     // TODO: Respond to inter-app audio instructions
-    if (hostIsPlaying && !isPlaying()) {
+    BOOL hostPlaying = iaaController->isHostPlaying();
+    if (hostPlaying && !isPlaying()) {
         syncWithIAA();
         playing = true;
         postUpdateNotification();
-    } else if (!hostIsPlaying && isPlaying()) {
+    } else if (!hostPlaying && isPlaying()) {
         playing = false;
         postUpdateNotification();
     }

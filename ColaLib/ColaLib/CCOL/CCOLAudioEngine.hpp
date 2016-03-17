@@ -15,7 +15,7 @@
 #include <vector>
 #include <AudioToolbox/AudioToolbox.h>
 
-#import "CCOLIAAController.h"
+#import "CCOLIAAController.hpp"
 
 using namespace std;
 
@@ -44,6 +44,8 @@ private:
     // Vectors of deferred changes to render chain
     vector<CCOLComponentConnector*> pendingDisconnects;
     
+    CCOLIAAController           iaaController;
+    
     CCOLTransportController*    transportController;
     CCOLMIDIComponent*          midiComponent;
     
@@ -52,18 +54,14 @@ private:
     void stopGraph();
     
     void getHostCalbackInfo();
+    void setupMIDICallbacks();
     
-    // IAA Sync
-    bool iaaConnected;
-    
-    HostCallbackInfo *callbackInfo;
-    float hostBeat;
-    float hostTempo;
-        
 public:
     CCOLAudioEngine();
+    ~CCOLAudioEngine();
 
     void initializeAUGraph(bool isForegroundIn);
+    void initializeIAA(CFStringRef componentNameIn, OSType manufacturerCodeIn);
     void startStop();
     
     void appDidEnterBackground();
@@ -72,23 +70,11 @@ public:
     void mediaServicesWereReset();
     
     void doPending();
-    
-    AudioUnit *getRemoteIO() {
-        return &mRemoteIO;
+
+    CCOLIAAController *getIAAController() {
+        return &iaaController;
     }
 
-    void iaaDidConnect() {
-        iaaConnected = true;
-        startStop();
-    }
-    
-    void iaaDidDisconnect() {
-        iaaConnected = false;
-        startStop();
-    }
-    
-    void updateHostBeatAndTempo();
-    
     // Component Management
     CCOLComponentAddress createComponent(char* componentType);
     void removeComponent(CCOLComponentAddress component);
