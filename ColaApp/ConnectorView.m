@@ -12,6 +12,8 @@
 @interface ConnectorView ()
 
 @property (nonatomic) CCOLConnectorAddress connector;
+@property (nonatomic) CALayer   *connectedLayer;
+@property (nonatomic) BOOL      connected;
 
 @end
 
@@ -39,6 +41,13 @@
         UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureHandler:)];
         [panGesture setCancelsTouchesInView:NO];
         [self addGestureRecognizer:panGesture];
+//        
+//        self.connectedLayer = [CALayer layer];
+//        [self.connectedLayer setFrame:self.bounds];
+//        [self.connectedLayer setContents:(id)[UIImage imageNamed:[ASSETS_PATH_CONNECTORS stringByAppendingString:@"connector_plug"]].CGImage];
+//        [self.layer addSublayer:self.connectedLayer];
+//        
+//        self.connected = false;
     }
     
     return self;
