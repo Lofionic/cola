@@ -11,11 +11,10 @@
 
 #include "CCOLDefines.h"
 #include "CCOLAudioContext.hpp"
+#include "CCOLIAAController.hpp"
 
 #include <vector>
 #include <AudioToolbox/AudioToolbox.h>
-
-#import "CCOLIAAController.hpp"
 
 using namespace std;
 
