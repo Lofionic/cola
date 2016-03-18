@@ -290,19 +290,19 @@
                                  "type" : "input",
                                  "connection" : "In 1",
                                  "x" : 25,
-                                 "y" : 270
+                                 "y" : 210
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "In 2",
                                  "x" : 65,
-                                 "y" : 270
+                                 "y" : 210
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out",
                                  "x" : 45,
-                                 "y" : 225
+                                 "y" : 270
                                  }
                                  ],
                  "controls" : [
@@ -310,13 +310,13 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Level 1",
                                "x" : 45,
-                               "y" : 70
+                               "y" : 75
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "Level 2",
                                "x" : 45,
-                               "y" : 150
+                               "y" : 155
                                }
                                ]
                  }
