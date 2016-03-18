@@ -125,7 +125,7 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Attack",
                                "x" : 45,
-                               "y" : 55,
+                               "y" : 60,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -134,7 +134,7 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Decay",
                                "x" : 45,
-                               "y" : 105,
+                               "y" : 110,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -143,7 +143,7 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Sustain",
                                "x" : 45,
-                               "y" : 155,
+                               "y" : 160,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -152,7 +152,7 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Release",
                                "x" : 45,
-                               "y" : 205,
+                               "y" : 210,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -185,7 +185,7 @@
                                  "type" : "input",
                                  "connection" : "CV In",
                                  "x" : 45,
-                                 "y" : 215
+                                 "y" : 230
                                  }
                                  ],
                  "controls" : [
@@ -193,14 +193,14 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Level",
                                "x" : 45,
-                               "y" : 70
+                               "y" : 75
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "CV Amt",
                                "asset" : "small_white",
                                "x" : 45,
-                               "y" : 155
+                               "y" : 160
                                }
                                ]
                  }
@@ -290,13 +290,13 @@
                                  "type" : "input",
                                  "connection" : "In 1",
                                  "x" : 25,
-                                 "y" : 210
+                                 "y" : 230
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "In 2",
                                  "x" : 65,
-                                 "y" : 210
+                                 "y" : 230
                                  },
                                  {
                                  "type" : "output",
@@ -316,7 +316,7 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Level 2",
                                "x" : 45,
-                               "y" : 155
+                               "y" : 160
                                }
                                ]
                  }
