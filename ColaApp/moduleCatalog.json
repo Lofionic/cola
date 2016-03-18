@@ -124,8 +124,8 @@
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "Attack",
-                               "x" : 30,
-                               "y" : 60,
+                               "x" : 45,
+                               "y" : 55,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -133,8 +133,8 @@
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "Decay",
-                               "x" : 30,
-                               "y" : 110,
+                               "x" : 45,
+                               "y" : 105,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -142,8 +142,8 @@
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "Sustain",
-                               "x" : 30,
-                               "y" : 160,
+                               "x" : 45,
+                               "y" : 155,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -151,8 +151,8 @@
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "Release",
-                               "x" : 30,
-                               "y" : 210,
+                               "x" : 45,
+                               "y" : 205,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -218,7 +218,7 @@
                                  "type" : "input",
                                  "connection" : "In A",
                                  "x" : 25,
-                                 "y" : 50
+                                 "y" : 55
                                  },
                                  {
                                  "type" : "output",
@@ -248,31 +248,31 @@
                                  "type" : "input",
                                  "connection" : "In B",
                                  "x" : 25,
-                                 "y" : 190
+                                 "y" : 200
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out B1",
                                  "x" : 25,
-                                 "y" : 235
+                                 "y" : 240
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out B2",
                                  "x" : 25,
-                                 "y" : 275
+                                 "y" : 280
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out B3",
                                  "x" : 65,
-                                 "y" : 235
+                                 "y" : 240
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out B4",
                                  "x" : 65,
-                                 "y" : 275
+                                 "y" : 280
                                  }
                                  ]
                  }
