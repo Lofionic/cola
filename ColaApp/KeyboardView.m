@@ -174,7 +174,7 @@
         NSMutableSet *releasedKeys = [NSMutableSet setWithSet:prevKeysDown];
         [releasedKeys minusSet:keysDown];
         for (NSNumber *n in releasedKeys) {
-            int midiNote = keyValues[[n integerValue]] + 24 + ((int)self.keyboardShift * 12);
+            int midiNote = keyValues[[n integerValue]] + 48 + ((int)self.keyboardShift * 12);
             [cae noteOff:midiNote];
         }
         [self setNeedsDisplay];
@@ -184,7 +184,7 @@
         [newKeys minusSet:prevKeysDown];
         
         for (NSNumber *n in newKeys) {
-            int midiNote = keyValues[[n integerValue]] + 24 + ((int)self.keyboardShift * 12);
+            int midiNote = keyValues[[n integerValue]] + 48 + ((int)self.keyboardShift * 12);
             [cae noteOn:midiNote];
         }
     }

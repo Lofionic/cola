@@ -15,9 +15,10 @@ using namespace std;
 void CCOLMIDIComponent::initializeIO() {
     keyboardOut     = new CCOLComponentOutput(this, kIOType1VOct, (char*)"Keyboard Out");
     gateOut         = new CCOLComponentOutput(this, kIOTypeGate, (char*)"Gate Out");
+    modOut         = new CCOLComponentOutput(this, kIOTypeControl, (char*)"Mod Out");
     
     vector<CCOLComponentOutput*> theOutputs = {
-        keyboardOut, gateOut
+        keyboardOut, gateOut, modOut
     };
     
     setOutputs(theOutputs);
@@ -105,8 +106,10 @@ void CCOLMIDIComponent::renderOutputs(unsigned int numFrames) {
     // Output Buffers
     SignalType *keyboardOutBuffer = keyboardOut->prepareBufferOfSize(numFrames);
     SignalType *gateOutBuffer = gateOut->prepareBufferOfSize(numFrames);
+    SignalType *modOutBuffer = modOut->prepareBufferOfSize(numFrames);
     
     float pitchbendDelta = (pitchbend - prevPitchbend) / numFrames;
+    float modulationDelta = (modulation - prevModulation) / numFrames;
     
     for (int i = 0; i < numFrames; i++) {
         
@@ -114,6 +117,8 @@ void CCOLMIDIComponent::renderOutputs(unsigned int numFrames) {
         
         float adjustValue = (pitchbendNormalized * 2.0) - 1.0;
         adjustValue = (powf(powf(2, (1.0 / 12.0)), adjustValue * pitchbendRange));
+        
+        modOutBuffer[i] = prevModulation + (i * modulationDelta);
         
         keyboardOutBuffer[i] = outputValue * adjustValue;
         
@@ -129,5 +134,6 @@ void CCOLMIDIComponent::renderOutputs(unsigned int numFrames) {
         gateTrigger = false;
     }
     prevPitchbend = pitchbend;
+    prevModulation = modulation;
 }
 

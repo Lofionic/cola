@@ -7,6 +7,7 @@
 //
 #import <QuartzCore/QuartzCore.h>
 #import <CoreMotion/CoreMotion.h>
+#import "defines.h"
 #import "BuildViewCableLayer.h"
 #import "BuildView.h"
 #import "UIColor+Shades.h"
@@ -15,6 +16,8 @@
 @property (nonatomic, strong) CADisplayLink *displayLink;
 @property (nonatomic) BOOL displayLinkRunning;
 @property (nonatomic, strong) CMMotionManager *motionManager;
+
+@property (nonatomic) CGImageRef plugImage;
 @end
 
 
@@ -25,8 +28,12 @@
     self = [super init];
     if (self)
     {
+        self.opacity = 1.0f;
         self.contentsScale = [[UIScreen mainScreen] scale];
+        self.plugImage = [UIImage imageNamed:[ASSETS_PATH_CONNECTORS stringByAppendingString:@"connector_plug"]].CGImage;
 
+        // Uncomment for 'cable-sway' effect
+        // TODO: Support landscape
 //        self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(setNeedsDisplay)];
 //        [self.displayLink setFrameInterval:4];
 //        [self setNeedsDisplayOnBoundsChange:YES];
@@ -51,20 +58,14 @@
     for (BuildViewCable *cable in self.buildView.cables) {
         CGContextSaveGState(ctx);
         
-        CGContextSetFillColorWithColor(ctx, [[UIColor darkGrayColor] CGColor]);
-        CGRect rect1 = CGRectMake(cable.point1.x - 8, cable.point1.y - 9, 16, 16);
-        CGContextFillEllipseInRect(ctx, rect1);
-        
-        CGRect rect2 = CGRectMake(cable.point2.x - 8, cable.point2.y - 9, 16, 16);
-        CGContextFillEllipseInRect(ctx, rect2);
-        
-        CGContextSetFillColorWithColor(ctx, [[UIColor lightGrayColor] CGColor]);
-        CGContextFillEllipseInRect(ctx, CGRectOffset(rect1, 0, 0));
-        CGContextFillEllipseInRect(ctx, CGRectOffset(rect2, 0, 0));
+        CGRect rect1 = CGRectMake(cable.point1.x - 20, cable.point1.y - 20, 40, 40);
+        CGRect rect2 = CGRectMake(cable.point2.x - 20, cable.point2.y - 20, 40, 40);
+        CGContextDrawImage(ctx, rect1, self.plugImage);
+        CGContextDrawImage(ctx, rect2, self.plugImage);
     }
     
     for (BuildViewCable *cable in self.buildView.cables) {
-        CGFloat hang = MIN(fabs(cable.point2.x - cable.point1.x), 40);
+        CGFloat hang = MIN(fabs(cable.point2.x - cable.point1.x), 80);
         CGFloat bottom = MAX(cable.point1.y, cable.point2.y) + hang;
         
         CGFloat sway = (self.motionManager.deviceMotion.attitude.roll * 0.25);
@@ -101,18 +102,11 @@
         
         // Stroke Mid
         CGContextSetStrokeColorWithColor(ctx, [[cable.colour midShade] CGColor]);
-        CGContextTranslateCTM(ctx, 0, -2);
+        CGContextTranslateCTM(ctx, 0, 0);
         CGContextSetLineWidth(ctx, 4);
         CGContextAddPath(ctx, bezierPath.CGPath);
         CGContextStrokePath(ctx);
-        
-        // Stroke Highlight
-        CGContextSetStrokeColorWithColor(ctx, [[cable.colour lighterShade] CGColor]);
-        CGContextTranslateCTM(ctx, 0, -2);
-        CGContextSetLineWidth(ctx, 1);
-        CGContextAddPath(ctx, bezierPath.CGPath);
-        CGContextStrokePath(ctx);
-        
+
         CGContextRestoreGState(ctx);
     }
 }

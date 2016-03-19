@@ -10,10 +10,11 @@
 #define CCOLTransportController_hpp
 
 #include "CCOLAudioEngine.hpp"
+#include "CCOLIAAController.hpp"
 #include <stdio.h>
 
 class CCOLTransportController {
-    CCOLAudioEngine*    engine;
+    CCOLIAAController*  iaaController;
     
     double          timeInMS;
     unsigned short  currentStep;
@@ -29,9 +30,8 @@ class CCOLTransportController {
     void syncWithIAA();
     
 public:
-    
-    CCOLTransportController(CCOLAudioEngine *inEngine) {
-        engine = inEngine;
+    CCOLTransportController(CCOLIAAController *iaaControllerIn) {
+        iaaController   = iaaControllerIn;
         
         timeInMS        = 0;
         currentStep     = 0;
@@ -56,7 +56,7 @@ public:
     void stop();
     void stopAndReset();
     void renderOutputs(unsigned int numFrames, double sampleRate);
-    void interappAudioTransportStateDidChange(bool hostIsPaying);
+    void interappAudioTransportStateDidChange(CCOLIAAController *iaaController);
 };
 
 #endif /* CCOLTransportController_hpp */

@@ -40,14 +40,16 @@ private:
     
     CCOLComponentOutput     *keyboardOut;
     CCOLComponentOutput     *gateOut;
+    CCOLComponentOutput     *modOut;
 
     SignalType      outputValue;
     bool            gateOpen;
     bool            gateTrigger;
     bool            gliss;
     float           pitchbend;
-    float           modulation;
     float           prevPitchbend;
+    float           modulation;
+    float           prevModulation;
     unsigned int    pitchbendRange;
   
     void openGate();

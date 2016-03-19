@@ -31,28 +31,34 @@
     
     CCOLInputAddress mainInL = [cae getMasterInputAtIndex:0];
     ConnectorView *mainInLConnectorView = [[ConnectorView alloc] initWithComponentIO:mainInL];
-    [mainInLConnectorView setCenter:CGPointMake(640.0, 40.0)];
+    [mainInLConnectorView setCenter:CGPointMake(630.0, 32.0)];
     [mainInLConnectorView setDelegate:buildView];
     [self addSubview:mainInLConnectorView];
 
     CCOLInputAddress mainInR = [cae getMasterInputAtIndex:1];
     ConnectorView *mainInRConnectorView = [[ConnectorView alloc] initWithComponentIO:mainInR];
-    [mainInRConnectorView setCenter:CGPointMake(690.0, 40.0)];
+    [mainInRConnectorView setCenter:CGPointMake(680.0, 32.0)];
     [mainInRConnectorView setDelegate:buildView];
     [self addSubview:mainInRConnectorView];
 
     CCOLComponentAddress midiComponent = [cae getMIDIComponent];
     CCOLOutputAddress keyboardOut = [cae getOutputNamed:@"Keyboard Out" onComponent:midiComponent];
     ConnectorView *keyboardOutView = [[ConnectorView alloc] initWithComponentIO:keyboardOut];
-    [keyboardOutView setCenter:CGPointMake(32.0, 40.0)];
+    [keyboardOutView setCenter:CGPointMake(40.0, 32.0)];
     [keyboardOutView setDelegate:buildView];
     [self addSubview:keyboardOutView];
     
     CCOLOutputAddress gateOut = [cae getOutputNamed:@"Gate Out" onComponent:midiComponent];
     ConnectorView *gateOutView = [[ConnectorView alloc] initWithComponentIO:gateOut];
-    [gateOutView setCenter:CGPointMake(82, 40)];
+    [gateOutView setCenter:CGPointMake(90.0, 32.0)];
     [gateOutView setDelegate:buildView];
     [self addSubview:gateOutView];
+    
+    CCOLOutputAddress modOut = [cae getOutputNamed:@"Mod Out" onComponent:midiComponent];
+    ConnectorView *modOutView = [[ConnectorView alloc] initWithComponentIO:modOut];
+    [modOutView setCenter:CGPointMake(140.0, 32.0)];
+    [modOutView setDelegate:buildView];
+    [self addSubview:modOutView];
 //
 //    COLComponentIO *keyboardGate = [[[COLAudioEnvironment sharedEnvironment] keyboardComponent] outputForIndex:1];
 //    ConnectorView *keyboardGateView = [[ConnectorView alloc] initWithComponentIO:keyboardGate];
@@ -66,7 +72,8 @@
                             mainInLConnectorView,
                             mainInRConnectorView,
                             keyboardOutView,
-                            gateOutView
+                            gateOutView,
+                            modOutView
                             ];
 }
 

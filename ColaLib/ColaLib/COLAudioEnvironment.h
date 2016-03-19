@@ -65,6 +65,15 @@
 -(void)transportPlay;
 -(void)transportStop;
 
+// IAA
+-(UIImage*)getIAAHostImage;
+-(void)iaaGoToHost;
+-(void)iaaTogglePlay;
+-(void)iaaToggleRecord;
+-(void)iaaRewind;
+-(BOOL)iaaIsPlaying;
+-(BOOL)iaaIsRecording;
+
 @property (readonly) NSMutableArray *components;
 
 @end

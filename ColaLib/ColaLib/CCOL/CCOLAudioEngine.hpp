@@ -11,6 +11,7 @@
 
 #include "CCOLDefines.h"
 #include "CCOLAudioContext.hpp"
+#include "CCOLIAAController.hpp"
 
 #include <vector>
 #include <AudioToolbox/AudioToolbox.h>
@@ -21,6 +22,7 @@ class CCOLComponent;
 class CCOLAudioContext;
 class CCOLKeyboardComponent;
 class CCOLTransportController;
+class CCOLMIDIComponent;
 
 class CCOLAudioEngine {
 
@@ -36,44 +38,30 @@ private:
     
     bool                    isForeground;
     
-    bool        iaaHostConnected;
-    bool        iaaHostPlaying;
-    bool        iaaHostRecording;
-    Float64     iaaHostPlayTime;
-    Float64     iaaHostTempo;
-    Float64     iaaHostBeat;
-    UIImage     *iaaHostImage;
-    
-    HostCallbackInfo *callbackInfo;
-    
     vector<CCOLComponent*>  components;
     
     // Vectors of deferred changes to render chain
     vector<CCOLComponentConnector*> pendingDisconnects;
     
+    CCOLIAAController           iaaController;
+    
     CCOLTransportController*    transportController;
+    CCOLMIDIComponent*          midiComponent;
     
     void buildWaveTables();
     void startGraph();
     void stopGraph();
-    void updateTransportStateFromHostCallback();
-
+    
     void getHostCalbackInfo();
+    void setupMIDICallbacks();
     
 public:
     CCOLAudioEngine();
+    ~CCOLAudioEngine();
 
     void initializeAUGraph(bool isForegroundIn);
-    void initializeIAA(CFStringRef componentName, OSType componentManufacturer);
-    void updateHostBeatAndTempo();
+    void initializeIAA(CFStringRef componentNameIn, OSType manufacturerCodeIn);
     void startStop();
-    
-    bool isIAAHostConnected() { return iaaHostConnected; }
-    Float64 getIAATempo() { return iaaHostTempo; }
-    Float64 getIAABeat() { return iaaHostBeat; }
-    
-    void interAppAudioConnectedDidChange();
-    void interAppAudioHostTransportStateDidChange();
     
     void appDidEnterBackground();
     void appWillEnterForeground();
@@ -81,11 +69,11 @@ public:
     void mediaServicesWereReset();
     
     void doPending();
-    
-    AudioUnit *getRemoteIO() {
-        return &mRemoteIO;
+
+    CCOLIAAController *getIAAController() {
+        return &iaaController;
     }
-    
+
     // Component Management
     CCOLComponentAddress createComponent(char* componentType);
     void removeComponent(CCOLComponentAddress component);
@@ -133,6 +121,11 @@ public:
     CCOLTransportController* getTransportController() {
         return transportController;
     }
+    
+    CCOLMIDIComponent* getMIDIComponent() {
+        return midiComponent;
+    }
+
 };
 
 #endif /* CCOLAudioEngine_hpp */

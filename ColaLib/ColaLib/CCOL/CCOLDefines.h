@@ -12,8 +12,6 @@
 #import "CCOLTypes.h"
 #import <UIKit/UIKit.h>
 
-
-
 #define WAVETABLE_SIZE      8196
 #define ANALOG_HARMONICS    50
 
@@ -23,7 +21,7 @@ extern SignalType ccSawWaveTable[WAVETABLE_SIZE];
 extern SignalType ccRampWaveTable[WAVETABLE_SIZE];
 extern SignalType ccSquareWaveTable[WAVETABLE_SIZE];
 
-const CFStringRef kCCOLEngineDidForceDisconnectNotification     = CFSTR("kCCOLEngineDidForceDisconnectNotification");
+const CFStringRef kCCOLEngineDidForceDisconnectNotification     = CFSTR("CCOLEngineDidForceDisconnectNotification");
 const CFStringRef kCCOLSetAudioSessionActiveNotification        = CFSTR("CCOLSetAudioSessionActiveNotification");
 const CFStringRef kCCOLSetAudioSessionInactiveNotification      = CFSTR("CCOLSetAudioSessionInactiveNotification");
 

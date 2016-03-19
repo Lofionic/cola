@@ -10,6 +10,9 @@
 #include "CCOLComponents.h"
 #include "CCOLComponentIO.hpp"
 #include "CCOLTransportController.hpp"
+#include "CCOLMIDIComponent.hpp"
+#include "CCOLIAAController.hpp"
+#include "CCOLUtility.hpp"
 
 #include <math.h>
 #include <string>
@@ -48,24 +51,16 @@ void mediaServicesWereResetNotification(CFNotificationCenterRef center, void *ob
     engine->mediaServicesWereReset();
 }
 
-// Utility
-void checkError(OSStatus error, const char *operation)
-{
-    if (error == noErr) return;
-    
-    char errorString[20];
-    // see if it appears to be a 4-char-code
-    *(UInt32 *)(errorString + 1) = CFSwapInt32HostToBig(error);
-    if (isprint(errorString[1]) && isprint(errorString[2]) && isprint(errorString[3]) && isprint(errorString[4])) {
-        errorString[0] = errorString[5] = '\'';
-        errorString[6] = '\0';
-    } else
-        // no, format it as an integer
-        sprintf(errorString, "%d", (int)error);
-    
-    fprintf(stderr, "CCOLAudioEngine: Error: %s (%s)\n", operation, errorString);
-    
-    exit(1);
+void iaaConnectedStateDidChangeNotification(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)  {
+    // When IAA connects or disconnects, we amy need to start or stop the AUGraph.
+    CCOLAudioEngine *engine = (CCOLAudioEngine*)observer;
+    engine->startStop();
+}
+
+void iaaTransportStateDidChangeNotification(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)  {
+    // When IAA transport state changed, we need to update the engine's transport controller.
+    CCOLAudioEngine *engine = (CCOLAudioEngine*)observer;
+    engine->getTransportController()->interappAudioTransportStateDidChange((CCOLIAAController *)object);
 }
 
 #pragma mark render
@@ -79,7 +74,7 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioAct
     SignalType *outB;
     
     // Sync with iaa
-    audioEngine->updateHostBeatAndTempo();
+    audioEngine->getIAAController()->updateHostBeatAndTempo();
     
     // Fill the beat buffer
     audioEngine->getTransportController()->renderOutputs(inNumberFrames, audioEngine->getSampleRate());
@@ -154,17 +149,20 @@ void CCOLAudioEngine::doPending() {
 }
 
 CCOLAudioEngine::CCOLAudioEngine() {
-    sampleRate = 0;
+    sampleRate = 0; // Will be set when graph is initialized.
     attenuation = 1.0;
     mute = false;
-    
-    iaaHostConnected = false;
-    
+   
+    // The generic audio context with two master outputs.
     audioContext = new CCOLAudioContext(this, 2);
 
     buildWaveTables();
+
+    transportController = new CCOLTransportController(&iaaController);
     
-    transportController = new CCOLTransportController(this);
+    // Manage all MIDI In & Out
+    midiComponent = new CCOLMIDIComponent(audioContext);
+    midiComponent->initializeIO();
 }
 
 void CCOLAudioEngine::initializeAUGraph(bool isForegroundIn) {
@@ -219,40 +217,65 @@ void CCOLAudioEngine::initializeAUGraph(bool isForegroundIn) {
     checkError(AudioUnitSetProperty(mRemoteIO, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(streamFormat)), "Cannot set RemoteIO stream format");
     
     // Register observers
-    CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(),
+    CFNotificationCenterRef center = CFNotificationCenterGetLocalCenter();
+    
+    CFNotificationCenterAddObserver(center,
                                     this,
                                     &appDidEnterBackgroundNotification,
                                     (__bridge CFStringRef)UIApplicationDidEnterBackgroundNotification,
                                     NULL,
                                     CFNotificationSuspensionBehaviorDeliverImmediately);
     
-    CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(),
+    CFNotificationCenterAddObserver(center,
                                     this,
                                     &appWillEnterForegroundNotification,
                                     (__bridge CFStringRef)UIApplicationWillEnterForegroundNotification,
                                     NULL,
                                     CFNotificationSuspensionBehaviorDeliverImmediately);
     
-    CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(),
+    CFNotificationCenterAddObserver(center,
                                     this,
                                     &appWillTerminateNotification,
                                     (__bridge CFStringRef)UIApplicationWillTerminateNotification,
                                     NULL,
                                     CFNotificationSuspensionBehaviorDeliverImmediately);
     
-    CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(),
+    CFNotificationCenterAddObserver(center,
                                     this,
                                     &mediaServicesWereResetNotification,
                                     (__bridge CFStringRef)AVAudioSessionMediaServicesWereResetNotification,
                                     NULL,
                                     CFNotificationSuspensionBehaviorDeliverImmediately);
+    
+    CFNotificationCenterAddObserver(center,
+                                    this,
+                                    &iaaTransportStateDidChangeNotification,
+                                    kCCOLIAAControllerTransportStateDidChange,
+                                    NULL,
+                                    CFNotificationSuspensionBehaviorDeliverImmediately);
+    
+    CFNotificationCenterAddObserver(center,
+                                    this,
+                                    &iaaConnectedStateDidChangeNotification,
+                                    kCCOLIAAControllerConnectedStateDidChange,
+                                    NULL,
+                                    CFNotificationSuspensionBehaviorDeliverImmediately);
+}
+
+CCOLAudioEngine::~CCOLAudioEngine() {
+    CFNotificationCenterRemoveEveryObserver(CFNotificationCenterGetLocalCenter(), this);
+}
+
+void CCOLAudioEngine::initializeIAA(CFStringRef componentNameIn, OSType manufacturerCodeIn) {
+    iaaController.publishIAA(&mRemoteIO, componentNameIn, manufacturerCodeIn);
+    setupMIDICallbacks();
 }
 
 void CCOLAudioEngine::startStop() {
     // Start or stop the engine depending on state
     printf("CCOLAudioEngine: Start/stop.\n");
 
-    if (isForeground || iaaHostConnected) {
+    if (isForeground || iaaController.isHostConnected()) {
         printf("CCOLAudioEngine: App is foreground or IAA connected.\n");
         startGraph();
     } else {
@@ -293,131 +316,6 @@ void CCOLAudioEngine::stopGraph() {
     }
 }
 
-#pragma mark Inter App Audio
-void audioUnitPropertyListenerDispatcher(void *inRefCon, AudioUnit inUnit, AudioUnitPropertyID inID, AudioUnitScope inScope, AudioUnitElement inElement) {
-    printf("CCOLAudioEngine: AudioUnitPropertyListenerDispatcher");
-    CCOLAudioEngine *SELF = (CCOLAudioEngine*)inRefCon;
-    //[SELF audioUnitPropertyChanged:inRefCon unit:inUnit propID:inID scope:inScope element:inElement];
-    
-    if (inID == kAudioUnitProperty_IsInterAppConnected) {
-        SELF->interAppAudioConnectedDidChange();
-    } else if (inID == kAudioOutputUnitProperty_HostTransportState) {
-        SELF->interAppAudioHostTransportStateDidChange();
-    }
-}
-
-void CCOLAudioEngine::initializeIAA(CFStringRef componentName, OSType componentManufacturer) {
-
-    printf("CCOLAudioEngine: Registering IAA...\n");
-    iaaHostConnected = false;
-    
-    // Add property listener for inter-app audio
-    checkError(AudioUnitAddPropertyListener(mRemoteIO, kAudioUnitProperty_IsInterAppConnected, audioUnitPropertyListenerDispatcher, this), "Error setting IAA connected property listener");
-    checkError(AudioUnitAddPropertyListener(mRemoteIO, kAudioOutputUnitProperty_HostTransportState, audioUnitPropertyListenerDispatcher, this), "Error setting IAA host transport state listener");
-
-    // Publish the inter-app audio component
-    AudioComponentDescription audioComponentDescription = {
-        kAudioUnitType_RemoteInstrument,
-        'iasp',
-        componentManufacturer,
-        0,
-        1
-    };
-    
-    checkError(AudioOutputUnitPublish(&audioComponentDescription, componentName, 0, mRemoteIO), "Cannot publish IAA component");
-}
-
-void CCOLAudioEngine::interAppAudioConnectedDidChange() {
-    UInt32 connected;
-    UInt32 dataSize = sizeof(UInt32);
-    checkError(AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_IsInterAppConnected, kAudioUnitScope_Global, 0, &connected, &dataSize), "Error getting IsInterAppConnected property");
-    if (connected != iaaHostConnected) {
-        iaaHostConnected = connected;
-        if (iaaHostConnected) {
-            printf("CCOLAudioEngine: IAA has connected.\n");
-            iaaHostImage = AudioOutputUnitGetHostIcon(mRemoteIO, 114);
-            startStop();
-        } else {
-            printf("CCOLAudioEngine: IAA has disconnected.\n");
-            startStop();
-        }
-    }
-}
-
-void CCOLAudioEngine::interAppAudioHostTransportStateDidChange() {
-    updateTransportStateFromHostCallback();
-}
-
-void CCOLAudioEngine::updateTransportStateFromHostCallback() {
-    if (iaaHostConnected) {
-        if (callbackInfo == nil) {
-            getHostCalbackInfo();
-        }
-        if (callbackInfo != nil) {
-            Boolean isPlaying =     iaaHostPlaying;
-            Boolean isRecording =   iaaHostRecording;
-            Float64 outCurrentSampleInTimeline = 0;
-            void * hostUserData = callbackInfo->hostUserData;
-            
-            // Get transport state
-            OSStatus result =  callbackInfo->transportStateProc2(hostUserData,
-                                                                 &isPlaying,
-                                                                 &isRecording, NULL,
-                                                                 &outCurrentSampleInTimeline,
-                                                                 NULL, NULL, NULL);
-            if (result == noErr) {
-                iaaHostPlaying = isPlaying;
-                iaaHostRecording = isRecording;
-                iaaHostPlayTime = outCurrentSampleInTimeline;
-            } else {
-                printf("CCOLAudioEngine: Error occured fetching callBackInfo->transportStateProc2 : %d", (int)result);
-            }
-            
-            getTransportController()->interappAudioTransportStateDidChange(iaaHostPlaying);
-        }
-    }
-}
-
-void CCOLAudioEngine::updateHostBeatAndTempo() {
-    if (iaaHostConnected) {
-        if (callbackInfo == nil) {
-            getHostCalbackInfo();
-        }
-        if (callbackInfo != nil) {
-            Float64 outCurrentBeat;
-            Float64 outTempo;
-            
-            void * hostUserData = callbackInfo->hostUserData;
-            OSStatus result = callbackInfo->beatAndTempoProc(hostUserData,
-                                                             &outCurrentBeat,
-                                                             &outTempo);
-            
-            if (result == noErr) {
-                iaaHostBeat = outCurrentBeat;
-                iaaHostTempo = outTempo;
-            } else  {
-                printf("Error occured fetching callbackInfo->beatAndTempProc : %d", (int)result);
-            }
-        }
-    }
-}
-
-void CCOLAudioEngine::getHostCalbackInfo() {
-    if (iaaHostConnected) {
-        if (callbackInfo) {
-            free(callbackInfo);
-        }
-        UInt32 dataSize = sizeof(HostCallbackInfo);
-        callbackInfo = (HostCallbackInfo*) malloc(dataSize);
-        OSStatus result = AudioUnitGetProperty(mRemoteIO, kAudioUnitProperty_HostCallbacks, kAudioUnitScope_Global, 0, callbackInfo, &dataSize);
-        if (result != noErr) {
-            printf("CCOLAudioEngine: Error occured fetching kAudioUnitProperty_HostCallbacks : %d", (int)result);
-            free(callbackInfo);
-            callbackInfo = NULL;
-        }
-    }
-}
-
 #pragma mark App State Management
 void CCOLAudioEngine::appDidEnterBackground() {
     printf("CCOLAudioEngine: App did enter background.\n");
@@ -429,18 +327,22 @@ void CCOLAudioEngine::appWillEnterForeground() {
     printf("CCOLAudioEngine: App will enter foreground.\n");
     isForeground = true;
     startStop();
-    // Update transport state
 }
 
 void CCOLAudioEngine::appWillTerminate() {
     printf("CCOLAudioEngine: App will terminate.\n");
     // cleanup
+    
+    stopGraph();
 }
 
 void CCOLAudioEngine::mediaServicesWereReset() {
     printf("CCOLAudioEngine: Media services were reset.\n");
     // clean up
     // re-initialize AUGraph
+    stopGraph();
+    
+    initializeAUGraph(isForeground);
 }
 
 #pragma mark Component Management
@@ -570,6 +472,40 @@ CCOLInputAddress CCOLAudioEngine::getMasterInput(unsigned int index) {
 kIOType CCOLAudioEngine::getIOType(CCOLConnectorAddress connectorAddress) {
     CCOLComponentConnector *connector = (CCOLComponentConnector*)connectorAddress;
     return connector->getIOType();
+}
+
+
+// Add the IAA MIDI callback to the remote io.
+void MIDIEventProcCallBack(void *userData, UInt32 inStatus, UInt32 inData1, UInt32 inData2, UInt32 inOffsetSampleFrame){
+    CCOLAudioEngine *engine = (CCOLAudioEngine*)userData;
+    printf("%u",(unsigned int)inOffsetSampleFrame);
+    Byte midiCommand = inStatus >> 4;
+    Byte data1 = inData1 & 0x7F;
+    Byte data2 = inData2 & 0x7F;
+    
+    if (midiCommand == 0x09) {
+        engine->getMIDIComponent()->noteOn(inData1);
+    } else if (midiCommand == 0x08) {
+        engine->getMIDIComponent()->noteOff(data1);
+    } else if (midiCommand == 0x0E) {
+        // TODO: Handle IAA MIDI pitchbends.
+//                int value = ((data2 << 7)) + data1;
+//        
+//                engine->getMIDIComponent()->setPitchbend(value / 16383.0);
+    }
+}
+
+void CCOLAudioEngine::setupMIDICallbacks() {
+    AudioOutputUnitMIDICallbacks callBackStruct;
+    callBackStruct.userData = (void*)this;
+    callBackStruct.MIDIEventProc = MIDIEventProcCallBack;
+    callBackStruct.MIDISysExProc = NULL;
+    checkError(AudioUnitSetProperty (mRemoteIO,
+                                     kAudioOutputUnitProperty_MIDICallbacks,
+                                     kAudioUnitScope_Global,
+                                     0,
+                                     &callBackStruct,
+                                     sizeof(callBackStruct)), "Can't setup Inter App MIDI Callback");
 }
 
 // Generate the wavetables
