@@ -198,7 +198,6 @@
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "CV Amt",
-                               "asset" : "small_white",
                                "x" : 45,
                                "y" : 160
                                }
@@ -491,44 +490,26 @@
                                  {
                                  "type" : "input",
                                  "connection" : "Audio in",
-                                 "x" : 24,
+                                 "x" : 30,
                                  "y" : 270
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "LP Out",
-                                 "x" : 57,
+                                 "x" : 110,
                                  "y" : 270
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "HP Out",
-                                 "x" : 90,
-                                 "y" : 270
-                                 },
-                                 {
-                                 "type" : "output",
-                                 "connection" : "BP Out",
-                                 "x" : 123,
-                                 "y" : 270
-                                 },
-                                 {
-                                 "type" : "output",
-                                 "connection" : "Notch Out",
-                                 "x" : 156,
+                                 "x" : 150,
                                  "y" : 270
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "CV Freq In",
-                                 "x" : 90,
-                                 "y" : 122
-                                 },
-                                 {
-                                 "type" : "input",
-                                 "connection" : "CV Res In",
-                                 "x" : 90,
-                                 "y" : 218
+                                 "x" : 70,
+                                 "y" : 270
                                  }
                                  ],
                  "controls" : [
@@ -536,29 +517,20 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Frequency",
                                "asset" : "large_white",
-                               "x" : 50,
-                               "y" : 69
+                               "x" : 90,
+                               "y" : 70
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "CV Freq Amount",
-                               "asset" : "large_white",
                                "x" : 130,
-                               "y" : 69
+                               "y" : 165
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "Resonance",
-                               "asset" : "large_white",
                                "x" : 50,
-                               "y" : 170
-                               },
-                               {
-                               "type" : "rotary_encoder",
-                               "parameter" : "CV Res Amount",
-                               "asset" : "large_white",
-                               "x" : 130,
-                               "y" : 170
+                               "y" : 165
                                }
                                ]
                  }
