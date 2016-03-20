@@ -432,17 +432,11 @@ static NSArray *cableColours;
 
 +(NSArray*)cableColours {
     if (!cableColours) {
-        cableColours = @[[UIColor redColor],
-                         [UIColor blueColor],
-                         [UIColor yellowColor],
-                         [UIColor greenColor],
-                         [UIColor orangeColor],
-                         [UIColor grayColor],
-                         [UIColor lightGrayColor],
-                         [UIColor purpleColor],
-                         [UIColor brownColor],
-                         [UIColor cyanColor],
-                         [UIColor magentaColor]];
+        cableColours = @[[UIColor colorWithRed:196/255.0 green:0 blue:0 alpha:1.0],
+                         [UIColor colorWithRed:0 green:128/255.0 blue:0 alpha:1.0],
+                         [UIColor colorWithRed:0 green:0 blue:196/255.0 alpha:1.0],
+                         [UIColor colorWithRed:1.0 green:220/255.0 blue:0 alpha:1.0],
+                         [UIColor colorWithRed:1.0 green:128/255.0 blue:0 alpha:1.0]];
     }
     
     return cableColours;
