@@ -17,7 +17,7 @@
 @property (nonatomic) BOOL displayLinkRunning;
 @property (nonatomic, strong) CMMotionManager *motionManager;
 
-@property (nonatomic) CGImageRef plugImage;
+@property (nonatomic, strong) UIImage *plugImage;
 @end
 
 
@@ -30,7 +30,7 @@
     {
         self.opacity = 1.0f;
         self.contentsScale = [[UIScreen mainScreen] scale];
-        self.plugImage = [UIImage imageNamed:[ASSETS_PATH_CONNECTORS stringByAppendingString:@"connector_plug"]].CGImage;
+        self.plugImage = [UIImage imageNamed:[ASSETS_PATH_CONNECTORS stringByAppendingString:@"connector_plug"]];
 
         // Uncomment for 'cable-sway' effect
         // TODO: Support landscape
@@ -60,8 +60,8 @@
         
         CGRect rect1 = CGRectMake(cable.point1.x - 20, cable.point1.y - 20, 40, 40);
         CGRect rect2 = CGRectMake(cable.point2.x - 20, cable.point2.y - 20, 40, 40);
-        CGContextDrawImage(ctx, rect1, self.plugImage);
-        CGContextDrawImage(ctx, rect2, self.plugImage);
+        CGContextDrawImage(ctx, rect1, self.plugImage.CGImage);
+        CGContextDrawImage(ctx, rect2, self.plugImage.CGImage);
     }
     
     for (BuildViewCable *cable in self.buildView.cables) {
