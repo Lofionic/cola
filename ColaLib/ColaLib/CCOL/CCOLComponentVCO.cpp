@@ -71,9 +71,8 @@ void CCOLComponentVCO::renderOutputs(unsigned int numFrames) {
         }
         // Modulate the frequency according to FM in
         if (fmInConnected) {
-            delta = i / (float)numFrames;
-            lfoValue = powf(0.5, (-fmInBuffer[i] * fmAmt->getOutputAtDelta(delta)));
-            freqIn *= lfoValue;
+            lfoValue = powf(0.5, (fmInBuffer[i] - 0.5) * -2.0) * freqIn;  // Modulate frequency from x0.5 -> x2.0 (+/- 1 octave).
+            freqIn =  freqIn + ((lfoValue - freqIn) * fmAmt->getOutputAtDelta(delta));
         }
         
         phase += (M_PI * freqIn * CV_FREQUENCY_RANGE * pow(2, rangeIn) * tuneIn) / sampleRate;

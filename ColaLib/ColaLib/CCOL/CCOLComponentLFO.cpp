@@ -82,8 +82,8 @@ void CCOLComponentLFO::renderOutputs(unsigned int numFrames) {
         }
         
         float remainder = fmodf(sampleIndexFloat, 1);
-        
-        outBuffer[i] = sampleLower + (sampleUpper - sampleLower) * remainder;
+        float out = sampleLower + (sampleUpper - sampleLower) * remainder;
+        outBuffer[i] = (out / 2.0) + 0.5;
     }
 }
 
