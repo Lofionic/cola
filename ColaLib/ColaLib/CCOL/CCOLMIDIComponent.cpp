@@ -81,10 +81,12 @@ void CCOLMIDIComponent::setFrequency() {
     if (noteOns.size() > 0) {
         // Set frequency to match last note
         NoteIndex note = noteOns.back();
-        float frequency = powf(2, ((int)note - 69) / 12.0) * 440;
+        float frequency = powf(2, ((int)note - 69) / 12.0) * 110;
         
         // Return as value 0-1, relative to range
         outputValue = frequency / CV_FREQUENCY_RANGE;
+        
+        printf("Note : %d (%.2fhz)\n", note, frequency);
     } else {
         outputValue = 0;
     }
