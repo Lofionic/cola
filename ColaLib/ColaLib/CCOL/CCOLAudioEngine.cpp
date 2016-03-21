@@ -525,7 +525,7 @@ void CCOLAudioEngine::buildWaveTables() {
         for (int j = 1; j <= ANALOG_HARMONICS; j++) {
             result -= (sin(tablePhase * j) / j) / 2.0;
         }
-        ccRampWaveTable[i] = (SignalType)result;
+        ccRampWaveTable[i] = (SignalType)result  * 1.344; // Overdamping.
     }
     
     // Ramp wavetable
@@ -535,7 +535,7 @@ void CCOLAudioEngine::buildWaveTables() {
         for (int j = 1; j <= ANALOG_HARMONICS; j++) {
             result += (sin(tablePhase * j) / j) / 2.0;
         }
-        ccSawWaveTable[i] = (SignalType)result;
+        ccSawWaveTable[i] = (SignalType)result * 1.344; // Overdamping.
     }
     
     // Tri wavetable
@@ -557,7 +557,7 @@ void CCOLAudioEngine::buildWaveTables() {
             }
         }
         
-        ccTriWaveTable[i] = result;
+        ccTriWaveTable[i] = result * 1.23; // Overdamping
     }
     
     // Square wavetable
@@ -567,6 +567,22 @@ void CCOLAudioEngine::buildWaveTables() {
         for (int j = 1; j < (ANALOG_HARMONICS * 2) + 1;j += 2) {
             result += sin(tablePhase * j) / j;
         }
-        ccSquareWaveTable[i] = result;
+        ccSquareWaveTable[i] = result * 1.28f; // Overdamping.
+    }
+    
+    // NSLOG the waves
+    int res = 40;
+    
+    printf("\n\n");
+    for (int i = 0; i < res; i++) {
+        NSInteger sampleIndex = (i / (float)res) * WAVETABLE_SIZE;
+        SignalType sample = ccTriWaveTable[sampleIndex];
+        
+        int level = ((sample + 1) / 2.0) * res * 2;
+
+        for (int i = 0; i < level; i++) {
+            printf("_");
+        }
+        printf("*%.3f\n", sample);
     }
 }
