@@ -15,12 +15,13 @@ void CCOLComponentLFO::initializeIO() {
     mainOut = new CCOLComponentOutput(this, kIOTypeControl, (char*)"Out");
     setOutputs(std::vector<CCOLComponentOutput*> { mainOut } );
     
-    freqIn = new CCOLComponentInput(this, kIOTypeControl, (char*)"FreqIn");
-    setInputs(std::vector<CCOLComponentInput*> { freqIn } );
+    cvIn = new CCOLComponentInput(this, kIOTypeControl, (char*)"CVIn");
+    setInputs(std::vector<CCOLComponentInput*> { cvIn } );
     
     rate = new CCOLComponentParameter(this, (char*)"Rate");
+    cvAmt = new CCOLComponentParameter(this, (char*)"CVAmt");
     waveform = new CCOLComponentParameter(this, (char*)"Wave");
-    setParameters(std::vector<CCOLComponentParameter*> { rate, waveform });
+    setParameters(std::vector<CCOLComponentParameter*> { rate, cvAmt, waveform });
     
     rate->setNormalizedValue(0.5);
     waveform->setNormalizedValue(0);
@@ -31,7 +32,7 @@ void CCOLComponentLFO::renderOutputs(unsigned int numFrames) {
     CCOLComponent::renderOutputs(numFrames);
     
     // Input buffers
-    SignalType *frequencyBuffer = freqIn->getBuffer(numFrames);
+    SignalType *frequencyBuffer = cvIn->getBuffer(numFrames);
     
     // Output buffer
     SignalType *outBuffer = mainOut->prepareBufferOfSize(numFrames);
@@ -43,7 +44,7 @@ void CCOLComponentLFO::renderOutputs(unsigned int numFrames) {
         
         float delta = (i / (float)numFrames);
         
-        if (freqIn->isConnected()) {
+        if (cvIn->isConnected()) {
             freq = frequencyBuffer[i] + 1;
         } else {
             freq = rate->getOutputAtDelta(delta) * 10.0;

@@ -19,7 +19,8 @@ void CCOLComponentPan :: initializeIO() {
     setInputs(vector<CCOLComponentInput*> { input, cvInput });
     
     pan = new CCOLComponentParameter(this, (char*)"Pan");
-    setParameters(vector<CCOLComponentParameter*> { pan });
+    cvAmt = new CCOLComponentParameter(this, (char*)"CVAmt");
+    setParameters(vector<CCOLComponentParameter*> { pan, cvAmt });
 }
 
 void CCOLComponentPan::renderOutputs(unsigned int numFrames) {

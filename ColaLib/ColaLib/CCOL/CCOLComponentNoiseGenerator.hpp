@@ -16,6 +16,7 @@
 class CCOLComponentOutput;
 class CCOLComponentNoiseGenerator : public CCOLComponent {
     
+    CCOLComponentParameter* outputLevel;
     CCOLComponentOutput*    mainOutput;
     
 public:

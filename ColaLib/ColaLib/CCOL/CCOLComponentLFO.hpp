@@ -18,9 +18,10 @@ class CCOLComponentLFO : public CCOLComponent {
     double phase;
     
     CCOLComponentOutput *mainOut;
-    CCOLComponentInput  *freqIn;
+    CCOLComponentInput  *cvIn;
     
     CCOLComponentParameter *rate;
+    CCOLComponentParameter *cvAmt;
     CCOLComponentParameter *waveform;
     
 public:

@@ -21,6 +21,7 @@ class CCOLComponentPan : public CCOLComponent {
     CCOLComponentOutput *output2;
     
     CCOLComponentParameter *pan;
+    CCOLComponentParameter *cvAmt;
     
 public:
     CCOLComponentPan(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {

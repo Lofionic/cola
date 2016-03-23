@@ -14,19 +14,19 @@
                                  "type" : "input",
                                  "connection" : "Key In",
                                  "x" : 30,
-                                 "y" : 270
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "FM In",
                                  "x" : 70,
-                                 "y" : 270
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out",
                                  "x" : 150,
-                                 "y" : 270
+                                 "y" : 290
                                  }
                                  ],
                  "controls" : [
@@ -34,7 +34,7 @@
                                "type" : "rotary_switch",
                                "parameter" : "Range",
                                "x" : 50,
-                               "y" : 70,
+                               "y" : 80,
                                "userinfo" : {
                                "maxindex" : 4
                                }
@@ -43,7 +43,7 @@
                                "type" : "rotary_switch",
                                "parameter" : "Waveform",
                                "x" : 130,
-                               "y" : 170,
+                               "y" : 80,
                                "userinfo" : {
                                "maxindex" : 4
                                }
@@ -52,13 +52,13 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Tune",
                                "x" : 130,
-                               "y" : 70
+                               "y" : 190
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "FM",
                                "x" : 50,
-                               "y" : 170
+                               "y" : 190
                                }
                                ]
                  }
@@ -73,10 +73,16 @@
                  "asset" : "lfo_a",
                  "connectors" : [
                                  {
+                                 "type" : "input",
+                                 "connection" : "CVIn",
+                                 "x" : 25,
+                                 "y" : 290
+                                 },
+                                 {
                                  "type" : "output",
                                  "connection" : "Out",
-                                 "x" : 45,
-                                 "y" : 270
+                                 "x" : 65,
+                                 "y" : 290
                                  }
                                  ],
                  "controls" : [
@@ -84,13 +90,20 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Rate",
                                "x" : 45,
-                               "y" : 70
+                               "y" : 80
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "CVAmt",
+                               "x" : 45,
+                               "y" : 145,
+                               "userinfo" : { "asset" : "small" }
                                },
                                {
                                "type" : "rotary_switch",
                                "parameter" : "Wave",
                                "x" : 45,
-                               "y" : 170,
+                               "y" : 225,
                                "userinfo" : {
                                "maxindex" : 5
                                }
@@ -111,13 +124,13 @@
                                  "type" : "input",
                                  "connection" : "Gate In",
                                  "x" : 25,
-                                 "y" : 270
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Output",
                                  "x" : 65,
-                                 "y" : 270
+                                 "y" : 290
                                  }
                                  ],
                  "controls" : [
@@ -125,7 +138,7 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Attack",
                                "x" : 45,
-                               "y" : 60,
+                               "y" : 65,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -134,7 +147,7 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Decay",
                                "x" : 45,
-                               "y" : 110,
+                               "y" : 120,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -143,7 +156,7 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Sustain",
                                "x" : 45,
-                               "y" : 160,
+                               "y" : 175,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -152,7 +165,7 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Release",
                                "x" : 45,
-                               "y" : 210,
+                               "y" : 230,
                                "userinfo" : {
                                "asset" : "small"
                                }
@@ -173,19 +186,19 @@
                                  "type" : "input",
                                  "connection" : "In",
                                  "x" : 25,
-                                 "y" : 270
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out",
                                  "x" : 65,
-                                 "y" : 270
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "CV In",
-                                 "x" : 45,
-                                 "y" : 230
+                                 "x" : 25,
+                                 "y" : 245
                                  }
                                  ],
                  "controls" : [
@@ -193,13 +206,13 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Level",
                                "x" : 45,
-                               "y" : 75
+                               "y" : 80
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "CV Amt",
                                "x" : 45,
-                               "y" : 160
+                               "y" : 170
                                }
                                ]
                  }
@@ -289,19 +302,19 @@
                                  "type" : "input",
                                  "connection" : "In 1",
                                  "x" : 25,
-                                 "y" : 230
+                                 "y" : 245
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "In 2",
-                                 "x" : 65,
-                                 "y" : 230
+                                 "x" : 25,
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out",
-                                 "x" : 45,
-                                 "y" : 270
+                                 "x" : 65,
+                                 "y" : 290
                                  }
                                  ],
                  "controls" : [
@@ -309,13 +322,13 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Level 1",
                                "x" : 45,
-                               "y" : 75
+                               "y" : 80
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "Level 2",
                                "x" : 45,
-                               "y" : 160
+                               "y" : 170
                                }
                                ]
                  }
@@ -332,32 +345,32 @@
                                  {
                                  "type" : "input",
                                  "connection" : "In 1",
-                                 "x" : 24,
-                                 "y" : 270
+                                 "x" : 30,
+                                 "y" : 245
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "In 2",
-                                 "x" : 57,
-                                 "y" : 270
+                                 "x" : 70,
+                                 "y" : 245
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "In 3",
-                                 "x" : 90,
-                                 "y" : 270
+                                 "x" : 30,
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "In 4",
-                                 "x" : 123,
-                                 "y" : 270
+                                 "x" : 70,
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out",
-                                 "x" : 156,
-                                 "y" : 270
+                                 "x" : 150,
+                                 "y" : 290
                                  }
                                  ],
                  "controls" : [
@@ -365,13 +378,13 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Level 1",
                                "x" : 50,
-                               "y" : 69
+                               "y" : 80
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "Level 2",
                                "x" : 130,
-                               "y" : 69
+                               "y" : 80
                                },
                                {
                                "type" : "rotary_encoder",
@@ -491,25 +504,25 @@
                                  "type" : "input",
                                  "connection" : "Audio in",
                                  "x" : 30,
-                                 "y" : 270
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "LP Out",
                                  "x" : 110,
-                                 "y" : 270
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "HP Out",
                                  "x" : 150,
-                                 "y" : 270
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "CV Freq In",
                                  "x" : 70,
-                                 "y" : 270
+                                 "y" : 290
                                  }
                                  ],
                  "controls" : [
@@ -517,20 +530,20 @@
                                "type" : "rotary_encoder",
                                "parameter" : "Frequency",
                                "asset" : "large_white",
-                               "x" : 90,
-                               "y" : 70
+                               "x" : 50,
+                               "y" : 80
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "CV Freq Amount",
                                "x" : 130,
-                               "y" : 165
+                               "y" : 80
                                },
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "Resonance",
-                               "x" : 50,
-                               "y" : 165
+                               "x" : 90,
+                               "y" : 190
                                }
                                ]
                  }
@@ -549,34 +562,40 @@
                                  {
                                  "type" : "input",
                                  "connection" : "Input",
-                                 "x" : 48,
-                                 "y" : 224
+                                 "x" : 25,
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Output 1",
-                                 "x" : 24,
-                                 "y" : 280
+                                 "x" : 65,
+                                 "y" : 245
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Output 2",
                                  "x" : 72,
-                                 "y" : 280
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "CV In",
-                                 "x" : 48,
-                                 "y" : 162
+                                 "x" : 25,
+                                 "y" : 245
                                  }
                                  ],
                  "controls" : [
                                {
                                "type" : "rotary_encoder",
                                "parameter" : "Pan",
-                               "x" : 48,
-                               "y" : 72
+                               "x" : 45,
+                               "y" : 80
+                               },
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "CVAmt",
+                               "x" : 45,
+                               "y" : 170
                                }
                                ]
                  }
@@ -594,19 +613,19 @@
                                  "type" : "input",
                                  "connection" : "In 1",
                                  "x" : 25,
-                                 "y" : 270
+                                 "y" : 245
                                  },
                                  {
                                  "type" : "input",
                                  "connection" : "In 2",
-                                 "x" : 65,
-                                 "y" : 270
+                                 "x" : 25,
+                                 "y" : 290
                                  },
                                  {
                                  "type" : "output",
                                  "connection" : "Out",
-                                 "x" : 45,
-                                 "y" : 165
+                                 "x" : 65,
+                                 "y" : 290
                                  }
                                  ],
                  "controls" : [
@@ -615,7 +634,7 @@
                                "parameter" : "Mix",
                                "asset" : "large_white",
                                "x" : 45,
-                               "y" : 70
+                               "y" : 80
                                },
                                ]
                  }
@@ -627,15 +646,24 @@
                  "type" : "CCOLComponentTypeNoiseGenerator",
                  "free" : 1,
                  "view" : {
-                 "asset" : "noise_generator",
+                 "asset" : "ng_a",
                  "connectors" : [
                                  {
                                  "type" : "output",
                                  "connection" : "Output",
                                  "x" : 45,
-                                 "y" : 270
+                                 "y" : 290
                                  }
                                  ],
+                 "controls" : [
+                               {
+                               "type" : "rotary_encoder",
+                               "parameter" : "Level",
+                               "asset" : "large_white",
+                               "x" : 45,
+                               "y" : 80
+                               },
+                               ]
                  }
                  },
                  
