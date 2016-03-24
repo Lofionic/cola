@@ -12,8 +12,8 @@
 #import "CCOLTypes.h"
 #import <UIKit/UIKit.h>
 
-#define WAVETABLE_SIZE      8196
-#define ANALOG_HARMONICS    50
+#define WAVETABLE_SIZE      65584
+#define ANALOG_HARMONICS    100
 
 extern SignalType ccSinWaveTable[WAVETABLE_SIZE];
 extern SignalType ccTriWaveTable[WAVETABLE_SIZE];

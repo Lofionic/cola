@@ -19,6 +19,10 @@ void CCOLComponentLFO::initializeIO() {
     setInputs(std::vector<CCOLComponentInput*> { cvIn } );
     
     rate = new CCOLComponentParameter(this, (char*)"Rate");
+    rate->setParameterFunction([] (double valueIn) -> double {
+        return (powf(MAX(valueIn, 0.15f),3.3f)*100.0f);
+    });
+    
     cvAmt = new CCOLComponentParameter(this, (char*)"CVAmt");
     waveform = new CCOLComponentParameter(this, (char*)"Wave");
     setParameters(std::vector<CCOLComponentParameter*> { rate, cvAmt, waveform });
@@ -47,7 +51,7 @@ void CCOLComponentLFO::renderOutputs(unsigned int numFrames) {
         if (cvIn->isConnected()) {
             freq = frequencyBuffer[i] + 1;
         } else {
-            freq = rate->getOutputAtDelta(delta) * 10.0;
+            freq = rate->getOutputAtDelta(delta);
         }
         
         phase += (2.0 * M_PI * (freq)) / sampleRate;
