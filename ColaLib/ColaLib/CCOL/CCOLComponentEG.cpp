@@ -23,7 +23,20 @@ void CCOLComponentEG::initializeIO() {
     sustainParameter = new CCOLComponentParameter(this, (char*)"Sustain");
     releaseParameter = new CCOLComponentParameter(this, (char*)"Release");
     setParameters(std::vector<CCOLComponentParameter*> {attackParameter, decayParameter, sustainParameter, releaseParameter});
-
+    
+    // Time controls function exponentially from 0 -> 10secs.
+    attackParameter->setParameterFunction([] (double valueIn) -> double {
+        return powf(valueIn, 3.3f) * 10.0f;
+    });
+    
+    decayParameter->setParameterFunction([] (double valueIn) -> double {
+        return powf(valueIn, 3.3f) * 10.0f;
+    });
+    
+    releaseParameter->setParameterFunction([] (double valueIn) -> double {
+        return powf(valueIn, 3.3f) * 10.0f;
+    });
+    
     attackParameter->setNormalizedValue(0);
     decayParameter->setNormalizedValue(0);
     sustainParameter->setNormalizedValue(1);
@@ -50,6 +63,7 @@ void CCOLComponentEG::renderOutputs(unsigned int numFrames) {
         unsigned int decaySamples = decayTime * sampleRate;
         
         float sustainLevel = sustainParameter->getOutputAtDelta(delta);
+        
         float releaseTime = releaseParameter->getOutputAtDelta(delta);
         unsigned int releaseSamples = releaseTime * sampleRate;
         
@@ -129,7 +143,6 @@ void CCOLComponentEG::renderOutputs(unsigned int numFrames) {
         if (medianWindowPosition >= MEDIAN_WINDOW_SIZE) {
             medianWindowPosition = 0;
         }
-        
         outputValue = medianWindowSigma / MEDIAN_WINDOW_SIZE;
         outputBuffer[i] = outputValue;
     }
