@@ -100,6 +100,7 @@ void CCOLComponentVCO::initializeIO() {
     
     keyboardIn = new CCOLComponentInput(this, kIOType1VOct, (char*)"Key In");
     fmodIn = new CCOLComponentInput(this, kIOTypeControl, (char*)"FM In");
+    
     std::vector<CCOLComponentInput*> theInputs = {
         keyboardIn,
         fmodIn
@@ -116,6 +117,9 @@ void CCOLComponentVCO::initializeIO() {
     waveform =  new CCOLComponentParameter(this, (char*)"Waveform");
     tune =      new CCOLComponentParameter(this, (char*)"Tune");
     fmAmt =     new CCOLComponentParameter(this, (char*)"FM");
+    fmAmt->setParameterFunction([] (double valueIn) -> double {
+        return powf(valueIn,2.0);
+    });
     
     tune->setParameterFunction([] (double valueIn) -> double {
         // A function that adjusts tune control to ±7 semitone multiplier
