@@ -163,7 +163,7 @@ CFDictionaryRef CCOLComponent::getDictionary() {
     i = 0;
     for(auto const& output: outputs) {
         if (output->isConnected()) {
-            CFStringRef connectionKeys[] { CFSTR("output"), CFSTR("component"), CFSTR("input") };
+            CFStringRef connectionKeys[] { kCCOLConnectionOutputKey, kCCOLConnectionComponentKey, kCCOLConnectionInputKey };
             CFStringRef connectionValues[] {
                 CFStringCreateWithCString(NULL, output->getName(), kCFStringEncodingUTF8),
                 CFStringCreateWithCString(NULL, output->getConnected()->getComponent()->getIdentifier(), kCFStringEncodingUTF8),

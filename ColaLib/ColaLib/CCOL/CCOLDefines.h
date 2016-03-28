@@ -32,5 +32,8 @@ const CFStringRef kCCOLComponentIdentifierKey   = CFSTR("identifier");
 const CFStringRef kCCOLComponentTypeKey         = CFSTR("type");
 const CFStringRef kCCOLComponentParametersKey   = CFSTR("parameters");
 const CFStringRef kCCOLComponentConnectionsKey  = CFSTR("connections");
+const CFStringRef kCCOLConnectionComponentKey   = CFSTR("component");
+const CFStringRef kCCOLConnectionOutputKey      = CFSTR("output");
+const CFStringRef kCCOLConnectionInputKey       = CFSTR("input");
 
 #endif /* CCOLDefines_h */
