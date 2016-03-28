@@ -29,6 +29,8 @@ class CCOLComponentReverb : public CCOLComponent {
     UInt32 bufferLocation2;
     UInt32 bufferLocation3;
     
+    const char* getComponentType() override { return kCCOLComponentTypeReverb; }
+    
 public:
     CCOLComponentReverb(CCOLAudioContext * contextIn):CCOLComponent(contextIn) {
         

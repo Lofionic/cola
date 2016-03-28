@@ -28,6 +28,7 @@ class CCOLComponentSequencer : public CCOLComponent {
     
     double freqOut;
     
+    const char* getComponentType() override { return kCCOLComponentTypeSequencer; }
 public:
     
     CCOLComponentSequencer(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {  }

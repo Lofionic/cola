@@ -44,13 +44,12 @@
 
 @property (nonatomic, strong) UIView                    *trashView;
 
-@property (nonatomic, strong) NSMutableDictionary       *moduleViews;
+@property (nonatomic, strong) NSMutableArray            *moduleViews;
 
 @property (nonatomic, strong) MasterModuleView          *masterModuleView;
 @property (nonatomic, weak) BuildViewScrollView         *scrollView;
 
 @end
-
 
 @implementation BuildView
 
@@ -82,7 +81,7 @@ static NSArray *cableColours;
         [self addLayers];
         
         self.cables = [[NSMutableArray alloc] initWithCapacity:200];
-        self.moduleViews = [[NSMutableDictionary alloc] initWithCapacity:100];
+        self.moduleViews = [[NSMutableArray alloc] initWithCapacity:100];
         
         self.masterModuleView = [[MasterModuleView alloc] initWithFrame:CGRectMake(0, 0, kBuildViewWidth, self.headerHeight) buildView:self];
         [self addSubview:self.masterModuleView];
@@ -259,14 +258,14 @@ static NSArray *cableColours;
     return result;
 }
 
--(ModuleView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point identifier:(NSString*)identifier {
+-(ModuleView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point forComponentID:(NSString*)componentID {
     BOOL occupied;
     NSSet *cellSet = [self cellPathsForModuleOfWidth:moduleDescription.width center:point occupied:&occupied];
     
     if (cellSet && !occupied) {
         
         CGRect newFrame = [self rectForCellSet:cellSet];
-        ModuleView *moduleView = [[ModuleView alloc] initWithModuleDescription:moduleDescription inFrame:newFrame identifier:identifier];
+        ModuleView *moduleView = [[ModuleView alloc] initWithModuleDescription:moduleDescription inFrame:newFrame componentID:componentID];
         
         if (moduleView) {
             [moduleView setDelegate:self];
@@ -279,7 +278,7 @@ static NSArray *cableColours;
                 cellOccupied[cellPath.row][cellPath.column] = TRUE;
             }];
             
-            [self.moduleViews setObject:moduleView forKey:moduleView.identifier];
+            [self.moduleViews addObject:moduleView];
             
             return moduleView;
         }
@@ -519,6 +518,14 @@ static NSArray *cableColours;
     }
 }
 
+-(NSInteger)getRowForX:(CGFloat)x {
+    return floor(x / self.cellSize.width);
+}
+
+-(NSInteger)getColumnForY:(CGFloat)y {
+    return floor(y / self.cellSize.height);
+}
+
 -(void)trashModuleView:(ModuleView*)moduleView {
     
     // Remove any cables connected to this module
@@ -530,7 +537,7 @@ static NSArray *cableColours;
     [self.cableLayer setNeedsDisplay];
 
     // Remove from module dictionary
-    [self.moduleViews removeObjectForKey:moduleView.identifier];
+    [self.moduleViews removeObject:moduleView];
 
     // Trash the module
     [moduleView trash];
@@ -586,111 +593,24 @@ static NSArray *cableColours;
 
 #pragma mark Load & Save
 
--(NSDictionary*)getPresetDictionary {
+-(NSArray*)getModuleDictionaries {
     // Create a dictionary of all the data needed to reassemble the patch
     
-   
     // Save modules
     NSMutableArray *modules = [[NSMutableArray alloc] initWithCapacity:[self.moduleViews count]];
 
-    for (NSString *thisKey in [self.moduleViews allKeys]) {
-        ModuleView *thisModuleView = [self.moduleViews objectForKey:thisKey];
-        [modules addObject:[thisModuleView getDictionary]]; 
+    for (ModuleView *thisModuleView in self.moduleViews) {
+        [modules addObject:[thisModuleView getDictionary]];
     }
 
-    // Save connections
-    NSMutableArray *cables = [[NSMutableArray alloc] initWithCapacity:[self.cables count]];
-    for (BuildViewCable *thisCable in self.cables) {
-    
-        ModuleView *outputModule = (ModuleView*)[thisCable.connector1 superview];
-        NSString *outputConnection = [[COLAudioEnvironment sharedEnvironment] getConnectorName:thisCable.connector1.connector];
-        ModuleView *inputModule = (ModuleView*)[thisCable.connector2 superview];
-        NSString *inputConnection = [[COLAudioEnvironment sharedEnvironment] getConnectorName:thisCable.connector2.connector];
-        
-        NSDictionary *cableDictionary = @{
-                                          @"outputModule"       : outputModule.identifier,
-                                          @"outputConnection"   : outputConnection,
-                                          @"inputModule"        : inputModule.identifier,
-                                          @"inputConnection"    : inputConnection,
-                                          @"colour"             : thisCable.colour
-                                          };
-        
-        [cables addObject:cableDictionary];
-    }
-    
-    return @{
-             PRESET_KEY_MODULES : modules,
-             PRESET_KEY_CABLES  : cables
-             };
-}
-
--(BOOL)buildFromDictionary:(NSDictionary*)dictionary {
-
-    [self removeAll];
-    
-    BOOL success = YES;
-    
-    
-    NSArray *modules = [dictionary objectForKey:PRESET_KEY_MODULES];
-    NSLog(@"Restoring %lu modules", (unsigned long)[modules count]);
-    
-    for (NSDictionary *thisModule in modules) {
-        CGPoint center = [[thisModule objectForKey:PRESET_KEY_MODULE_CENTER] CGPointValue];
-        ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[thisModule objectForKey:PRESET_KEY_MODULE_TYPE]];
-        if (moduleDescription) {
-            NSString *identifier = [thisModule objectForKey:PRESET_KEY_MODULE_IDENTIFIER];
-            NSDictionary *controlsDictionary = [thisModule objectForKey:PRESET_KEY_MODULE_CONTROLS];
-            [[self addViewForModule:moduleDescription atPoint:center identifier:identifier] setParametersFromDictionary:controlsDictionary];
-        }
-    }
-
-    NSArray *cablesArray = [dictionary objectForKey:PRESET_KEY_CABLES];
-    
-    for (NSDictionary *thisCable in cablesArray) {
-        ModuleView *outModule = [self moduleWithIdentifier:[thisCable objectForKey:@"outputModule"]];
-        ModuleView *inModule = [self moduleWithIdentifier:[thisCable objectForKey:@"inputModule"]];
-        if (outModule && inModule) {
-            ConnectorView *outConnector = [outModule connectorForName:[thisCable objectForKey:@"outputConnection"]];
-            ConnectorView *inConnector = [inModule connectorForName:[thisCable objectForKey:@"inputConnection"]];
-            if (outConnector && inConnector) {
-                if ([self connectorView:outConnector connectWith:inConnector]) {
-                    [self addCableFrom:outConnector to:inConnector withColour:[thisCable objectForKey:@"colour"]];
-                } else {
-                    success = NO;
-                }
-            } else {
-                success = NO;
-            }
-        }
-    }
-    
-    return success;
-}
-
--(ModuleView*)moduleWithIdentifier:(NSString*)identifier {
-    
-    if ([identifier isEqualToString:@"Master"]) {
-        return self.masterModuleView;
-    } else {
-        __block ModuleView *result = nil;
-        
-        [self.moduleViews enumerateKeysAndObjectsUsingBlock:^(NSString *key, ModuleView *obj, BOOL *stop) {
-            if ([key isEqualToString:identifier]) {
-                result = obj;
-                *stop = YES;
-            }
-        }];
-        
-        return result;
-    }
+    return [NSArray arrayWithArray:modules];
 }
 
 -(void)removeAll {
     NSLog(@"Removing all modules");
     
-    for (NSString *thisModuleIdentifier in [self.moduleViews allKeys]) {
-        ModuleView *moduleView = [self.moduleViews objectForKey:thisModuleIdentifier];
-        [moduleView trash];
+    for (ModuleView *thisModuleView in self.moduleViews) {
+        [thisModuleView trash];
     }
     
     [self.moduleViews removeAllObjects];

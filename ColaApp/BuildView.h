@@ -59,11 +59,12 @@ typedef enum {
 
 -(BuildViewCellPath*)cellPathForPoint:(CGPoint)point;
 -(NSSet*)cellPathsForModuleOfWidth:(NSUInteger)width center:(CGPoint)center occupied:(BOOL*)occupied;
--(ModuleView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point identifier:(NSString*)identifier;
+-(ModuleView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point forComponentID:(NSString*)componentID;
 -(CGRect)rectForCellSet:(NSSet*)cellSet;
 
--(NSDictionary*)getPresetDictionary;
--(BOOL)buildFromDictionary:(NSDictionary*)dictionary;
+-(NSArray*)getModuleDictionaries;
 -(void)forceDisconnect:(NSDictionary*)userInfo;
+
+-(void)removeAll;
 
 @end

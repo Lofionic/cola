@@ -381,7 +381,7 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
         newComponent = new CCOLComponentSequencer(audioContext);
     } else if (componentTypeString == KCCOLComponentTypeMIDI) {
         newComponent = new CCOLMIDIComponent(audioContext);
-    } else if (componentTypeString == kCCOLComponentNoiseGenerator) {
+    } else if (componentTypeString == kCCOLComponentTypeNoiseGenerator) {
         newComponent = new CCOLComponentNoiseGenerator(audioContext);
     } else if (componentTypeString == kCCOLComponentTypeVCF) {
         newComponent = new CCOLComponentVCF(audioContext);
@@ -405,16 +405,43 @@ CCOLComponentAddress CCOLAudioEngine::createComponent(char* componentType) {
 void CCOLAudioEngine::removeComponent(CCOLComponentAddress componentAddress) {
     CCOLComponent *component = (CCOLComponent*)componentAddress;
     
-    // Remove from components vector
-    auto it = std::find(components.begin(), components.end(), component);
-    if (it != components.end()) {
-        components.erase(it);
+    if (component != NULL) {
+        // Remove from components vector
+        auto it = std::find(components.begin(), components.end(), component);
+        if (it != components.end()) {
+            components.erase(it);
+        }
+        
+        // Destroy the component
+        component->disconnectAll();
+        component->dealloc();
+        free(component);
+    }
+}
+
+char* CCOLAudioEngine::getComponentIdentifier(CCOLComponentAddress componentAddress) {
+    CCOLComponent *component = (CCOLComponent*)componentAddress;
+    return component->getIdentifier();
+}
+
+CCOLComponentAddress CCOLAudioEngine::getComponentWithIdentifier(char* componentId) {
+    CCOLComponent *result = NULL;
+    for (CCOLComponent* &c : components) {
+        if (std::string(c->getIdentifier()) == std::string(componentId)) {
+            result = c;
+        }
+    }
+    return (CCOLComponentAddress)result;
+}
+
+void CCOLAudioEngine::removeAllComponents() {
+    for(auto const& thisComponent: components) {
+        thisComponent->disconnectAll();
+        thisComponent->dealloc();
+        free(thisComponent);
     }
     
-    // Destroy the component
-    component->disconnectAll();
-    component->dealloc();
-    free(component);
+    components.clear();
 }
 
 // Get a component's output
@@ -506,6 +533,34 @@ void CCOLAudioEngine::setupMIDICallbacks() {
                                      0,
                                      &callBackStruct,
                                      sizeof(callBackStruct)), "Can't setup Inter App MIDI Callback");
+}
+
+CFDictionaryRef CCOLAudioEngine::getDictionary() {
+
+    CFStringRef keys[3];
+    CFTypeRef   values[3];
+
+    // User component.
+    keys[0] = kCCOLComponentsKey;
+    uint componentCount = components.size();
+    CFDictionaryRef componentArray[componentCount];
+
+    int i = 0;
+    for(auto const& value: components) {
+        componentArray[i++] = value->getDictionary();
+    }
+    
+    values[0] = CFArrayCreate(NULL, (const void **)componentArray, componentCount, &kCFTypeArrayCallBacks);
+    
+    // MIDI component.
+    keys[1] = kCCOLMIDIComponentKey;
+    values[1] = getMIDIComponent()->getDictionary();
+    
+    // Interface component.
+    keys[2] = kCCOLInterfaceComponentKey;
+    values[2] = audioContext->getInterfaceComponent()->getDictionary();
+    
+    return CFDictionaryCreate(NULL, (const void**)keys, (const void**)values, 3, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 }
 
 // Generate the wavetables

@@ -26,6 +26,8 @@ public:
     
     void            initializeIO() override;
     void            renderOutputs(unsigned int numFrames) override;
+    
+    const char* getComponentType() override { return kCCOLComponentTypeNoiseGenerator; }
 };
 
 #endif /* CCOLComponentNoiseGenerator_hpp */

@@ -181,7 +181,7 @@
 }
 
 -(Preset*)getEmptyPreset {
-    return [[Preset alloc] initWithDictionary:@{@"modules" : @{}, @"cables"  : @{}}
+    return [[Preset alloc] initWithDictionary:@{@"model" : @"", @"modules" : @{}}
                                          name:DEFAULT_PRESET_NAME
                                     thumbnail:nil];
 }

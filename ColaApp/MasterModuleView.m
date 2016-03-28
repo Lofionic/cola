@@ -17,7 +17,6 @@
 
 -(instancetype)initWithFrame:(CGRect)frame buildView:(BuildView*)buildView {
     if (self = [super initWithFrame:frame]) {
-        self.identifier = @"Master";
         [self addGlobalIObuildView:buildView];
         
         UIImage *asset = [UIImage imageNamed:@"ImageAssets/components/master"];

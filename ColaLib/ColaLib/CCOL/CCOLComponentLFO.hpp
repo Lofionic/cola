@@ -24,6 +24,8 @@ class CCOLComponentLFO : public CCOLComponent {
     CCOLComponentParameter *cvAmt;
     CCOLComponentParameter *waveform;
     
+    const char* getComponentType() override { return kCCOLComponentTypeLFO; }
+
 public:
     CCOLComponentLFO(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
         phase = 0;

@@ -22,6 +22,8 @@ class CCOLComponentMixer : public CCOLComponent {
     CCOLComponentParameter *level1;
     CCOLComponentParameter *level2;
     
+    const char* getComponentType() override { return kCCOLComponentTypeMixer; }
+    
 public:
     CCOLComponentMixer(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
         

@@ -23,6 +23,8 @@ class CCOLComponentVCA : public CCOLComponent {
     CCOLComponentParameter *level;
     CCOLComponentParameter *CVAmt;
     
+    const char* getComponentType() override { return kCCOLComponentTypeVCA; }
+    
 public:
     CCOLComponentVCA(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
     }

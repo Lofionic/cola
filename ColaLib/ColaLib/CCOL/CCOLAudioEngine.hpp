@@ -70,6 +70,10 @@ public:
     
     void doPending();
 
+    CCOLAudioContext *getContext() {
+        return audioContext;
+    }
+    
     CCOLIAAController *getIAAController() {
         return &iaaController;
     }
@@ -77,6 +81,9 @@ public:
     // Component Management
     CCOLComponentAddress createComponent(char* componentType);
     void removeComponent(CCOLComponentAddress component);
+    CCOLComponentAddress getComponentWithIdentifier(char* componentId);
+    char* getComponentIdentifier(CCOLComponentAddress component);
+    void removeAllComponents();
     
     // Connections
     CCOLOutputAddress getOutput(CCOLComponentAddress componentAddress, char* outputName);
@@ -125,6 +132,9 @@ public:
     CCOLMIDIComponent* getMIDIComponent() {
         return midiComponent;
     }
+    
+    // Export / Import
+    CFDictionaryRef getDictionary();
 
 };
 

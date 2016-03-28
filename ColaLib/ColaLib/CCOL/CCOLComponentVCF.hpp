@@ -39,6 +39,8 @@ class CCOLComponentVCF : public CCOLComponent {
     float b0, b1, b2, b3, b4;  //filter buffers (beware denormals!)
     float t1, t2;
     
+    const char* getComponentType() override { return kCCOLComponentTypeVCF; }
+    
 public:
     CCOLComponentVCF(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
         

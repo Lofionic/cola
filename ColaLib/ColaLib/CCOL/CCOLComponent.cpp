@@ -14,6 +14,7 @@
 
 #include <stdlib.h>
 #include <string>
+#include <sstream>
 
 void gen_random(char *s, const int len) {
     static const char alphanum[] =
@@ -104,6 +105,78 @@ CCOLComponentParameter* CCOLComponent::getParameterNamed(char *name) {
             result = p;
         }
     }
+    return result;
+}
+
+void CCOLComponent::setIdentifier(char* inIdentifier) {
+    strcpy(componentIdentifier, inIdentifier);
+}
+
+// Returns a CFDictionary describing the state of this component for recall.
+CFDictionaryRef CCOLComponent::getDictionary() {
+    
+    CFStringRef keys[4];
+    CFTypeRef values[4];
+    
+    // Create the properties dict
+    keys[0] = kCCOLComponentIdentifierKey;
+    values[0] = CFStringCreateWithCString(NULL, getIdentifier(), kCFStringEncodingUTF8);
+
+    keys[1] = kCCOLComponentTypeKey;
+    values[1] = CFStringCreateWithCString(NULL, getComponentType(), kCFStringEncodingUTF8);
+
+    // Create the parameters dict
+    keys[2] = kCCOLComponentParametersKey;
+    uint parameterCount = parameters.size();
+    CFStringRef parameterNames[parameterCount];
+    CFStringRef parameterValues[parameterCount];
+    
+    int i = 0;
+    
+    // Create a number formatter for parameter values.
+    CFLocaleRef locale = CFLocaleCopyCurrent();
+    CFNumberFormatterRef numberFormatter = CFNumberFormatterCreate(NULL, locale, kCFNumberFormatterDecimalStyle);
+    int fractionDigits = 6;
+    CFNumberRef maxFractionDigits = CFNumberCreate(NULL, kCFNumberIntType, &fractionDigits);
+    CFNumberFormatterSetProperty(numberFormatter, kCFNumberFormatterMaxFractionDigits, maxFractionDigits);
+    
+    for(auto const& parameter: parameters) {
+        parameterNames[i] = CFStringCreateWithCString(NULL, parameter->getName(), kCFStringEncodingUTF8);
+        float floatValue = parameter->getNormalizedValue();
+        CFNumberRef number = CFNumberCreate(NULL, kCFNumberFloatType, &floatValue);
+        parameterValues[i++] =  CFNumberFormatterCreateStringWithNumber(NULL, numberFormatter, number);
+        CFRelease(number);
+    }
+    CFRelease(locale);
+    CFRelease(numberFormatter);
+    CFRelease(maxFractionDigits);
+  
+    values[2] = CFDictionaryCreate(NULL, (const void **)parameterNames, (const void **)parameterValues, parameterCount, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+
+    
+    // Create the outputs dict
+    keys[3] = kCCOLComponentConnectionsKey;
+    
+    uint outputCount = outputs.size();
+    CFDictionaryRef connections[outputCount];
+    
+    i = 0;
+    for(auto const& output: outputs) {
+        if (output->isConnected()) {
+            CFStringRef connectionKeys[] { CFSTR("output"), CFSTR("component"), CFSTR("input") };
+            CFStringRef connectionValues[] {
+                CFStringCreateWithCString(NULL, output->getName(), kCFStringEncodingUTF8),
+                CFStringCreateWithCString(NULL, output->getConnected()->getComponent()->getIdentifier(), kCFStringEncodingUTF8),
+                CFStringCreateWithCString(NULL, output->getConnected()->getName(), kCFStringEncodingUTF8)
+            };
+            connections[i++] = CFDictionaryCreate(NULL, (const void**)connectionKeys, (const void**)connectionValues, 3, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+        }
+    }
+    
+    values[3] = CFArrayCreate(NULL, (const void**)connections, i, &kCFTypeArrayCallBacks);
+   
+    CFDictionaryRef result =  CFDictionaryCreate(NULL, (const void **)keys, (const void **)values, 4, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    
     return result;
 }
 

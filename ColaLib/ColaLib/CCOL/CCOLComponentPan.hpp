@@ -30,6 +30,8 @@ public:
     
     void            initializeIO() override;
     void            renderOutputs(unsigned int numFrames) override;
+    
+    const char* getComponentType() override { return kCCOLComponentTypePan; }
 };
 
 #endif /* CCOLComponentPan_hpp */

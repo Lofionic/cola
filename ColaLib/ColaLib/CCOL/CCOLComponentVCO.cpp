@@ -117,8 +117,9 @@ void CCOLComponentVCO::initializeIO() {
     waveform =  new CCOLComponentParameter(this, (char*)"Waveform");
     tune =      new CCOLComponentParameter(this, (char*)"Tune");
     fmAmt =     new CCOLComponentParameter(this, (char*)"FM");
+    
     fmAmt->setParameterFunction([] (double valueIn) -> double {
-        return powf(valueIn,2.0);
+        return powf(valueIn, 3);
     });
     
     tune->setParameterFunction([] (double valueIn) -> double {

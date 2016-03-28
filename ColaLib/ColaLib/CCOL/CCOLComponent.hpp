@@ -71,6 +71,11 @@ public:
 
     virtual void dealloc();
     
+    virtual const char*               getComponentType() { return "undetermined"; } // Used for model export.
+    CFDictionaryRef                   getDictionary();
+    
+    void setIdentifier(char* inIdentifier);
+    
 protected:
     void setInputs(vector<CCOLComponentInput*> inputsIn) {
         inputs = inputsIn;
@@ -86,7 +91,8 @@ protected:
 
 private:
     CCOLAudioContext*   context;
-    char*               componentIdentifier;
+    char*         componentType;
+    char*         componentIdentifier;
     bool                rendered;
     
     vector<CCOLComponentInput*>          inputs;

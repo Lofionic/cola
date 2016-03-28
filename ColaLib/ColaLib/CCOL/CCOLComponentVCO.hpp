@@ -36,6 +36,8 @@ class CCOLComponentVCO : public CCOLComponent {
     SignalType              previousResult;
     
     float remainder, delta, tuneIn, freqIn, lfoValue;
+    const char* getComponentType() override { return kCCOLComponentTypeVCO; }
+    
     
 public:
     CCOLComponentVCO(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {

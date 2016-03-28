@@ -16,6 +16,9 @@
 -(void)moduleView:(ModuleView*)moduleView didContinueDraggingWithGesture:(UIGestureRecognizer*)gesture;
 -(void)moduleView:(ModuleView*)moduleView didEndDraggingWithGesture:(UIGestureRecognizer*)gesture;
 
+-(NSInteger)getRowForX:(CGFloat)x;
+-(NSInteger)getColumnForY:(CGFloat)y;
+
 @end
 
 @class ModuleDescription;
@@ -26,12 +29,11 @@
 @property (nonatomic, weak) id<ModuleViewDelegate>  delegate;
 @property (readonly) CCOLComponentAddress           component;
 @property (readonly, strong) ModuleDescription      *moduleDescription;
-@property (nonatomic, strong) NSString              *identifier;
 @property (nonatomic, strong) NSArray               *connectorViews;
 @property (nonatomic, strong) NSArray               *controlViews;
 @property (nonatomic, strong) NSArray               *subviewViews;
 
--(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame identifier:(NSString*)identifier;
+-(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame componentID:(NSString*)componentID;
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription;
 -(void)setParametersFromDictionary:(NSDictionary*)dictionary; 
 -(void)trash;

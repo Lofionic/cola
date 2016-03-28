@@ -60,6 +60,8 @@ public:    typedef enum kCCOLEnvelopeState {
     void            initializeIO() override;
     void            renderOutputs(unsigned int numFrames) override;
     
+    const char* getComponentType() override { return kCCOLComponentTypeEG; }
+    
 private:
     void openGate();
     void closeGate();

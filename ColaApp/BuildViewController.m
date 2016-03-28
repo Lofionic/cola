@@ -267,7 +267,7 @@ static BuildView *buildView = nil;
     
     // Load initial preset
     self.preset = [[PresetController sharedController] recallPresetAtIndex:0];
-    [self.buildView buildFromDictionary:[self.preset dictionary]];
+    [self recallPreset:self.preset completion:nil];
     
 //    // Register for updates from the transport controller
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedOfTransportUpdate:) name:kCOLEventTransportStateUpdated object:nil];
@@ -341,20 +341,19 @@ static BuildView *buildView = nil;
     
     //[[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
     
-    [self savePresetCompletion:^(BOOL success) {
+    [self savePresetWithCompletion:^(BOOL success) {
         FilesViewController *filesViewController = [[FilesViewController alloc] initWithBuildViewController:self];
         [self.navigationController pushViewController:filesViewController animated:YES];
     }];
 }
 
 -(void)saveTapped {
-    [self.cae exportEnvironment];
     
     if (self.buildMode) {
         [self setBuildMode:NO animated:YES];
     }
     
-    [self savePresetCompletion:nil];
+    [self savePresetWithCompletion:nil];
 }
 
 -(void)setBuildMode:(BOOL)buildMode animated:(BOOL)animated {
@@ -520,7 +519,7 @@ static BuildView *buildView = nil;
             pointInWindow.y < self.view.frame.size.height - 8) {
             if ([self.view hitTest:pointInWindow withEvent:nil] == self.buildView) {
                 // Add a component
-                [self.buildView addViewForModule:module atPoint:[gesture locationInView:self.buildView] identifier:nil];
+                [self.buildView addViewForModule:module atPoint:[gesture locationInView:self.buildView] forComponentID:nil];
             }
         }
     }
@@ -558,8 +557,8 @@ static BuildView *buildView = nil;
 
 #pragma LoadSave
 
--(void)savePresetCompletion:(void (^)(BOOL success))completion {
-    
+-(void)savePresetWithCompletion:(void (^)(BOOL success))completion {
+
     UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
     [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.6]];
     [self.navigationController.view addSubview:blockingView];
@@ -583,18 +582,22 @@ static BuildView *buildView = nil;
     [blockingView addSubview:progressView];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
-        NSLog(@"BuildViewController: Creating thumbnail...");
+        NSLog(@"BuildViewController: Saving...");
         
         CGFloat aspect = self.buildViewScrollView.contentSize.height / self.buildViewScrollView.contentSize.width;
         CGFloat thumbnailHeight = 300;
         UIImage *thumbnail = [[self.buildViewScrollView snapshot] resizeTo:CGSizeMake((int)(thumbnailHeight / aspect), thumbnailHeight)];
-        NSLog(@"BuildViewController: Thumbnail created.");
-        NSLog(@"BuildViewController: Creating preset dicionary...");
-        NSDictionary *dictionary = [self.buildView getPresetDictionary];
-        NSLog(@"BuildViewController: Preset dicionary created.");
+        
+        NSArray *moduleViews = [self.buildView getModuleDictionaries];
+        NSString *modelJSON = [[COLAudioEnvironment sharedEnvironment] getModelAsJSON];
+
+        NSDictionary *presetDictionary = @{
+                                           PRESET_KEY_MODULES   : moduleViews,
+                                           PRESET_KEY_MODEL     : modelJSON
+                                           };
         
         NSLog(@"BuildViewController: Sending to preset controller...");
-        [[PresetController sharedController] updateSelectedPresetWithDictionary:dictionary
+        [[PresetController sharedController] updateSelectedPresetWithDictionary:presetDictionary
                                                                            name:self.preset.name
                                                                       thumbnail:thumbnail
                                                                        progress:^ (float progress){
@@ -612,9 +615,29 @@ static BuildView *buildView = nil;
 
 -(void)recallPreset:(Preset*)preset completion:(void (^)(BOOL success))completion {
     dispatch_async(dispatch_get_main_queue(), ^{
-        BOOL success = [self.buildView buildFromDictionary:preset.dictionary];
+        
+        [buildView removeAll];
+        
+        // Rebuild the engine model from JSON.
+        NSString *model = [preset.dictionary objectForKey:PRESET_KEY_MODEL];
+        [[COLAudioEnvironment sharedEnvironment] buildModelFromJSON:model];
+
+        // Add the module views to the build view.
+        NSArray *modules = [preset.dictionary objectForKey:PRESET_KEY_MODULES];
+        NSLog(@"Restoring %lu modules", (unsigned long)[modules count]);
+        
+        for (NSDictionary *thisModule in modules) {
+            NSInteger x = ([[thisModule objectForKey:PRESET_KEY_MODULE_COLUMN] integerValue] + 0.5f) * buildView.cellSize.width;
+            NSInteger y = ([[thisModule objectForKey:PRESET_KEY_MODULE_ROW] integerValue] + 0.5f) * buildView.cellSize.height;
+            
+            ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[thisModule objectForKey:PRESET_KEY_MODULE_TYPE]];
+            if (moduleDescription) {
+                [buildView addViewForModule:moduleDescription atPoint:CGPointMake(x, y) forComponentID:[thisModule objectForKey:PRESET_KEY_MODULE_COMPONENT_ID]];
+            }
+        }
+
         if (completion) {
-            completion(success);
+            completion(true);
         }
     });
 }

@@ -31,7 +31,8 @@
 -(void)unmute;
 -(BOOL)isMute;
 
--(void)exportEnvironment;
+-(NSString*)getModelAsJSON;
+-(void)buildModelFromJSON:(NSString*)json;
 
 // Component Management
 -(CCOLComponentAddress)createComponentOfType:(char*)componentType;
@@ -45,6 +46,9 @@
 -(CCOLInputAddress)getInputNamed:(NSString*)outputName onComponent:(CCOLComponentAddress)componentAddress;
 -(CCOLParameterAddress)getParameterNamed:(NSString*)parameterName onComponent:(CCOLComponentAddress)componentAddress;
 -(kIOType)getConnectorType:(CCOLConnectorAddress)connectorAddress;
+
+-(NSString*)getComponentID:(CCOLComponentAddress)componentAddress;
+-(CCOLComponentAddress)getComponentWithID:(NSString*)componentID;
 
 // Get set parameters
 -(NSString*)getParameterName:(CCOLParameterAddress)parameterAddress;

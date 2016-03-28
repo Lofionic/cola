@@ -37,6 +37,8 @@ class CCOLComponentLogic : public CCOLComponent {
     SInt32 bufferReadPos;
     SInt32 bufferWritePos;
     
+    const char* getComponentType() override { return kCCOLComponentTypeLogic; }
+    
 public:
     CCOLComponentLogic(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
     }

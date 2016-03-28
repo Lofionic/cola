@@ -23,6 +23,7 @@ void CCOLComponentNoiseGenerator::initializeIO() {
         outputLevel
     };
     setParameters(theParameters);
+    
 }
 
 void CCOLComponentNoiseGenerator::renderOutputs(unsigned int numFrames) {

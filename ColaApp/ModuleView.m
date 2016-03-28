@@ -36,16 +36,24 @@
 
 @implementation ModuleView
 
--(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame identifier:(NSString*)identifier {
-        
-    CCOLComponentAddress component = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:(char*)[moduleDescription.component UTF8String]];
-
-    if (component == 0) {
+-(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription inFrame:(CGRect)frame componentID:(NSString*)componentID {
+    
+    CCOLComponentAddress componentAddress = 0;
+    
+    if (componentID) {
+        componentAddress = [[COLAudioEnvironment sharedEnvironment] getComponentWithID:componentID];
+    }
+    
+    if (!componentID) {
+        componentAddress = [[COLAudioEnvironment sharedEnvironment] createComponentOfType:(char*)[moduleDescription.component UTF8String]];
+    }
+    
+    if (componentAddress == 0) {
         return nil;
     }
     
     if (self = [super initWithFrame:frame]) {
-        self.component = component;
+        self.component = componentAddress;
         self.moduleDescription = moduleDescription;
 
         if (moduleDescription.connectors) {
@@ -92,12 +100,6 @@
         [longPress setMinimumPressDuration:0.5f];
         [longPress setCancelsTouchesInView:NO];
         [self addGestureRecognizer:longPress];
-        
-        if (!identifier) {
-            self.identifier = [NSString randomIdentifier];
-        } else {
-            self.identifier = identifier;
-        }
     }
     return self;
 }
@@ -106,7 +108,7 @@
 -(instancetype)initWithModuleDescription:(ModuleDescription *)moduleDescription {
     
     CGRect frame = CGRectMake(0, 0, moduleDescription.width * kBuildViewColumnWidth, 1 * kBuildViewRowHeight);
-    if (self = [self initWithModuleDescription:moduleDescription inFrame:frame identifier:nil]) {
+    if (self = [self initWithModuleDescription:moduleDescription inFrame:frame componentID:nil]) {
         
     }
     return self;
@@ -236,11 +238,16 @@
         [controls setObject:thisControl.getDictionaryObject forKey:controlName];
     }
     
+    NSString *componentId = [[COLAudioEnvironment sharedEnvironment] getComponentID:self.component];
+    NSInteger column = [self.delegate getRowForX:self.frame.origin.x];
+    NSInteger row = [self.delegate getColumnForY:self.frame.origin.y];
+    
     return @{
+             PRESET_KEY_MODULE_COMPONENT_ID : componentId,
              PRESET_KEY_MODULE_TYPE         : self.moduleDescription.identifier,
-             PRESET_KEY_MODULE_IDENTIFIER   : self.identifier,
-             PRESET_KEY_MODULE_CENTER       : [NSValue valueWithCGPoint:self.center],
-             PRESET_KEY_MODULE_CONTROLS     : [NSDictionary dictionaryWithDictionary:controls],
+             PRESET_KEY_MODULE_ROW          : [NSNumber numberWithInteger:row],
+             PRESET_KEY_MODULE_COLUMN       : [NSNumber numberWithInteger:column],
+             PRESET_KEY_MODULE_TYPE         : self.moduleDescription.identifier
              };
 }
 

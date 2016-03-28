@@ -35,6 +35,8 @@ public:
     void setPitchbend(float value);
     void setModulation(float value);
     
+    const char* getComponentType() override { return KCCOLComponentTypeMIDI; }
+    
 private:
     vector<NoteIndex>   noteOns;
     

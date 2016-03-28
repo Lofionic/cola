@@ -26,6 +26,7 @@ class CCOLComponentDelay : public CCOLComponent {
     UInt32 bufferSize;
     UInt32 bufferLocation;
 
+    const char* getComponentType() override { return kCCOLComponentTypeDelay; }
 public:
     CCOLComponentDelay(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
         

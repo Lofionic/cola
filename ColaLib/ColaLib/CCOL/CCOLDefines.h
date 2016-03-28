@@ -25,4 +25,12 @@ const CFStringRef kCCOLEngineDidForceDisconnectNotification     = CFSTR("CCOLEng
 const CFStringRef kCCOLSetAudioSessionActiveNotification        = CFSTR("CCOLSetAudioSessionActiveNotification");
 const CFStringRef kCCOLSetAudioSessionInactiveNotification      = CFSTR("CCOLSetAudioSessionInactiveNotification");
 
+const CFStringRef kCCOLComponentsKey            = CFSTR("components");
+const CFStringRef kCCOLInterfaceComponentKey    = CFSTR("interface");
+const CFStringRef kCCOLMIDIComponentKey         = CFSTR("MIDI");
+const CFStringRef kCCOLComponentIdentifierKey   = CFSTR("identifier");
+const CFStringRef kCCOLComponentTypeKey         = CFSTR("type");
+const CFStringRef kCCOLComponentParametersKey   = CFSTR("parameters");
+const CFStringRef kCCOLComponentConnectionsKey  = CFSTR("connections");
+
 #endif /* CCOLDefines_h */

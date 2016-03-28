@@ -151,6 +151,14 @@ static void setAudioSessionInactiveNotificationReceived(CFNotificationCenterRef 
     ccAudioEngine.removeComponent(componentAddress);
 }
 
+-(NSString*)getComponentID:(CCOLComponentAddress)componentAddress {
+    return [NSString stringWithUTF8String:ccAudioEngine.getComponentIdentifier(componentAddress)];
+}
+
+-(CCOLComponentAddress)getComponentWithID:(NSString*)componentID {
+    return ccAudioEngine.getComponentWithIdentifier((char*)[componentID UTF8String]);
+}
+
 -(CCOLOutputAddress)getOutputNamed:(NSString*)outputName onComponent:(CCOLComponentAddress)componentAddress {
     return ccAudioEngine.getOutput(componentAddress, (char*)[outputName UTF8String]);
 }
@@ -277,8 +285,94 @@ static void setAudioSessionInactiveNotificationReceived(CFNotificationCenterRef 
     iaaController->hostRewind();
 }
 
--(void)exportEnvironment {
-    // [COLExporter getJSONObjectForEnvironment:self];
+-(NSString*)getModelAsJSON {
+    NSDictionary *dictionary = (__bridge NSDictionary*)ccAudioEngine.getDictionary();
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary
+                                                       options:0
+                                                         error:&error];
+    
+    if (! jsonData) {
+        NSLog(@"getModelAsJSON: error: %@", error.localizedDescription);
+        return @"{}";
+    } else {
+        return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+}
+
+-(void)buildModelFromJSON:(NSString*)json {
+    NSError *error;
+    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+    
+    if (error) {
+        NSLog(@"buildModelFromJSON: error: %@", error.localizedDescription);
+    } else {
+        ccAudioEngine.removeAllComponents();
+        
+        // Set the identifiers for the MIDI and Master Interface components.
+        NSString *midiIdentifier = [[dictionary objectForKey:@"MIDI"] objectForKey:@"identifier"];
+        NSString *interfaceIdentifier = [[dictionary objectForKey:@"interface"] objectForKey:@"identifier"];
+        NSArray *components = [dictionary objectForKey:@"components"];
+        
+        midiComponent->setIdentifier((char*)[midiIdentifier UTF8String]);
+        ccAudioEngine.getContext()->getInterfaceComponent()->setIdentifier((char*)[interfaceIdentifier UTF8String]);
+
+        // Add the user components.
+        NSMutableDictionary *componentDictionary = [[NSMutableDictionary alloc] initWithCapacity:components.count + 2]; // Stores component addresses against component identifier.
+        
+        for (NSDictionary *thisComponent in components) {
+            CCOLComponentAddress newComponentAddress = ccAudioEngine.createComponent((char*)[[thisComponent objectForKey:@"type" ] UTF8String]);
+            CCOLComponent* newComponent = (CCOLComponent*)newComponentAddress;
+            if (newComponent) {
+                NSString *identifier = [thisComponent objectForKey:@"identifier"];
+                newComponent->setIdentifier((char*)[identifier UTF8String]);
+                [componentDictionary setObject:[NSNumber numberWithUnsignedInteger:newComponentAddress] forKey:identifier];
+                
+                // Set component parameters.
+                NSDictionary *parameters = [thisComponent objectForKey:@"parameters"];
+                for (NSString *thisParameter in [parameters allKeys]) {
+                    CCOLParameterAddress parameterAddress = [self getParameterNamed:thisParameter onComponent:newComponentAddress];
+                    if (parameterAddress) {
+                        float parameterValue = [[parameters objectForKey:thisParameter] floatValue];
+                        [self setParameter:parameterAddress value:parameterValue];
+                    }
+                }
+            }
+        }
+        
+        // Connect the components.
+        [componentDictionary setObject:[NSNumber numberWithUnsignedInteger:(CCOLComponentAddress)midiComponent] forKey:midiIdentifier];
+        [componentDictionary setObject:[NSNumber numberWithUnsignedInteger:(CCOLComponentAddress)ccAudioEngine.getContext()->getInterfaceComponent()] forKey:interfaceIdentifier];
+        
+        // Add the MIDI and Interfaces components to the list of components.
+        NSMutableArray *mutableComponents = [components mutableCopy];
+        [mutableComponents addObject:[dictionary objectForKey:@"MIDI"]];
+        [mutableComponents addObject:[dictionary objectForKey:@"interface"]];
+        
+        NSArray *allComponents = [NSArray arrayWithArray:mutableComponents];
+        
+        for (NSDictionary *thisComponent in allComponents) {
+            if ([[thisComponent allKeys] containsObject:@"connections"]) {
+                NSArray *connections = [thisComponent objectForKey:@"connections"];
+                for (NSDictionary *thisConnection in connections) {
+                    NSString *fromComponentIdentifier = [thisComponent objectForKey:@"identifier"];
+                    NSString *outputName = [thisConnection objectForKey:@"output"];
+                    NSString *toComponentIdentifier = [thisConnection objectForKey:@"component"];
+                    NSString *inputName = [thisConnection objectForKey:@"input"];
+
+                    if ([[componentDictionary allKeys] containsObject:fromComponentIdentifier] && [[componentDictionary allKeys] containsObject:toComponentIdentifier]) {
+                        CCOLConnectorAddress outputAddress = [self getOutputNamed:outputName onComponent:[[componentDictionary objectForKey:fromComponentIdentifier] unsignedIntegerValue]];
+                        CCOLConnectorAddress inputAddress = [self getInputNamed:inputName onComponent:[[componentDictionary objectForKey:toComponentIdentifier] unsignedIntegerValue]];
+                        if (outputAddress && inputAddress) {
+                            [self connectOutput:outputAddress toInput:inputAddress];
+                        }
+                    }
+                }
+            }
+        }
+        
+        NSLog(@"MEHFOO");
+    }
 }
 
 

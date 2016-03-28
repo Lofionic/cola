@@ -23,7 +23,7 @@ public:
     
     void initializeIO(unsigned int inputCount);
     CCOLComponentInput* getInputForIndex(short unsigned int index) override;
-    
+        
 private:
     CCOLComponentInput* inputs[16];
 };

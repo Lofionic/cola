@@ -21,6 +21,8 @@ class CCOLComponentMultiples : public CCOLComponent {
     CCOLComponentInput *inputB;
     vector<CCOLComponentOutput*> outBs;
     
+    const char* getComponentType() override { return kCCOLComponentTypeMultiples; }
+    
 public:
     CCOLComponentMultiples(CCOLAudioContext *contextIn):CCOLComponent(contextIn) {
         
