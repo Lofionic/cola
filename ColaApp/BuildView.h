@@ -24,6 +24,7 @@ typedef enum {
 @class BuildView;
 @interface BuildViewCable : NSObject
 -(instancetype)initWithPoint:(CGPoint)point1 andPoint:(CGPoint)point2 inBuildView:(BuildView*)buildView;
+-(NSDictionary*)getDictionary;
 -(void)updatePoints;
 
 @property (nonatomic, weak) BuildView       *buildView;
@@ -37,6 +38,7 @@ typedef enum {
 
 @class BuildViewController;
 @class ModuleDescription;
+@class MasterModuleView;
 @interface BuildView : UIView <ConnectorViewDelegate, ModuleViewDelegate, UIScrollViewDelegate>
 
 -(instancetype)initWithScrollView:(UIScrollView *)scrollView;
@@ -46,8 +48,6 @@ typedef enum {
 @property (nonatomic, strong) NSSet *highlightedCellSet;
 @property (readonly, strong) ConnectorView *draggingConnector;
 
-@property (readonly) CGSize cellSize;
-@property (readonly) CGFloat headerHeight;
 @property (readonly) NSUInteger rows;
 @property (readonly) NSUInteger columns;
 
@@ -62,8 +62,10 @@ typedef enum {
 -(ModuleView*)addViewForModule:(ModuleDescription*)moduleDescription atPoint:(CGPoint)point forComponentID:(NSString*)componentID;
 -(CGRect)rectForCellSet:(NSSet*)cellSet;
 
--(NSArray*)getModuleDictionaries;
 -(void)forceDisconnect:(NSDictionary*)userInfo;
+
+-(NSDictionary*)getDictionary;
+-(void)rebuildFromDictionary:(NSDictionary*)dictionary;
 
 -(void)removeAll;
 

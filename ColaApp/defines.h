@@ -37,13 +37,30 @@ extern CGFloat kKeyboardHeight;
 #define TRANSPROT_ICON_REWIND_ON    @"Icons/Transport/rewind_button_on"
 
 // Preset Dictionary Keys
-#define PRESET_KEY_MODULES              @"modules"
+
+#define PRESET_KEY_METADATA             @"meta"
+#define PRESET_KEY_VIEWS                @"views"
 #define PRESET_KEY_MODEL                @"model"
+
+#define PRESET_KEY_META_TITLE           @"title"
+#define PRESET_KEY_META_RACK_WIDTH      @"rack_width"
+#define PRESET_KEY_META_RACK_HEIGHT     @"rack_height"
+
+#define PRESET_KEY_VIEW_MODULES         @"modules"
+#define PRESET_KEY_VIEW_CABLES          @"cables"
 
 #define PRESET_KEY_MODULE_TYPE          @"module_type"
 #define PRESET_KEY_MODULE_COMPONENT_ID  @"component_id"
 #define PRESET_KEY_MODULE_ROW           @"module_row"
 #define PRESET_KEY_MODULE_COLUMN        @"module_column"
+#define PRESET_KEY_MODULE_CONNECTIONS   @"connections"
+
+#define PRESET_KEY_CONNECTION_FROM_COMPONENT    @"from_component"
+#define PRESET_KEY_CONNECTION_FROM_OUTPUT       @"from_output"
+#define PRESET_KEY_CONNECTION_TO_COMPONENT      @"to_component"
+#define PRESET_KEY_CONNECTION_TO_INPUT          @"to_input"
+#define PRESET_KEY_CONNECTION_CABLE_COLOUR      @"cable_colour"
+
 
 // Userinfos
 #define CONTROL_USERINFO_ASSET_KEY      @"asset"

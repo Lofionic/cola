@@ -40,7 +40,9 @@
 -(BOOL)connectOutput:(CCOLOutputAddress)outputAddress toInput:(CCOLInputAddress)inputAddress;
 -(BOOL)disconnect:(CCOLConnectorAddress)connectorAddress;
 -(NSString*)getConnectorName:(CCOLConnectorAddress)connectorAddress;
+-(CCOLComponentAddress)getConnectorComponent:(CCOLConnectorAddress)connectorAddress;
 
+-(CCOLComponentAddress)getMasterComponent;
 -(CCOLInputAddress)getMasterInputAtIndex:(UInt32)index;
 -(CCOLOutputAddress)getOutputNamed:(NSString*)outputName onComponent:(CCOLComponentAddress)componentAddress;
 -(CCOLInputAddress)getInputNamed:(NSString*)outputName onComponent:(CCOLComponentAddress)componentAddress;
@@ -48,6 +50,7 @@
 -(kIOType)getConnectorType:(CCOLConnectorAddress)connectorAddress;
 
 -(NSString*)getComponentID:(CCOLComponentAddress)componentAddress;
+
 -(CCOLComponentAddress)getComponentWithID:(NSString*)componentID;
 
 // Get set parameters

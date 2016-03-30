@@ -592,18 +592,64 @@ static NSArray *cableColours;
 }
 
 #pragma mark Load & Save
-
--(NSArray*)getModuleDictionaries {
-    // Create a dictionary of all the data needed to reassemble the patch
+-(NSDictionary*)getDictionary {
+    // Create a dictionary of all the data needed to reassemble the build view.
     
-    // Save modules
+    // Modules
     NSMutableArray *modules = [[NSMutableArray alloc] initWithCapacity:[self.moduleViews count]];
-
     for (ModuleView *thisModuleView in self.moduleViews) {
         [modules addObject:[thisModuleView getDictionary]];
     }
+    
+    // Cables
+    NSMutableArray *cables = [[NSMutableArray alloc] initWithCapacity:self.cables.count];
+    for (BuildViewCable *thisCableView in self.cables) {
+        [cables addObject:thisCableView.getDictionary];
+    }
+    
+    return @{
+             PRESET_KEY_VIEW_MODULES    : modules,
+             PRESET_KEY_VIEW_CABLES     : cables
+             };
+}
 
-    return [NSArray arrayWithArray:modules];
+-(void)rebuildFromDictionary:(NSDictionary*)dictionary {
+    
+    [self removeAll];
+    
+    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+    
+    // Add the module views to the build view.
+    NSArray *modules = [dictionary objectForKey:PRESET_KEY_VIEW_MODULES];
+    NSMutableDictionary *moduleIdentifiers = [[NSMutableDictionary alloc] initWithCapacity:modules.count + 2];
+    for (NSDictionary *thisModule in modules) {
+        NSInteger x = ([[thisModule objectForKey:PRESET_KEY_MODULE_COLUMN] integerValue] + 0.5f) * self.cellSize.width;
+        NSInteger y = ([[thisModule objectForKey:PRESET_KEY_MODULE_ROW] integerValue] + 0.5f) * self.cellSize.height;
+        ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[thisModule objectForKey:PRESET_KEY_MODULE_TYPE]];
+        if (moduleDescription) {
+            [moduleIdentifiers setObject:[self addViewForModule:moduleDescription atPoint:CGPointMake(x, y) forComponentID:[thisModule objectForKey:PRESET_KEY_MODULE_COMPONENT_ID]] forKey:[thisModule objectForKey:PRESET_KEY_MODULE_COMPONENT_ID]];
+        }
+    }
+    
+    // We need to hook up MIDI & master connectors too. These are in the master module.
+    [moduleIdentifiers setObject:self.masterModuleView forKey:[cae getComponentID:[cae getMIDIComponent]]];
+    [moduleIdentifiers setObject:self.masterModuleView forKey:[cae getComponentID:[cae getMasterComponent]]];
+    
+    // Add the cables to the build view
+    NSArray *cables = [dictionary objectForKey:PRESET_KEY_VIEW_CABLES];
+    for (NSDictionary *thisCable in cables) {
+        ModuleView *fromModule = [moduleIdentifiers objectForKey:[thisCable objectForKey:PRESET_KEY_CONNECTION_FROM_COMPONENT]];
+        ModuleView *toModule = [moduleIdentifiers objectForKey:[thisCable objectForKey:PRESET_KEY_CONNECTION_TO_COMPONENT]];
+        
+        if (fromModule && toModule) {
+            ConnectorView *fromConnector = [fromModule connectorForName:[thisCable objectForKey:PRESET_KEY_CONNECTION_FROM_OUTPUT]];
+            ConnectorView *toConnector = [toModule connectorForName:[thisCable objectForKey:PRESET_KEY_CONNECTION_TO_INPUT]];
+            
+            if (fromConnector && toConnector) {
+                [self addCableFrom:fromConnector to:toConnector withColour:[thisCable objectForKey:PRESET_KEY_CONNECTION_CABLE_COLOUR]];
+            }
+        }
+    }
 }
 
 -(void)removeAll {
@@ -682,6 +728,17 @@ static NSArray *cableColours;
     if (self.connector2) {
         self.point2 = [self.buildView convertPoint:self.connector2.center fromView:self.connector2.superview];
     }
+}
+        
+-(NSDictionary*)getDictionary {
+    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+    return @{
+             PRESET_KEY_CONNECTION_FROM_COMPONENT   : [cae getComponentID:[cae getConnectorComponent:self.connector1.connector]],
+             PRESET_KEY_CONNECTION_FROM_OUTPUT      : [cae getConnectorName:self.connector1.connector],
+             PRESET_KEY_CONNECTION_TO_COMPONENT     : [cae getComponentID:[cae getConnectorComponent:self.connector2.connector]],
+             PRESET_KEY_CONNECTION_TO_INPUT         : [cae getConnectorName:self.connector2.connector],
+             PRESET_KEY_CONNECTION_CABLE_COLOUR     : self.colour
+             };
 }
 
 @end

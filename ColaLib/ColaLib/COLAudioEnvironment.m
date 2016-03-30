@@ -172,6 +172,12 @@ static void setAudioSessionInactiveNotificationReceived(CFNotificationCenterRef 
     return [NSString stringWithUTF8String:connector->getName()];
 }
 
+-(CCOLComponentAddress)getConnectorComponent:(CCOLConnectorAddress)connectorAddress {
+    CCOLComponentConnector* connector = (CCOLComponentConnector*)connectorAddress;
+    CCOLComponent* component = connector->getComponent();
+    return (CCOLComponentAddress)component;
+}
+
 -(CCOLParameterAddress)getParameterNamed:(NSString*)parameterName onComponent:(CCOLComponentAddress)componentAddress {
     return ccAudioEngine.getParameter(componentAddress, (char*)[parameterName UTF8String]);
 }
@@ -203,15 +209,20 @@ static void setAudioSessionInactiveNotificationReceived(CFNotificationCenterRef 
     return ccAudioEngine.getIOType(connectorAddress);
 }
 
+// Master IO
+-(CCOLComponentAddress)getMasterComponent {
+    return (CCOLComponentAddress)ccAudioEngine.getContext()->getInterfaceComponent();
+}
+
 -(CCOLInputAddress)getMasterInputAtIndex:(UInt32)index {
     return ccAudioEngine.getMasterInput(index);
 }
 
-//TODO: Make this MIDI
-#pragma mark notes
+// MIDI IO
 -(CCOLComponentAddress)getMIDIComponent {
     return (CCOLComponentAddress)midiComponent;
 }
+
 
 -(void)noteOn:(NoteIndex)noteIndex {
     midiComponent->noteOn(noteIndex);

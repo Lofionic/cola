@@ -75,8 +75,6 @@
         }
     }
     
-
-    
     NSLog(@"PresetController: Found %lu files.", (unsigned long)presetsFound.count);
     
     self.files = [NSArray arrayWithArray:presetsFound];
@@ -160,7 +158,6 @@
     Preset *preset = [NSKeyedUnarchiver unarchiveObjectWithData:presetData];
     return preset;
 }
-
 
 -(NSUInteger)addNewPreset {
     NSLog(@"PresetController: Creating empty preset.");
@@ -303,7 +300,6 @@
 @interface Preset ()
 
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *filename;
 @property (nonatomic, strong) NSDictionary *dictionary;
 @property (nonatomic, strong) UIImage *thumbnail;
 @property (nonatomic, strong) NSDate *saveDate;

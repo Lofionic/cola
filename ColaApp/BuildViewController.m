@@ -584,15 +584,23 @@ static BuildView *buildView = nil;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
         NSLog(@"BuildViewController: Saving...");
         
+        // Create the thumbnail
         CGFloat aspect = self.buildViewScrollView.contentSize.height / self.buildViewScrollView.contentSize.width;
         CGFloat thumbnailHeight = 300;
         UIImage *thumbnail = [[self.buildViewScrollView snapshot] resizeTo:CGSizeMake((int)(thumbnailHeight / aspect), thumbnailHeight)];
+
+        // Meta data
+        NSDictionary *meta = @{
+                               PRESET_KEY_META_RACK_WIDTH : [NSNumber numberWithInteger:self.buildView.columns],
+                               PRESET_KEY_META_RACK_HEIGHT : [NSNumber numberWithInteger:self.buildView.rows]
+                               };
         
-        NSArray *moduleViews = [self.buildView getModuleDictionaries];
-        NSString *modelJSON = [[COLAudioEnvironment sharedEnvironment] getModelAsJSON];
+        NSDictionary *views = [self.buildView getDictionary]; // Descriptions of module views.
+        NSString *modelJSON = [[COLAudioEnvironment sharedEnvironment] getModelAsJSON]; // Engine model JSON.
 
         NSDictionary *presetDictionary = @{
-                                           PRESET_KEY_MODULES   : moduleViews,
+                                           PRESET_KEY_METADATA  : meta,
+                                           PRESET_KEY_VIEWS     : views,
                                            PRESET_KEY_MODEL     : modelJSON
                                            };
         
@@ -618,24 +626,15 @@ static BuildView *buildView = nil;
         
         [buildView removeAll];
         
+        COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
+        
         // Rebuild the engine model from JSON.
         NSString *model = [preset.dictionary objectForKey:PRESET_KEY_MODEL];
-        [[COLAudioEnvironment sharedEnvironment] buildModelFromJSON:model];
-
-        // Add the module views to the build view.
-        NSArray *modules = [preset.dictionary objectForKey:PRESET_KEY_MODULES];
-        NSLog(@"Restoring %lu modules", (unsigned long)[modules count]);
+        [cae buildModelFromJSON:model];
         
-        for (NSDictionary *thisModule in modules) {
-            NSInteger x = ([[thisModule objectForKey:PRESET_KEY_MODULE_COLUMN] integerValue] + 0.5f) * buildView.cellSize.width;
-            NSInteger y = ([[thisModule objectForKey:PRESET_KEY_MODULE_ROW] integerValue] + 0.5f) * buildView.cellSize.height;
-            
-            ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[thisModule objectForKey:PRESET_KEY_MODULE_TYPE]];
-            if (moduleDescription) {
-                [buildView addViewForModule:moduleDescription atPoint:CGPointMake(x, y) forComponentID:[thisModule objectForKey:PRESET_KEY_MODULE_COMPONENT_ID]];
-            }
-        }
-
+        NSDictionary *views = [preset.dictionary objectForKey:PRESET_KEY_VIEWS];
+        [buildView rebuildFromDictionary:views];
+        
         if (completion) {
             completion(true);
         }
