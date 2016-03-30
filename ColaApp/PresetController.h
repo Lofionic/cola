@@ -22,21 +22,22 @@ typedef void (^ProgressBlock)(float progress);
 -(Preset*)recallPresetAtIndex:(NSUInteger)index;
 
 -(NSUInteger)addNewPreset;
--(void)updateSelectedPresetWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress;
+-(void)updateSelectedPresetWithDictionary:(NSDictionary*)dictionary thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress;
 
 -(void)removeFilesAtIndexes:(NSArray *)indexes;
 -(Preset*)presetAtIndex:(NSUInteger)index;
+
+-(NSString*)nameOfPresetAtIndex:(NSUInteger)index;
 
 @end
 
 @interface Preset : NSObject <NSCoding>
 
-@property (readonly, strong) NSString       *name;
 @property (readonly, strong) NSDictionary   *dictionary;
 @property (readonly, strong) UIImage        *thumbnail;
 @property (readonly, strong) NSDate         *saveDate;
 
--(instancetype)initWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail;
--(void)updateWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail;
+-(instancetype)initWithDictionary:(NSDictionary*)dictionary thumbnail:(UIImage*)thumbnail;
+-(void)updateWithDictionary:(NSDictionary*)dictionary thumbnail:(UIImage*)thumbnail;
 
 @end

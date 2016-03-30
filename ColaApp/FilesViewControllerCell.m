@@ -7,6 +7,7 @@
 //
 #import "defines.h"
 #import "FilesViewControllerCell.h"
+#import "PresetController.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1
@@ -78,7 +79,8 @@
         [self.thumbnailView setImage:nil];
     }
     
-    [self.presetNameLabel setText:self.preset.name];
+//    [self.presetNameLabel setText:self.preset.name];
+    [self.presetNameLabel setText:[[PresetController sharedController] nameOfPresetAtIndex:self.presetIndex]];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.timeStyle = NSDateFormatterShortStyle;

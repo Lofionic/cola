@@ -12,7 +12,9 @@
 #import "PresetController.h"
 #import "NSString+Random.h"
 
-#define DEFAULT_PRESET_NAME @"New Preset"
+#define FILE_EXTENSION @"col"
+#define DEFAULT_FILE_NAME @"New File.%@"
+#define DEFAULT_FILE_NAME_OVERFLOW @"New File %d.%@"
 
 @interface PresetController ()
 
@@ -70,7 +72,7 @@
     
     NSMutableArray *presetsFound = [[NSMutableArray alloc] initWithCapacity:presetsContents.count];
     for (NSString *thisFileName in presetsContents) {
-        if ([thisFileName hasSuffix:@".col"]) {
+        if ([thisFileName hasSuffix:FILE_EXTENSION]) {
             [presetsFound addObject:thisFileName];
         }
     }
@@ -125,6 +127,10 @@
     self.files = [NSArray arrayWithArray:sortedFiles];
 }
 
+-(NSString*)nameOfPresetAtIndex:(NSUInteger)index {
+    return [[self.files objectAtIndex:index] stringByDeletingPathExtension];
+}
+
 -(Preset*)recallPresetAtIndex:(NSUInteger)index {
     if (self.files.count == 0) {
         // No files yet - create an empty one
@@ -164,9 +170,12 @@
     Preset *newPreset = [self getEmptyPreset];
     
     NSString *filename;
-    do {
-        filename = [[NSString randomAlphanumericStringWithLength:12] stringByAppendingPathExtension:@"col"];
-    } while ([self doesFileExist:filename]);
+    filename = [NSString stringWithFormat:DEFAULT_FILE_NAME, FILE_EXTENSION];
+    
+    int i = 0;
+    while ([self doesFileExist:filename]) {
+        filename = [NSString stringWithFormat:DEFAULT_FILE_NAME_OVERFLOW, ++i, FILE_EXTENSION];
+    }
     
     [self savePreset:newPreset withFilename:filename thumbnail:nil overwrite:NO progress:nil];
     
@@ -179,12 +188,11 @@
 
 -(Preset*)getEmptyPreset {
     return [[Preset alloc] initWithDictionary:@{@"model" : @"", @"modules" : @{}}
-                                         name:DEFAULT_PRESET_NAME
                                     thumbnail:nil];
 }
 
--(void)updateSelectedPresetWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress {
-    Preset *preset = [[Preset alloc] initWithDictionary:dictionary name:name thumbnail:thumbnail];
+-(void)updateSelectedPresetWithDictionary:(NSDictionary*)dictionary thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress {
+    Preset *preset = [[Preset alloc] initWithDictionary:dictionary thumbnail:thumbnail];
     [self savePreset:preset withFilename:self.selectedPresetFilename thumbnail:thumbnail overwrite:YES progress:progress];
     [self loadPresets];
 }
@@ -299,23 +307,20 @@
 
 @interface Preset ()
 
-@property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSDictionary *dictionary;
 @property (nonatomic, strong) UIImage *thumbnail;
 @property (nonatomic, strong) NSDate *saveDate;
 
 @end
 
-#define kPresetNameKey          @"kPresetNameKey"
 #define kPresetDictionaryKey    @"kPresetDictionaryKey"
 #define kPresetThumbnailKey     @"kPresetThumbnailKey"
 #define kPresetSaveDateKey      @"kPresetSaveDateKey"
 
 @implementation Preset
 
--(instancetype)initWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail {
+-(instancetype)initWithDictionary:(NSDictionary*)dictionary thumbnail:(UIImage*)thumbnail {
     if (self = [super init]) {
-        self.name = name;
         self.dictionary = dictionary;
         self.thumbnail = thumbnail;
         self.saveDate = [NSDate date];
@@ -323,23 +328,18 @@
     return self;
 }
 
--(void)updateWithDictionary:(NSDictionary*)dictionary name:(NSString*)name thumbnail:(UIImage*)thumbnail {
+-(void)updateWithDictionary:(NSDictionary*)dictionary thumbnail:(UIImage*)thumbnail {
     if (dictionary) {
         self.dictionary = dictionary;
         self.saveDate = [NSDate date];
     }
-    
-    if (name) {
-        self.name = name;
-    }
-    
+
     if (thumbnail) {
         self.thumbnail = thumbnail;
     }
 }
 
 -(void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:self.name forKey:kPresetNameKey];
     [aCoder encodeObject:self.dictionary forKey:kPresetDictionaryKey];
     [aCoder encodeObject:self.thumbnail forKey:kPresetThumbnailKey];
     [aCoder encodeObject:self.saveDate forKey:kPresetSaveDateKey];
@@ -348,7 +348,6 @@
 -(id)initWithCoder:(NSCoder *)aDecoder {
     self = [super init];
     if (self) {
-        self.name = [aDecoder decodeObjectForKey:kPresetNameKey];
         self.dictionary = [aDecoder decodeObjectForKey:kPresetDictionaryKey];
         self.thumbnail = [aDecoder decodeObjectForKey:kPresetThumbnailKey];
         self.saveDate = [aDecoder decodeObjectForKey:kPresetSaveDateKey];

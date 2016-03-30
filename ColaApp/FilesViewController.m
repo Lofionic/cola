@@ -35,7 +35,7 @@
 
 
 -(instancetype)initWithBuildViewController:(BuildViewController*)buildViewController {
-    
+        
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
     
@@ -48,16 +48,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [self setTitle:@"Files"];
     
     [self.collectionView registerClass:[FilesViewControllerCell class] forCellWithReuseIdentifier:CELL_IDENTIFIER];
     [self.collectionView setDelegate:self];
     [self.collectionView setDataSource:self];
 
-    UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
-    [backgroundView setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1]];
+    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"wallpaper"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeTile]];
+    [backgroundView setFrame:self.view.bounds];
+    [backgroundView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
     [self.collectionView setBackgroundView:backgroundView];
     
     self.addBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addTapped)];
@@ -77,6 +77,8 @@
 }
 
 -(void)addTapped {
+    [self.addBarButtonItem setEnabled:false];
+    [self.editBarButtonItem setEnabled:false];
     
     NSUInteger newIndex = [[PresetController sharedController] addNewPreset];
 
@@ -162,6 +164,7 @@
     
     Preset *preset = [[PresetController sharedController] presetAtIndex:indexPath.row];
     [cell setPreset:preset];
+    [cell setPresetIndex:indexPath.row];
     [cell setHighlighted:NO];
     [cell setSelected:NO];
     

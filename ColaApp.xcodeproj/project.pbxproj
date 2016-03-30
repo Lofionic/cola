@@ -253,7 +253,6 @@
 		6C2A5E1E1A8BF2CC00ECEAB2 /* ColaApp */ = {
 			isa = PBXGroup;
 			children = (
-				6C64D7031AD9B06600012108 /* PresetController */,
 				6C2A5EA41A8C0B8D00ECEAB2 /* ColaApp.entitlements */,
 				6C1DB6B11AADDEB60041F5F9 /* defines.h */,
 				6C3D5F521C996BAB00828F59 /* buildSettings.h */,
@@ -261,6 +260,7 @@
 				6C2A5E241A8BF2CC00ECEAB2 /* AppDelegate.m */,
 				6C6DB53E1AD6C5480001343E /* ModuleCatalog */,
 				6C8DD2961AC0DA2400320628 /* BuildView */,
+				6C64D7031AD9B06600012108 /* PresetController */,
 				6C0B16AE1ADBD5D40058BA18 /* FilesView */,
 				6C2A5E2E1A8BF2CC00ECEAB2 /* LaunchScreen.xib */,
 				6C2A5E2C1A8BF2CC00ECEAB2 /* Images.xcassets */,

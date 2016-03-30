@@ -606,7 +606,6 @@ static BuildView *buildView = nil;
         
         NSLog(@"BuildViewController: Sending to preset controller...");
         [[PresetController sharedController] updateSelectedPresetWithDictionary:presetDictionary
-                                                                           name:self.preset.name
                                                                       thumbnail:thumbnail
                                                                        progress:^ (float progress){
                                                                            [progressView setProgress:progress animated:YES];;

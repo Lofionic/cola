@@ -12,6 +12,7 @@
 @interface FilesViewControllerCell : UICollectionViewCell
 
 @property (nonatomic, weak) Preset *preset;
+@property (nonatomic) NSInteger presetIndex;
 
 -(void)updateContents;
 -(void)startJiggling;
