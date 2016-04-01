@@ -9,7 +9,7 @@
 #import "FilesViewController.h"
 #import "PresetController.h"
 #import "BuildViewController.h"
-#import "FilesViewControllerCell.h"
+#import "RenameFileViewController.h"
 
 @interface FilesViewController ()
 
@@ -33,15 +33,17 @@
 
 @implementation FilesViewController
 
-
 -(instancetype)initWithBuildViewController:(BuildViewController*)buildViewController {
         
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    [flowLayout setSectionInset:UIEdgeInsetsMake(10, 10, 10, 10)];
+    [flowLayout setMinimumInteritemSpacing:10];
+    [flowLayout setMinimumLineSpacing:20];
     
     if (self = [super initWithCollectionViewLayout:flowLayout]) {
         self.buildViewController = buildViewController;
-        self.cellSize = CGSizeMake(200, 300);
+        self.cellSize = CGSizeMake(170, 250);
     }
     return self;
 }
@@ -76,10 +78,14 @@
     [self.collectionView setAllowsMultipleSelection:YES];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [self.collectionView reloadData];
+}
+
 -(void)addTapped {
-    [self.addBarButtonItem setEnabled:false];
-    [self.editBarButtonItem setEnabled:false];
-    
+//    [self.addBarButtonItem setEnabled:false];
+//    [self.editBarButtonItem setEnabled:false];
+//    
     NSUInteger newIndex = [[PresetController sharedController] addNewPreset];
 
     NSArray *newIndexPath = @[[NSIndexPath indexPathForRow:newIndex inSection:0]];
@@ -88,7 +94,7 @@
         [self.collectionView insertItemsAtIndexPaths:newIndexPath];
     } completion:^ (BOOL finished) {
         if (finished) {
-            [self loadPresetAtIndex:newIndex];
+//            [self loadPresetAtIndex:newIndex];
         }
     }];
 }
@@ -162,11 +168,10 @@
 -(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     FilesViewControllerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CELL_IDENTIFIER forIndexPath:indexPath];
     
-    Preset *preset = [[PresetController sharedController] presetAtIndex:indexPath.row];
-    [cell setPreset:preset];
     [cell setPresetIndex:indexPath.row];
+    [cell setDelegate:self];
     [cell setHighlighted:NO];
-    [cell setSelected:NO];
+    [cell setSelected:[[self.collectionView indexPathsForSelectedItems] containsObject:indexPath]];
     
     if (self.editing) {
         [cell startJiggling];
@@ -195,12 +200,17 @@
     }
 }
 
--(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (!self.editing) {
-        [self loadPresetAtIndex:indexPath.row];
+-(BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.editing) {
+        return YES;
     } else {
-        [self updateEditBarButtons];
+        [self loadPresetAtIndex:indexPath.row];
+        return NO;
     }
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self updateEditBarButtons];
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -221,7 +231,21 @@
         [blockingView removeFromSuperview];
         [self.navigationController popViewControllerAnimated:YES];
     }];
+}
 
+// Cell Delegates
+-(void)FilesViewControllerCellDidTapLabel:(FilesViewControllerCell *)cell {
+    // Present rename view controller
+    RenameFileViewController *vc = [[RenameFileViewController alloc] init];
+    [vc setPresetIndex:cell.presetIndex];
+    [self.navigationController pushViewController:vc animated:true];
+}
+
+-(void)FilesViewControllerCellDidTapThumbnail:(FilesViewControllerCell *)cell {
+    if (!self.editing) {
+        // Load the preset
+        [self loadPresetAtIndex:cell.presetIndex];
+    }
 }
 
 @end

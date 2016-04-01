@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FilesViewControllerCell.h"
 
 @class BuildViewController;
-@interface FilesViewController : UICollectionViewController <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface FilesViewController : UICollectionViewController <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FilesViewControllerCellDelegate>
 
 -(instancetype)initWithBuildViewController:(BuildViewController*)buildViewController;
 

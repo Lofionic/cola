@@ -25,9 +25,14 @@ typedef void (^ProgressBlock)(float progress);
 -(void)updateSelectedPresetWithDictionary:(NSDictionary*)dictionary thumbnail:(UIImage*)thumbnail progress:(ProgressBlock)progress;
 
 -(void)removeFilesAtIndexes:(NSArray *)indexes;
+-(void)renameFileAtIndex:(NSUInteger)index to:(NSString*)newFilename;
 -(Preset*)presetAtIndex:(NSUInteger)index;
 
 -(NSString*)nameOfPresetAtIndex:(NSUInteger)index;
+-(NSDate*)dateOfPresetAtIndex:(NSUInteger)index;
+-(void)fetchThumbnailForPresetAtIndex:(NSUInteger)index onCompletion:(void (^)(NSUInteger index, UIImage *image))completion;
+
+
 
 @end
 
@@ -35,7 +40,6 @@ typedef void (^ProgressBlock)(float progress);
 
 @property (readonly, strong) NSDictionary   *dictionary;
 @property (readonly, strong) UIImage        *thumbnail;
-@property (readonly, strong) NSDate         *saveDate;
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary thumbnail:(UIImage*)thumbnail;
 -(void)updateWithDictionary:(NSDictionary*)dictionary thumbnail:(UIImage*)thumbnail;

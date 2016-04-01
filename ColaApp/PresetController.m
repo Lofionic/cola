@@ -131,6 +131,31 @@
     return [[self.files objectAtIndex:index] stringByDeletingPathExtension];
 }
 
+-(NSDate*)dateOfPresetAtIndex:(NSUInteger)index {
+    NSError* error;
+    NSDictionary *properties = [[NSFileManager defaultManager] attributesOfItemAtPath:[self fullPathForFilename:[self.files objectAtIndex:index]] error:&error];
+    if (error) {
+//        NSLog(@"PresetController: Error reading properties of file %@. %@", thisFile, error.debugDescription);
+        return nil;
+    } else {
+        return [properties objectForKey:NSFileModificationDate];
+        
+    }
+}
+
+-(void)fetchThumbnailForPresetAtIndex:(NSUInteger)index onCompletion:(void (^)(NSUInteger index, UIImage *image))completion {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
+        Preset *thisPreset = [self presetAtIndex:index];
+        UIImage *result = thisPreset.thumbnail;
+        
+        if (completion) {
+            dispatch_async(dispatch_get_main_queue(), ^ {
+                completion(index, result);
+            });
+        }
+    });
+}
+
 -(Preset*)recallPresetAtIndex:(NSUInteger)index {
     if (self.files.count == 0) {
         // No files yet - create an empty one
@@ -150,7 +175,7 @@
 
 -(Preset*)loadPresetFromFilename:(NSString*)filename {
     
-    NSLog(@"PresetController: Opening file %@.", filename);
+//    NSLog(@"PresetController: Opening file %@.", filename);
     NSString *path = [self fullPathForFilename:filename];
     
     NSError *error;
@@ -303,13 +328,33 @@
     return [fm fileExistsAtPath:[self fullPathForFilename:filename]];
 }
 
+-(void)renameFileAtIndex:(NSUInteger)index to:(NSString*)newFilename{
+    
+    NSString *oldFilename = [self.files objectAtIndex:index];
+    newFilename = [[newFilename stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] stringByAppendingPathExtension:FILE_EXTENSION];
+    
+    NSString *oldPath = [self fullPathForFilename:oldFilename];
+    NSString *newPath = [self fullPathForFilename:newFilename];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSError *error;
+    [fm moveItemAtPath:oldPath toPath:newPath error:&error];
+    
+    if (error) {
+        NSLog(@"PresetController: Error renaming file %@", error.localizedDescription);
+    } else {
+        NSMutableArray *mutableFiles = [self.files mutableCopy];
+        [mutableFiles setObject:newFilename atIndexedSubscript:index];
+        self.files = [NSArray arrayWithArray:mutableFiles];
+    }
+}
+
 @end
 
 @interface Preset ()
 
 @property (nonatomic, strong) NSDictionary *dictionary;
 @property (nonatomic, strong) UIImage *thumbnail;
-@property (nonatomic, strong) NSDate *saveDate;
 
 @end
 
@@ -323,7 +368,6 @@
     if (self = [super init]) {
         self.dictionary = dictionary;
         self.thumbnail = thumbnail;
-        self.saveDate = [NSDate date];
     }
     return self;
 }
@@ -331,7 +375,6 @@
 -(void)updateWithDictionary:(NSDictionary*)dictionary thumbnail:(UIImage*)thumbnail {
     if (dictionary) {
         self.dictionary = dictionary;
-        self.saveDate = [NSDate date];
     }
 
     if (thumbnail) {
@@ -342,7 +385,6 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:self.dictionary forKey:kPresetDictionaryKey];
     [aCoder encodeObject:self.thumbnail forKey:kPresetThumbnailKey];
-    [aCoder encodeObject:self.saveDate forKey:kPresetSaveDateKey];
 }
 
 -(id)initWithCoder:(NSCoder *)aDecoder {
@@ -350,7 +392,6 @@
     if (self) {
         self.dictionary = [aDecoder decodeObjectForKey:kPresetDictionaryKey];
         self.thumbnail = [aDecoder decodeObjectForKey:kPresetThumbnailKey];
-        self.saveDate = [aDecoder decodeObjectForKey:kPresetSaveDateKey];
     }
     return self;
 }

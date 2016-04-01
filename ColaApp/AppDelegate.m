@@ -49,6 +49,12 @@ CGFloat kKeyboardHeight;
     BuildViewController *buildViewController = [[BuildViewController alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:buildViewController];
     
+    
+//    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"wallpaper"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeTile]];
+//    [backgroundView setFrame:navigationController.view.bounds];
+//    [backgroundView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
+//    [navigationController.view insertSubview:backgroundView atIndex:0];
+    
 //    FilesViewController *fvc = [[FilesViewController alloc] initWithBuildViewController:nil];
 //    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:fvc];
     

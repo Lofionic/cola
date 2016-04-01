@@ -9,9 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "PresetController.h"
 
+@class FilesViewControllerCell;
+@protocol FilesViewControllerCellDelegate <NSObject>
+
+-(void)FilesViewControllerCellDidTapThumbnail:(FilesViewControllerCell*)cell;
+-(void)FilesViewControllerCellDidTapLabel:(FilesViewControllerCell*)cell;
+
+@end
+
 @interface FilesViewControllerCell : UICollectionViewCell
 
-@property (nonatomic, weak) Preset *preset;
+@property (nonatomic, weak) id<FilesViewControllerCellDelegate> delegate;
 @property (nonatomic) NSInteger presetIndex;
 
 -(void)updateContents;

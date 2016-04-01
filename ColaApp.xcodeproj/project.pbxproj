@@ -40,6 +40,7 @@
 		6C7459021AE84D3200AEC106 /* BuildViewScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7459011AE84D3200AEC106 /* BuildViewScrollView.m */; };
 		6C7D48741BE226C20092BC95 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7D48721BE226870092BC95 /* AVFoundation.framework */; };
 		6C7D48751BE227430092BC95 /* libColaLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C2A5E911A8BF30600ECEAB2 /* libColaLib.a */; };
+		6C82AFCA1CAEB891002D3B92 /* RenameFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C82AFC91CAEB891002D3B92 /* RenameFileViewController.m */; };
 		6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */; };
 		6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8DD2941AC0C9CC00320628 /* ModuleView.m */; };
 		6C98BACD1C57A94900751CC6 /* SequencerLED.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C98BACC1C57A94900751CC6 /* SequencerLED.m */; };
@@ -128,6 +129,8 @@
 		6C7459001AE84D3200AEC106 /* BuildViewScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewScrollView.h; sourceTree = "<group>"; };
 		6C7459011AE84D3200AEC106 /* BuildViewScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildViewScrollView.m; sourceTree = "<group>"; };
 		6C7D48721BE226870092BC95 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		6C82AFC81CAEB891002D3B92 /* RenameFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenameFileViewController.h; sourceTree = "<group>"; };
+		6C82AFC91CAEB891002D3B92 /* RenameFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenameFileViewController.m; sourceTree = "<group>"; };
 		6C8DD28F1AC0AB1200320628 /* RotaryEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotaryEncoder.h; sourceTree = "<group>"; };
 		6C8DD2901AC0AB1200320628 /* RotaryEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotaryEncoder.m; sourceTree = "<group>"; };
 		6C8DD2931AC0C9CC00320628 /* ModuleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleView.h; sourceTree = "<group>"; };
@@ -170,10 +173,13 @@
 		6C0B16AE1ADBD5D40058BA18 /* FilesView */ = {
 			isa = PBXGroup;
 			children = (
+				6C82AFC71CAEAB83002D3B92 /* New Group */,
 				6C0B16B01ADBD5F70058BA18 /* FilesViewController.h */,
 				6C0B16B11ADBD5F70058BA18 /* FilesViewController.m */,
 				6CBA6DC31AE04AA000E28195 /* FilesViewControllerCell.h */,
 				6CCA30B21AE10B5500CAF1AF /* FilesViewControllerCell.m */,
+				6C82AFC81CAEB891002D3B92 /* RenameFileViewController.h */,
+				6C82AFC91CAEB891002D3B92 /* RenameFileViewController.m */,
 			);
 			name = FilesView;
 			sourceTree = "<group>";
@@ -231,11 +237,11 @@
 		6C2A5E131A8BF2CC00ECEAB2 = {
 			isa = PBXGroup;
 			children = (
+				6C2A5EA21A8C0B2A00ECEAB2 /* Interapp.txt */,
 				0214FD591C9B5981008E716A /* pitchwheel.png */,
 				0214FD5A1C9B5981008E716A /* pitchwheel@2x.png */,
 				6C7D48721BE226870092BC95 /* AVFoundation.framework */,
 				6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */,
-				6C2A5EA21A8C0B2A00ECEAB2 /* Interapp.txt */,
 				6C2A5E8B1A8BF30500ECEAB2 /* ColaLib.xcodeproj */,
 				6C2A5E1E1A8BF2CC00ECEAB2 /* ColaApp */,
 				6C2A5E1D1A8BF2CC00ECEAB2 /* Products */,
@@ -342,6 +348,13 @@
 				6C1201081AAE44D200C6ACB6 /* ModuleDescription.m */,
 			);
 			name = ModuleCatalog;
+			sourceTree = "<group>";
+		};
+		6C82AFC71CAEAB83002D3B92 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 		6C8DD2961AC0DA2400320628 /* BuildView */ = {
@@ -493,6 +506,7 @@
 				6C0B16B21ADBD5F70058BA18 /* FilesViewController.m in Sources */,
 				6C1201091AAE44D200C6ACB6 /* ModuleDescription.m in Sources */,
 				6C300BE61AD3182E00D51544 /* NSString+Random.m in Sources */,
+				6C82AFCA1CAEB891002D3B92 /* RenameFileViewController.m in Sources */,
 				6CB8FAAB1BEE671B00DCAB2E /* UIImage+Resize.m in Sources */,
 				6CDA9F141AA9017E00D64EB0 /* BuildView.mm in Sources */,
 				6C0F86DC1AA7C1330092FB18 /* ComponentShelfCollectionViewCell.m in Sources */,

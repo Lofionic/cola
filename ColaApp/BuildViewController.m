@@ -586,7 +586,7 @@ static BuildView *buildView = nil;
         
         // Create the thumbnail
         CGFloat aspect = self.buildViewScrollView.contentSize.height / self.buildViewScrollView.contentSize.width;
-        CGFloat thumbnailHeight = 300;
+        CGFloat thumbnailHeight = 150;
         UIImage *thumbnail = [[self.buildViewScrollView snapshot] resizeTo:CGSizeMake((int)(thumbnailHeight / aspect), thumbnailHeight)];
 
         // Meta data
