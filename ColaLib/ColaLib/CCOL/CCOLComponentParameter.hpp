@@ -22,7 +22,7 @@ public:
         strcpy(name, nameIn);
         
         preValue = postValue = pendingValue = 0;
-        cachedInput = cachedOutput = 0;
+        cachedInput = cachedOutput = FLT_MIN;
         
         function = [] (double valueIn) -> double {
             return valueIn;
