@@ -296,6 +296,10 @@ static void setAudioSessionInactiveNotificationReceived(CFNotificationCenterRef 
     iaaController->hostRewind();
 }
 
+-(void)removeAllComponents {
+    ccAudioEngine.removeAllComponents();
+}
+
 -(NSString*)getModelAsJSON {
     NSDictionary *dictionary = (__bridge NSDictionary*)ccAudioEngine.getDictionary();
     NSError *error;
@@ -318,7 +322,7 @@ static void setAudioSessionInactiveNotificationReceived(CFNotificationCenterRef 
     if (error) {
         NSLog(@"buildModelFromJSON: error: %@", error.localizedDescription);
     } else {
-        ccAudioEngine.removeAllComponents();
+        [self removeAllComponents];
         
         // Set the identifiers for the MIDI and Master Interface components.
         NSString *midiIdentifier = [[dictionary objectForKey:(__bridge NSString*)kCCOLMIDIComponentKey] objectForKey:(__bridge  NSString*)kCCOLComponentIdentifierKey];

@@ -85,8 +85,7 @@ void CCOLMIDIComponent::setFrequency() {
         
         // Return as value 0-1, relative to range
         outputValue = frequency / CV_FREQUENCY_RANGE;
-        
-        printf("Note : %d (%.2fhz)\n", note, frequency);
+
     } else {
         outputValue = 0;
     }

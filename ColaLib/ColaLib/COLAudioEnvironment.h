@@ -53,6 +53,8 @@
 
 -(CCOLComponentAddress)getComponentWithID:(NSString*)componentID;
 
+-(void)removeAllComponents;
+
 // Get set parameters
 -(NSString*)getParameterName:(CCOLParameterAddress)parameterAddress;
 -(double)getParameterValue:(CCOLParameterAddress)parameterAddress;

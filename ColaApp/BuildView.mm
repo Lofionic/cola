@@ -615,7 +615,7 @@ static NSArray *cableColours;
 
 -(void)rebuildFromDictionary:(NSDictionary*)dictionary {
     
-    [self removeAll];
+    [self removeAllModules];
     
     COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
     
@@ -652,7 +652,7 @@ static NSArray *cableColours;
     }
 }
 
--(void)removeAll {
+-(void)removeAllModules {
     NSLog(@"Removing all modules");
     
     for (ModuleView *thisModuleView in self.moduleViews) {

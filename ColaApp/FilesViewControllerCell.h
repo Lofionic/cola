@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PresetController.h"
+#import "Preset.h"
 
 @class FilesViewControllerCell;
 @protocol FilesViewControllerCellDelegate <NSObject>
@@ -20,9 +20,13 @@
 @interface FilesViewControllerCell : UICollectionViewCell
 
 @property (nonatomic, weak) id<FilesViewControllerCellDelegate> delegate;
-@property (nonatomic) NSInteger presetIndex;
 
--(void)updateContents;
+@property (nonatomic, strong) NSString*         preset;
+@property (readonly) UILabel*                   presetNameLabel;
+@property (readonly) UILabel*                   dateLabel;
+@property (readonly) UIImageView*               thumbnailView;
+@property (readonly) UIActivityIndicatorView*   activityIndicator;
+
 -(void)startJiggling;
 -(void)stopJiggling;
 

@@ -67,6 +67,6 @@ typedef enum {
 -(NSDictionary*)getDictionary;
 -(void)rebuildFromDictionary:(NSDictionary*)dictionary;
 
--(void)removeAll;
+-(void)removeAllModules;
 
 @end

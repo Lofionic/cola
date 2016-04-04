@@ -11,6 +11,9 @@
 @class PresetController;
 @interface RenameFileViewController : UIViewController <UITextFieldDelegate>
 
-@property (nonatomic) NSUInteger presetIndex;
+@property (nonatomic, strong) NSString*     presetName;
+
+@property (readonly) UIImageView *thumbnailView;
+@property (readonly) UITextField *textField;
 
 @end

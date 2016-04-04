@@ -14,7 +14,7 @@
 #import "ModuleView.h"
 #import "ModuleCatalog.h"
 #import "FilesViewController.h"
-#import "PresetController.h"
+#import "Preset.h"
 #import "UIView+Snapshot.h"
 #import "UIImage+Resize.h"
 #import "BuildViewScrollView.h"
@@ -266,8 +266,8 @@ static BuildView *buildView = nil;
     [self setIaaViewHidden:YES];
     
     // Load initial preset
-    self.preset = [[PresetController sharedController] recallPresetAtIndex:0];
-    [self recallPreset:self.preset completion:nil];
+//    self.preset = [[PresetController sharedController] recallPresetAtIndex:0];
+//    [self recallPreset:self.preset onCompletion:nil onError:nil];
     
 //    // Register for updates from the transport controller
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedOfTransportUpdate:) name:kCOLEventTransportStateUpdated object:nil];
@@ -275,13 +275,6 @@ static BuildView *buildView = nil;
     // We need to know when the engine has forced a disconnect
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(engineDidForceDisconnect:) name:kCCOLEventEngineDidForceDisconnect object:nil];
 
-    // Set up test
-//    COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
-//    CCOLComponentAddress vco = [cae createCComponentOfType:(char*)kCCOLComponentTypeVCO];
-//    CCOLOutputAddress vcoMainOut = [cae getOutputNamed:(char*)"MainOut" onComponent:vco];
-//    CCOLInputAddress mainL = [cae getMasterInputAtIndex:0];
-//    
-//    [cae connectOutput:vcoMainOut toInput:mainL];
 }
 
 
@@ -338,22 +331,11 @@ static BuildView *buildView = nil;
     }
     
     [self.cae allNotesOff];
-    
-    //[[[COLAudioEnvironment sharedEnvironment] keyboardComponent] allNotesOff];
-    
+
     [self savePresetWithCompletion:^(BOOL success) {
         FilesViewController *filesViewController = [[FilesViewController alloc] initWithBuildViewController:self];
         [self.navigationController pushViewController:filesViewController animated:YES];
     }];
-}
-
--(void)saveTapped {
-    
-    if (self.buildMode) {
-        [self setBuildMode:NO animated:YES];
-    }
-    
-    [self savePresetWithCompletion:nil];
 }
 
 -(void)setBuildMode:(BOOL)buildMode animated:(BOOL)animated {
@@ -558,7 +540,7 @@ static BuildView *buildView = nil;
 #pragma LoadSave
 
 -(void)savePresetWithCompletion:(void (^)(BOOL success))completion {
-
+    
     UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
     [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.6]];
     [self.navigationController.view addSubview:blockingView];
@@ -570,7 +552,7 @@ static BuildView *buildView = nil;
     
     [blockingViewLabel setTextAlignment:NSTextAlignmentCenter];
     [blockingViewLabel setTextColor:[UIColor whiteColor]];
-    [blockingViewLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20]];
+    [blockingViewLabel setFont:[UIFont fontWithName:@"DINAlternate-Bold" size:20]];
     [blockingViewLabel setText:@"Saving..."];
     [blockingView addSubview:blockingViewLabel];
     
@@ -582,11 +564,17 @@ static BuildView *buildView = nil;
     [blockingView addSubview:progressView];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
-        NSLog(@"BuildViewController: Saving...");
+        
+        if (!self.filename) {
+            // We don't have a filename, create a new one.
+            self.filename = [Preset getNewFilename];
+        }
+        
+        NSLog(@"BuildViewController: Saving %@.", self.filename);
         
         // Create the thumbnail
         CGFloat aspect = self.buildViewScrollView.contentSize.height / self.buildViewScrollView.contentSize.width;
-        CGFloat thumbnailHeight = 150;
+        CGFloat thumbnailHeight = 300;
         UIImage *thumbnail = [[self.buildViewScrollView snapshot] resizeTo:CGSizeMake((int)(thumbnailHeight / aspect), thumbnailHeight)];
 
         // Meta data
@@ -604,12 +592,13 @@ static BuildView *buildView = nil;
                                            PRESET_KEY_MODEL     : modelJSON
                                            };
         
-        NSLog(@"BuildViewController: Sending to preset controller...");
-        [[PresetController sharedController] updateSelectedPresetWithDictionary:presetDictionary
-                                                                      thumbnail:thumbnail
-                                                                       progress:^ (float progress){
-                                                                           [progressView setProgress:progress animated:YES];;
-                                                                       }];
+        [Preset savePresetWithName:self.filename
+                        dictionary:presetDictionary
+                         thumbnail:thumbnail
+                         overwrite:YES
+                          progress:^ (float progress){
+                              [progressView setProgress:progress animated:YES];
+                          }];
         
         dispatch_async(dispatch_get_main_queue(), ^ {
             if (completion) {
@@ -620,27 +609,77 @@ static BuildView *buildView = nil;
     });
 }
 
--(void)recallPreset:(Preset*)preset completion:(void (^)(BOOL success))completion {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [buildView removeAll];
+-(void)recallPreset:(NSString*)presetName onCompletion:(void (^)(BOOL success))completion onError:(void (^)(NSError *Error))error {
+
+    Preset *preset = [Preset loadPreset:presetName];
+    
+    if (!preset || !preset.dictionary) {
+        if (error) {
+            error(nil);
+            return;
+        }
+    }
+    
+    [self clear];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^() {
         
         COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
         
         // Rebuild the engine model from JSON.
         NSString *model = [preset.dictionary objectForKey:PRESET_KEY_MODEL];
-        [cae buildModelFromJSON:model];
+        if (model) {
+            @try {
+                [cae buildModelFromJSON:model];
+            }
+            @catch (NSException *e) {
+                if (error) {
+                    dispatch_async(dispatch_get_main_queue(), ^() {
+                        error(nil);
+                    });
+                }
+            }
+        } else {
+            if (error) {
+                dispatch_async(dispatch_get_main_queue(), ^() {
+                    error(nil);
+                });
+                return;
+            }
+        }
         
+        // Rebuild the preset's module views.
         NSDictionary *views = [preset.dictionary objectForKey:PRESET_KEY_VIEWS];
-        [buildView rebuildFromDictionary:views];
+        
+        if (views) {
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                [buildView rebuildFromDictionary:views];
+            });
+        } else {
+            if (error) {
+                dispatch_async(dispatch_get_main_queue(), ^() {
+                    error(nil);
+                });
+                return;
+            }
+        }
+        
+        self.filename = presetName;
         
         if (completion) {
-            completion(true);
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                
+                completion(true);
+            });
         }
     });
 }
 
-#pragma mark Convenience Methods
+-(void)clear {
+    self.filename = nil;
+    [buildView removeAllModules];
+    [[COLAudioEnvironment sharedEnvironment] removeAllComponents];
+}
 
 +(BuildView*)buildView {
     return buildView;

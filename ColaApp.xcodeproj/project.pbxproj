@@ -35,7 +35,7 @@
 		6C37DACC1C5908C300BF0C97 /* ModuleSubview.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37DACB1C5908C300BF0C97 /* ModuleSubview.m */; };
 		6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C59C5651ABF4273001EE663 /* ConnectorView.m */; };
 		6C64D6FE1AD9394800012108 /* MasterModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D6FD1AD9394800012108 /* MasterModuleView.m */; };
-		6C64D7061AD9B0DD00012108 /* PresetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D7051AD9B0DD00012108 /* PresetController.m */; };
+		6C64D7061AD9B0DD00012108 /* Preset.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D7051AD9B0DD00012108 /* Preset.m */; };
 		6C6DB53D1AD6B48C0001343E /* ModuleCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C6DB53C1AD6B48C0001343E /* ModuleCatalog.m */; };
 		6C7459021AE84D3200AEC106 /* BuildViewScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7459011AE84D3200AEC106 /* BuildViewScrollView.m */; };
 		6C7D48741BE226C20092BC95 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7D48721BE226870092BC95 /* AVFoundation.framework */; };
@@ -122,8 +122,8 @@
 		6C59C5651ABF4273001EE663 /* ConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorView.m; sourceTree = "<group>"; };
 		6C64D6FC1AD9394800012108 /* MasterModuleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterModuleView.h; sourceTree = "<group>"; };
 		6C64D6FD1AD9394800012108 /* MasterModuleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterModuleView.m; sourceTree = "<group>"; };
-		6C64D7041AD9B0DD00012108 /* PresetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresetController.h; sourceTree = "<group>"; };
-		6C64D7051AD9B0DD00012108 /* PresetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresetController.m; sourceTree = "<group>"; };
+		6C64D7041AD9B0DD00012108 /* Preset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Preset.h; sourceTree = "<group>"; };
+		6C64D7051AD9B0DD00012108 /* Preset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Preset.m; sourceTree = "<group>"; };
 		6C6DB53B1AD6B48C0001343E /* ModuleCatalog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleCatalog.h; sourceTree = "<group>"; };
 		6C6DB53C1AD6B48C0001343E /* ModuleCatalog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleCatalog.m; sourceTree = "<group>"; };
 		6C7459001AE84D3200AEC106 /* BuildViewScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildViewScrollView.h; sourceTree = "<group>"; };
@@ -323,8 +323,8 @@
 		6C64D7031AD9B06600012108 /* PresetController */ = {
 			isa = PBXGroup;
 			children = (
-				6C64D7041AD9B0DD00012108 /* PresetController.h */,
-				6C64D7051AD9B0DD00012108 /* PresetController.m */,
+				6C64D7041AD9B0DD00012108 /* Preset.h */,
+				6C64D7051AD9B0DD00012108 /* Preset.m */,
 			);
 			name = PresetController;
 			sourceTree = "<group>";
@@ -522,7 +522,7 @@
 				6C6DB53D1AD6B48C0001343E /* ModuleCatalog.m in Sources */,
 				6CB8283E1AC3077800610DD4 /* UIColor+Shades.m in Sources */,
 				6C8DD2951AC0C9CC00320628 /* ModuleView.m in Sources */,
-				6C64D7061AD9B0DD00012108 /* PresetController.m in Sources */,
+				6C64D7061AD9B0DD00012108 /* Preset.m in Sources */,
 				6C2A5E221A8BF2CC00ECEAB2 /* main.m in Sources */,
 				6C7459021AE84D3200AEC106 /* BuildViewScrollView.m in Sources */,
 				6C8DD2911AC0AB1200320628 /* RotaryEncoder.m in Sources */,

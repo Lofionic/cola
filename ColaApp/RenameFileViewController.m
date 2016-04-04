@@ -7,7 +7,7 @@
 //
 
 #import "RenameFileViewController.h"
-#import "PresetController.h"
+#import "Preset.h"
 
 @interface RenameFileViewController ()
 
@@ -23,78 +23,78 @@
 
 @implementation RenameFileViewController
 
+- (instancetype)init {
+    
+    if (self = [super init]) {
+        [self setEdgesForExtendedLayout:UIRectEdgeTop];
+        [self setTitle:@"Rename File"];
+        
+        [self.navigationItem setHidesBackButton:true];
+        
+        self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneTapped)];
+        [self.navigationItem setRightBarButtonItem:self.doneButton];
+        
+        UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"wallpaper"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeTile]];
+        [backgroundView setFrame:self.view.bounds];
+        [backgroundView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
+        [self.view addSubview:backgroundView];
+        
+        self.containerView = [[UIView alloc] init];
+        [self.containerView setTranslatesAutoresizingMaskIntoConstraints:false];
+        [self.view addSubview:self.containerView];
+        
+        self.keyboardView = [[UIView alloc] init];
+        [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:false];
+        [self.view addSubview:self.keyboardView];
+        
+        self.thumbnailView = [[UIImageView alloc] init];
+        [self.thumbnailView setTranslatesAutoresizingMaskIntoConstraints:false];
+        [self.thumbnailView setContentMode:UIViewContentModeScaleAspectFit];
+        [self.containerView addSubview:self.thumbnailView];
+        
+        self.textField = [[UITextField alloc] init];
+        [self.textField setBackgroundColor:[UIColor darkGrayColor]];
+        [self.textField setTextColor:[UIColor whiteColor]];
+        [self.textField setTextAlignment:NSTextAlignmentCenter];
+        [self.textField setClearButtonMode:UITextFieldViewModeAlways];
+        [self.textField setBorderStyle:UITextBorderStyleRoundedRect];
+        [self.textField setReturnKeyType:UIReturnKeyDone];
+        [self.textField setDelegate:self];
+        [self.textField setTranslatesAutoresizingMaskIntoConstraints:false];
+        [self.textField setPlaceholder:@"Filename"];
+        [self.textField setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
+        [self.containerView addSubview:self.textField];
+        
+        NSDictionary *viewsDictionary = @{
+                                          @"top"       : self.topLayoutGuide,
+                                          @"bottom"    : self.bottomLayoutGuide,
+                                          @"container" : self.containerView,
+                                          @"keyboard"  : self.keyboardView,
+                                          @"thumbnail" : self.thumbnailView,
+                                          @"textfield" : self.textField
+                                          };
+        
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[container]|" options:0 metrics:nil views:viewsDictionary]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[keyboard]|" options:0 metrics:nil views:viewsDictionary]];
+        
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top][container][keyboard]|" options:0 metrics:nil views:viewsDictionary]];
+        
+        [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[thumbnail]-|" options:0 metrics:nil views:viewsDictionary]];
+        [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[textfield(300)]" options:0 metrics:nil views:viewsDictionary]];
+        [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[thumbnail]-20-[textfield]-20-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:viewsDictionary]];
+        
+        self.keyboardHeightConstraint = [NSLayoutConstraint constraintWithItem:self.keyboardView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
+        [self.view addConstraint:self.keyboardHeightConstraint];
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setEdgesForExtendedLayout:UIRectEdgeTop];
-    [self setTitle:@"Rename File"];
-    
-    [self.navigationItem setHidesBackButton:true];
-
-    self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneTapped)];
-    [self.navigationItem setRightBarButtonItem:self.doneButton];
-    
-    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"wallpaper"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeTile]];
-    [backgroundView setFrame:self.view.bounds];
-    [backgroundView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth)];
-    [self.view addSubview:backgroundView];
-    
-    self.containerView = [[UIView alloc] init];
-    [self.containerView setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.view addSubview:self.containerView];
-    
-    self.keyboardView = [[UIView alloc] init];
-    [self.keyboardView setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.view addSubview:self.keyboardView];
-    
-    self.thumbnailView = [[UIImageView alloc] init];
-    [self.thumbnailView setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.thumbnailView setContentMode:UIViewContentModeScaleAspectFit];
-    [self.containerView addSubview:self.thumbnailView];
-    
-    self.textField = [[UITextField alloc] init];
-    [self.textField setBackgroundColor:[UIColor darkGrayColor]];
-    [self.textField setTextColor:[UIColor whiteColor]];
-    [self.textField setTextAlignment:NSTextAlignmentCenter];
-    [self.textField setClearButtonMode:UITextFieldViewModeAlways];
-    [self.textField setBorderStyle:UITextBorderStyleRoundedRect];
-    [self.textField setReturnKeyType:UIReturnKeyDone];
-    [self.textField setDelegate:self];
-    
-//    [self.textField.layer setCornerRadius:4.0];
-    [self.textField setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.containerView addSubview:self.textField];
-    
-    NSDictionary *viewsDictionary = @{
-                                      @"top"       : self.topLayoutGuide,
-                                      @"bottom"    : self.bottomLayoutGuide,
-                                      @"container" : self.containerView,
-                                      @"keyboard"  : self.keyboardView,
-                                      @"thumbnail" : self.thumbnailView,
-                                      @"textfield" : self.textField
-                                      };
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[container]|" options:0 metrics:nil views:viewsDictionary]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[keyboard]|" options:0 metrics:nil views:viewsDictionary]];
-
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[top][container][keyboard]|" options:0 metrics:nil views:viewsDictionary]];
-
-    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[thumbnail]-|" options:0 metrics:nil views:viewsDictionary]];
-    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[textfield(300)]" options:0 metrics:nil views:viewsDictionary]];
-    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[thumbnail]-20-[textfield]-20-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:viewsDictionary]];
-
-    self.keyboardHeightConstraint = [NSLayoutConstraint constraintWithItem:self.keyboardView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:128];
-    [self.view addConstraint:self.keyboardHeightConstraint];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShowNotification:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHideNotification:) name:UIKeyboardWillHideNotification object:nil];
-    
-    [self.textField setText:[[PresetController sharedController] nameOfPresetAtIndex:self.presetIndex]];
-    [[PresetController sharedController] fetchThumbnailForPresetAtIndex:self.presetIndex onCompletion:^(NSUInteger index, UIImage *image) {
-        if (index == self.presetIndex) {
-            [self.thumbnailView setImage:image];
-        }
-    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -107,7 +107,7 @@
 }
 
 -(void)keyboardWillHideNotification:(NSNotification*)note {
-    [self dismissMe];
+    [self doRenameAndDismiss];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -116,13 +116,43 @@
 }
 
 - (void)doneTapped {
-    [self dismissMe];
+    [self doRenameAndDismiss];
 }
 
--(void)dismissMe {
-    [[PresetController sharedController] renameFileAtIndex:self.presetIndex to:self.textField.text];
+-(void)doRenameAndDismiss {
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self.navigationController popViewControllerAnimated:YES];
+    NSString *newFilename = [self.textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (newFilename.length == 0 || [newFilename isEqualToString:[self.presetName stringByDeletingPathExtension]]) {
+        // New name is equal to old name, do nothing.
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        // Check the new filename is unique.
+        if (![Preset isFilenameUnique:newFilename]) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                           message:@"Sorry, a file with this name already exists.\n\nPlease check and try again."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self.textField becomeFirstResponder];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+        } else {
+            if ([Preset renamePreset:self.presetName to:newFilename]) {
+                [[NSNotificationCenter defaultCenter] removeObserver:self];
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                // Error renaming.
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                               message:@"Sorry, there was an error renaming this file.\n\nPlease check and try again."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                
+                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [self.textField becomeFirstResponder];
+                }]];
+                [self presentViewController:alert animated:NO completion:nil];
+            }
+        }
+    }
 }
 @end

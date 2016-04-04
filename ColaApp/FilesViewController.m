@@ -7,9 +7,12 @@
 //
 #import "defines.h"
 #import "FilesViewController.h"
-#import "PresetController.h"
 #import "BuildViewController.h"
 #import "RenameFileViewController.h"
+
+#define FILE_EXTENSION @"col"
+#define DEFAULT_FILE_NAME @"New File.%@"
+#define DEFAULT_FILE_NAME_OVERFLOW @"New File %d.%@"
 
 @interface FilesViewController ()
 
@@ -17,7 +20,6 @@
 
 @property CGSize cellSize;
 
-//@property (nonatomic) NSMutableArray *selectedCellSet;
 @property (nonatomic, strong) UIBarButtonItem *editBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *addBarButtonItem;
 
@@ -26,6 +28,8 @@
 @property (nonatomic, strong) UIBarButtonItem *duplicateBarButtonItem;
 
 @property (nonatomic, strong) NSArray *editBarButtonItems;
+
+@property (nonatomic, strong) NSArray *files;
 
 @end
 
@@ -79,24 +83,76 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    [self refreshFiles];
     [self.collectionView reloadData];
 }
 
--(void)addTapped {
-//    [self.addBarButtonItem setEnabled:false];
-//    [self.editBarButtonItem setEnabled:false];
-//    
-    NSUInteger newIndex = [[PresetController sharedController] addNewPreset];
+-(void)refreshFiles {
+    self.files = [Preset getPresets];
+    [self sortFiles];
+}
 
-    NSArray *newIndexPath = @[[NSIndexPath indexPathForRow:newIndex inSection:0]];
+- (NSString*)presetsPath {
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *presetsPath = documentsPath;
+    return presetsPath;
+}
+
+-(NSString*)fullPathForFilename:(NSString*)filename {
+    return [[self presetsPath] stringByAppendingPathComponent:filename];
+}
+
+-(void)sortFiles {
+    // Sort files by date modified
+    NSFileManager *fm = [NSFileManager defaultManager];
     
-    [self.collectionView performBatchUpdates:^ {
-        [self.collectionView insertItemsAtIndexPaths:newIndexPath];
-    } completion:^ (BOOL finished) {
-        if (finished) {
-//            [self loadPresetAtIndex:newIndex];
+    NSMutableArray *fileInfos = [[NSMutableArray alloc] initWithCapacity:self.files.count];
+    for (NSString *thisFile in self.files) {
+        NSError* error;
+        NSDictionary *properties = [fm attributesOfItemAtPath:[self fullPathForFilename:thisFile] error:&error];
+        if (error) {
+            NSLog(@"PresetController: Error reading properties of file %@. %@", thisFile, error.debugDescription);
+        } else {
+            NSDate *modDate = [properties objectForKey:NSFileModificationDate];
+            [fileInfos addObject:@{
+                                   @"file" : thisFile,
+                                   @"date" : modDate
+                                   }];
         }
-    }];
+    }
+    
+    NSArray* sortedFileInfos = [fileInfos sortedArrayUsingComparator:
+                                ^(id path1, id path2)
+                                {
+                                    // compare
+                                    NSComparisonResult comp = [[path1 objectForKey:@"date"] compare:
+                                                               [path2 objectForKey:@"date"]];
+                                    // invert ordering
+                                    if (comp == NSOrderedDescending) {
+                                        comp = NSOrderedAscending;
+                                    }
+                                    else if(comp == NSOrderedAscending){
+                                        comp = NSOrderedDescending;
+                                    }
+                                    return comp;
+                                }];
+    
+    NSMutableArray *sortedFiles = [[NSMutableArray alloc] initWithCapacity:sortedFileInfos.count];
+    
+    for (NSDictionary *thisDictionary in sortedFileInfos) {
+        [sortedFiles addObject:[thisDictionary objectForKey:@"file"]];
+    }
+    
+    self.files = [NSArray arrayWithArray:sortedFiles];
+}
+
+
+-(void)addTapped {
+    [self.addBarButtonItem setEnabled:false];
+    [self.editBarButtonItem setEnabled:false];
+    
+    [self.buildViewController clear];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)editTapped {
@@ -111,8 +167,18 @@
 }
 
 -(void)trashTapped {
-    [[PresetController sharedController] removeFilesAtIndexes:[self.collectionView indexPathsForSelectedItems]];
-    [self.collectionView deleteItemsAtIndexPaths:[self.collectionView indexPathsForSelectedItems]];
+    
+    [self.collectionView performBatchUpdates:^ {
+        for (NSIndexPath *thisIndexPath in [self.collectionView indexPathsForSelectedItems]) {
+            NSString *filename = [self.files objectAtIndex:thisIndexPath.row];
+            if ([Preset removePreset:filename]) {
+                [self.collectionView deleteItemsAtIndexPaths:@[thisIndexPath]];
+                NSMutableArray *mutableFiles = [self.files mutableCopy];
+                [mutableFiles removeObject:filename];
+                self.files = [NSArray arrayWithArray:mutableFiles];
+            }
+        }
+    } completion:nil];
     
     [self.trashBarButtonItem setEnabled:NO];
     [self.exportBarButtonItem setEnabled:NO];
@@ -143,7 +209,6 @@
 }
 
 -(void)deselectAll {
-    
     for (NSIndexPath *thisIndexPath in [self.collectionView indexPathsForSelectedItems]) {
         [self.collectionView deselectItemAtIndexPath:thisIndexPath animated:NO];
     }
@@ -154,7 +219,7 @@
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [[PresetController sharedController] presetCount];
+    return [self.files count];
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
@@ -166,9 +231,11 @@
 }
 
 -(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+
     FilesViewControllerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CELL_IDENTIFIER forIndexPath:indexPath];
+    [cell setPreset:[self.files objectAtIndex:indexPath.row]];
+
     
-    [cell setPresetIndex:indexPath.row];
     [cell setDelegate:self];
     [cell setHighlighted:NO];
     [cell setSelected:[[self.collectionView indexPathsForSelectedItems] containsObject:indexPath]];
@@ -178,8 +245,6 @@
     } else {
         [cell stopJiggling];
     }
-    
-    [cell updateContents];
     
     return cell;
 }
@@ -204,7 +269,6 @@
     if (self.editing) {
         return YES;
     } else {
-        [self loadPresetAtIndex:indexPath.row];
         return NO;
     }
 }
@@ -219,33 +283,49 @@
     }
 }
 
--(void)loadPresetAtIndex:(NSUInteger)index {
-    
-    Preset *selectedPreset = [[PresetController sharedController] recallPresetAtIndex:index];
-    
+-(void)loadPresetNamed:(NSString*)presetName {
+
     UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
     [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
     [self.navigationController.view addSubview:blockingView];
-    
-    [self.buildViewController recallPreset:selectedPreset completion:^(BOOL success) {
+
+    [self.buildViewController recallPreset:presetName onCompletion:^(BOOL success) {
+        [self.buildViewController setFilename:presetName];
         [blockingView removeFromSuperview];
         [self.navigationController popViewControllerAnimated:YES];
+    } onError:^(NSError *error) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                       message:@"Sorry, there appears to be a problem when opening this file.\n\nThis file cannot be opened."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+    
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            dispatch_async(dispatch_get_main_queue(), ^ {
+                [blockingView removeFromSuperview];
+            });
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
     }];
+    
 }
 
 // Cell Delegates
 -(void)FilesViewControllerCellDidTapLabel:(FilesViewControllerCell *)cell {
-    // Present rename view controller
     RenameFileViewController *vc = [[RenameFileViewController alloc] init];
-    [vc setPresetIndex:cell.presetIndex];
+
+    [vc setPresetName:cell.preset];
+    
+    [vc.thumbnailView setImage:cell.thumbnailView.image];
+    [vc.textField setText:[cell.preset stringByDeletingPathExtension]];
+    
     [self.navigationController pushViewController:vc animated:true];
 }
 
 -(void)FilesViewControllerCellDidTapThumbnail:(FilesViewControllerCell *)cell {
     if (!self.editing) {
         // Load the preset
-        [self loadPresetAtIndex:cell.presetIndex];
-    }
+        NSString *preset = [self.files objectAtIndex:[self.collectionView indexPathForCell:cell].row];
+        [self loadPresetNamed:preset];
+    } 
 }
 
 @end

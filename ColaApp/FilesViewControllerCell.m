@@ -7,7 +7,7 @@
 //
 #import "defines.h"
 #import "FilesViewControllerCell.h"
-#import "PresetController.h"
+#import "Preset.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
@@ -24,6 +24,8 @@
 @property (nonatomic, strong) UIImageView                   *deleteImage;
 @property (nonatomic, strong) UIActivityIndicatorView       *activityIndicator;
 
+@property (nonatomic, strong) UIGestureRecognizer           *tapThumbnailGestureRecognizer;
+
 @property BOOL jiggling;
 
 @end
@@ -32,13 +34,10 @@
 
 -(instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        
-//        [self setBackgroundColor:[UIColor blackColor]];
-//        [self.layer setBorderWidth:1.0];
-//        [self.layer setBorderColor:[[UIColor darkGrayColor] CGColor]];
-        
+
         self.thumbnailContainerView = [[UIView alloc] init];
         [self.thumbnailContainerView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.thumbnailContainerView.layer setBorderWidth:2.0];
         [self.contentView addSubview:self.thumbnailContainerView];
         
         self.thumbnailView = [[UIImageView alloc] init];
@@ -62,10 +61,12 @@
         [self.presetNameLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.labelContainerView addSubview:self.presetNameLabel];
         
-        UITapGestureRecognizer *tapPresetName = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapLabel:)];
-        [self.labelContainerView addGestureRecognizer:tapPresetName];
-//        [self.labelContainerView setUserInteractionEnabled:YES];
+        self.tapThumbnailGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapThumbnail:)];
+        [self.thumbnailContainerView addGestureRecognizer:self.tapThumbnailGestureRecognizer];
         
+        UITapGestureRecognizer *tapLabel = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapLabel:)];
+        [self.labelContainerView addGestureRecognizer:tapLabel];
+     
         self.dateLabel = [[UILabel alloc] init];
         [self.dateLabel setTextAlignment:NSTextAlignmentCenter];
         [self.dateLabel setFont:[UIFont fontWithName:@"DINAlternate-Bold" size:10]];
@@ -92,7 +93,6 @@
         [self.labelContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-4-[nameLabel(16)]-2-[dateLabel(16)]-4-|" options:0 metrics:nil views:viewsDictionary]];
         [self.labelContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[nameLabel]-8-|" options:0 metrics:nil views:viewsDictionary]];
         [self.labelContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[dateLabel]-8-|" options:0 metrics:nil views:viewsDictionary]];
-
         
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[thumbnailContainer]|" options:0 metrics:nil views:viewsDictionary]];
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[labelContainer]|" options:0 metrics:nil views:viewsDictionary]];
@@ -116,24 +116,28 @@
     }
 }
 
--(void)updateContents {
+-(void)setPreset:(NSString *)preset {
     
-    // Fetch the thumbnail async
-    [self.activityIndicator startAnimating];
-    [[PresetController sharedController] fetchThumbnailForPresetAtIndex:self.presetIndex onCompletion:^(NSUInteger index, UIImage *image) {
-        if (index == self.presetIndex) {
-            [self.activityIndicator stopAnimating];
-            [self.thumbnailView setImage:image];
-        }
-    }];
-
-    [self.presetNameLabel setText:[[PresetController sharedController] nameOfPresetAtIndex:self.presetIndex]];
+    _preset = preset;
+    [self.presetNameLabel setText:[preset stringByDeletingPathExtension]];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.timeStyle = NSDateFormatterShortStyle;
     dateFormatter.dateStyle = NSDateFormatterShortStyle;
     dateFormatter.doesRelativeDateFormatting = YES;
-    [self.dateLabel setText:[dateFormatter stringFromDate:[[PresetController sharedController] dateOfPresetAtIndex:self.presetIndex]]];
+    [self.dateLabel setText:[dateFormatter stringFromDate:[Preset getDateForPreset:preset]]];
+    
+    // Fetch the thumbnail async
+    [self.thumbnailView setHidden:YES];
+    [self.activityIndicator startAnimating];
+    [Preset fetchThumbnailForPreset:preset onCompletion:^(NSString *thumbnail, UIImage *image) {
+        if ([preset isEqualToString:thumbnail]) {
+            [self.activityIndicator stopAnimating];
+            [self.thumbnailView setHidden:NO];
+            [self.thumbnailView setImage:image];
+        }
+    }];
+    
 }
 
 @synthesize selected = _selected;
@@ -142,11 +146,9 @@
     [super setSelected:selected];
     
     if (selected) {
-        [self.thumbnailContainerView setBackgroundColor:[UIColor colorWithRed:0.6 green:0 blue:0 alpha:1]];
-        [self.thumbnailContainerView.layer setCornerRadius:16.0];
+        [self.thumbnailContainerView.layer setBorderColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1].CGColor];
     } else {
-        [self.thumbnailContainerView setBackgroundColor:[UIColor clearColor]];
-        [self.thumbnailContainerView.layer setCornerRadius:0.0];
+        [self.thumbnailContainerView.layer setBorderColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0].CGColor];
     }
     
     _selected = selected;
@@ -174,10 +176,13 @@
     animation.timeOffset = ( rand() / (float)RAND_MAX ) * duration;
     [self.contentView.layer addAnimation:animation forKey:@"jiggle"];
 
+    [self.tapThumbnailGestureRecognizer setEnabled:false];
 }
 
 - (void)stopJiggling {
     [self.contentView.layer removeAnimationForKey:@"jiggle"];
+    
+    [self.tapThumbnailGestureRecognizer setEnabled:true];
 }
 
 @end

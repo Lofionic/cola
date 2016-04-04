@@ -10,7 +10,7 @@
 #import "BuildViewController.h"
 #import "ModuleDescription.h"
 #import "ModuleCatalog.h"
-#import "PresetController.h"
+#import "Preset.h"
 #import "FilesViewController.h"
 
 @interface AppDelegate ()
@@ -34,9 +34,6 @@ CGFloat kKeyboardHeight;
     // Initialize module catalog
     [[ModuleCatalog sharedCatalog] loadFromURL:[[NSBundle mainBundle] URLForResource:@"moduleCatalog" withExtension:@"json"]];
     
-    // Initialize presets
-    [[PresetController sharedController] loadPresets];
-    
     // Start audio engine
     [[COLAudioEnvironment sharedEnvironment] start];
     
@@ -47,8 +44,15 @@ CGFloat kKeyboardHeight;
     [self.window makeKeyAndVisible];
     
     BuildViewController *buildViewController = [[BuildViewController alloc] init];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:buildViewController];
+    // Load the initial preset, if there is one.
+    NSArray *presets = [Preset getPresets];
+    if (presets.count > 0) {
+        NSString *initialPreset = [presets objectAtIndex:0];
+        NSLog(@"Recalling initial preset : %@", initialPreset);
+        [buildViewController recallPreset:initialPreset onCompletion:nil onError:nil];
+    }
     
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:buildViewController];
     
 //    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"wallpaper"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeTile]];
 //    [backgroundView setFrame:navigationController.view.bounds];
@@ -57,7 +61,7 @@ CGFloat kKeyboardHeight;
     
 //    FilesViewController *fvc = [[FilesViewController alloc] initWithBuildViewController:nil];
 //    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:fvc];
-    
+//    
     [navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     [navigationController.navigationBar setTintColor:[UIColor whiteColor]];
 
