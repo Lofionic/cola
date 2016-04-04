@@ -81,7 +81,7 @@
         
         [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[thumbnail]-|" options:0 metrics:nil views:viewsDictionary]];
         [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[textfield(300)]" options:0 metrics:nil views:viewsDictionary]];
-        [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[thumbnail]-20-[textfield]-20-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:viewsDictionary]];
+        [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[thumbnail]-20-[textfield(30)]-20-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:viewsDictionary]];
         
         self.keyboardHeightConstraint = [NSLayoutConstraint constraintWithItem:self.keyboardView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0];
         [self.view addConstraint:self.keyboardHeightConstraint];
@@ -107,16 +107,21 @@
 }
 
 -(void)keyboardWillHideNotification:(NSNotification*)note {
-    [self doRenameAndDismiss];
+    CGRect keyboardEndFrame = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    [self.keyboardHeightConstraint setConstant:keyboardEndFrame.size.height];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.textField resignFirstResponder];
     return true;
 }
 
-- (void)doneTapped {
+-(void)textFieldDidEndEditing:(UITextField *)textField {
     [self doRenameAndDismiss];
+}
+
+- (void)doneTapped {
+    [self.textField resignFirstResponder];
 }
 
 -(void)doRenameAndDismiss {
