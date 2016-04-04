@@ -1,0 +1,22 @@
+/* 
+  Localized.strings
+  ColaApp
+
+  Created by Chris on 04/04/2016.
+  Copyright © 2016 Chris Rivers. All rights reserved.
+*/
+
+"Files_View_Title" = "Files";
+"Rename_View_Title" = "Rename File";
+
+"Saving" = "Saving...";
+"New_File" = "New File"; // Default new file name
+"New_File_Overflow" = "New File %d"; // Default new file name with enumerator.
+
+// Error alert dialogs.
+"Error_Alert_Title" = "Error";
+"Error_Alert_Load_Error" = "Sorry, there appears to be a problem when opening this file.\n\nThis file cannot be opened.";
+"Error_Alert_Rename_Not_Unique" = "Sorry, a file with this name already exists.\n\nPlease check and try again.";
+"Error_Alert_Rename_Error" = "Sorry, there was an error renaming this file.\n\nPlease check and try again.";
+"Error_Alert_Confirm" = "OK";
+

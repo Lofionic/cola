@@ -163,6 +163,8 @@ CCOLAudioEngine::CCOLAudioEngine() {
     // Manage all MIDI In & Out
     midiComponent = new CCOLMIDIComponent(audioContext);
     midiComponent->initializeIO();
+    
+    srand(time(NULL));
 }
 
 void CCOLAudioEngine::initializeAUGraph(bool isForegroundIn) {
@@ -442,6 +444,7 @@ void CCOLAudioEngine::removeAllComponents() {
     }
     
     components.clear();
+    CCOLComponent::usedIDs.clear();
 }
 
 // Get a component's output

@@ -37,7 +37,6 @@ extern CGFloat kKeyboardHeight;
 #define TRANSPROT_ICON_REWIND_ON    @"Icons/Transport/rewind_button_on"
 
 // Preset Dictionary Keys
-
 #define PRESET_KEY_METADATA             @"meta"
 #define PRESET_KEY_VIEWS                @"views"
 #define PRESET_KEY_MODEL                @"model"
@@ -61,8 +60,9 @@ extern CGFloat kKeyboardHeight;
 #define PRESET_KEY_CONNECTION_TO_INPUT          @"to_input"
 #define PRESET_KEY_CONNECTION_CABLE_COLOUR      @"cable_colour"
 
-
 // Userinfos
 #define CONTROL_USERINFO_ASSET_KEY      @"asset"
+
+#define USER_DEFAULTS_FILENAME_KEY @"user_defaults_filename"
 
 

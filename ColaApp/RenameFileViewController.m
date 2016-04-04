@@ -27,7 +27,7 @@
     
     if (self = [super init]) {
         [self setEdgesForExtendedLayout:UIRectEdgeTop];
-        [self setTitle:@"Rename File"];
+        [self setTitle:NSLocalizedString(@"Rename_View_Title", "Rename view title")];
         
         [self.navigationItem setHidesBackButton:true];
         
@@ -61,8 +61,6 @@
         [self.textField setReturnKeyType:UIReturnKeyDone];
         [self.textField setDelegate:self];
         [self.textField setTranslatesAutoresizingMaskIntoConstraints:false];
-        [self.textField setPlaceholder:@"Filename"];
-        [self.textField setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
         [self.containerView addSubview:self.textField];
         
         NSDictionary *viewsDictionary = @{
@@ -107,8 +105,8 @@
 }
 
 -(void)keyboardWillHideNotification:(NSNotification*)note {
-    CGRect keyboardEndFrame = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    [self.keyboardHeightConstraint setConstant:keyboardEndFrame.size.height];
+//    CGRect keyboardEndFrame = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+//    [self.keyboardHeightConstraint setConstant:keyboardEndFrame.size.height];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -134,11 +132,11 @@
     } else {
         // Check the new filename is unique.
         if (![Preset isFilenameUnique:newFilename]) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                           message:@"Sorry, a file with this name already exists.\n\nPlease check and try again."
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error_Alert_Title", @"Error alert title")
+                                                                           message:NSLocalizedString(@"Error_Alert_Rename_Not_Unique", @"Rename filename not unique")
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Error_Alert_Confirm", @"Error Alert Confirm") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                 [self.textField becomeFirstResponder];
             }]];
             [self presentViewController:alert animated:YES completion:nil];
@@ -148,11 +146,11 @@
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
                 // Error renaming.
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                               message:@"Sorry, there was an error renaming this file.\n\nPlease check and try again."
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error_Alert_Title", @"Error alert title")
+                                                                               message:NSLocalizedString(@"Error_Alert_Rename_Error", @"Rename error")
                                                                         preferredStyle:UIAlertControllerStyleAlert];
                 
-                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Error_Alert_Confirm", @"Error Alert Confirm") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                     [self.textField becomeFirstResponder];
                 }]];
                 [self presentViewController:alert animated:NO completion:nil];

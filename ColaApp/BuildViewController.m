@@ -250,31 +250,28 @@ static BuildView *buildView = nil;
     
     UIImage *filesIcon = [UIImage imageNamed:TOOLBAR_FILES_ICON];
     self.filesBarButtonItem = [[UIBarButtonItem alloc] initWithImage:filesIcon style:UIBarButtonItemStylePlain target:self action:@selector(filesTapped)];
-    
-//    UIImage *saveIcon = [UIImage imageNamed:TOOLBAR_SAVE_ICON];
-//    self.saveBarButtonItem = [[UIBarButtonItem alloc] initWithImage:saveIcon style:UIBarButtonItemStylePlain target:self action:@selector(saveTapped)];
-    
+
     [self.navigationItem setRightBarButtonItems:@[self.filesBarButtonItem]];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(appWillEnterForeground)
+                                             selector: @selector(appWillEnterForeground:)
                                                  name: UIApplicationWillEnterForegroundNotification
                                                object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(appDidEnterBackground:)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
     
     // Setup initial view
     [self setBottomPanelHidden:NO animated:NO onCompletion:nil];
     [self setIaaViewHidden:YES];
-    
-    // Load initial preset
-//    self.preset = [[PresetController sharedController] recallPresetAtIndex:0];
-//    [self recallPreset:self.preset onCompletion:nil onError:nil];
-    
+
 //    // Register for updates from the transport controller
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifiedOfTransportUpdate:) name:kCOLEventTransportStateUpdated object:nil];
 //
     // We need to know when the engine has forced a disconnect
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(engineDidForceDisconnect:) name:kCCOLEventEngineDidForceDisconnect object:nil];
-
 }
 
 
@@ -291,7 +288,7 @@ static BuildView *buildView = nil;
     [self.cae mute];
 }
 
--(void)appWillEnterForeground {
+-(void)appWillEnterForeground:(NSNotification*)note {
     if ([self.cae isInterAppAudioConnected]) {
         [self setIaaViewHidden:NO];
         [self.playStopBarButtonItem setEnabled:NO];
@@ -301,8 +298,14 @@ static BuildView *buildView = nil;
     }
 }
 
-#pragma mark Toolbar
+-(void)appDidEnterBackground:(NSNotification*)note {
+    NSLog(@"App in background, saving.");
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^ {
+        [self performSaveWithProgress:nil];
+    });
+}
 
+#pragma mark Toolbar
 -(void)editTapped {
     if (!self.buildMode) {
         [self setBuildMode:YES animated:YES];
@@ -332,7 +335,7 @@ static BuildView *buildView = nil;
     
     [self.cae allNotesOff];
 
-    [self savePresetWithCompletion:^(BOOL success) {
+    [self performSaveWithCompletion:^(BOOL success) {
         FilesViewController *filesViewController = [[FilesViewController alloc] initWithBuildViewController:self];
         [self.navigationController pushViewController:filesViewController animated:YES];
     }];
@@ -539,7 +542,7 @@ static BuildView *buildView = nil;
 
 #pragma LoadSave
 
--(void)savePresetWithCompletion:(void (^)(BOOL success))completion {
+-(void)performSaveWithCompletion:(void (^)(BOOL success))completion {
     
     UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
     [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.6]];
@@ -553,7 +556,7 @@ static BuildView *buildView = nil;
     [blockingViewLabel setTextAlignment:NSTextAlignmentCenter];
     [blockingViewLabel setTextColor:[UIColor whiteColor]];
     [blockingViewLabel setFont:[UIFont fontWithName:@"DINAlternate-Bold" size:20]];
-    [blockingViewLabel setText:@"Saving..."];
+    [blockingViewLabel setText:NSLocalizedString(@"Saving", @"Saving")];
     [blockingView addSubview:blockingViewLabel];
     
     UIProgressView *progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(blockingView.bounds.size.width / 2.0 - 100,
@@ -565,40 +568,9 @@ static BuildView *buildView = nil;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^ {
         
-        if (!self.filename) {
-            // We don't have a filename, create a new one.
-            self.filename = [Preset getNewFilename];
-        }
-        
-        NSLog(@"BuildViewController: Saving %@.", self.filename);
-        
-        // Create the thumbnail
-        CGFloat aspect = self.buildViewScrollView.contentSize.height / self.buildViewScrollView.contentSize.width;
-        CGFloat thumbnailHeight = 300;
-        UIImage *thumbnail = [[self.buildViewScrollView snapshot] resizeTo:CGSizeMake((int)(thumbnailHeight / aspect), thumbnailHeight)];
-
-        // Meta data
-        NSDictionary *meta = @{
-                               PRESET_KEY_META_RACK_WIDTH : [NSNumber numberWithInteger:self.buildView.columns],
-                               PRESET_KEY_META_RACK_HEIGHT : [NSNumber numberWithInteger:self.buildView.rows]
-                               };
-        
-        NSDictionary *views = [self.buildView getDictionary]; // Descriptions of module views.
-        NSString *modelJSON = [[COLAudioEnvironment sharedEnvironment] getModelAsJSON]; // Engine model JSON.
-
-        NSDictionary *presetDictionary = @{
-                                           PRESET_KEY_METADATA  : meta,
-                                           PRESET_KEY_VIEWS     : views,
-                                           PRESET_KEY_MODEL     : modelJSON
-                                           };
-        
-        [Preset savePresetWithName:self.filename
-                        dictionary:presetDictionary
-                         thumbnail:thumbnail
-                         overwrite:YES
-                          progress:^ (float progress){
-                              [progressView setProgress:progress animated:YES];
-                          }];
+        [self performSaveWithProgress:^ (float progress){
+            [progressView setProgress:progress animated:YES];
+        }];
         
         dispatch_async(dispatch_get_main_queue(), ^ {
             if (completion) {
@@ -607,6 +579,44 @@ static BuildView *buildView = nil;
             [blockingView removeFromSuperview];
         });
     });
+}
+
+-(void)performSaveWithProgress:(ProgressBlock)progress {
+    if (!self.filename) {
+        // We don't have a filename, create a new one.
+        self.filename = [Preset getNewFilename];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:self.filename forKey:USER_DEFAULTS_FILENAME_KEY];
+        [userDefaults synchronize];
+    }
+    
+    NSLog(@"BuildViewController: Saving %@.", self.filename);
+    
+    // Create the thumbnail
+    CGFloat aspect = self.buildViewScrollView.contentSize.height / self.buildViewScrollView.contentSize.width;
+    CGFloat thumbnailHeight = 300;
+    UIImage *thumbnail = [[self.buildViewScrollView snapshot] resizeTo:CGSizeMake((int)(thumbnailHeight / aspect), thumbnailHeight)];
+    
+    // Meta data
+    NSDictionary *meta = @{
+                           PRESET_KEY_META_RACK_WIDTH : [NSNumber numberWithInteger:self.buildView.columns],
+                           PRESET_KEY_META_RACK_HEIGHT : [NSNumber numberWithInteger:self.buildView.rows]
+                           };
+    
+    NSDictionary *views = [self.buildView getDictionary]; // Descriptions of module views.
+    NSString *modelJSON = [[COLAudioEnvironment sharedEnvironment] getModelAsJSON]; // Engine model JSON.
+    
+    NSDictionary *presetDictionary = @{
+                                       PRESET_KEY_METADATA  : meta,
+                                       PRESET_KEY_VIEWS     : views,
+                                       PRESET_KEY_MODEL     : modelJSON
+                                       };
+    
+    [Preset savePresetWithName:self.filename
+                    dictionary:presetDictionary
+                     thumbnail:thumbnail
+                     overwrite:YES
+                      progress:progress];
 }
 
 -(void)recallPreset:(NSString*)presetName onCompletion:(void (^)(BOOL success))completion onError:(void (^)(NSError *Error))error {
@@ -664,14 +674,16 @@ static BuildView *buildView = nil;
             }
         }
         
-        self.filename = presetName;
-        
-        if (completion) {
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            self.filename = presetName;
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setObject:presetName forKey:USER_DEFAULTS_FILENAME_KEY];
+            [userDefaults synchronize];
+            if (completion) {
                 completion(true);
-            });
-        }
+            }
+        });
+
     });
 }
 

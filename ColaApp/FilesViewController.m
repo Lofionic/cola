@@ -10,10 +10,6 @@
 #import "BuildViewController.h"
 #import "RenameFileViewController.h"
 
-#define FILE_EXTENSION @"col"
-#define DEFAULT_FILE_NAME @"New File.%@"
-#define DEFAULT_FILE_NAME_OVERFLOW @"New File %d.%@"
-
 @interface FilesViewController ()
 
 @property (nonatomic, weak) BuildViewController *buildViewController;
@@ -55,7 +51,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setTitle:@"Files"];
+    [self setTitle:NSLocalizedString(@"Files_View_Title", @"Files view title")];
     
     [self.collectionView registerClass:[FilesViewControllerCell class] forCellWithReuseIdentifier:CELL_IDENTIFIER];
     [self.collectionView setDelegate:self];
@@ -292,11 +288,11 @@
         [blockingView removeFromSuperview];
         [self.navigationController popViewControllerAnimated:YES];
     } onError:^(NSError *error) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                       message:@"Sorry, there appears to be a problem when opening this file.\n\nThis file cannot be opened."
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error_Alert_Title", @"Error alert title")
+                                                                       message:NSLocalizedString(@"Error_Alert_Load_Error", @"Load error")
                                                                 preferredStyle:UIAlertControllerStyleAlert];
     
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Error_Alert_Confirm", @"Error Alert Confirm") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [blockingView removeFromSuperview];
             });

@@ -10,8 +10,6 @@
 #import "NSString+Random.h"
 
 #define FILE_EXTENSION @"col"
-#define DEFAULT_FILE_NAME @"New File"
-#define DEFAULT_FILE_NAME_OVERFLOW @"New File %d"
 
 @interface Preset ()
 
@@ -290,11 +288,11 @@
 }
 
 +(NSString*)getNewFilename {
-    NSString *filename = [NSString stringWithFormat:DEFAULT_FILE_NAME];
+    NSString *filename = NSLocalizedString(@"New_File", @"New file");
     
     int i = 1;
     while (![Preset isFilenameUnique:filename]) {
-        filename = [NSString stringWithFormat:DEFAULT_FILE_NAME_OVERFLOW, ++i];
+        filename = [NSString stringWithFormat:NSLocalizedString(@"New_File_Overflow", @"New file overflow"), ++i];
     }
     
     return [filename stringByAppendingPathExtension:FILE_EXTENSION];

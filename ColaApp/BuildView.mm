@@ -395,6 +395,7 @@ static NSArray *cableColours;
     [newCable setConnector2:connectorView2];
     
     [self.cables addObject:newCable];
+    [self.cableLayer setNeedsDisplay];
 }
 
 -(BOOL)connectorView:(ConnectorView*)connectorView1 connectWith:(ConnectorView*)connectorView2 {
@@ -614,9 +615,7 @@ static NSArray *cableColours;
 }
 
 -(void)rebuildFromDictionary:(NSDictionary*)dictionary {
-    
-    [self removeAllModules];
-    
+
     COLAudioEnvironment *cae = [COLAudioEnvironment sharedEnvironment];
     
     // Add the module views to the build view.
@@ -627,7 +626,10 @@ static NSArray *cableColours;
         NSInteger y = ([[thisModule objectForKey:PRESET_KEY_MODULE_ROW] integerValue] + 0.5f) * self.cellSize.height;
         ModuleDescription *moduleDescription = [[ModuleCatalog sharedCatalog] moduleWithIdentifier:[thisModule objectForKey:PRESET_KEY_MODULE_TYPE]];
         if (moduleDescription) {
-            [moduleIdentifiers setObject:[self addViewForModule:moduleDescription atPoint:CGPointMake(x, y) forComponentID:[thisModule objectForKey:PRESET_KEY_MODULE_COMPONENT_ID]] forKey:[thisModule objectForKey:PRESET_KEY_MODULE_COMPONENT_ID]];
+            ModuleView *newModule = [self addViewForModule:moduleDescription atPoint:CGPointMake(x, y) forComponentID:[thisModule objectForKey:PRESET_KEY_MODULE_COMPONENT_ID]];
+            if (newModule) {
+                [moduleIdentifiers setObject:newModule forKey:[thisModule objectForKey:PRESET_KEY_MODULE_COMPONENT_ID]];
+            }
         }
     }
     

@@ -45,14 +45,17 @@ CGFloat kKeyboardHeight;
     
     BuildViewController *buildViewController = [[BuildViewController alloc] init];
     // Load the initial preset, if there is one.
-    NSArray *presets = [Preset getPresets];
-    if (presets.count > 0) {
-        NSString *initialPreset = [presets objectAtIndex:0];
-        NSLog(@"Recalling initial preset : %@", initialPreset);
-        [buildViewController recallPreset:initialPreset onCompletion:nil onError:nil];
-    }
+    
+
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:buildViewController];
+    
+    // Load initial preset
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults objectForKey:USER_DEFAULTS_FILENAME_KEY]) {
+        NSLog(@"Recalling default preset %@", [userDefaults objectForKey:USER_DEFAULTS_FILENAME_KEY]);
+        [buildViewController recallPreset:[userDefaults objectForKey:USER_DEFAULTS_FILENAME_KEY] onCompletion:nil onError:nil];
+    }
     
 //    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"wallpaper"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeTile]];
 //    [backgroundView setFrame:navigationController.view.bounds];

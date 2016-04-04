@@ -75,6 +75,8 @@ public:
     CFDictionaryRef                   getDictionary();
     
     void setIdentifier(char* inIdentifier);
+    static vector<std::string> usedIDs;
+    
     
 protected:
     void setInputs(vector<CCOLComponentInput*> inputsIn) {

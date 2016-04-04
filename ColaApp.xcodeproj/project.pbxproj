@@ -33,6 +33,7 @@
 		6C37DAC51C58F5A300BF0C97 /* SequencerSubview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C37DAC41C58F5A300BF0C97 /* SequencerSubview.xib */; };
 		6C37DAC91C5905F400BF0C97 /* SequencerSubview.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37DAC81C5905F400BF0C97 /* SequencerSubview.m */; };
 		6C37DACC1C5908C300BF0C97 /* ModuleSubview.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C37DACB1C5908C300BF0C97 /* ModuleSubview.m */; };
+		6C42BADA1CB2AAF90092891D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C42BAD91CB2AAF90092891D /* Localizable.strings */; };
 		6C59C5661ABF4273001EE663 /* ConnectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C59C5651ABF4273001EE663 /* ConnectorView.m */; };
 		6C64D6FE1AD9394800012108 /* MasterModuleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D6FD1AD9394800012108 /* MasterModuleView.m */; };
 		6C64D7061AD9B0DD00012108 /* Preset.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C64D7051AD9B0DD00012108 /* Preset.m */; };
@@ -118,6 +119,7 @@
 		6C37DACA1C5908C300BF0C97 /* ModuleSubview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleSubview.h; sourceTree = "<group>"; };
 		6C37DACB1C5908C300BF0C97 /* ModuleSubview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleSubview.m; sourceTree = "<group>"; };
 		6C3D5F521C996BAB00828F59 /* buildSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = buildSettings.h; sourceTree = "<group>"; };
+		6C42BAD91CB2AAF90092891D /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		6C59C5641ABF4273001EE663 /* ConnectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorView.h; sourceTree = "<group>"; };
 		6C59C5651ABF4273001EE663 /* ConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorView.m; sourceTree = "<group>"; };
 		6C64D6FC1AD9394800012108 /* MasterModuleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterModuleView.h; sourceTree = "<group>"; };
@@ -335,6 +337,7 @@
 				6CEF81141ACC779000FB1943 /* Icons */,
 				6CB828371AC2F58000610DD4 /* ImageAssets */,
 				6C12010A1AAE49A100C6ACB6 /* moduleCatalog.json */,
+				6C42BAD91CB2AAF90092891D /* Localizable.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 			files = (
 				6CEF81151ACC779000FB1943 /* Icons in Resources */,
 				83F313DF1C56D0CC00356B2E /* Sequencer.xcassets in Resources */,
+				6C42BADA1CB2AAF90092891D /* Localizable.strings in Resources */,
 				6C12010B1AAE49A100C6ACB6 /* moduleCatalog.json in Resources */,
 				6C2A5EA31A8C0B2A00ECEAB2 /* Interapp.txt in Resources */,
 				6CB828381AC2F58000610DD4 /* ImageAssets in Resources */,

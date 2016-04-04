@@ -29,10 +29,27 @@ void gen_random(char *s, const int len) {
     s[len] = 0;
 }
 
+vector<std::string> CCOLComponent::usedIDs;
+
+static BOOL isUniqueID(std::string idIn) {
+    for (std::string &thisId : CCOLComponent::usedIDs) {
+        if (thisId == idIn) {
+            return false;
+        }
+    }
+    return true;
+}
+
 CCOLComponent::CCOLComponent(CCOLAudioContext* contextIn) {
     context = contextIn;
     componentIdentifier = new char[12];
-    gen_random(componentIdentifier, 10);
+    
+    // Make sure this ID is unique.
+    do {
+        gen_random(componentIdentifier, 10);
+    } while (!isUniqueID(std::string(componentIdentifier)));
+    
+    CCOLComponent::usedIDs.push_back(std::string(componentIdentifier));
     
     rendered = false;
     
@@ -109,7 +126,10 @@ CCOLComponentParameter* CCOLComponent::getParameterNamed(char *name) {
 }
 
 void CCOLComponent::setIdentifier(char* inIdentifier) {
-    strcpy(componentIdentifier, inIdentifier);
+    if (isUniqueID(std::string(inIdentifier))) {
+        strcpy(componentIdentifier, inIdentifier);
+        usedIDs.push_back(std::string(inIdentifier));
+    }
 }
 
 // Returns a CFDictionary describing the state of this component for recall.
