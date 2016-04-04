@@ -167,17 +167,16 @@
 }
 
 -(void)trashTapped {
-    
     [self.collectionView performBatchUpdates:^ {
+        NSMutableArray *filesCopy = [self.files mutableCopy];
         for (NSIndexPath *thisIndexPath in [self.collectionView indexPathsForSelectedItems]) {
             NSString *filename = [self.files objectAtIndex:thisIndexPath.row];
             if ([Preset removePreset:filename]) {
                 [self.collectionView deleteItemsAtIndexPaths:@[thisIndexPath]];
-                NSMutableArray *mutableFiles = [self.files mutableCopy];
-                [mutableFiles removeObject:filename];
-                self.files = [NSArray arrayWithArray:mutableFiles];
+                [filesCopy removeObject:filename];
             }
         }
+        self.files = [NSArray arrayWithArray:filesCopy];
     } completion:nil];
     
     [self.trashBarButtonItem setEnabled:NO];
@@ -284,7 +283,6 @@
 }
 
 -(void)loadPresetNamed:(NSString*)presetName {
-
     UIView *blockingView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
     [blockingView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
     [self.navigationController.view addSubview:blockingView];
@@ -305,7 +303,6 @@
         }]];
         [self presentViewController:alert animated:YES completion:nil];
     }];
-    
 }
 
 // Cell Delegates
