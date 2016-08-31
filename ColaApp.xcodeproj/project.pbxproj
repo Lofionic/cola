@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0214FD571C9B5948008E716A /* WheelControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 0214FD561C9B5947008E716A /* WheelControl.m */; };
-		0214FD5B1C9B5981008E716A /* pitchwheel.png in Resources */ = {isa = PBXBuildFile; fileRef = 0214FD591C9B5981008E716A /* pitchwheel.png */; };
-		0214FD5C1C9B5981008E716A /* pitchwheel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0214FD5A1C9B5981008E716A /* pitchwheel@2x.png */; };
 		6C0B16B21ADBD5F70058BA18 /* FilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0B16B11ADBD5F70058BA18 /* FilesViewController.m */; };
 		6C0BAEBE1B1BBA94007314CB /* IAAView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0BAEBD1B1BBA94007314CB /* IAAView.m */; };
 		6C0D48831AC3663D008AD869 /* KeyboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C0D48821AC3663D008AD869 /* KeyboardView.m */; };
@@ -70,8 +68,6 @@
 /* Begin PBXFileReference section */
 		0214FD551C9B5947008E716A /* WheelControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WheelControl.h; sourceTree = "<group>"; };
 		0214FD561C9B5947008E716A /* WheelControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WheelControl.m; sourceTree = "<group>"; };
-		0214FD591C9B5981008E716A /* pitchwheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pitchwheel.png; path = ColaApp/ImageAssets/components/pitchwheel.png; sourceTree = "<group>"; };
-		0214FD5A1C9B5981008E716A /* pitchwheel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "pitchwheel@2x.png"; path = "ColaApp/ImageAssets/components/pitchwheel@2x.png"; sourceTree = "<group>"; };
 		6C0B16B01ADBD5F70058BA18 /* FilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilesViewController.h; sourceTree = "<group>"; };
 		6C0B16B11ADBD5F70058BA18 /* FilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesViewController.m; sourceTree = "<group>"; };
 		6C0BAEBC1B1BBA94007314CB /* IAAView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAAView.h; sourceTree = "<group>"; };
@@ -240,8 +236,6 @@
 			isa = PBXGroup;
 			children = (
 				6C2A5EA21A8C0B2A00ECEAB2 /* Interapp.txt */,
-				0214FD591C9B5981008E716A /* pitchwheel.png */,
-				0214FD5A1C9B5981008E716A /* pitchwheel@2x.png */,
 				6C7D48721BE226870092BC95 /* AVFoundation.framework */,
 				6C2A5EA51A8C0B8D00ECEAB2 /* AudioToolbox.framework */,
 				6C2A5E8B1A8BF30500ECEAB2 /* ColaLib.xcodeproj */,
@@ -491,8 +485,6 @@
 				6C2A5EA31A8C0B2A00ECEAB2 /* Interapp.txt in Resources */,
 				6CB828381AC2F58000610DD4 /* ImageAssets in Resources */,
 				6C2A5E2D1A8BF2CC00ECEAB2 /* Images.xcassets in Resources */,
-				0214FD5B1C9B5981008E716A /* pitchwheel.png in Resources */,
-				0214FD5C1C9B5981008E716A /* pitchwheel@2x.png in Resources */,
 				6C37DAC51C58F5A300BF0C97 /* SequencerSubview.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
