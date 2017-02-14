@@ -13,12 +13,14 @@ using namespace std;
 
 void CCOLComponentVCA::initializeIO() {
     
-    input = new CCOLComponentInput(this, kIOTypeAudio, (char*)"In");
+    input = new CCOLComponentInput(this, kIOTypeDynamic, (char*)"In");
     CVin = new CCOLComponentInput(this, kIOTypeControl, (char*)"CV In");
     setInputs(vector<CCOLComponentInput*> { input, CVin });
     
-    output = new CCOLComponentOutput(this, kIOTypeAudio, (char*)"Out");
+    output = new CCOLComponentOutput(this, kIOTypeDynamic, (char*)"Out");
     setOutputs(vector<CCOLComponentOutput*> { output });
+    
+    output->setLinkedInput(input);
     
     level = new CCOLComponentParameter(this, (char*)"Level");
     CVAmt = new CCOLComponentParameter(this, (char*)"CV Amt");
@@ -45,9 +47,16 @@ void CCOLComponentVCA::renderOutputs(unsigned int numFrames) {
             SignalType cv = cvBuffer[i];
             amp = amp + ((cv - amp) * cvAmount);
         }
-        
-        SignalType output = inputBuffer[i] * amp;
-        
-        outputBuffer[i] = output;
+        float inLevel = inputBuffer[i];
+        if (output->getIOType() & kIOTypeControl) {
+            // Normalize CV output ( 0 > 0.5 )
+            if (input->isConnected()) {
+                outputBuffer[i] = ((((inputBuffer[i] * 2.) - 1) * amp) + 1) / 2.0;
+            } else {
+                outputBuffer[i] = 0.5;
+            }
+        } else {
+            outputBuffer[i] = inputBuffer[i] * amp;
+        }
     }
 }
