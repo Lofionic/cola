@@ -13,9 +13,11 @@ typedef NS_ENUM(NSUInteger, WheelControlType) {
 };
 @interface WheelControl : UIControl
 
-@property WheelControlType wheelControlType;
+@property (readonly) WheelControlType wheelControlType;
 @property (nonatomic, strong) UIImage* spriteSheet;
-@property CGSize spriteSize;
-@property CGFloat value;
+@property (readonly) CGSize spriteSize;
+@property (readonly) CGFloat value;
+
+-(instancetype)initWithControlType:(WheelControlType)controlType;
 
 @end

@@ -11,21 +11,33 @@
 
 #define SCREEN_SCALE [[UIScreen mainScreen] scale]
 
+@interface WheelControl()
+
+@property (nonatomic) WheelControlType wheelControlType;
+@property (nonatomic) CGSize spriteSize;
+
+@end
+
 @implementation WheelControl {
-    
     CGFloat trackingY;
+    CGFloat trackingValue;
     bool tracking;
-    
 }
+
 
 @synthesize value = _value;
 
-- (instancetype)init {
+- (instancetype)initWithControlType:(WheelControlType)controlType {
     self = [super init];
     if (self) {
+        self.wheelControlType = controlType;
         self.spriteSheet = [UIImage imageNamed:@"pitchwheel"];
         self.spriteSize = CGSizeMake(60 * SCREEN_SCALE, 150 * SCREEN_SCALE);
-        self.value = 0.5;
+        if (self.wheelControlType == WheelControlTypePitchbend) {
+            self.value = 0.5;
+        } else {
+            self.value = 0;
+        }
         self.backgroundColor = [UIColor clearColor];
     }
     return self;
@@ -51,6 +63,7 @@
 
 -(BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
     trackingY = [touch locationInView:self].y;
+    trackingValue = self.value;
     return YES;
 }
 
@@ -59,7 +72,7 @@
     CGFloat newPosition = [touch locationInView:self].y;
     CGFloat delta = trackingY - newPosition;
 
-    self.value = 0.5 + (delta / self.frame.size.height);
+    self.value = trackingValue + (delta / self.frame.size.height);
     
     [self setNeedsDisplay];
     
@@ -70,7 +83,9 @@
 
 -(void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
     
-    self.value = 0.5;
+    if (self.wheelControlType == WheelControlTypePitchbend) {
+        self.value = 0.5;
+    }
     [self setNeedsDisplay];
     [self sendActionsForControlEvents:UIControlEventValueChanged];
     

@@ -10,6 +10,9 @@
 #include "CCOLAudioContext.hpp"
 #include "CCOLAudioEngine.hpp"
 
+float cvInCachedIn = MAXFLOAT;
+float cvInCachedOut = 0;
+
 void CCOLComponentLFO::initializeIO() {
     
     mainOut = new CCOLComponentOutput(this, kIOTypeControl, (char*)"Out");
@@ -36,7 +39,7 @@ void CCOLComponentLFO::renderOutputs(unsigned int numFrames) {
     CCOLComponent::renderOutputs(numFrames);
     
     // Input buffers
-    SignalType *frequencyBuffer = cvIn->getBuffer(numFrames);
+    SignalType *cvInBuffer = cvIn->getBuffer(numFrames);
     
     // Output buffer
     SignalType *outBuffer = mainOut->prepareBufferOfSize(numFrames);
@@ -49,7 +52,12 @@ void CCOLComponentLFO::renderOutputs(unsigned int numFrames) {
         float delta = (i / (float)numFrames);
         
         if (cvIn->isConnected()) {
-            freq = frequencyBuffer[i] + 1;
+            if (cvInBuffer[i] != cvInCachedIn) {
+                cvInCachedOut = powf(MAX(cvInBuffer[i], 0.15f), 3.3f) * 100.0f;
+            }
+            SignalType baseFreq = rate->getOutputAtDelta(delta);
+            SignalType d = cvAmt->getOutputAtDelta(delta);
+            freq = baseFreq + ((cvInCachedOut - baseFreq) * d);
         } else {
             freq = rate->getOutputAtDelta(delta);
         }

@@ -109,14 +109,12 @@ static BuildView *buildView = nil;
     [self.keyboardContainerView addSubview:self.keyboardView];
     
     // Setup modulation wheel in bottom shelf
-    self.modWheelControl =  [[WheelControl alloc] init];
-    self.modWheelControl.wheelControlType = WheelControlTypeModulation;
+    self.modWheelControl =  [[WheelControl alloc] initWithControlType:WheelControlTypeModulation];
     [self.modWheelControl setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.keyboardContainerView addSubview:self.modWheelControl];
     
     // Setup pitchbend wheel in bottom shelf
-    self.pitchbendWheelControl =  [[WheelControl alloc] init];
-    self.pitchbendWheelControl.wheelControlType = WheelControlTypePitchbend;
+    self.pitchbendWheelControl =  [[WheelControl alloc] initWithControlType:WheelControlTypePitchbend];
     [self.pitchbendWheelControl setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.keyboardContainerView addSubview:self.pitchbendWheelControl];
     
@@ -201,7 +199,7 @@ static BuildView *buildView = nil;
     [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[keyboardContainerView]|" options:0 metrics:nil views:viewsDictionary]];
     [self.bottomPanel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-44-[keyboardContainerView]|" options:0 metrics:nil views:viewsDictionary]];
     
-    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[modWheelControl(40)][pitchWheelControl(40)][keyboardView]-20-|"
+    [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[pitchWheelControl(40)][modWheelControl(40)][keyboardView]-20-|"
                                                                                        options:0 metrics:nil views:viewsDictionary]];
     [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[modWheelControl]|" options:0 metrics:nil views:viewsDictionary]];
     [self.keyboardContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[pitchWheelControl]|" options:0 metrics:nil views:viewsDictionary]];
