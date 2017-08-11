@@ -7,7 +7,7 @@
 //
 
 #include "CCOLComponentVCF.hpp"
-#include "Math.h"
+#include "math.h"
 
 void CCOLComponentVCF::initializeIO() {
     audioInput  = new CCOLComponentInput(this, kIOTypeAudio, (char*)"Audio in");

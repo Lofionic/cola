@@ -147,7 +147,7 @@ CFDictionaryRef CCOLComponent::getDictionary() {
 
     // Create the parameters dict
     keys[2] = kCCOLComponentParametersKey;
-    uint parameterCount = parameters.size();
+    __SIZE_TYPE__ parameterCount = parameters.size();
     CFStringRef parameterNames[parameterCount];
     CFStringRef parameterValues[parameterCount];
     
@@ -177,7 +177,7 @@ CFDictionaryRef CCOLComponent::getDictionary() {
     // Create the outputs dict
     keys[3] = kCCOLComponentConnectionsKey;
     
-    uint outputCount = outputs.size();
+    __SIZE_TYPE__ outputCount = outputs.size();
     CFDictionaryRef connections[outputCount];
     
     i = 0;

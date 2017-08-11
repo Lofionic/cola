@@ -47,7 +47,7 @@ void CCOLComponentVCA::renderOutputs(unsigned int numFrames) {
             SignalType cv = cvBuffer[i];
             amp = amp + ((cv - amp) * cvAmount);
         }
-        float inLevel = inputBuffer[i];
+
         if (output->getIOType() & kIOTypeControl) {
             // Normalize CV output ( 0 > 0.5 )
             if (input->isConnected()) {

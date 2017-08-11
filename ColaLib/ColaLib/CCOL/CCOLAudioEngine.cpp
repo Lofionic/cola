@@ -164,7 +164,7 @@ CCOLAudioEngine::CCOLAudioEngine() {
     midiComponent = new CCOLMIDIComponent(audioContext);
     midiComponent->initializeIO();
     
-    srand(time(NULL));
+    srand((UInt32)time(NULL));
 }
 
 void CCOLAudioEngine::initializeAUGraph(bool isForegroundIn) {
@@ -511,7 +511,7 @@ void MIDIEventProcCallBack(void *userData, UInt32 inStatus, UInt32 inData1, UInt
     printf("%u",(unsigned int)inOffsetSampleFrame);
     Byte midiCommand = inStatus >> 4;
     Byte data1 = inData1 & 0x7F;
-    Byte data2 = inData2 & 0x7F;
+//    Byte data2 = inData2 & 0x7F;
     
     if (midiCommand == 0x09) {
         engine->getMIDIComponent()->noteOn(inData1);
@@ -545,7 +545,7 @@ CFDictionaryRef CCOLAudioEngine::getDictionary() {
 
     // User component.
     keys[0] = kCCOLComponentsKey;
-    uint componentCount = components.size();
+    __SIZE_TYPE__ componentCount = components.size();
     CFDictionaryRef componentArray[componentCount];
 
     int i = 0;
